@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Exporte - {{ auftrag.bezeichnung }}{% endblock %}
+
+{% block content %}
+<div class="layout-sidebar">
+  {% include "_sidebar.html" %}
+
+  <main class="workspace">
+    <div class="page-head">
+      <div>
+        <div class="crumbs eyebrow">
+          <span>{{ auftrag.projekt_nummer }}</span><span class="sep">/</span><span>{{ auftrag.kunde }}</span>
+        </div>
+        <h1>Exporte</h1>
+        <div class="meta-line"><span>Dokumenten- und Datenexport</span></div>
+      </div>
+    </div>
+
+    <form action="/auftrag/{{ auftrag.id }}/export" method="GET" style="margin-top:28px;">
+      <div class="form-row" style="align-items:flex-end; max-width:640px;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label>Ziel-Vertraulichkeitsstufe</label>
+          <select name="ziel_vertraulichkeit" class="form-control">
+            <option value="intern" {% if ziel_vertraulichkeit == 'intern' %}selected{% endif %}>intern (vollständig)</option>
+            <option value="kundentauglich" {% if ziel_vertraulichkeit == 'kundentauglich' %}selected{% endif %}>kundentauglich (gefiltert)</option>
+            <option value="anonymisiert" {% if ziel_vertraulichkeit == 'anonymisiert' %}selected{% endif %}>anonymisiert (Namen maskiert)</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <button type="submit" class="btn btn-outline">Aktualisieren</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="section-head">
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <h2>Downloads</h2>
+        <span class="count">Stufe {{ ziel_vertraulichkeit }}</span>
+      </div>
+    </div>
+
+    <div class="download-grid" style="margin-top:20px;">
+      <a class="btn btn-primary" href="/auftrag/{{ auftrag.id }}/export/download/analysebericht.docx?ziel_vertraulichkeit={{ ziel_vertraulichkeit }}" download>Analysebericht (.docx)</a>
+      <a class="btn btn-outline" href="/auftrag/{{ auftrag.id }}/export/download/analysebericht.md?ziel_vertraulichkeit={{ ziel_vertraulichkeit }}" download>Analysebericht (.md)</a>
+      <a class="btn btn-outline" href="/auftrag/{{ auftrag.id }}/export/download/massnahmen.md?ziel_vertraulichkeit={{ ziel_vertraulichkeit }}" download>Maßnahmenkatalog (.md)</a>
+      <a class="btn btn-outline" href="/auftrag/{{ auftrag.id }}/export/download/massnahmen.csv?ziel_vertraulichkeit={{ ziel_vertraulichkeit }}" download>Maßnahmenkatalog (.csv)</a>
+      <a class="btn btn-outline" href="/auftrag/{{ auftrag.id }}/export/download/summary.md?ziel_vertraulichkeit={{ ziel_vertraulichkeit }}" download>Management Summary (.md)</a>
+      <a class="btn" href="/auftrag/{{ auftrag.id }}/export/download/raw.json?ziel_vertraulichkeit={{ ziel_vertraulichkeit }}" download>Rohdaten (.json)</a>
+    </div>
+
+    <div class="section-head">
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <h2>Vorschau Analysebericht</h2>
+      </div>
+    </div>
+
+    <pre class="preview" style="margin-top:20px;">{{ bericht_preview }}</pre>
+  </main>
+</div>
+{% endblock %}

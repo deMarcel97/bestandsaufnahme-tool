@@ -1,0 +1,320 @@
+schema_version: 1
+typ: switch
+bezeichnung_anzeige: Switch / Aktive Netzwerktechnik
+berichtskapitel: netzwerk_und_internet
+abschnitte:
+  - id: allgemeine_angaben
+    titel: Allgemeine Angaben
+    felder:
+      - name: hersteller
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: Cisco
+            textbaustein:
+              feststellung: "Im Netzwerk kommen Switches des Herstellers Cisco zum Einsatz."
+              auswirkung: null
+          - wert: Aruba_HPE
+            textbaustein:
+              feststellung: "Im Netzwerk kommen Switches von Aruba / HPE zum Einsatz."
+              auswirkung: null
+          - wert: Ubiquiti
+            textbaustein:
+              feststellung: "Im Netzwerk kommen Switches von Ubiquiti UniFi zum Einsatz."
+              auswirkung: null
+          - wert: Fortinet
+            textbaustein:
+              feststellung: "Im Netzwerk kommen Switches von Fortinet (FortiSwitch) zum Einsatz."
+              auswirkung: null
+          - wert: Dell
+            textbaustein:
+              feststellung: "Im Netzwerk kommen Switches von Dell Networking zum Einsatz."
+              auswirkung: null
+          - wert: Netgear
+            textbaustein:
+              feststellung: "Im Netzwerk kommen Switches von Netgear zum Einsatz."
+              auswirkung: null
+          - wert: Sonstiges
+            textbaustein:
+              feststellung: "Im Netzwerk kommen Switches eines sonstigen Herstellers zum Einsatz."
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: modell
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+
+      - name: port_anzahl
+        typ: zahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+
+      - name: geschwindigkeit
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: 1G
+            textbaustein:
+              feststellung: "Die Switches arbeiten mit 1 Gbit/s Portgeschwindigkeit."
+              auswirkung: null
+          - wert: 2.5G
+            textbaustein:
+              feststellung: "Die Switches unterstützen Multigigabit (2,5 Gbit/s)."
+              auswirkung: null
+          - wert: 10G
+            textbaustein:
+              feststellung: "Die Switches unterstützen 10 Gbit/s Port- / Uplinkgeschwindigkeiten."
+              auswirkung: null
+          - wert: 25G
+            textbaustein:
+              feststellung: "Die Switches verfügen über High-Speed Uplinks mit 25 Gbit/s."
+              auswirkung: null
+          - wert: gemischt
+            textbaustein:
+              feststellung: "Im Netz kommen gemischte Portgeschwindigkeiten zum Einsatz."
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: poe_vorhanden
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: ja
+            textbaustein:
+              feststellung: "Die Switches unterstützen Power-over-Ethernet (PoE) zur Stromversorgung von Endgeräten."
+              auswirkung: null
+          - wert: nein
+            textbaustein:
+              feststellung: "Die Switches verfügen über keine PoE-Unterstützung."
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: management_typ
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: hardware_und_software
+          kriterium: switch_management_typ
+          max_punkte: 10
+        werte:
+          - wert: fully_managed
+            punkte: 10
+            textbaustein:
+              feststellung: "Es kommen voll verwaltbare (Fully Managed) Switches zum Einsatz."
+              auswirkung: null
+          - wert: smart_managed
+            punkte: 7
+            textbaustein:
+              feststellung: "Es kommen Smart-Managed Switches mit grundlegenden Verwaltungsfunktionen zum Einsatz."
+              auswirkung: null
+          - wert: unmanaged
+            punkte: 0
+            textbaustein:
+              feststellung: "Es werden nicht-verwaltbare (Unmanaged) Switches eingesetzt."
+              auswirkung: "Unmanaged Switches erlauben keine VLAN-Segmentierung, Protokollierung oder zentrale Überwachung."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+  - id: sicherheit_und_segmentierung
+    titel: Sicherheit und Segmentierung
+    felder:
+      - name: netztrennung
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: switch_netztrennung
+          max_punkte: 15
+        werte:
+          - wert: ja
+            punkte: 15
+            textbaustein:
+              feststellung: "Eine Netztrennung mittels VLANs (z. B. Server, Clients, IoT, Gast) ist eingerichtet."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Es ist keine VLAN-Netztrennung konfiguriert; alle Systeme befinden sich in einer flachen Netzstruktur."
+              auswirkung: "Ohne Netztrennung können sich Schadsoftware und Angreifer ungehindert im gesamten Unternehmensnetz ausbreiten."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: zugangsschutz_management
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: switch_zugangsschutz_management
+          max_punkte: 15
+        werte:
+          - wert: mfa_und_ssh_https
+            punkte: 15
+            textbaustein:
+              feststellung: "Der Management-Zugriff erfolgt abgesichert über verschlüsselte Protokolle (SSH/HTTPS) und Mehrfaktor-Authentifizierung."
+              auswirkung: null
+          - wert: ssh_https
+            punkte: 10
+            textbaustein:
+              feststellung: "Der Management-Zugriff erfolgt über verschlüsselte Protokolle (SSH/HTTPS)."
+              auswirkung: null
+          - wert: http_telnet
+            punkte: 0
+            textbaustein:
+              feststellung: "Der Management-Zugriff auf Switches erlaubt unverschlüsselte Protokolle (HTTP / Telnet)."
+              auswirkung: "Zugangsdaten und Konfigurationen können im Netzwerk im Klartext abgefangen werden."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: port_security_aktiv
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: switch_port_security
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: "Port Security oder 802.1X-Zugangskontrolle ist auf den Switchports aktiviert."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Port-Security / 802.1X ist nicht konfiguriert."
+              auswirkung: "Jeder freie Netzwerkport in Büros oder Besprechungsräumen ermöglicht das Anstecken fremder Geräte."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: loop_protection_aktiv
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: switch_loop_protection
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: "Loop Protection / Spanning Tree Protocol (STP) ist aktiviert."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Spanning Tree / Loop Protection ist auf den Switches nicht aktiviert."
+              auswirkung: "Versehentlich gesteckte Schleifen (Looping) führen zum sofortigen Ausfall des gesamten Netzwerks."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+  - id: wartung_und_sicherung
+    titel: Wartung und Konfigurationssicherung
+    felder:
+      - name: firmware_aktuell
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: switch_firmware
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: "Die Switch-Firmware ist auf einem aktuellen Stand."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Die Switch-Firmware ist veraltet."
+              auswirkung: "Bekannte Sicherheitslücken in der Switch-Software können von Angreifern ausgenutzt werden."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: garantie_bis
+        typ: datum
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: switch_garantie
+          max_punkte: 5
+
+      - name: wartungsvertrag_vorhanden
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: switch_wartungsvertrag
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: "Für die Switches besteht ein aktiver Wartungsvertrag mit Vor-Ort-Service."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Es besteht kein Wartungsvertrag für die Switches."
+              auswirkung: "Bei Hardwareausfällen steht kein zugesicherter Ersatzgeräte-Service zur Verfügung."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: konfigurationssicherung_aktuell
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: switch_konfig_sicherung
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: "Die Switch-Konfigurationen werden regelmäßig und automatisch gesichert."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Die Switch-Konfigurationen werden nicht regelmäßig gesichert."
+              auswirkung: "Im Austauschfall muss das Ersatzgerät zeitaufwendig von Grund auf neu konfiguriert werden."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null

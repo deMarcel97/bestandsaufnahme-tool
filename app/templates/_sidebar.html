@@ -1,0 +1,46 @@
+{# Auftrags-Navigation. Erwartet: auftrag, optional active_tab, progress_data, offene_punkte, findings #}
+<aside class="sidebar">
+  <h3>Auftrag</h3>
+  <ul>
+    <li><a href="/auftrag/{{ auftrag.id }}" {% if active_tab == 'uebersicht' %}class="active"{% endif %}>Übersicht &amp; Erfassung</a></li>
+    <li><a href="/auftrag/{{ auftrag.id }}/einstellungen" {% if active_tab == 'einstellungen' %}class="active"{% endif %}>Stammdaten &amp; Kontext</a></li>
+    <li><a href="/auftrag/{{ auftrag.id }}/offene_punkte" {% if active_tab == 'offene_punkte' %}class="active"{% endif %}>Offene Punkte {% if offene_punkte %}<span class="count">{{ offene_punkte|length }}</span>{% endif %}</a></li>
+    <li><a href="/auftrag/{{ auftrag.id }}/findings" {% if active_tab == 'findings' %}class="active"{% endif %}>Findings {% if findings %}<span class="count-accent">{{ findings|length }}</span>{% endif %}</a></li>
+    <li><a href="/auftrag/{{ auftrag.id }}/massnahmen" {% if active_tab == 'massnahmen' %}class="active"{% endif %}>Maßnahmenkatalog {% if massnahmen %}<span class="count">{{ massnahmen|length }}</span>{% endif %}</a></li>
+    <li><a href="/auftrag/{{ auftrag.id }}/bewertung" {% if active_tab == 'bewertung' %}class="active"{% endif %}>Bewertung</a></li>
+    <li><a href="/auftrag/{{ auftrag.id }}/export" {% if active_tab == 'export' %}class="active"{% endif %}>Exporte</a></li>
+  </ul>
+
+  {% if progress_data %}
+  {% set erfasst_count = progress_data.values() | selectattr('prozent') | list | length %}
+  {% set offen_liste = progress_data.values() | rejectattr('prozent') | list %}
+
+  <div class="sidebar-head">
+    <span class="eyebrow">Aktive Bausteine</span>
+    <span class="eyebrow">{{ erfasst_count }} / {{ progress_data|length }}</span>
+  </div>
+
+  <ul class="baustein-list">
+    {% for b, pdata in progress_data.items() if pdata.prozent %}
+    <li>
+      <div class="baustein-row">
+        <span title="{{ pdata.titel }}">{{ pdata.titel }}</span>
+        <span>{{ pdata.prozent }} %</span>
+      </div>
+      <div class="progress-container"><div class="progress-bar" style="width: {{ pdata.prozent }}%;"></div></div>
+    </li>
+    {% endfor %}
+
+    {% if offen_liste %}
+    <li style="margin-top:6px; padding-top:12px; border-top:1px solid var(--line);">
+      <div class="eyebrow" style="margin-bottom:8px;">Noch nicht erfasst</div>
+      <div class="chip-list">
+        {% for pdata in offen_liste %}
+        <span class="chip">{{ pdata.titel }}</span>
+        {% endfor %}
+      </div>
+    </li>
+    {% endif %}
+  </ul>
+  {% endif %}
+</aside>

@@ -1,0 +1,145 @@
+schema_version: 1
+regeln:
+  - id: usv-batterie-alt
+    gilt_fuer: usv
+    bedingung:
+      alle:
+        - feld: batterie_alter
+          operator: gleich
+          wert: ueber_5_jahre
+    schweregrad: hoch
+    befund: USV-Batterien sind älter als 5 Jahre
+    risiko: Überalterte Akkus können unter Last spontan zusammenbrechen und liefern keine verlässliche Überbrückungszeit.
+    empfehlung: Erneuerung des USV-Akkusatzes veranlassen.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: USV-Akkusatz erneuern
+      beschreibung: Austausch der gealterten Batterien gegen neue Originalakkus.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: usv-kein-batterietest
+    gilt_fuer: usv
+    bedingung:
+      eines:
+        - feld: letzter_batterietest
+          operator: datum_in_tagen_kleiner
+          wert: -365
+        - feld: letzter_batterietest
+          operator: ist_leer
+    schweregrad: hoch
+    befund: Kein aktueller Batterietest für das USV-System nachweisbar (älter als 12 Monate)
+    risiko: Ein unbemerktes Kapazitätsdefizit führt bei Netzausfall zum plötzlichen Systemausfall.
+    empfehlung: Durchführung und Dokumentation eines USV-Belastungstests.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: USV-Belastungstest durchführen und dokumentieren
+      beschreibung: Manuelle oder automatische Prüfentladung durchführen.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: usv-kein-abschaltsignal
+    gilt_fuer: usv
+    bedingung:
+      alle:
+        - feld: abschaltsignal_an_server
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Keine automatische Shutdown-Signalisierung an versorgte Server eingerichtet
+    risiko: Bei erschöpfter USV-Kapazität schalten die Server hart ab, was zu Datenverlust und Dateisystemschäden führt.
+    empfehlung: USV-Management-Software / Shutdown-Agenten auf Servern installieren und Signalverbindung einrichten.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Automatisches USV-Shutdown-Signal an Server anbinden
+      beschreibung: Installation und Konfiguration von Network Shutdown Agenten.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: usv-ueberlastet
+    gilt_fuer: usv
+    bedingung:
+      alle:
+        - feld: auslastung_prozent
+          operator: groesser
+          wert: 80
+    schweregrad: hoch
+    befund: USV-Auslastung liegt über 80 % der Nennleistung
+    risiko: Hohe Auslastung verkürzt die Überbrückungszeit drastisch und erhöht die thermische Belastung der Komponenten.
+    empfehlung: Lastverteilung anpassen oder USV-Kapazität erweitern.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: USV-Auslastung reduzieren oder größeres USV-Modell beschaffen
+      beschreibung: Umverteilung der Verbraucher oder Erhöhung der Nennleistung.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: usv-kein-wartungsvertrag
+    gilt_fuer: usv
+    bedingung:
+      alle:
+        - feld: wartungsvertrag_vorhanden
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Kein Wartungsvertrag für das USV-System vorhanden
+    risiko: Im Defektfall steht kein zugesicherter Vor-Ort-Service oder Ersatzteilvorhaltung zur Verfügung.
+    empfehlung: Abschluss eines Service- und Wartungsvertrages für das USV-System.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Wartungsvertrag für USV-System abschließen
+      beschreibung: Vereinbarung von Service-Level-Agreements und Vor-Ort-Austausch.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: usv-garantie-abgelaufen
+    gilt_fuer: usv
+    bedingung:
+      alle:
+        - feld: garantie_geraet_bis
+          operator: datum_vor_heute
+    schweregrad: mittel
+    befund: Herstellergarantie für das USV-Hauptgerät abgelaufen
+    risiko: Reparaturen und Ersatzteilbeschaffung erfolgen auf eigenes finanzielles Risiko und zeitliches Risiko.
+    empfehlung: Garantieerweiterung prüfen oder Gerät im Hardware-Austauschzyklus einplanen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Garantieerweiterung oder Gerätetausch für USV prüfen
+      beschreibung: Überprüfung von Herstellersupport-Optionen.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: usv-batteriegarantie-abgelaufen
+    gilt_fuer: usv
+    bedingung:
+      alle:
+        - feld: garantie_batterie_bis
+          operator: datum_vor_heute
+    schweregrad: niedrig
+    befund: Herstellergarantie für USV-Batterieabdeckung abgelaufen
+    risiko: Akkutausch kann im Schadensfall nicht mehr als Garantiefall abgewickelt werden.
+    empfehlung: Akkuzustand regelmäßig im Monitoring und bei Wartungen prüfen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Akkugarantie und Zustand der USV-Batterien prüfen
+      beschreibung: Überprüfung der Batterieabdeckung im Servicevertrag.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: usv-ueberbrueckung-kurz
+    gilt_fuer: usv
+    bedingung:
+      alle:
+        - feld: ueberbrueckungszeit_minuten
+          operator: kleiner
+          wert: 5
+    schweregrad: mittel
+    befund: USV-Überbrückungszeit liegt unter 5 Minuten
+    risiko: Die verbleibende Laufzeit reicht möglicherweise nicht für das geordnete Herunterfahren aller Systeme.
+    empfehlung: USV-Laufzeit durch Erweitern der Akkupacks oder Lastreduzierung auf mindestens 15 Minuten erhöhen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: USV-Laufzeit durch Zusatz-Akkupacks erweitern
+      beschreibung: Montage externer Batteriemodule zur Verlängerung der Überbrückungszeit.
+      kosten_richtwert: null
+      aufwand_richtwert: null

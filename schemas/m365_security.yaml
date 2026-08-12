@@ -1,0 +1,301 @@
+schema_version: 1
+typ: m365_security
+bezeichnung_anzeige: Microsoft 365 & Security
+berichtskapitel: cloud_und_m365
+abschnitte:
+- id: was_ist_es
+  titel: Was ist es
+  felder:
+  - name: tenant_typ
+    label: M365 Tenant Typ / Lizenzierungsmodell
+    typ: auswahl
+    pflicht: true
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+    werte:
+    - wert: commercial_cloud
+      textbaustein:
+        feststellung: Als Cloud-Plattform wird ein kommerzieller Microsoft 365 Tenant
+          genutzt.
+        auswirkung: null
+    - wert: non_profit
+      textbaustein:
+        feststellung: Der Microsoft 365 Tenant wird unter einem Non-Profit Modell
+          betrieben.
+        auswirkung: null
+    - wert: education
+      textbaustein:
+        feststellung: Der Microsoft 365 Tenant wird unter einem Education Modell betrieben.
+        auswirkung: null
+    - wert: unbekannt
+      textbaustein: null
+  - name: anzahl_lizenzen
+    label: Anzahl aktiver M365 Benutzeralizenzen
+    typ: zahl
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+  - name: lizenztypen
+    label: Eingesetzte M365 Lizenztypen (z.B. Business Premium, E3, E5)
+    typ: text
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+  - name: hybrid_setup
+    label: Hybrid-Einrichtung (Entra ID Connect mit lokalem Active Directory)
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+    werte:
+    - wert: ja
+      textbaustein:
+        feststellung: Der Tenant wird in einer Hybrid-Konfiguration mit dem lokalen
+          Active Directory synchronisiert.
+        auswirkung: null
+    - wert: nein
+      textbaustein:
+        feststellung: Der Tenant wird rein in der Cloud (Cloud-Only) betrieben.
+        auswirkung: null
+    - wert: unbekannt
+      textbaustein: null
+- id: identitaet_und_zugriff
+  titel: Identität und Zugriffsschutz
+  felder:
+  - name: mfa_fuer_alle_benutzer
+    label: Multi-Faktor-Authentisierung (MFA) für ALLE Benutzer aktiv
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: it_security
+      kriterium: mfa_m365_benutzer
+      max_punkte: 25
+    werte:
+    - wert: ja
+      punkte: 25
+      textbaustein:
+        feststellung: Multi-Faktor-Authentisierung (MFA) ist für alle Benutzerkonten
+          im Tenant verpflichtend eingerichtet.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: MFA ist nicht für alle M365-Benutzer verpflichtend konfiguriert.
+        auswirkung: null
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: mfa_fuer_administratoren
+    label: MFA für ALLE Administrator-Konten erzwungen
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: it_security
+      kriterium: mfa_m365_admin
+      max_punkte: 20
+    werte:
+    - wert: ja
+      punkte: 20
+      textbaustein:
+        feststellung: Alle M365 Administrator-Konten sind strikt durch MFA geschützt.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Es existieren M365 Administrator-Konten ohne erzwungene MFA.
+        auswirkung: null
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: conditional_access_regelwerke
+    label: Bedingter Zugriff (Conditional Access) Richtlinien eingerichtet
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: it_security
+      kriterium: conditional_access_m365
+      max_punkte: 15
+    werte:
+    - wert: ja
+      punkte: 15
+      textbaustein:
+        feststellung: Zugriffe auf den Tenant werden über Conditional Access Richtlinien
+          geschützt.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Es sind keine Richtlinien für bedingten Zugriff (Conditional
+          Access) eingerichtet.
+        auswirkung: null
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: legacy_authentication_blockiert
+    label: Veraltete Authentifizierung (Legacy Auth) blockiert
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: it_security
+      kriterium: legacy_auth_m365
+      max_punkte: 15
+    werte:
+    - wert: ja
+      punkte: 15
+      textbaustein:
+        feststellung: Veraltete Authentifizierungsprotokolle (POP3, IMAP, SMTP AUTH)
+          sind im Tenant blockiert.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Veraltete Authentifizierungsprotokolle (Legacy Auth) sind noch
+          teilweise oder komplett aktiv.
+        auswirkung: null
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: global_admin_anzahl_angemessen
+    label: Anzahl Global Admins angemessen (max. 2-4 Konten)
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: it_security
+      kriterium: global_admin_count_m365
+      max_punkte: 10
+    werte:
+    - wert: ja
+      punkte: 10
+      textbaustein:
+        feststellung: Die Anzahl der Global-Admin-Konten ist auf das notwendige Minimum
+          beschränkt.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Es existieren unverhältnismäßig viele Konten mit Global-Admin-Rechten
+          im Tenant.
+        auswirkung: null
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+- id: bedrohungsschutz_und_backup
+  titel: Bedrohungsschutz und M365 Backup
+  felder:
+  - name: defender_for_office365_aktiv
+    label: Defender for Office 365 (Safe Links / Safe Attachments) aktiv
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: it_security
+      kriterium: defender_o365_m365
+      max_punkte: 15
+    werte:
+    - wert: ja
+      punkte: 15
+      textbaustein:
+        feststellung: Erweiterter E-Mail-Schutz durch Microsoft Defender for Office
+          365 ist konfiguriert.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Safe Links / Safe Attachments in M365 sind nicht aktiviert.
+        auswirkung: null
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: m365_drittanbieter_backup_aktiv
+    label: Drittanbieter M365 Backup aktiv (Mail, SharePoint, Teams)
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: betriebsrisiken
+      kriterium: m365_cloud_backup
+      max_punkte: 20
+    werte:
+    - wert: ja
+      punkte: 20
+      textbaustein:
+        feststellung: M365-Daten (Exchange, SharePoint, OneDrive, Teams) werden über
+          eine unabhängige Drittanbieter-Lösung gesichert.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Es existiert kein unabhängiges Backup für die Microsoft 365
+          Cloud-Daten.
+        auswirkung: null
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: audit_logging_aktiv
+    label: M365 Audit-Logging (Unified Audit Log) aktiviert
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: rechtliche_anforderungen
+      kriterium: audit_log_m365
+      max_punkte: 10
+    werte:
+    - wert: ja
+      punkte: 10
+      textbaustein:
+        feststellung: Unified Audit Logging ist im Tenant aktiviert und ermöglicht
+          die Nachvollziehbarkeit von Sicherheitsereignissen.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: M365 Unified Audit Logging ist deaktiviert.
+        auswirkung: null
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: dokumentation_vorhanden
+    label: Tenant-Konzept & Admin-Dokumentation vorhanden
+    typ: auswahl
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: rechtliche_anforderungen
+      kriterium: dokumentation_m365
+      max_punkte: 10
+    werte:
+    - wert: vollstaendig
+      punkte: 10
+      textbaustein:
+        feststellung: Eine Dokumentation der M365 Tenant-Konfiguration und Berechtigungsstruktur
+          liegt vor.
+        auswirkung: null
+    - wert: teilweise
+      punkte: 5
+      textbaustein:
+        feststellung: Die Dokumentation des M365 Tenants ist unvollständig.
+        auswirkung: null
+    - wert: keine
+      punkte: 0
+      textbaustein:
+        feststellung: Es liegt keine Dokumentation für den Microsoft 365 Tenant vor.
+        auswirkung: Im Störungs- oder Vertretungsfall verzögert die fehlende Dokumentation
+          die Analyse und Behebung von Fehlern.
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null

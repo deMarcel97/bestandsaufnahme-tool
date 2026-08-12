@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Bewertung - {{ auftrag.bezeichnung }}{% endblock %}
+
+{% macro scale(prozent) -%}
+{% set step = ((prozent / 20) | round(0, 'ceil') | int) %}
+<div class="scale">
+  {% for i in range(1, 6) %}
+  <div class="scale-step{% if i <= step %} {% if step <= 2 %}is-low{% else %}is-on{% endif %}{% endif %}"></div>
+  {% endfor %}
+</div>
+{%- endmacro %}
+
+{% block content %}
+<div class="layout-sidebar">
+  {% include "_sidebar.html" %}
+
+  <main class="workspace">
+    <div class="page-head">
+      <div>
+        <div class="crumbs eyebrow">
+          <span>{{ auftrag.projekt_nummer }}</span><span class="sep">/</span><span>{{ auftrag.kunde }}</span>
+        </div>
+        <h1>Bewertung</h1>
+        <div class="meta-line"><span>Gesamtbewertung der IT-Umgebung</span></div>
+      </div>
+    </div>
+
+    <div class="kpi-band">
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="eyebrow">Gesamtbewertung</div>
+          <div class="kpi-value is-word">{{ bewertung.gesamt_stufe_bezeichnung }}</div>
+          <div class="kpi-sub tnum">{{ bewertung.gesamt_prozent }} % von 100</div>
+        </div>
+        <div class="kpi">
+          <div class="eyebrow">Feldabdeckung</div>
+          <div class="kpi-value">{{ bewertung.feldabdeckung_prozent }} %</div>
+          <div class="kpi-sub">ausgefüllte bewertbare Felder</div>
+        </div>
+        <div class="kpi">
+          <div class="eyebrow">Bausteinabdeckung</div>
+          <div class="kpi-value">{{ bewertung.bausteinabdeckung_prozent }} %</div>
+          <div class="kpi-sub">aktive Bausteine mit Objekten</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:36px;">
+      {{ scale(bewertung.gesamt_prozent) }}
+      {% set gstep = ((bewertung.gesamt_prozent / 20) | round(0, 'ceil') | int) %}
+      <div class="scale-labels">
+        <span {% if gstep == 1 %}class="is-on"{% endif %}>Kritisch</span>
+        <span {% if gstep == 2 %}class="is-on"{% endif %}>Mangelhaft</span>
+        <span {% if gstep == 3 %}class="is-on"{% endif %}>Ausreichend</span>
+        <span {% if gstep == 4 %}class="is-on"{% endif %}>Gut</span>
+        <span {% if gstep == 5 %}class="is-on"{% endif %}>Sehr gut</span>
+      </div>
+    </div>
+
+    {% if bewertung.unter_50_prozent_warnung %}
+    <div class="alert alert-warning" style="margin-top:28px;">
+      <strong>Hinweis</strong>
+      <span>
+        Die Bausteine wurden nicht vollständig erfasst.
+        {% if bewertung.nicht_erfasste_bausteine %}Fehlend: {{ bewertung.nicht_erfasste_bausteine|join(', ') }}.{% endif %}
+        Die Bewertung bezieht sich ausschließlich auf die erfassten Bereiche.
+      </span>
+    </div>
+    {% endif %}
+
+    <div class="section-head">
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <h2>Nach Kategorien</h2>
+        <span class="count">{{ bewertung.kategorien|length }} Kategorien</span>
+      </div>
+    </div>
+
+    {% for kat in bewertung.kategorien %}
+    <section class="standort">
+      <div class="scale-row">
+        <h3 style="margin:0; font-size:18px;">{{ kat.bezeichnung }}</h3>
+        {{ scale(kat.prozent) }}
+        <div class="value">
+          <div style="font-size:18px; font-weight:800;">{{ kat.prozent }} %</div>
+          <div class="cell-sub">{{ kat.stufe_bezeichnung }}</div>
+        </div>
+      </div>
+
+      {% if kat.kriterien %}
+      <table style="margin-top:18px;">
+        <thead>
+          <tr>
+            <th>Kriterium</th>
+            <th>Feld</th>
+            <th>Objekt</th>
+            <th class="col-right" style="width:130px;">Punkte</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for kr in kat.kriterien %}
+          <tr>
+            <td class="cell-name">{{ kr.kriterium_id }}</td>
+            <td class="text-muted">{{ kr.field_name }}</td>
+            <td class="text-muted">{{ kr.objekt_bezeichnung }}</td>
+            <td class="col-right tnum">{{ kr.erreichte_punkte }} / {{ kr.max_punkte }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </section>
+    {% endfor %}
+  </main>
+</div>
+{% endblock %}

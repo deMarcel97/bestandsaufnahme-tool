@@ -1,0 +1,259 @@
+schema_version: 1
+typ: access_point
+bezeichnung_anzeige: Access Point / WLAN-Infrastruktur
+berichtskapitel: netzwerk_und_internet
+abschnitte:
+  - id: allgemeine_angaben
+    titel: Allgemeine Angaben
+    felder:
+      - name: hersteller
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: Cisco
+            textbaustein:
+              feststellung: "Im WLAN kommen Access Points des Herstellers Cisco / Meraki zum Einsatz."
+              auswirkung: null
+          - wert: Aruba_HPE
+            textbaustein:
+              feststellung: "Im WLAN kommen Access Points von Aruba / HPE zum Einsatz."
+              auswirkung: null
+          - wert: Ubiquiti
+            textbaustein:
+              feststellung: "Im WLAN kommen Access Points von Ubiquiti UniFi zum Einsatz."
+              auswirkung: null
+          - wert: Sophos
+            textbaustein:
+              feststellung: "Im WLAN kommen Access Points von Sophos zum Einsatz."
+              auswirkung: null
+          - wert: Fortinet
+            textbaustein:
+              feststellung: "Im WLAN kommen Access Points von Fortinet (FortiAP) zum Einsatz."
+              auswirkung: null
+          - wert: Netgear
+            textbaustein:
+              feststellung: "Im WLAN kommen Access Points von Netgear zum Einsatz."
+              auswirkung: null
+          - wert: Sonstiges
+            textbaustein:
+              feststellung: "Im WLAN kommen Access Points eines sonstigen Herstellers zum Einsatz."
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: modell
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+
+      - name: wlan_standard
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: hardware_und_software
+          kriterium: ap_wlan_standard
+          max_punkte: 10
+        werte:
+          - wert: wifi7
+            punkte: 10
+            textbaustein:
+              feststellung: "Das WLAN unterstützt den neuesten Standard Wi-Fi 7 (802.11be)."
+              auswirkung: null
+          - wert: wifi6e
+            punkte: 10
+            textbaustein:
+              feststellung: "Das WLAN unterstützt den Standard Wi-Fi 6E (802.11ax 6 GHz)."
+              auswirkung: null
+          - wert: wifi6
+            punkte: 10
+            textbaustein:
+              feststellung: "Das WLAN unterstützt den Standard Wi-Fi 6 (802.11ax)."
+              auswirkung: null
+          - wert: wifi5
+            punkte: 7
+            textbaustein:
+              feststellung: "Das WLAN basiert auf dem Standard Wi-Fi 5 (802.11ac)."
+              auswirkung: null
+          - wert: gemischt
+            punkte: 5
+            textbaustein:
+              feststellung: "Im WLAN kommen gemischte Standards zum Einsatz."
+              auswirkung: null
+          - wert: wifi4_oder_aelter
+            punkte: 0
+            textbaustein:
+              feststellung: "Im WLAN werden veraltete Access Points (Wi-Fi 4 / 802.11n oder älter) eingesetzt."
+              auswirkung: "Veraltete WLAN-Standards bieten nur geringe Bandbreiten und weisen bekannte Sicherheitsschwachstellen auf."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: management
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: ap_management
+          max_punkte: 10
+        werte:
+          - wert: cloud_controller
+            punkte: 10
+            textbaustein:
+              feststellung: "Die Access Points werden zentral über einen Cloud-Controller verwaltet."
+              auswirkung: null
+          - wert: onprem_controller
+            punkte: 10
+            textbaustein:
+              feststellung: "Die Access Points werden zentral über einen On-Premise-Controller verwaltet."
+              auswirkung: null
+          - wert: standalone
+            punkte: 0
+            textbaustein:
+              feststellung: "Die Access Points werden einzeln (Standalone) ohne zentralen Controller betrieben."
+              auswirkung: "Standalone-Betrieb erschwert Konfigurationsanpassungen, Roaming und die Überwachung von WLAN-Sicherheitsvorfällen."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+  - id: sicherheit_und_gastnetz
+    titel: WLAN-Sicherheit und Gastnetz
+    felder:
+      - name: gast_wlan_vorhanden
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: ja
+            textbaustein:
+              feststellung: "Ein separates Gast-WLAN ist eingerichtet."
+              auswirkung: null
+          - wert: nein
+            textbaustein:
+              feststellung: "Es ist kein separates Gast-WLAN vorhanden."
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: gast_wlan_isoliert
+        typ: ja_nein_nicht_relevant
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: gast_wlan_vorhanden
+          operator: gleich
+          wert: ja
+        bewertung:
+          kategorie: it_security
+          kriterium: ap_gast_isoliert
+          max_punkte: 15
+        werte:
+          - wert: ja
+            punkte: 15
+            textbaustein:
+              feststellung: "Das Gast-WLAN ist vollständig vom internen Firmennetzwerk isoliert (VLAN / Client Isolation)."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Das Gast-WLAN ist nicht vollständig vom internen Firmennetz getrennt."
+              auswirkung: "Gäste und private Endgeräte erhalten Zugriff auf interne Netzwerkressourcen und Server."
+          - wert: nicht_relevant
+            punkte: null
+            textbaustein: null
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: verschluesselung_wpa3
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: ap_verschluesselung_wpa3
+          max_punkte: 15
+        werte:
+          - wert: ja
+            punkte: 15
+            textbaustein:
+              feststellung: "Das WLAN nutzt moderne WPA3- / WPA2-Enterprise-Verschlüsselung."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Das WLAN unterstützt noch kein WPA3 oder verwendet veraltete Verschlüsselungsverfahren (WPA1 / WEP / Preshared Key ohne PMF)."
+              auswirkung: "Fehlendes WPA3 oder reine WPA2-PSK-Verschlüsselung ist anfällig für Wörterbuch- und Offlinetrennungsangriffe."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+  - id: wartung_und_garantie
+    titel: Wartung und Garantie
+    felder:
+      - name: firmware_aktuell
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: ap_firmware
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: "Die Access-Point-Firmware wird regelmäßig aktualisiert."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Die Access-Point-Firmware ist veraltet."
+              auswirkung: "Veraltete Software auf Funk-Schnittstellen birgt Sicherheitsrisiken für den gesamten Netzbetrieb."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: garantie_bis
+        typ: datum
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: ap_garantie
+          max_punkte: 5
+
+      - name: wartungsvertrag_vorhanden
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: ap_wartungsvertrag
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: "Für die WLAN-Infrastruktur besteht ein aktiver Wartungs- und Supportvertrag."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Für die Access Points besteht kein Wartungsvertrag."
+              auswirkung: "Bei Defekten steht kein zugesicherter Support des Herstellers zur Verfügung."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null

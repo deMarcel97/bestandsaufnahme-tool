@@ -1,0 +1,317 @@
+schema_version: 1
+typ: netzwerkschrank
+bezeichnung_anzeige: Netzwerkschrank / Verteiler
+berichtskapitel: infrastruktur
+abschnitte:
+  - id: allgemeine_angaben
+    titel: Allgemeine Angaben
+    felder:
+      - name: art
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: nwschrank_art
+          max_punkte: 10
+        werte:
+          - wert: serverraum
+            punkte: 10
+            textbaustein:
+              feststellung: "Die Netzwerktechnik ist in einem dedizierten Serverraum untergebracht."
+              auswirkung: null
+          - wert: 19_zoll_schrank
+            punkte: 8
+            textbaustein:
+              feststellung: "Die Technik befindet sich in einem 19-Zoll-Stand-Netzwerkschrank."
+              auswirkung: null
+          - wert: wandschrank
+            punkte: 5
+            textbaustein:
+              feststellung: "Die Technik befindet sich in einem Wandgehäuse."
+              auswirkung: null
+          - wert: offen_im_raum
+            punkte: 0
+            textbaustein:
+              feststellung: "Die Netzwerk- und Servertechnik ist offen im Raum aufgestellt."
+              auswirkung: "Ohne Gehäuseschutz ist die Hardware physischen Einwirkungen, Verschmutzung und direktem Zugriff ausgesetzt."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: abschliessbar
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: nwschrank_abschliessbar
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: "Der Netzwerkschrank / das Gehäuse ist abgeschlossen."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Der Netzwerkschrank / das Gehäuse ist nicht abgeschlossen."
+              auswirkung: "Unbefugte Personen haben physischen Zugriff auf Switchports, Server-Interfaces und Verkabelung."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: belueftung
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: nwschrank_belueftung
+          max_punkte: 10
+        werte:
+          - wert: aktiv_klimatisiert
+            punkte: 10
+            textbaustein:
+              feststellung: "Der Netzwerkschrank ist aktiv klimatisiert."
+              auswirkung: null
+          - wert: zwangsbelueftet
+            punkte: 7
+            textbaustein:
+              feststellung: "Der Netzwerkschrank ist mit einer Lüftereinheit zwangsbelüftet."
+              auswirkung: null
+          - wert: passiv
+            punkte: 4
+            textbaustein:
+              feststellung: "Der Netzwerkschrank wird passiv über Lüftungsschlitze gekühlt."
+              auswirkung: null
+          - wert: keine
+            punkte: 0
+            textbaustein:
+              feststellung: "Für den Netzwerkschrank ist keine ausreichende Belüftung vorhanden."
+              auswirkung: "Wärmestau im Schrank führt zur Überhitzung von Geräten und verkürzt deren Lebensdauer."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+  - id: verkabelung_und_patchfelder
+    titel: Verkabelung und Patchfelder
+    felder:
+      - name: patchpanel_vorhanden
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: ja
+            textbaustein:
+              feststellung: "Im Schrank sind Patchfelder für die Netzstruktur verbaut."
+              auswirkung: null
+          - wert: nein
+            textbaustein:
+              feststellung: "Im Schrank sind keine Patchfelder verbaut."
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: patchpanel_beschriftung
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: patchpanel_vorhanden
+          operator: gleich
+          wert: ja
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: nwschrank_patchpanel_beschriftung
+          max_punkte: 10
+        werte:
+          - wert: vollstaendig
+            punkte: 10
+            textbaustein:
+              feststellung: "Alle Patchpanel-Ports sind vollständig und eindeutig beschriftet."
+              auswirkung: null
+          - wert: teilweise
+            punkte: 5
+            textbaustein:
+              feststellung: "Die Beschriftung der Patchpanel-Ports ist nur teilweise vorhanden."
+              auswirkung: null
+          - wert: keine
+            punkte: 0
+            textbaustein:
+              feststellung: "Die Patchpanel-Ports sind nicht beschriftet."
+              auswirkung: "Fehlende Port-Beschriftungen erschweren die Fehlersuche und führen bei Umpatchungen zu Verwechslungen."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: verkabelungsdokumentation
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: rechtliche_anforderungen
+          kriterium: nwschrank_verkabelungsdoku
+          max_punkte: 10
+        werte:
+          - wert: vollstaendig
+            punkte: 10
+            textbaustein:
+              feststellung: "Eine vollständige Verkabelungsdokumentation und Belegungsübersicht liegt vor."
+              auswirkung: null
+          - wert: teilweise
+            punkte: 5
+            textbaustein:
+              feststellung: "Die Verkabelungsdokumentation ist nur teilweise vorhanden."
+              auswirkung: null
+          - wert: keine
+            punkte: 0
+            textbaustein:
+              feststellung: "Es liegt keine Verkabelungsdokumentation vor."
+              auswirkung: "Im Störungsfall sind Kabelwege und Verteilungen nicht nachvollziehbar."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: ausfuehrung_durch
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: nwschrank_ausfuehrung
+          max_punkte: 5
+        werte:
+          - wert: fachfirma
+            punkte: 5
+            textbaustein:
+              feststellung: "Die Netzwerkverkabelung wurde durch einen IT-Netzwerkspezialisten ausgeführt."
+              auswirkung: null
+          - wert: elektriker
+            punkte: 4
+            textbaustein:
+              feststellung: "Die Verkabelung wurde durch einen Elektroinstallationsbetrieb ausgeführt."
+              auswirkung: null
+          - wert: intern
+            punkte: 3
+            textbaustein:
+              feststellung: "Die Verkabelung wurde intern durchgeführt."
+              auswirkung: null
+          - wert: gewachsen_ohne_dokumentation
+            punkte: 0
+            textbaustein:
+              feststellung: "Die Verkabelung ist historisch gewachsen und weist keine einheitliche Struktur auf."
+              auswirkung: "Unstrukturierter Kabelaushang behindert die Luftzirkulation und erhöht die Fehleranfälligkeit bei Wartungsarbeiten."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: kabeltyp
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: hardware_und_software
+          kriterium: nwschrank_kabeltyp
+          max_punkte: 10
+        werte:
+          - wert: cat7
+            punkte: 10
+            textbaustein:
+              feststellung: "Die Gebäudeverkabelung entspricht der Kategorie Cat 7."
+              auswirkung: null
+          - wert: cat6a
+            punkte: 10
+            textbaustein:
+              feststellung: "Die Gebäudeverkabelung entspricht der Kategorie Cat 6a."
+              auswirkung: null
+          - wert: cat6
+            punkte: 8
+            textbaustein:
+              feststellung: "Die Gebäudeverkabelung entspricht der Kategorie Cat 6."
+              auswirkung: null
+          - wert: cat5e
+            punkte: 5
+            textbaustein:
+              feststellung: "Die Gebäudeverkabelung basiert auf der Kategorie Cat 5e."
+              auswirkung: null
+          - wert: gemischt
+            punkte: 4
+            textbaustein:
+              feststellung: "Im Netz kommen gemischte Kabelkategorien zum Einsatz."
+              auswirkung: null
+          - wert: cat5
+            punkte: 0
+            textbaustein:
+              feststellung: "Die Verkabelung basiert teilweise auf veralteten Cat-5-Kabeln."
+              auswirkung: "Cat-5-Kabel begrenzen die Übertragungsrate auf 100 Mbit/s und sind anfällig für Übersprechen."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: verkabelung_alter
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: hardware_und_software
+          kriterium: nwschrank_verkabelung_alter
+          max_punkte: 5
+        werte:
+          - wert: unter_5_jahre
+            punkte: 5
+            textbaustein:
+              feststellung: "Die Verkabelung ist jünger als 5 Jahre."
+              auswirkung: null
+          - wert: 5_bis_10_jahre
+            punkte: 3
+            textbaustein:
+              feststellung: "Die Verkabelung ist zwischen 5 und 10 Jahre alt."
+              auswirkung: null
+          - wert: ueber_10_jahre
+            punkte: 0
+            textbaustein:
+              feststellung: "Die Verkabelung ist älter als 10 Jahre."
+              auswirkung: "Alternde Isolierungen und Kontakte können zu spontanen Verbindungsabbrüchen führen."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: erweiterungsreserve
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: nwschrank_erweiterungsreserve
+          max_punkte: 5
+        werte:
+          - wert: ausreichend
+            punkte: 5
+            textbaustein:
+              feststellung: "Der Schrank verfügt über ausreichende Höheneinheiten- und Portreserven."
+              auswirkung: null
+          - wert: knapp
+            punkte: 2
+            textbaustein:
+              feststellung: "Die Erweiterungsreserve im Schrank ist knapp."
+              auswirkung: null
+          - wert: keine
+            punkte: 0
+            textbaustein:
+              feststellung: "Es ist keine Erweiterungsreserve im Schrank mehr vorhanden."
+              auswirkung: "Neue Geräte können nicht mehr geordnet im Schrank nachgerüstet werden."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null

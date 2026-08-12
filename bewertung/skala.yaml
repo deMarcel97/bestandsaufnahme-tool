@@ -1,0 +1,17 @@
+schema_version: 1
+stufen:
+  - id: kritisch
+    bezeichnung: Kritisch
+    bis_prozent: 20
+  - id: mangelhaft
+    bezeichnung: Mangelhaft
+    bis_prozent: 40
+  - id: ausreichend
+    bezeichnung: Ausreichend
+    bis_prozent: 60
+  - id: gut
+    bezeichnung: Gut
+    bis_prozent: 80
+  - id: sehr_gut
+    bezeichnung: Sehr gut
+    bis_prozent: 100

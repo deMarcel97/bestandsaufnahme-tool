@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Aufträge - IT-Bestandsaufnahme{% endblock %}
+
+{% block content %}
+<div class="workspace">
+
+  <div class="page-head">
+    <div>
+      <div class="crumbs eyebrow"><span>Systemhaus</span><span class="sep">/</span><span>Alle Projekte</span></div>
+      <h1>Aufträge</h1>
+      <div class="meta-line">
+        <span>{{ auftraege|length }} Auftrag{% if auftraege|length != 1 %}sakte{% endif %} im Bestand</span>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary btn-lg" style="margin-top:30px; flex:none;" data-dialog-open="neu-auftrag-modal">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+      Neuer Auftrag
+    </button>
+  </div>
+
+  <div class="section-head">
+    <div style="display:flex; align-items:baseline; gap:12px;">
+      <h2>Auftragsübersicht</h2>
+    </div>
+  </div>
+
+  {% if auftraege %}
+  <table style="margin-top:18px;">
+    <thead>
+      <tr>
+        <th>Projektnummer</th>
+        <th>Kunde</th>
+        <th>Bezeichnung</th>
+        <th>Status</th>
+        <th>Vertraulichkeit</th>
+        <th class="col-right">Aktionen</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in auftraege %}
+      <tr>
+        <td class="cell-typ">{{ a.projekt_nummer }}</td>
+        <td>{{ a.kunde }}</td>
+        <td class="cell-name"><a href="/auftrag/{{ a.id }}">{{ a.bezeichnung }}</a></td>
+        <td><span class="badge">{{ a.status }}</span></td>
+        <td class="text-muted">{{ a.vertraulichkeit_default }}</td>
+        <td class="col-right">
+          <span class="linkact">
+            <a href="/auftrag/{{ a.id }}">Öffnen</a>
+            <form action="/auftrag/{{ a.id }}/delete" method="POST" style="display:inline;" onsubmit="return confirm('Auftrag wirklich löschen?');">
+              <button type="submit" class="subtle">Löschen</button>
+            </form>
+          </span>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state" style="margin-top:24px;">
+    <strong>Noch keine Aufträge erfasst</strong>
+    <span>Lege den ersten Auftrag über „+ Neuer Auftrag“ an.</span>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Dialog: Neuer Auftrag -->
+<div class="dialog-backdrop" id="neu-auftrag-modal">
+  <div class="dialog">
+    <div class="dialog-title">
+      <span>Neuen Auftrag anlegen</span>
+      <button type="button" class="btn btn-icon" data-dialog-close aria-label="Schließen">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <form action="/auftrag/neu" method="POST">
+      <div class="dialog-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Projektnummer</label>
+            <input type="text" name="projekt_nummer" class="form-control" placeholder="wird generiert, wenn leer">
+          </div>
+          <div class="form-group">
+            <label>Jira Link</label>
+            <input type="url" name="jira_url" class="form-control" placeholder="https://jira.example.com/browse/PROJ-1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Kunde <span class="req">*</span></label>
+            <input type="text" name="kunde" class="form-control" required placeholder="Landratsamt Mustercity">
+          </div>
+          <div class="form-group">
+            <label>Auftragsbezeichnung <span class="req">*</span></label>
+            <input type="text" name="bezeichnung" class="form-control" required placeholder="Infrastrukturanalyse 2026">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Grundlage</label>
+            <select name="grundlage" class="form-control">
+              <option value="Ausschreibung">Ausschreibung</option>
+              <option value="Angebot">Angebot</option>
+              <option value="Rahmenvertrag">Rahmenvertrag</option>
+              <option value="Sonstiges" selected>Sonstiges</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Default Vertraulichkeit</label>
+            <select name="vertraulichkeit_default" class="form-control">
+              <option value="intern">intern</option>
+              <option value="kundentauglich" selected>kundentauglich</option>
+              <option value="anonymisiert">anonymisiert</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <span class="eyebrow">Aktive Bausteine (Scope-Steuerung)</span>
+          <div class="checkbox-grid">
+            {% for typ in verfuegbare_typen %}
+            <label><input type="checkbox" name="aktive_bausteine" value="{{ typ }}" checked> {{ bausteine_labels.get(typ, typ.capitalize()) }}</label>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <button type="submit" class="btn btn-primary">Auftrag anlegen</button>
+        <button type="button" class="btn" data-dialog-close>Abbrechen</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="/static/js/dialog.js"></script>
+{% endblock %}

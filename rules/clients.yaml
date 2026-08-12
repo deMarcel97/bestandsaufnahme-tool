@@ -1,0 +1,137 @@
+schema_version: 1
+regeln:
+  - id: cli-win10-eol-ungeplant
+    gilt_fuer: clients
+    bedingung:
+      alle:
+        - feld: windows_10_eol_migration_geplant
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Keine Migration von Windows 10 vor dem End-of-Life (EOL) geplant
+    risiko: Nach Ablauf des Supports für Windows 10 erhalten betroffene Arbeitsplätze keine Sicherheitsupdates mehr.
+    empfehlung: Windows 11 Rollout-Plan erstellen und Hardwarekompatibilität prüfen.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Erstellung und Umsetzung eines Windows 11 Rollout-Plans
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: cli-patchmanagement-fehlt
+    gilt_fuer: clients
+    bedingung:
+      alle:
+        - feld: zentrales_patchmanagement_aktiv
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: kein zentrales Patchmanagement für Client-Betriebssysteme und Dritthersteller-Software
+    risiko: Ungepatchte Sicherheitslücken in OS, Browser, Adobe Reader etc. ermöglichen Malware-Infektionen.
+    empfehlung: Zentrales Patchmanagement (z.B. Microsoft Intune, RMM oder WSUS) einführen.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Implementierung eines zentralen Patchmanagements für alle Clients
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: cli-edr-antivirus-fehlt
+    gilt_fuer: clients
+    bedingung:
+      alle:
+        - feld: edr_antivirus_zentral_gemanagt
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Kein zentral verwalteter EDR- / Viren-Schutz auf den Arbeitsplätzen
+    risiko: Schadsoftware-Infektionen auf Endgeräten bleiben unbemerkt und können sich im Netz ausbreiten.
+    empfehlung: EDR- / Next-Gen Antivirus-Lösung flächendeckend installieren und zentral überwachen.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Rollout einer zentral verwalteten EDR- / Antivirus-Lösung
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: cli-verschluesselung-fehlt
+    gilt_fuer: clients
+    bedingung:
+      alle:
+        - feld: festplattenverschluesselung_aktiv
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Festplattenverschlüsselung (z.B. BitLocker/FileVault) ist nicht aktiviert
+    risiko: Bei Verlust oder Diebstahl eines Laptops können vertrauliche Unternehmensdaten problemlos ausgelesen werden.
+    empfehlung: Festplattenverschlüsselung auf allen mobilen Arbeitsgeräten aktivieren und Wiederherstellungsschlüssel zentral sichern.
+    referenz: "DSGVO Art. 32 / BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Aktivierung der Festplattenverschlüsselung (BitLocker / FileVault) auf allen Laptops
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: cli-lokale-adminrechte
+    gilt_fuer: clients
+    bedingung:
+      alle:
+        - feld: lokale_adminrechte_eingeschraenkt
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Benutzer besitzen dauerhafte lokale Administratorrechte auf ihren Arbeitsplatzrechnern
+    risiko: Schadsoftware kann sich mit erhöhten Rechten im System festsetzen und Sicherheitskontrollen umgehen.
+    empfehlung: Lokale Adminrechte entziehen und bei Bedarf ein Privileged Access Management (PAM) oder Just-In-Time Rechte nutzen.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Entzug permanenter lokaler Administratorrechte auf allen Client-Arbeitsplätzen
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: cli-rmm-mdm-fehlt
+    gilt_fuer: clients
+    bedingung:
+      alle:
+        - feld: mdm_rmm_software_im_einsatz
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Kein zentrales RMM- / MDM-System zur Clientverwaltung vorhanden
+    risiko: Inventarisierung, Konfigurationsanpassungen und Remote-Support sind ineffizient und fehleranfällig.
+    empfehlung: Einsatz eines RMM-/MDM-Tools zur zentralen Verwaltung der Endgeräte.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Einführung einer zentralen RMM- / MDM-Verwaltungslösung
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: cli-hardware-alt
+    gilt_fuer: clients
+    bedingung:
+      alle:
+        - feld: hardware_alter_durchschnitt
+          operator: gleich
+          wert: ueber_5_jahre
+    schweregrad: mittel
+    befund: Client-Fuhrpark ist im Durchschnitt älter als 5 Jahre
+    risiko: Verringerte Mitarbeiterproduktivität, hohe Reparaturkosten und inkompatible Hardware für moderne Windows-Versionen.
+    empfehlung: Kontinuierlichen Erneuerungszyklus (z.B. Lifecycle von 4-5 Jahren) etablieren.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Staffelweise Erneuerung veralteter Client-Hardware
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: cli-dokumentation-fehlt
+    gilt_fuer: clients
+    bedingung:
+      alle:
+        - feld: dokumentation_vorhanden
+          operator: gleich
+          wert: keine
+    schweregrad: mittel
+    befund: Keine Standard-Client-Dokumentation oder Endgeräte-Richtlinien vorhanden
+    risiko: Uneinheitliche Arbeitsplatzeinrichtungen und fehlende Rechtsgrundlagen bei der Gerätenutzung.
+    empfehlung: Richtlinie zur IT-Arbeitsplatznutzung und Setup-Dokumentation erstellen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Erstellung von Standard-Installations-Dokumentationen und IT-Nutzungsrichtlinien
+      kosten_richtwert: null
+      aufwand_richtwert: null

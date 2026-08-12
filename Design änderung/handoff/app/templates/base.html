@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}IT-Bestandsaufnahme Tool{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="/static/js/htmx.min.js"></script>
+  <script>
+    // Theme sofort setzen, damit nichts aufblitzt
+    (function () {
+      var saved = localStorage.getItem("theme");
+      var dark = saved === "dark" || (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+    })();
+  </script>
+</head>
+<body>
+  <header>
+    <div style="display:flex; align-items:baseline;">
+      <h1>Bestandsaufnahme</h1>
+      <span class="brand-sub">Systemhaus</span>
+    </div>
+    <nav style="display:flex; align-items:center; gap:6px;">
+      <a href="/auftrag" {% if active_nav == 'auftrag' %}class="active"{% endif %}>Aufträge</a>
+      <button type="button" id="theme-toggle-btn" onclick="toggleDarkMode()" title="Hell / Dunkel umschalten">
+        <svg id="theme-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg>
+        <span id="theme-label">Theme</span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+
+  <script>
+    var ICON_MOON = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>';
+    var ICON_SUN = '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.9 4.9 1.4 1.4"></path><path d="m17.7 17.7 1.4 1.4"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.3 17.7-1.4 1.4"></path><path d="m19.1 4.9-1.4 1.4"></path>';
+
+    function updateThemeBtn() {
+      var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      var icon = document.getElementById("theme-icon");
+      var label = document.getElementById("theme-label");
+      if (icon) icon.innerHTML = isDark ? ICON_SUN : ICON_MOON;
+      if (label) label.textContent = isDark ? "Hell" : "Dunkel";
+    }
+
+    function toggleDarkMode() {
+      var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      updateThemeBtn();
+    }
+
+    document.addEventListener("DOMContentLoaded", updateThemeBtn);
+  </script>
+</body>
+</html>

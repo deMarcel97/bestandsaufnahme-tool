@@ -1,0 +1,184 @@
+from datetime import date
+from fastapi import APIRouter, Request, Form
+from fastapi.responses import RedirectResponse
+from fastapi.templating import Jinja2Templates
+from app.config import BASE_DIR
+from app.services.storage import storage
+from app.services.slug import generate_slug_id
+from app.services.rule_engine import rule_engine
+from app.models.standort import Standort, Internetanbindung
+from app.utils.number_parser import parse_float_german, parse_int_german
+
+router = APIRouter()
+templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
+
+def _parse_anbindungen_from_form(form_data) -> list[Internetanbindung]:
+    anbindungen = []
+    indices = set()
+    for key in form_data.keys():
+        if "_" in key:
+            parts = key.rsplit("_", 1)
+            if parse_int_german(parts[1], -1) >= 0:
+                indices.add(parse_int_german(parts[1]))
+
+    for idx in sorted(indices):
+        vorhanden = f"anbindung_vorhanden_{idx}" in form_data
+        anbieter = form_data.get(f"anbieter_{idx}", "").strip()
+        art = form_data.get(f"art_{idx}", "DSL").strip()
+        down_val = parse_float_german(form_data.get(f"bandbreite_down_mbit_{idx}"))
+        up_val = parse_float_german(form_data.get(f"bandbreite_up_mbit_{idx}"))
+        symmetrisch = form_data.get(f"symmetrisch_{idx}", "nein")
+        feste_ip = form_data.get(f"feste_ip_{idx}", "nein")
+        ist_backup = form_data.get(f"ist_backup_leitung_{idx}", "nein")
+        failover = form_data.get(f"failover_verfahren_{idx}", "").strip()
+        ip_adressen = form_data.get(f"ip_adressen_{idx}", "").strip()
+        subnetzmaske = form_data.get(f"subnetzmaske_{idx}", "").strip()
+        sla_entstoerzeit = parse_float_german(form_data.get(f"sla_entstoerzeit_{idx}"))
+
+        has_user_input = bool(
+            anbieter or
+            down_val > 0 or
+            up_val > 0 or
+            ip_adressen or
+            failover or
+            sla_entstoerzeit > 0 or
+            subnetzmaske or
+            symmetrisch == "ja" or
+            feste_ip == "ja" or
+            ist_backup == "ja" or
+            (art and art != "DSL")
+        )
+
+        if has_user_input or (vorhanden and (anbieter or down_val > 0 or up_val > 0 or art != "DSL" or ist_backup == "ja")):
+            anbindungen.append(Internetanbindung(
+                anbieter=anbieter if anbieter else "Unbekannt",
+                art=art if art else "DSL",
+                bandbreite_down_mbit=down_val,
+                bandbreite_up_mbit=up_val,
+                symmetrisch=symmetrisch,
+                feste_ip=feste_ip,
+                ip_adressen=ip_adressen,
+                subnetzmaske=subnetzmaske,
+                sla_entstoerzeit=sla_entstoerzeit,
+                ist_backup_leitung=ist_backup,
+                failover_verfahren=failover
+            ))
+    return anbindungen
+
+@router.get("/auftrag/{auftrag_id}/standort/neu")
+def new_standort_form(request: Request, auftrag_id: str):
+    auftrag = storage.load_auftrag(auftrag_id)
+    if not auftrag:
+        return RedirectResponse(url="/auftrag", status_code=303)
+    return templates.TemplateResponse(
+        request=request,
+        name="standort/form.html",
+        context={
+            "auftrag": auftrag,
+            "standort": None,
+            "heutiges_datum": date.today().isoformat(),
+            "active_nav": "auftrag"
+        }
+    )
+
+@router.post("/auftrag/{auftrag_id}/standort/neu")
+async def new_standort_submit(
+    request: Request,
+    auftrag_id: str
+):
+    form_data = await request.form()
+    bezeichnung = form_data.get("bezeichnung", "").strip()
+    strasse = form_data.get("strasse", "").strip()
+    plz = form_data.get("plz", "").strip()
+    ort = form_data.get("ort", "").strip()
+    anzahl_user = parse_int_german(form_data.get("anzahl_user"))
+    funktion = form_data.get("funktion", "").strip()
+    ansprechpartner_vor_ort = form_data.get("ansprechpartner_vor_ort", "").strip()
+    vertraulichkeit = form_data.get("vertraulichkeit", "kundentauglich")
+    begehung_am = form_data.get("begehung_am", "").strip()
+    redaktionskonzept_backup_leitung = form_data.get("redaktionskonzept_backup_leitung", "automatische_umschaltung")
+    trassenfuehrung_getrennt = form_data.get("trassenfuehrung_getrennt", "ja")
+    usv_fuer_netzwerktechnik = form_data.get("usv_fuer_netzwerktechnik", "")
+    notiz = form_data.get("notiz", "").strip()
+
+    auftrag = storage.load_auftrag(auftrag_id)
+    if not auftrag:
+        return RedirectResponse(url="/auftrag", status_code=303)
+
+    existing_ids = [s.id for s in storage.list_standorte(auftrag_id)]
+    sto_id = generate_slug_id("standort", bezeichnung, existing_ids)
+    anbindungen = _parse_anbindungen_from_form(form_data)
+
+    standort = Standort(
+        schema_version=1,
+        id=sto_id,
+        auftrag_id=auftrag_id,
+        bezeichnung=bezeichnung,
+        strasse=strasse,
+        plz=plz,
+        ort=ort,
+        anzahl_user=anzahl_user,
+        funktion=funktion,
+        ansprechpartner_vor_ort=ansprechpartner_vor_ort,
+        vertraulichkeit=vertraulichkeit,
+        begehung_am=begehung_am if begehung_am else None,
+        redaktionskonzept_backup_leitung=redaktionskonzept_backup_leitung,
+        trassenfuehrung_getrennt=trassenfuehrung_getrennt,
+        usv_fuer_netzwerktechnik=usv_fuer_netzwerktechnik,
+        anbindungen=anbindungen,
+        notiz=notiz
+    )
+    storage.save_standort(standort)
+
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+
+@router.get("/auftrag/{auftrag_id}/standort/{standort_id}/bearbeiten")
+def edit_standort_form(request: Request, auftrag_id: str, standort_id: str):
+    auftrag = storage.load_auftrag(auftrag_id)
+    standort = storage.load_standort(auftrag_id, standort_id)
+    if not auftrag or not standort:
+        return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+    return templates.TemplateResponse(
+        request=request,
+        name="standort/form.html",
+        context={
+            "auftrag": auftrag,
+            "standort": standort,
+            "active_nav": "auftrag"
+        }
+    )
+
+@router.post("/auftrag/{auftrag_id}/standort/{standort_id}/bearbeiten")
+async def edit_standort_submit(
+    request: Request,
+    auftrag_id: str,
+    standort_id: str
+):
+    form_data = await request.form()
+    standort = storage.load_standort(auftrag_id, standort_id)
+    if not standort:
+        return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+
+    standort.bezeichnung = form_data.get("bezeichnung", standort.bezeichnung).strip()
+    standort.strasse = form_data.get("strasse", "").strip()
+    standort.plz = form_data.get("plz", "").strip()
+    standort.ort = form_data.get("ort", "").strip()
+    standort.anzahl_user = parse_int_german(form_data.get("anzahl_user"))
+    standort.funktion = form_data.get("funktion", "").strip()
+    standort.ansprechpartner_vor_ort = form_data.get("ansprechpartner_vor_ort", "").strip()
+    standort.vertraulichkeit = form_data.get("vertraulichkeit", standort.vertraulichkeit)
+    begehung_am = form_data.get("begehung_am", "").strip()
+    standort.begehung_am = begehung_am if begehung_am else None
+
+    if "redaktionskonzept_backup_leitung" in form_data:
+        standort.redaktionskonzept_backup_leitung = form_data.get("redaktionskonzept_backup_leitung")
+    if "trassenfuehrung_getrennt" in form_data:
+        standort.trassenfuehrung_getrennt = form_data.get("trassenfuehrung_getrennt")
+    if "usv_fuer_netzwerktechnik" in form_data:
+        standort.usv_fuer_netzwerktechnik = form_data.get("usv_fuer_netzwerktechnik")
+    standort.notiz = form_data.get("notiz", "").strip()
+
+    standort.anbindungen = _parse_anbindungen_from_form(form_data)
+    storage.save_standort(standort)
+
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)

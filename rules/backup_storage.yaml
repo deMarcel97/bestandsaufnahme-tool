@@ -1,0 +1,137 @@
+schema_version: 1
+regeln:
+  - id: bak-321-regel-nicht-erfuellt
+    gilt_fuer: backup_storage
+    bedingung:
+      alle:
+        - feld: 3_2_1_regel_erfuellt
+          operator: gleich
+          wert: "nein"
+    schweregrad: kritisch
+    befund: 3-2-1-Backup-Regel wird nicht eingehalten
+    risiko: Bei Elementarschäden (Feuer, Diebstahl) oder Ransomware-Befall droht irreparabler Datenverlust.
+    empfehlung: Backup-Strategie zwingend gemäß 3-2-1-Regel umstrukturierten (3 Kopien, 2 Medien, 1 Offsite).
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Umstellung der Datensicherung auf die 3-2-1-Backup-Regel
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: bak-kein-immutability
+    gilt_fuer: backup_storage
+    bedingung:
+      alle:
+        - feld: immutability_ransomware_schutz
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Kein unveränderbares Backup (Immutability) eingerichtet
+    risiko: Moderne Ransomware-Stämme verschlüsseln oder löschen vor dem Hauptangriff auch die online erreichbaren Backups.
+    empfehlung: Unveränderbare Repositories (Immutable Storage / S3 Object Lock / Air-Gap) einrichten.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Einrichtung unveränderbarer Backup-Speicherbereiche (Immutable Storage)
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: bak-kein-offsite-backup
+    gilt_fuer: backup_storage
+    bedingung:
+      alle:
+        - feld: offsite_backup_vorhanden
+          operator: gleich
+          wert: "nein"
+    schweregrad: kritisch
+    befund: Kein externes / Außer-Haus Backup (Offsite Backup) vorhanden
+    risiko: Bei lokalen Katastrophen am Hauptstandort (z.B. Brand, Überschwemmung, Einbruch) werden Primär- und Sicherungsdaten zerstört.
+    empfehlung: Automatisierte Offsite-Sicherung in ein Rechenzentrum oder Cloud-Repository einrichten.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Einrichtung einer verschlüsselten Offsite-Datensicherung
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: bak-keine-verschluesselung
+    gilt_fuer: backup_storage
+    bedingung:
+      alle:
+        - feld: backup_verschluesselung
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Datensicherungen sind nicht verschlüsselt
+    risiko: Unbefugte Dritte können bei Verlust oder Entwendungs der Backup-Medien vertrauliche Unternehmensdaten auslesen.
+    empfehlung: AES-256 Verschlüsselung für alle Sicherungsjobs aktivieren.
+    referenz: "DSGVO Art. 32"
+    massnahme_vorschlag:
+      bezeichnung: Aktivierung der End-to-End Verschlüsselung aller Datensicherungen
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: bak-keine-restore-tests
+    gilt_fuer: backup_storage
+    bedingung:
+      alle:
+        - feld: regelmaessige_restore_tests
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Keine regelmäßigen Wiederherstellungstests (Restore-Tests)
+    risiko: Im Ernstfall schlägt die Datenwiederherstellung aufgrund unbemerkter Korruption oder Konfigurationsfehler fehl.
+    empfehlung: Turnusmäßige (z.B. quartalsweise) Proberestores durchführen und protokollieren.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Einführung regelmäßiger, protokollierter Restore-Tests
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: bak-storage-hardware-alt
+    gilt_fuer: backup_storage
+    bedingung:
+      alle:
+        - feld: hardware_alter_storage
+          operator: gleich
+          wert: ueber_5_jahre
+    schweregrad: mittel
+    befund: Storage- / NAS-Hardware ist älter als 5 Jahre
+    risiko: Erhöhte Wahrscheinlichkeit für Festplatten- und Controllerdefekte im Speichersystem.
+    empfehlung: Erneuerung der Storage-Hardware planen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Austausch veralteter Backup-Storage Hardware
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: bak-monitoring-fehlt
+    gilt_fuer: backup_storage
+    bedingung:
+      alle:
+        - feld: backup_monitoring_und_alarming
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Keine automatische Fehlerbenachrichtigung für Backup-Jobs
+    risiko: Fehlgeschlagene Sicherungen bleiben über Tage oder Wochen unbemerkt.
+    empfehlung: Zentrales Monitoring und Mail-Alerting für alle Sicherungsjobs konfigurieren.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Einrichtung von automatischem Mail-Alerting und Job-Monitoring
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: bak-konzept-fehlt
+    gilt_fuer: backup_storage
+    bedingung:
+      alle:
+        - feld: backup_konzept_dokumentiert
+          operator: gleich
+          wert: keine
+    schweregrad: hoch
+    befund: Kein schriftliches Backup- und Wiederherstellungskonzept vorhanden
+    risiko: Datenschutz- und Compliance-Verstöße sowie Unsicherheit bezüglich RTO/RPO im Notfall.
+    empfehlung: Vollständiges Sicherungs- und Notfallwiederherstellungskonzept erstellen.
+    referenz: "DSGVO / BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Erstellung eines DSGVO-konformen Backup- und Disaster-Recovery-Konzepts
+      kosten_richtwert: null
+      aufwand_richtwert: null

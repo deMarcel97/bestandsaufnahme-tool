@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Findings - {{ auftrag.bezeichnung }}{% endblock %}
+
+{% block content %}
+<div class="layout-sidebar">
+  {% include "_sidebar.html" %}
+
+  <main class="workspace">
+    <div class="page-head">
+      <div>
+        <div class="crumbs eyebrow">
+          <span>{{ auftrag.projekt_nummer }}</span><span class="sep">/</span><span>{{ auftrag.kunde }}</span>
+        </div>
+        <h1>Findings</h1>
+        <div class="meta-line">
+          <span>{{ findings|length }} erfasste und automatisch erzeugte Befunde</span>
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; margin-top:30px; flex:none;">
+        {% if findings %}
+        <form action="/auftrag/{{ auftrag.id }}/findings/alle_uebernehmen" method="POST">
+          <button type="submit" class="btn btn-outline">Bestätigte übernehmen</button>
+        </form>
+        {% endif %}
+        <button type="button" class="btn btn-primary" data-dialog-open="manuell-finding-modal">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          Manuelles Finding
+        </button>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <h2>Befundliste</h2>
+      </div>
+    </div>
+
+    {% if findings %}
+    <table style="margin-top:18px;">
+      <thead>
+        <tr>
+          <th style="width:110px;">Schweregrad</th>
+          <th>Befund &amp; Risiko</th>
+          <th>Empfehlung</th>
+          <th style="width:280px;">Status &amp; Begründung</th>
+          <th class="col-right" style="width:170px;">Aktion</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in findings %}
+        <tr>
+          <td class="top"><span class="badge badge-{{ f.schweregrad }}">{{ f.schweregrad }}</span></td>
+          <td class="top">
+            <div class="cell-title">{{ f.befund }}</div>
+            <div class="cell-sub">{{ f.risiko }}</div>
+          </td>
+          <td class="top cell-sub">{{ f.empfehlung }}</td>
+          <td class="top">
+            <form action="/auftrag/{{ auftrag.id }}/finding/{{ f.id }}/status" method="POST" class="stack">
+              <select name="status" class="form-control" onchange="this.form.querySelector('input[name=\'begruendung\']').required = (this.value === 'verworfen' || this.value === 'kunde_akzeptiert');">
+                {% for st in ["offen", "bestaetigt", "verworfen", "kunde_akzeptiert", "uebernommen", "behoben"] %}
+                <option value="{{ st }}" {% if f.status == st %}selected{% endif %}>{{ st }}</option>
+                {% endfor %}
+              </select>
+              <input type="text" name="begruendung" value="{{ f.begruendung }}" class="form-control" placeholder="Begründung (Pflicht bei verworfen / akzeptiert)" {% if f.status in ["verworfen", "kunde_akzeptiert"] %}required{% endif %}>
+              <button type="submit" class="btn btn-sm" style="align-self:flex-start;">Speichern</button>
+            </form>
+          </td>
+          <td class="top col-right">
+            {% if f.status == "bestaetigt" %}
+            <form action="/auftrag/{{ auftrag.id }}/finding/{{ f.id }}/massnahme_erzeugen" method="POST">
+              <button type="submit" class="btn btn-sm btn-primary">Als Maßnahme übernehmen</button>
+            </form>
+            {% else %}
+            <button class="btn btn-sm" disabled title="Nur bestätigte Findings können übernommen werden">Erst bestätigen</button>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state" style="margin-top:24px;">
+      <strong>Keine Findings festgestellt</strong>
+      <span>Automatische Findings entstehen bei der Bewertung, manuelle legst du oben an.</span>
+    </div>
+    {% endif %}
+  </main>
+</div>
+
+<!-- Dialog: Manuelles Finding -->
+<div class="dialog-backdrop" id="manuell-finding-modal">
+  <div class="dialog">
+    <div class="dialog-title">
+      <span>Manuelles Finding anlegen</span>
+      <button type="button" class="btn btn-icon" data-dialog-close aria-label="Schließen">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <form action="/auftrag/{{ auftrag.id }}/finding/neu" method="POST">
+      <div class="dialog-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Standort</label>
+            <select name="standort_id" class="form-control" required>
+              {% for s in standorte %}
+              <option value="{{ s.id }}">{{ s.bezeichnung }} ({{ s.ort }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Schweregrad</label>
+            <select name="schweregrad" class="form-control">
+              <option value="hoch">hoch</option>
+              <option value="mittel" selected>mittel</option>
+              <option value="niedrig">niedrig</option>
+              <option value="empfehlung">empfehlung</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Befund <span class="req">*</span></label>
+          <input type="text" name="befund" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Risiko <span class="req">*</span></label>
+          <textarea name="risiko" class="form-control" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Empfehlung <span class="req">*</span></label>
+          <textarea name="empfehlung" class="form-control" required></textarea>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <button type="submit" class="btn btn-primary">Finding speichern</button>
+        <button type="button" class="btn" data-dialog-close>Abbrechen</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="/static/js/dialog.js"></script>
+{% endblock %}

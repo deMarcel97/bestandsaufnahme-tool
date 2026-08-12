@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{% block title %}{{ schema.bezeichnung_anzeige }} - {{ auftrag.bezeichnung }}{% endblock %}
+
+{% block content %}
+<div class="workspace">
+
+  <div class="page-head">
+    <div>
+      <div class="crumbs eyebrow">
+        <span>{{ auftrag.projekt_nummer }}</span><span class="sep">/</span><span>{{ schema.bezeichnung_anzeige }}</span>
+      </div>
+      <h1>{% if obj %}{{ obj.bezeichnung }}{% else %}Neue {{ schema.bezeichnung_anzeige }}{% endif %}</h1>
+      <div class="meta-line"><span>{% if obj %}Gerät bearbeiten{% else %}Gerät erfassen{% endif %}</span></div>
+    </div>
+    <a href="/auftrag/{{ auftrag.id }}" class="btn" style="margin-top:30px; flex:none;">Zurück zum Auftrag</a>
+  </div>
+
+  <form action="{% if obj %}/auftrag/{{ auftrag.id }}/objekt/{{ schema.typ }}/{{ obj.id }}{% else %}/auftrag/{{ auftrag.id }}/objekt/neu?typ={{ schema.typ }}{% endif %}" method="POST">
+
+    <fieldset class="fieldset">
+      <div class="fieldset-head"><h2>Zuordnung</h2></div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Bezeichnung <span class="req">*</span></label>
+          <input type="text" name="bezeichnung" id="input_bezeichnung" value="{{ obj.bezeichnung if obj else default_bezeichnung }}" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Standort <span class="req">*</span></label>
+          <select name="standort_id" class="form-control" required>
+            {% for s in standorte %}
+            <option value="{{ s.id }}" {% if (obj and obj.standort_id == s.id) or (selected_standort_id == s.id) %}selected{% endif %}>{{ s.bezeichnung }} ({{ s.ort }})</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Betreut durch</label>
+          <select name="betreut_durch" class="form-control">
+            <option value="wir" {% if not obj or obj.betreut_durch == 'wir' %}selected{% endif %}>wir (Systemhaus)</option>
+            <option value="Kunde" {% if obj and obj.betreut_durch == 'Kunde' %}selected{% endif %}>Kunde (Eigenbetrieb)</option>
+            <option value="Dritter" {% if obj and obj.betreut_durch == 'Dritter' %}selected{% endif %}>Dritter Dienstleister</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Dienstleister Name</label>
+          <input type="text" name="dienstleister_name" value="{{ obj.dienstleister_name if obj else '' }}" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Vertraulichkeitsstufe</label>
+          <select name="vertraulichkeit" class="form-control">
+            {% for opt in ["intern", "kundentauglich", "anonymisiert"] %}
+            <option value="{{ opt }}" {% if (obj and obj.vertraulichkeit == opt) or (not obj and auftrag.vertraulichkeit_default == opt) %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Erfassungsstatus</label>
+          <select name="erfassungsstatus" class="form-control">
+            <option value="vollstaendig" {% if obj and obj.erfassungsstatus == 'vollstaendig' %}selected{% endif %}>vollständig</option>
+            <option value="teilweise" {% if obj and obj.erfassungsstatus == 'teilweise' %}selected{% endif %}>teilweise</option>
+            <option value="unbekannt" {% if not obj or obj.erfassungsstatus == 'unbekannt' %}selected{% endif %}>unbekannt</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    {% for abschnitt in schema.abschnitte %}
+    <fieldset class="fieldset">
+      <div class="fieldset-head">
+        <h2>{{ abschnitt.titel }}</h2>
+        <span class="eyebrow">{{ abschnitt.felder|length }} Felder</span>
+      </div>
+
+      <div class="form-row">
+        {% for field in abschnitt.felder %}
+        {% set current_val = obj.daten.get(field.name) if obj and obj.daten else None %}
+        <div class="form-group" id="field_{{ field.name }}">
+          <label>
+            {{ field.label if field.label else field.name.replace('_', ' ').capitalize() }}
+            {% if field.pflicht %}<span class="req">*</span>{% endif %}
+            {% if field.vertraulichkeit == 'intern' %}<span class="badge" style="margin-left:6px; font-size:9.5px; padding:2px 5px;">intern</span>{% endif %}
+          </label>
+
+          {% if field.typ == 'text' %}
+          <input type="text" name="{{ field.name }}" id="input_{{ field.name }}" value="{{ current_val if current_val else '' }}" class="form-control" {% if field.pflicht %}required{% endif %}>
+
+          {% elif field.typ == 'mehrzeiliger_text' %}
+          <textarea name="{{ field.name }}" id="input_{{ field.name }}" class="form-control">{{ current_val if current_val else '' }}</textarea>
+
+          {% elif field.typ == 'zahl' %}
+          <input type="number" name="{{ field.name }}" id="input_{{ field.name }}" value="{{ current_val if current_val is not none else '' }}" class="form-control">
+
+          {% elif field.typ == 'datum' %}
+          <input type="date" name="{{ field.name }}" id="input_{{ field.name }}" value="{{ current_val if current_val else '' }}" class="form-control">
+
+          {% elif field.typ == 'ja_nein' %}
+          <select name="{{ field.name }}" id="input_{{ field.name }}" class="form-control">
+            <option value="" {% if current_val is none or current_val == '' %}selected{% endif %}>bitte wählen</option>
+            <option value="ja" {% if current_val == 'ja' %}selected{% endif %}>ja</option>
+            <option value="nein" {% if current_val == 'nein' %}selected{% endif %}>nein</option>
+            <option value="rueckfrage" {% if current_val == 'rueckfrage' %}selected{% endif %}>Rückfrage erforderlich</option>
+          </select>
+
+          {% elif field.typ == 'ja_nein_unbekannt' %}
+          <select name="{{ field.name }}" id="input_{{ field.name }}" class="form-control">
+            <option value="unbekannt" {% if current_val is none or current_val == 'unbekannt' or current_val == '' %}selected{% endif %}>unbekannt</option>
+            <option value="ja" {% if current_val == 'ja' %}selected{% endif %}>ja</option>
+            <option value="nein" {% if current_val == 'nein' %}selected{% endif %}>nein</option>
+            <option value="rueckfrage" {% if current_val == 'rueckfrage' %}selected{% endif %}>Rückfrage erforderlich</option>
+          </select>
+
+          {% elif field.typ == 'ja_nein_nicht_relevant' %}
+          <select name="{{ field.name }}" id="input_{{ field.name }}" class="form-control">
+            <option value="" {% if current_val is none or current_val == '' %}selected{% endif %}>bitte wählen</option>
+            <option value="ja" {% if current_val == 'ja' %}selected{% endif %}>ja</option>
+            <option value="nein" {% if current_val == 'nein' %}selected{% endif %}>nein</option>
+            <option value="nicht_relevant" {% if current_val == 'nicht_relevant' %}selected{% endif %}>nicht relevant</option>
+            <option value="unbekannt" {% if current_val == 'unbekannt' %}selected{% endif %}>unbekannt</option>
+            <option value="rueckfrage" {% if current_val == 'rueckfrage' %}selected{% endif %}>Rückfrage erforderlich</option>
+          </select>
+
+          {% elif field.typ == 'auswahl' %}
+          <select name="{{ field.name }}" id="input_{{ field.name }}" class="form-control">
+            <option value="" {% if current_val is none or current_val == '' %}selected{% endif %}>bitte wählen</option>
+            {% for w in field.werte %}
+            <option value="{{ w.wert }}" {% if current_val == w.wert %}selected{% endif %}>{{ w.wert.replace('_', ' ') }}</option>
+            {% endfor %}
+            <option value="rueckfrage" {% if current_val == 'rueckfrage' %}selected{% endif %}>Rückfrage erforderlich</option>
+          </select>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+    {% endfor %}
+
+    <fieldset class="fieldset">
+      <div class="fieldset-head"><h2>Notizen</h2></div>
+      <div class="form-group">
+        <label>Bemerkungen</label>
+        <textarea name="notiz" class="form-control">{{ obj.notiz if obj else '' }}</textarea>
+      </div>
+    </fieldset>
+
+    <div class="form-bar">
+      <button type="submit" class="btn btn-primary">Objekt speichern</button>
+      {% if obj %}<a href="/auftrag/{{ auftrag.id }}" class="btn">Abbrechen</a>{% endif %}
+    </div>
+  </form>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  function setupToggle(sourceElem, targetElem, conditionFn) {
+    if (!sourceElem || !targetElem) return;
+    function update() {
+      targetElem.style.display = conditionFn(sourceElem.value) ? "block" : "none";
+    }
+    sourceElem.addEventListener("change", update);
+    update();
+  }
+
+  const betreutSelect = document.querySelector("select[name='betreut_durch']");
+  const dienstleisterInput = document.querySelector("input[name='dienstleister_name']");
+  const dienstleisterGroup = dienstleisterInput ? dienstleisterInput.closest(".form-group") : null;
+  setupToggle(betreutSelect, dienstleisterGroup, val => val === "Dritter");
+
+  setupToggle(document.getElementById("input_alarmanlage_vorhanden"), document.getElementById("field_alarm_hersteller"), val => val === "ja");
+  setupToggle(document.getElementById("input_wartungsvertrag_vorhanden"), document.getElementById("field_wartungsvertrag_bis"), val => val === "ja");
+  setupToggle(document.getElementById("input_security_abo_vorhanden"), document.getElementById("field_security_abo_bis"), val => val === "ja");
+  setupToggle(document.getElementById("input_notstromaggregat"), document.getElementById("field_notstromaggregat_letzter_test"), val => val === "ja");
+
+  const zugangSelect = document.getElementById("input_zugangskontrolle");
+  const zutrittDokuField = document.getElementById("field_zutrittsprotokollierung");
+  const zugangsberechtigteField = document.getElementById("field_zugangsberechtigte_dokumentiert");
+
+  function updateZugangstoggle() {
+    if (!zugangSelect) return;
+    const val = zugangSelect.value;
+    const show = val && val !== "frei_zugaenglich" && val !== "unbekannt";
+    if (zutrittDokuField) zutrittDokuField.style.display = show ? "block" : "none";
+    if (zugangsberechtigteField) zugangsberechtigteField.style.display = show ? "block" : "none";
+  }
+  if (zugangSelect) {
+    zugangSelect.addEventListener("change", updateZugangstoggle);
+    updateZugangstoggle();
+  }
+
+  const ipInput = document.getElementById("input_ip_adressen");
+  if (ipInput) {
+    const hint = document.createElement("div");
+    hint.className = "cell-sub";
+    hint.style.marginTop = "6px";
+    hint.style.color = "var(--warn)";
+    hint.style.fontWeight = "600";
+    hint.style.display = "none";
+    hint.textContent = "Achtung: Dies ist eine öffentliche IP-Adresse.";
+    ipInput.parentNode.appendChild(hint);
+
+    function checkPublicIp() {
+      const val = ipInput.value.trim();
+      if (!val) { hint.style.display = "none"; return; }
+      const isPrivate = /^(10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[01])\.|127\.)/.test(val);
+      const isIpFormat = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(val);
+      hint.style.display = (isIpFormat && !isPrivate) ? "block" : "none";
+    }
+    ipInput.addEventListener("input", checkPublicIp);
+    checkPublicIp();
+  }
+
+  if (window.location.hash) {
+    const targetElem = document.getElementById(window.location.hash.substring(1));
+    if (targetElem) {
+      setTimeout(() => {
+        targetElem.classList.add("field-highlight");
+        const inp = targetElem.querySelector("input, select, textarea");
+        if (inp) inp.focus();
+      }, 200);
+    }
+  }
+});
+</script>
+{% endblock %}

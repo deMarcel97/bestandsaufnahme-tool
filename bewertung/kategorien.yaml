@@ -1,0 +1,14 @@
+schema_version: 1
+kategorien:
+  - id: it_security
+    bezeichnung: IT-Security und Bedrohungsmanagement
+    reihenfolge: 1
+  - id: rechtliche_anforderungen
+    bezeichnung: Rechtliche Anforderungen
+    reihenfolge: 2
+  - id: hardware_und_software
+    bezeichnung: Zustand von Hardware und Software
+    reihenfolge: 3
+  - id: betriebsrisiken
+    bezeichnung: Kritische Betriebsrisiken
+    reihenfolge: 4

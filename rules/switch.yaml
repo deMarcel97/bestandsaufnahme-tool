@@ -1,0 +1,162 @@
+schema_version: 1
+regeln:
+  - id: sw-unmanaged
+    gilt_fuer: switch
+    bedingung:
+      alle:
+        - feld: management_typ
+          operator: gleich
+          wert: unmanaged
+    schweregrad: hoch
+    befund: Es werden nicht-verwaltbare (Unmanaged) Switches eingesetzt
+    risiko: Unmanaged Switches bieten keine VLAN-Unterstützung, keine Sicherheitskonfiguration und keine zentralisierte Überwachung.
+    empfehlung: Austausch gegen verwaltbare Layer-2/Layer-3-Switches durchführen.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Unmanaged Switches gegen verwaltbare Modelle austauschen
+      beschreibung: Beschaffung und Konfiguration von Managed Layer-2/3 Switches.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: sw-keine-netztrennung
+    gilt_fuer: switch
+    bedingung:
+      alle:
+        - feld: netztrennung
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Keine VLAN-Netztrennung im Unternehmensnetzwerk eingerichtet
+    risiko: Schadsoftware oder Angreifer können aus dem Gast- oder Clientnetz ungehindert auf vertrauliche Server zugreifen.
+    empfehlung: VLAN-Struktur (Server, Clients, Management, Gast, IoT) konzipieren und auf Switches konfigurieren.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: VLAN-Netzwerksegmentierung konzipieren und konfigurieren
+      beschreibung: Einrichtung virtueller Netze zur Isolation sensibler Fachbereiche und Server.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: sw-firmware-veraltet
+    gilt_fuer: switch
+    bedingung:
+      alle:
+        - feld: firmware_aktuell
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Switch-Firmware ist veraltet
+    risiko: Bekannte Sicherheitslücken im Switch-Betriebssystem können für Netzwerkangriffe ausgenutzt werden.
+    empfehlung: Einspielung aktueller Firmware-Updates veranlassen.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Switch-Firmware auf den neuesten Stand aktualisieren
+      beschreibung: Wartungsfenster vereinbaren und Firmware-Updates durchführen.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: sw-garantie-abgelaufen
+    gilt_fuer: switch
+    bedingung:
+      alle:
+        - feld: garantie_bis
+          operator: datum_vor_heute
+    schweregrad: mittel
+    befund: Herstellergarantie für die Switches ist abgelaufen
+    risiko: Defekte Komponenten müssen auf eigene Kosten ersetzt werden; zeitnahe Vorab-Austausche sind nicht zugesichert.
+    empfehlung: Garantieverlängerung oder Hardware-Austausch im Lifecycle-Plan einplanen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Garantieabdeckung für Switches prüfen und erneuern
+      beschreibung: Prüfung von Care-Pack-Verlängerungen oder Modellwechsel.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: sw-kein-wartungsvertrag
+    gilt_fuer: switch
+    bedingung:
+      alle:
+        - feld: wartungsvertrag_vorhanden
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Kein Wartungsvertrag / Service-Level-Agreement für Switches vorhanden
+    risiko: Bei Hardwareausfällen verzögert sich der Austausch mangels definierter Reaktionszeiten.
+    empfehlung: Abschluss eines Servicevertrages mit NBD- (Next Business Day) oder 4-Stunden-Austausch.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Wartungsvertrag mit Ersatzgeräteservice für Switches abschließen
+      beschreibung: Vereinbarung von NBD- / 4h-Austauschservice mit Hersteller oder Systemhaus.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: sw-konfig-sicherung-fehlt
+    gilt_fuer: switch
+    bedingung:
+      alle:
+        - feld: konfigurationssicherung_aktuell
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Keine automatische / aktuelle Sicherung der Switch-Konfigurationen
+    risiko: Im Schadensfall verzögert die manuelle Rekonstruktion aller Port- und VLAN-Einstellungen die Wiederherstellung massiv.
+    empfehlung: Automatisiertes Backup der Switch-Konfigurationen (z. B. via TFTP/SSH oder NMS) einrichten.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Automatische Sicherung der Switch-Konfigurationen einrichten
+      beschreibung: Anbindung der Switches an ein zentrales Konfigurations-Backup-Tool.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: sw-zugangsschutz-unsicher
+    gilt_fuer: switch
+    bedingung:
+      alle:
+        - feld: zugangsschutz_management
+          operator: gleich
+          wert: http_telnet
+    schweregrad: hoch
+    befund: Management-Zugriff auf Switches erlaubt unverschlüsselte Protokolle (HTTP / Telnet)
+    risiko: Passwort und Konfigurationsdaten können per Sniffing im lokalen Netz abgefangen werden.
+    empfehlung: Unverschlüsselte Managementdienste deaktivieren und rein auf HTTPS / SSH umstellen.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: HTTP und Telnet auf Switches deaktivieren und HTTPS/SSH erzwingen
+      beschreibung: Abschaltung unverschlüsselter Verwaltungsdienste in der Switch-Konfiguration.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: sw-keine-port-security
+    gilt_fuer: switch
+    bedingung:
+      alle:
+        - feld: port_security_aktiv
+          operator: gleich
+          wert: "nein"
+    schweregrad: niedrig
+    befund: Keine Port-Security / 802.1X-Zugangskontrolle auf Switchports aktiviert
+    risiko: Unbefugte können eigene Geräte an freie Netzwerkdosen anschließen.
+    empfehlung: Deaktivierung ungenutzter Ports oder 802.1X-Authentifizierung konfigurieren.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Port-Security und Deaktivierung ungenutzter Switchports umsetzen
+      beschreibung: Sperrung ungenutzter Dosen und Einrichtung von MAC-Limits oder 802.1X.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: sw-kein-loop-protection
+    gilt_fuer: switch
+    bedingung:
+      alle:
+        - feld: loop_protection_aktiv
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Loop Protection / Spanning Tree Protocol (STP) nicht aktiviert
+    risiko: Versehentlich gesteckte Netzwerkschleifen führen zu einem Broadcast-Storm und vollständigem Netzausfall.
+    empfehlung: Spanning Tree Protocol (RSTP / MSTP) sowie BPDU-Guard auf allen Switches aktivieren.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Spanning Tree Protocol (STP) und BPDU-Guard aktivieren
+      beschreibung: Einschalten von Loop Protection Mechanismen im gesamten Switch-Netz.
+      kosten_richtwert: null
+      aufwand_richtwert: null

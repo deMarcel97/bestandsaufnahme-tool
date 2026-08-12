@@ -1,0 +1,263 @@
+schema_version: 1
+typ: serverraum
+bezeichnung_anzeige: Serverraum / IT-Raum
+berichtskapitel: infrastruktur
+abschnitte:
+  - id: zutritt_und_sicherheit
+    titel: Zutritt und Physische Sicherheit
+    felder:
+      - name: zugangskontrolle
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: srvraum_zugangskontrolle
+          max_punkte: 15
+        werte:
+          - wert: transponder_protokolliert
+            punkte: 15
+            textbaustein:
+              feststellung: "Der Zugang zum Serverraum ist durch ein elektronisch protokolliertes Transpondersystem geschützt."
+              auswirkung: null
+          - wert: transponder
+            punkte: 12
+            textbaustein:
+              feststellung: "Der Zugang zum Serverraum erfolgt über ein Transpondersystem ohne automatische Protokollierung."
+              auswirkung: null
+          - wert: schluessel_dokumentiert
+            punkte: 8
+            textbaustein:
+              feststellung: "Der Zugang zum Serverraum ist mit Schließzylindern gesichert; die Schlüsselvergabe ist dokumentiert."
+              auswirkung: null
+          - wert: schluessel_undokumentiert
+            punkte: 3
+            textbaustein:
+              feststellung: "Der Zugang zum Serverraum erfolgt über Schlüssel ohne schriftliche Dokumentation der Schlüsselträger."
+              auswirkung: "Fehlende Schlüsselübersichten erschweren die Kontrolle, wer physischen Zutritt zur IT-Infrastruktur besitzt."
+          - wert: frei_zugaenglich
+            punkte: 0
+            textbaustein:
+              feststellung: "Der Serverraum / Serverbereich ist frei zugänglich."
+              auswirkung: "Unbefugte Personen haben ungehinderten physischen Zugriff auf Server, Datenspeicher und Netzwerkverkabelung."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: zutrittsprotokollierung
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: rechtliche_anforderungen
+          kriterium: srvraum_zutrittsprotokollierung
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: "Zutritte zum Serverraum werden nachvollziehbar protokolliert."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Zutritte zum Serverraum werden nicht protokolliert."
+              auswirkung: "Im Sicherheits- oder Sabotagefall lässt sich nicht nachvollziehen, wer den Raum betreten hat."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: zugangsberechtigte_dokumentiert
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: rechtliche_anforderungen
+          kriterium: srvraum_zugangsberechtigte_doku
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: "Die zugangsberechtigten Personen für den Serverraum sind schriftlich dokumentiert."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Es liegt keine schriftliche Übersicht der zugangsberechtigten Personen für den Serverraum vor."
+              auswirkung: "Der Personenkreis mit physischem IT-Zugriff ist nicht transparent gesteuert."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: kameraueberwachung
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: ja
+            textbaustein:
+              feststellung: "Der Serverraumzugang wird per Video überwacht."
+              auswirkung: null
+          - wert: nein
+            textbaustein:
+              feststellung: "Eine Videoüberwachung des Serverraumzugangs ist nicht eingerichtet."
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+  - id: umwelt_und:brandschutz
+    titel: Umwelt- und Brandschutz
+    felder:
+      - name: umweltsensorik
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: srvraum_umweltsensorik
+          max_punkte: 10
+        werte:
+          - wert: mit_alarmierung
+            punkte: 10
+            textbaustein:
+              feststellung: "Umweltsensoren (Temperatur, Feuchtigkeit, Wasser) mit aktiver Alarmierung sind im Serverraum installiert."
+              auswirkung: null
+          - wert: nur_messung
+            punkte: 5
+            textbaustein:
+              feststellung: "Umweltsensoren messen Umgebungswerte, verfügen jedoch über keine automatische Alarmierung."
+              auswirkung: "Klimastörungen oder Wassereinbrüche werden außerhalb der Arbeitszeiten nicht zeitnah bemerkt."
+          - wert: keine
+            punkte: 0
+            textbaustein:
+              feststellung: "Im Serverraum ist keine Umweltsensorik vorhanden."
+              auswirkung: "Überhitzung oder Wasserschäden bleiben bis zum Ausfall der IT-Geräte unentdeckt."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: brandmeldeanlage
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: srvraum_brandmeldeanlage
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: "Der Serverraum ist an eine automatische Brandmeldeanlage angebunden."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Der Serverraum ist nicht an eine automatische Brandmeldeanlage angebunden."
+              auswirkung: "Entstehungsbrände werden nicht frühzeitig erkannt, wodurch schwere Hardware- und Datenschäden drohen."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: loeschanlage
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: srvraum_loeschanlage
+          max_punkte: 5
+        werte:
+          - wert: gas
+            punkte: 5
+            textbaustein:
+              feststellung: "Eine automatische Gaslösch- / Brandvermeidungsanlage schützt den Serverraum."
+              auswirkung: null
+          - wert: sprinkler
+            punkte: 2
+            textbaustein:
+              feststellung: "Im Serverraum ist eine Sprinkleranlage verbaut."
+              auswirkung: null
+          - wert: keine
+            punkte: 0
+            textbaustein:
+              feststellung: "Im Serverraum ist keine automatische Lösch- oder Brandvermeidungsanlage vorhanden."
+              auswirkung: null
+          - wert: nicht_relevant
+            punkte: null
+            textbaustein: null
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+  - id: stromversorgung_und_redundanz
+    titel: Stromversorgung und Redundanz
+    felder:
+      - name: stromeinspeisung
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: srvraum_stromeinspeisung
+          max_punkte: 10
+        werte:
+          - wert: zwei_getrennte_einspeisungen
+            punkte: 10
+            textbaustein:
+              feststellung: "Der Serverraum verfügt über zwei getrennte Stromeinspeisungen (A/B-Versorgung)."
+              auswirkung: null
+          - wert: eine_einspeisung
+            punkte: 0
+            textbaustein:
+              feststellung: "Der Serverraum wird über eine einzelne Stromeinspeisung versorgt."
+              auswirkung: "Bei Wartungsarbeiten am Hausanschluss oder Ausfall der Hauptzuleitung ist der Raum stromlos."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: notstromaggregat
+        typ: ja_nein_nicht_relevant
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: srvraum_notstromaggregat
+          max_punkte: 5
+        werte:
+          - wert: ja
+            punkte: 5
+            textbaustein:
+              feststellung: "Ein Notstromaggregat (NEA) sichert die Stromversorgung bei längerem Netzausfall."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Ein Notstromaggregat steht nicht zur Verfügung."
+              auswirkung: null
+          - wert: nicht_relevant
+            punkte: null
+            textbaustein: null
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: notstromaggregat_letzter_test
+        typ: datum
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: srvraum_notstrom_test
+          max_punkte: 5

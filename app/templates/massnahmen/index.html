@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Maßnahmenkatalog - {{ auftrag.bezeichnung }}{% endblock %}
+
+{% block content %}
+<div class="layout-sidebar">
+  {% include "_sidebar.html" %}
+
+  <main class="workspace">
+    <div class="page-head">
+      <div>
+        <div class="crumbs eyebrow">
+          <span>{{ auftrag.projekt_nummer }}</span><span class="sep">/</span><span>{{ auftrag.kunde }}</span>
+        </div>
+        <h1>Maßnahmenkatalog</h1>
+        <div class="meta-line"><span>Priorisiert nach Umsetzungsstufe 1 bis 3</span></div>
+      </div>
+      <button type="button" class="btn btn-primary btn-lg" style="flex:none;" data-dialog-open="neu-massnahme-modal">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        Neue Maßnahme
+      </button>
+    </div>
+
+    {% if transferred is not none %}
+    <div class="alert alert-info" style="margin-top:28px;">
+      <strong>Übernahme</strong>
+      <span>{{ transferred }} Findings in den Maßnahmenkatalog übernommen. {{ skipped }} übersprungen ({{ offen }} noch offen, {{ verworfen }} verworfen oder akzeptiert, {{ uebernommen }} bereits früher übernommen).</span>
+    </div>
+    {% endif %}
+
+    {% set stufen_beschreibung = {
+      1: "Sofortmaßnahmen — kritische Risiken mit unmittelbarem Handlungsbedarf, i. d. R. innerhalb der nächsten Wochen umzusetzen.",
+      2: "Mittelfristige Maßnahmen — wichtige Verbesserungen ohne akutes Risiko, planbar über die nächsten Monate.",
+      3: "Langfristige Optimierungen — strategische oder komfortbezogene Maßnahmen ohne Zeitdruck, z. B. im Rahmen der nächsten Budgetplanung."
+    } %}
+    {% for stufe in [1, 2, 3] %}
+    {% set st_m = massnahmen | selectattr('stufe', 'equalto', stufe) | list %}
+    <div class="group">
+      <div class="group-head">
+        <div>
+          <h3>Umsetzungsstufe {{ stufe }}</h3>
+          <p class="cell-sub" style="margin-top:4px; max-width:640px;">{{ stufen_beschreibung[stufe] }}</p>
+        </div>
+        <span class="eyebrow">{{ st_m|length }} Maßnahme{% if st_m|length != 1 %}n{% endif %}</span>
+      </div>
+
+      {% if st_m %}
+      <table style="margin-top:14px;">
+        <thead>
+          <tr>
+            <th>Bezeichnung</th>
+            <th style="width:110px;">Priorität</th>
+            <th class="col-right" style="width:130px;">Investition</th>
+            <th class="col-right" style="width:120px;">Monatlich</th>
+            <th style="width:130px;">Zeitaufwand</th>
+            <th style="width:130px;">Status</th>
+            <th class="col-right" style="width:110px;">Aktion</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in st_m %}
+          <tr>
+            <td class="top">
+              <div class="cell-title">{{ m.bezeichnung }}</div>
+              {% if m.beschreibung %}<div class="cell-sub">{{ m.beschreibung }}</div>{% endif %}
+            </td>
+            <td class="top"><span class="badge badge-{{ m.prioritaet }}">{{ m.prioritaet }}</span></td>
+            <td class="top col-right tnum">{{ "%.2f"|format(m.investitionskosten) }} €</td>
+            <td class="top col-right tnum">{{ "%.2f"|format(m.monatliche_kosten) }} €</td>
+            <td class="top tnum">{{ m.zeitaufwand }} {{ m.zeitaufwand_einheit }}</td>
+            <td class="top text-muted">{{ m.status }}</td>
+            <td class="top col-right">
+              <span class="linkact">
+                <form action="/auftrag/{{ auftrag.id }}/massnahme/{{ m.id }}/loeschen" method="POST" style="display:inline;" onsubmit="return confirm('Maßnahme löschen?');">
+                  <button type="submit" class="subtle">Entfernen</button>
+                </form>
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {% set inv_sum = st_m | map(attribute='investitionskosten') | sum %}
+      {% set mon_sum = st_m | map(attribute='monatliche_kosten') | sum %}
+      {% set zeit_sum = st_m | map(attribute='zeitaufwand') | sum %}
+      <div class="total-row">
+        <span>Zwischensumme Stufe {{ stufe }}</span>
+        <span class="figures">
+          <span>Investition {{ "%.2f"|format(inv_sum) }} €</span>
+          <span>Monatlich {{ "%.2f"|format(mon_sum) }} €</span>
+          <span>Aufwand {{ zeit_sum }} Einheiten</span>
+        </span>
+      </div>
+      {% else %}
+      <div class="empty-state" style="margin-top:14px;">
+        <strong>Keine Maßnahmen für Stufe {{ stufe }}</strong>
+        <span>Bestätigte Findings lassen sich aus der Findings-Liste hierher übernehmen.</span>
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </main>
+</div>
+
+<!-- Dialog: Neue Maßnahme -->
+<div class="dialog-backdrop" id="neu-massnahme-modal">
+  <div class="dialog">
+    <div class="dialog-title">
+      <span>Manuelle Maßnahme erstellen</span>
+      <button type="button" class="btn btn-icon" data-dialog-close aria-label="Schließen">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <form action="/auftrag/{{ auftrag.id }}/massnahme/neu" method="POST">
+      <div class="dialog-body">
+        <div class="form-group">
+          <label>Bezeichnung <span class="req">*</span></label>
+          <input type="text" name="bezeichnung" class="form-control" required placeholder="z. B. Firewall-Redundanz herstellen">
+        </div>
+        <div class="form-group">
+          <label>Beschreibung</label>
+          <textarea name="beschreibung" class="form-control"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Umsetzungsstufe</label>
+            <select name="stufe" class="form-control">
+              <option value="1">Stufe 1 (Sofort / Hoch)</option>
+              <option value="2" selected>Stufe 2 (Mittelfristig)</option>
+              <option value="3">Stufe 3 (Langfristig / Optimierung)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Priorität</label>
+            <select name="prioritaet" class="form-control">
+              <option value="hoch">hoch</option>
+              <option value="mittel" selected>mittel</option>
+              <option value="niedrig">niedrig</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select name="status" class="form-control">
+              <option value="vorgeschlagen" selected>vorgeschlagen</option>
+              <option value="im Angebot">im Angebot</option>
+              <option value="beauftragt">beauftragt</option>
+              <option value="verworfen">verworfen</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Investitionskosten (€)</label>
+            <input type="number" step="0.01" name="investitionskosten" value="0.00" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Monatliche Kosten (€)</label>
+            <input type="number" step="0.01" name="monatliche_kosten" value="0.00" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Zeitaufwand</label>
+            <input type="number" step="0.5" name="zeitaufwand" value="0.0" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Einheit</label>
+            <select name="zeitaufwand_einheit" class="form-control">
+              <option value="Stunden">Stunden</option>
+              <option value="Tage">Tage</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <button type="submit" class="btn btn-primary">Maßnahme speichern</button>
+        <button type="button" class="btn" data-dialog-close>Abbrechen</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="/static/js/dialog.js"></script>
+{% endblock %}

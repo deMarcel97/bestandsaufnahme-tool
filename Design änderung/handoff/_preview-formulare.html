@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vorschau — Formulare, Tabellen, Bewertung</title>
+  <link rel="stylesheet" href="app/static/css/style.css">
+  <script>
+    (function () {
+      var saved = localStorage.getItem("bat-theme");
+      document.documentElement.setAttribute("data-theme", saved === "dark" ? "dark" : "light");
+    })();
+  </script>
+</head>
+<body>
+  <header>
+    <div style="display:flex; align-items:baseline;">
+      <h1>Bestandsaufnahme</h1>
+      <span class="brand-sub">Systemhaus</span>
+    </div>
+    <nav style="display:flex; align-items:center; gap:6px;">
+      <a href="_preview.html">Aufträge</a>
+      <button type="button" id="theme-toggle-btn" onclick="toggleDarkMode()">
+        <svg id="theme-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+        <span id="theme-label">Theme</span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="workspace">
+
+      <div class="page-head">
+        <div>
+          <div class="crumbs eyebrow"><span>PROJ-1</span><span class="sep">/</span><span>Infrastrukturanalyse 2026</span></div>
+          <h1>Zentrale Mustercity</h1>
+          <div class="meta-line"><span>Standort bearbeiten</span></div>
+        </div>
+        <a href="#" class="btn" style="margin-top:30px; flex:none;">Zurück zum Auftrag</a>
+      </div>
+
+      <fieldset class="fieldset">
+        <div class="fieldset-head"><h2>Standortdaten</h2></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Bezeichnung <span class="req">*</span></label>
+            <input type="text" value="Zentrale Mustercity" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Anzahl User</label>
+            <input type="number" value="180" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Begehung am</label>
+            <input type="date" value="2026-03-04" class="form-control">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Straße</label>
+            <input type="text" value="Musterstraße 1" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>PLZ</label>
+            <input type="text" value="12345" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Ort</label>
+            <input type="text" value="Mustercity" class="form-control">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>Internetanbindungen</h2>
+          <span class="eyebrow">Primär, Backup &amp; weitere</span>
+        </div>
+        <p class="hint">Ein Standort ohne zweite Anbindung oder ohne Backup-Leitung erzeugt automatisch ein Risiko-Finding.</p>
+
+        <div class="repeat-block">
+          <div class="repeat-head">
+            <h4>Leitung 1 <span class="text-muted" style="font-weight:400;">Primäranschluss</span></h4>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Anbieter</label>
+              <input type="text" value="Telekom" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Anschlussart</label>
+              <select class="form-control"><option>Glasfaser_FTTH</option><option>DSL</option></select>
+            </div>
+            <div class="form-group">
+              <label>Profil / Vorauswahl</label>
+              <select class="form-control"><option>FTTH 600 (600/300 Mbit/s)</option></select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Down (Mbit/s)</label>
+              <input type="number" value="600" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Up (Mbit/s)</label>
+              <input type="number" value="300" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Feste IP?</label>
+              <select class="form-control"><option>ja</option><option>nein</option></select>
+            </div>
+          </div>
+          <div class="conditional">
+            <span class="eyebrow" style="display:block; margin-bottom:12px;">Feste IP-Adressierung</span>
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom:0;">
+                <label>Öffentliche IP-Adresse(n)</label>
+                <input type="text" value="198.51.100.1" class="form-control">
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label>Subnetzmaske</label>
+                <input type="text" value="/29" class="form-control">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-outline">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          Weitere Internetanbindung
+        </button>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <div class="fieldset-head"><h2>Aktive Bausteine</h2></div>
+        <div class="checkbox-grid">
+          <label><input type="checkbox" checked> USV (Unterbrechungsfreie Stromversorgung)</label>
+          <label><input type="checkbox" checked> Access Point / WLAN-Infrastruktur</label>
+          <label><input type="checkbox" checked> Firewall</label>
+          <label><input type="checkbox"> Switch / Aktive Netzwerktechnik</label>
+          <label><input type="checkbox"> Server &amp; Virtualisierung</label>
+          <label><input type="checkbox" checked> Serverraum / IT-Raum</label>
+        </div>
+      </fieldset>
+
+      <div class="section-head">
+        <div style="display:flex; align-items:baseline; gap:12px;"><h2>Findings</h2><span class="count">3 Befunde</span></div>
+        <button type="button" class="btn btn-primary" data-dialog-open="demo-dialog">Manuelles Finding</button>
+      </div>
+
+      <table style="margin-top:18px;">
+        <thead>
+          <tr><th style="width:110px;">Schweregrad</th><th>Befund &amp; Risiko</th><th>Empfehlung</th><th class="col-right" style="width:170px;">Aktion</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="top"><span class="badge badge-hoch">hoch</span></td>
+            <td class="top"><div class="cell-title">Keine Backup-Leitung am Hauptstandort</div><div class="cell-sub">Ausfall der Primärleitung legt den gesamten Standort still.</div></td>
+            <td class="top cell-sub">Zweite Anbindung über einen anderen Carrier mit getrennter Trasse.</td>
+            <td class="top col-right"><button class="btn btn-sm btn-primary">Als Maßnahme übernehmen</button></td>
+          </tr>
+          <tr>
+            <td class="top"><span class="badge badge-mittel">mittel</span></td>
+            <td class="top"><div class="cell-title">Firewall ohne aktives Security-Abo</div><div class="cell-sub">IPS- und Filterfunktionen laufen ohne Signaturupdates.</div></td>
+            <td class="top cell-sub">Security-Abo verlängern und Laufzeit dokumentieren.</td>
+            <td class="top col-right"><button class="btn btn-sm" disabled>Erst bestätigen</button></td>
+          </tr>
+          <tr>
+            <td class="top"><span class="badge badge-empfehlung">empfehlung</span></td>
+            <td class="top"><div class="cell-title">Zutrittsprotokollierung nicht dokumentiert</div><div class="cell-sub">Zugänge zum Serverraum sind nicht nachvollziehbar.</div></td>
+            <td class="top cell-sub">Protokollierung einführen und Berechtigte listen.</td>
+            <td class="top col-right"><button class="btn btn-sm" disabled>Erst bestätigen</button></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="section-head">
+        <div style="display:flex; align-items:baseline; gap:12px;"><h2>Bewertung</h2><span class="count">4 Kategorien</span></div>
+      </div>
+
+      <div style="margin-top:22px;">
+        <div class="scale">
+          <div class="scale-step is-on"></div><div class="scale-step is-on"></div><div class="scale-step is-on"></div><div class="scale-step"></div><div class="scale-step"></div>
+        </div>
+        <div class="scale-labels">
+          <span>Kritisch</span><span>Mangelhaft</span><span class="is-on">Ausreichend</span><span>Gut</span><span>Sehr gut</span>
+        </div>
+      </div>
+
+      <section class="standort">
+        <div class="scale-row">
+          <h3 style="margin:0; font-size:18px;">Netzwerk &amp; Anbindung</h3>
+          <div class="scale">
+            <div class="scale-step is-low"></div><div class="scale-step is-low"></div><div class="scale-step"></div><div class="scale-step"></div><div class="scale-step"></div>
+          </div>
+          <div class="value"><div style="font-size:18px; font-weight:800;">34 %</div><div class="cell-sub">Mangelhaft</div></div>
+        </div>
+      </section>
+
+      <section class="standort">
+        <div class="scale-row">
+          <h3 style="margin:0; font-size:18px;">Serverraum &amp; Infrastruktur</h3>
+          <div class="scale">
+            <div class="scale-step is-on"></div><div class="scale-step is-on"></div><div class="scale-step is-on"></div><div class="scale-step is-on"></div><div class="scale-step"></div>
+          </div>
+          <div class="value"><div style="font-size:18px; font-weight:800;">76 %</div><div class="cell-sub">Gut</div></div>
+        </div>
+      </section>
+
+      <div class="total-row" style="margin-top:32px;">
+        <span>Zwischensumme Stufe 1</span>
+        <span class="figures"><span>Investition 18.400,00 €</span><span>Monatlich 240,00 €</span><span>Aufwand 24 Einheiten</span></span>
+      </div>
+
+      <div class="form-bar">
+        <button type="submit" class="btn btn-primary">Standort speichern</button>
+        <a href="#" class="btn">Abbrechen</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialog-backdrop" id="demo-dialog">
+    <div class="dialog">
+      <div class="dialog-title">
+        <span>Manuelles Finding anlegen</span>
+        <button type="button" class="btn btn-icon" data-dialog-close aria-label="Schließen">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <div class="dialog-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Standort</label>
+            <select class="form-control"><option>Zentrale Mustercity (Mustercity)</option></select>
+          </div>
+          <div class="form-group">
+            <label>Schweregrad</label>
+            <select class="form-control"><option>mittel</option></select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Befund <span class="req">*</span></label>
+          <input type="text" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Risiko <span class="req">*</span></label>
+          <textarea class="form-control"></textarea>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-primary">Finding speichern</button>
+        <button type="button" class="btn" data-dialog-close>Abbrechen</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app/static/js/dialog.js"></script>
+  <script>
+    var ICON_MOON = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>';
+    var ICON_SUN = '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.9 4.9 1.4 1.4"></path><path d="m17.7 17.7 1.4 1.4"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.3 17.7-1.4 1.4"></path><path d="m19.1 4.9-1.4 1.4"></path>';
+    function updateThemeBtn() {
+      var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      document.getElementById("theme-icon").innerHTML = isDark ? ICON_SUN : ICON_MOON;
+      document.getElementById("theme-label").textContent = isDark ? "Hell" : "Dunkel";
+    }
+    function toggleDarkMode() {
+      var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("bat-theme", next);
+      updateThemeBtn();
+    }
+    document.addEventListener("DOMContentLoaded", updateThemeBtn);
+  </script>
+</body>
+</html>

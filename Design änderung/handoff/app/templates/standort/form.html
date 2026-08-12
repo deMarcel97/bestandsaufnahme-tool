@@ -1,0 +1,442 @@
+{% extends "base.html" %}
+
+{% block title %}Standort bearbeiten - {{ auftrag.bezeichnung }}{% endblock %}
+
+{% block content %}
+<div class="workspace">
+
+  <div class="page-head">
+    <div>
+      <div class="crumbs eyebrow">
+        <span>{{ auftrag.projekt_nummer }}</span><span class="sep">/</span><span>{{ auftrag.bezeichnung }}</span>
+      </div>
+      <h1>{% if standort %}{{ standort.bezeichnung }}{% else %}Neuer Standort{% endif %}</h1>
+      <div class="meta-line"><span>{% if standort %}Standort bearbeiten{% else %}Standort anlegen{% endif %}</span></div>
+    </div>
+    <a href="/auftrag/{{ auftrag.id }}" class="btn" style="margin-top:30px; flex:none;">Zurück zum Auftrag</a>
+  </div>
+
+  <form action="{% if standort %}/auftrag/{{ auftrag.id }}/standort/{{ standort.id }}/bearbeiten{% else %}/auftrag/{{ auftrag.id }}/standort/neu{% endif %}" method="POST">
+
+    <fieldset class="fieldset">
+      <div class="fieldset-head"><h2>Standortdaten</h2></div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Bezeichnung <span class="req">*</span></label>
+          <input type="text" name="bezeichnung" value="{{ standort.bezeichnung if standort else '' }}" class="form-control" required placeholder="Zentrale München">
+        </div>
+        <div class="form-group">
+          <label>Anzahl User</label>
+          <input type="number" name="anzahl_user" value="{{ standort.anzahl_user if standort else 10 }}" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Begehung am</label>
+          <input type="date" name="begehung_am" value="{{ standort.begehung_am if standort else '' }}" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Straße</label>
+          <input type="text" name="strasse" value="{{ standort.strasse if standort else '' }}" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>PLZ</label>
+          <input type="text" name="plz" value="{{ standort.plz if standort else '' }}" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Ort</label>
+          <input type="text" name="ort" value="{{ standort.ort if standort else '' }}" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Funktion / Nutzung</label>
+          <input type="text" name="funktion" value="{{ standort.funktion if standort else '' }}" class="form-control" placeholder="Hauptverwaltung, Produktion, etc.">
+        </div>
+        <div class="form-group">
+          <label>Ansprechpartner vor Ort</label>
+          <input type="text" name="ansprechpartner_vor_ort" value="{{ standort.ansprechpartner_vor_ort if standort else '' }}" class="form-control" placeholder="Max Mustermann (IT-Leitung)">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <div class="fieldset-head"><h2>Netzwerktechnik &amp; Trassenführung</h2></div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Redundanzkonzept für Backup-Leitung</label>
+          <select name="redaktionskonzept_backup_leitung" class="form-control">
+            <option value="automatische_umschaltung" {% if not standort or standort.redaktionskonzept_backup_leitung == 'automatische_umschaltung' %}selected{% endif %}>Automatische Umschaltung (Failover / VRRP / SD-WAN)</option>
+            <option value="manuelle_umschaltung" {% if standort and standort.redaktionskonzept_backup_leitung == 'manuelle_umschaltung' %}selected{% endif %}>Manuelle Umschaltung (Umstecken / Re-IP)</option>
+            <option value="keine_backup_leitung" {% if standort and standort.redaktionskonzept_backup_leitung == 'keine_backup_leitung' %}selected{% endif %}>Kein Redundanzkonzept</option>
+            <option value="unbekannt" {% if standort and standort.redaktionskonzept_backup_leitung == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Getrennte Trassenführung der Zuleitungen</label>
+          <select name="trassenfuehrung_getrennt" class="form-control">
+            <option value="ja" {% if not standort or standort.trassenfuehrung_getrennt == 'ja' %}selected{% endif %}>Ja (medien- / trassenredundant)</option>
+            <option value="nein" {% if standort and standort.trassenfuehrung_getrennt == 'nein' %}selected{% endif %}>Nein (gemeinsame Hauseinführung)</option>
+            <option value="nicht_relevant" {% if standort and standort.trassenfuehrung_getrennt == 'nicht_relevant' %}selected{% endif %}>Nicht relevant</option>
+            <option value="unbekannt" {% if standort and standort.trassenfuehrung_getrennt == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>USV-Absicherung der Netzwerktechnik</label>
+          <select name="usv_fuer_netzwerktechnik" class="form-control">
+            <option value="ja" {% if not standort or standort.usv_fuer_netzwerktechnik == 'ja' %}selected{% endif %}>Ja (Router, Modems &amp; Switches gepuffert)</option>
+            <option value="nein" {% if standort and standort.usv_fuer_netzwerktechnik == 'nein' %}selected{% endif %}>Nein (keine USV für Übergabekomponenten)</option>
+            <option value="unbekannt" {% if standort and standort.usv_fuer_netzwerktechnik == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <div class="fieldset-head">
+        <h2>Internetanbindungen</h2>
+        <span class="eyebrow">Primär, Backup &amp; weitere</span>
+      </div>
+      <p class="hint">Ein Standort ohne zweite Anbindung oder ohne Backup-Leitung erzeugt automatisch ein Risiko-Finding.</p>
+
+      <div id="anbindungen_container">
+        {% set existing_anb = standort.anbindungen if standort and standort.anbindungen else [] %}
+        {% set num_blocks = existing_anb|length if existing_anb|length >= 2 else 2 %}
+        {% for idx in range(num_blocks) %}
+        {% set anb = standort.anbindungen[idx] if standort and standort.anbindungen|length > idx else None %}
+        <div class="repeat-block anbindung-block" id="anbindung_block_{{ idx }}">
+          <input type="hidden" name="anbindung_vorhanden_{{ idx }}" value="1">
+          <div class="repeat-head">
+            <h4>Leitung {{ idx + 1 }} <span class="text-muted" style="font-weight:400;">{% if idx == 0 %}Primäranschluss{% elif idx == 1 %}Zweit- / Backup-Anschluss{% else %}Weitere Leitung{% endif %}</span></h4>
+            {% if idx >= 2 %}
+            <button type="button" class="btn btn-sm btn-danger" onclick="removeAnbindungBlock({{ idx }})">Entfernen</button>
+            {% endif %}
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Anbieter</label>
+              <input type="text" name="anbieter_{{ idx }}" list="anbieter_list_{{ idx }}" value="{{ anb.anbieter if anb else '' }}" class="form-control" placeholder="Bitte wählen oder tippen">
+              <datalist id="anbieter_list_{{ idx }}">
+                <option value="Telekom"></option>
+                <option value="Vodafone"></option>
+                <option value="1&amp;1"></option>
+                <option value="O2 / Telefónica"></option>
+                <option value="Deutsche Glasfaser"></option>
+                <option value="M-net"></option>
+                <option value="NetCologne"></option>
+                <option value="EWE"></option>
+                <option value="Plusnet"></option>
+                <option value="Colt"></option>
+              </datalist>
+            </div>
+            <div class="form-group">
+              <label>Anschlussart</label>
+              <select name="art_{{ idx }}" id="art_{{ idx }}" class="form-control" onchange="updatePresets({{ idx }})">
+                {% for opt in ["DSL", "Kabel", "Glasfaser_FTTH", "Standleitung", "Richtfunk", "LTE_5G", "Starlink", "Sonstiges"] %}
+                <option value="{{ opt }}" {% if anb and anb.art == opt %}selected{% endif %}>{{ opt }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Profil / Vorauswahl</label>
+              <select class="form-control" id="speed_preset_{{ idx }}" onchange="applySpeedPreset({{ idx }})">
+                <option value="">manuell / custom</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Down (Mbit/s)</label>
+              <input type="number" step="any" id="down_{{ idx }}" name="bandbreite_down_mbit_{{ idx }}" value="{{ anb.bandbreite_down_mbit if anb and anb.bandbreite_down_mbit else '' }}" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Up (Mbit/s)</label>
+              <input type="number" step="any" id="up_{{ idx }}" name="bandbreite_up_mbit_{{ idx }}" value="{{ anb.bandbreite_up_mbit if anb and anb.bandbreite_up_mbit else '' }}" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Symmetrisch?</label>
+              <select name="symmetrisch_{{ idx }}" class="form-control">
+                <option value="nein" {% if not anb or anb.symmetrisch == 'nein' %}selected{% endif %}>nein</option>
+                <option value="ja" {% if anb and anb.symmetrisch == 'ja' %}selected{% endif %}>ja</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Feste IP?</label>
+              <select id="feste_ip_{{ idx }}" name="feste_ip_{{ idx }}" class="form-control" onchange="toggleFesteIP({{ idx }})">
+                <option value="nein" {% if not anb or anb.feste_ip == 'nein' %}selected{% endif %}>nein</option>
+                <option value="ja" {% if anb and anb.feste_ip == 'ja' %}selected{% endif %}>ja</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Ist Backup-Leitung?</label>
+              <select name="ist_backup_leitung_{{ idx }}" class="form-control">
+                <option value="nein" {% if not anb or anb.ist_backup_leitung == 'nein' %}selected{% endif %}>nein</option>
+                <option value="ja" {% if anb and anb.ist_backup_leitung == 'ja' %}selected{% endif %}>ja</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Failover-Verfahren (SLA)</label>
+              <input type="text" name="failover_verfahren_{{ idx }}" value="{{ anb.failover_verfahren if anb else '' }}" class="form-control" placeholder="OSPF, BGP, statisch, manuell …">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>SLA / Entstörzeit</label>
+              <input type="text" name="sla_entstoerzeit_{{ idx }}" value="{{ anb.sla_entstoerzeit if anb else '' }}" class="form-control" placeholder="z. B. 4h rund um die Uhr">
+            </div>
+          </div>
+
+          <div class="conditional" id="ip_details_{{ idx }}" style="display:none;">
+            <span class="eyebrow" style="display:block; margin-bottom:12px;">Feste IP-Adressierung</span>
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom:0;">
+                <label>Öffentliche IP-Adresse(n)</label>
+                <input type="text" name="ip_adressen_{{ idx }}" value="{{ anb.ip_adressen if anb else '' }}" class="form-control" placeholder="z. B. 198.51.100.1">
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label>Subnetzmaske</label>
+                <input type="text" name="subnetzmaske_{{ idx }}" list="subnet_list_{{ idx }}" value="{{ anb.subnetzmaske if anb else '' }}" class="form-control" placeholder="z. B. /32 oder /29">
+                <datalist id="subnet_list_{{ idx }}">
+                  <option value="/32"></option>
+                  <option value="/30"></option>
+                  <option value="/29"></option>
+                  <option value="/28"></option>
+                  <option value="/24"></option>
+                </datalist>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <button type="button" class="btn btn-outline" onclick="addAnbindungBlock()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        Weitere Internetanbindung
+      </button>
+    </fieldset>
+
+    <div class="form-bar">
+      <button type="submit" class="btn btn-primary">Standort speichern</button>
+      <a href="/auftrag/{{ auftrag.id }}" class="btn">Abbrechen</a>
+    </div>
+  </form>
+</div>
+
+<script>
+const speedPresets = {
+  "DSL": [
+    { label: "ADSL 16", down: 16, up: 2 },
+    { label: "VDSL 50", down: 50, up: 10 },
+    { label: "VDSL 100", down: 100, up: 40 },
+    { label: "VDSL 250", down: 250, up: 40 }
+  ],
+  "Glasfaser_FTTH": [
+    { label: "FTTH 150", down: 150, up: 50 },
+    { label: "FTTH 300", down: 300, up: 150 },
+    { label: "FTTH 600", down: 600, up: 300 },
+    { label: "FTTH 1000", down: 1000, up: 500 }
+  ],
+  "Kabel": [
+    { label: "Kabel 150", down: 150, up: 15 },
+    { label: "Kabel 250", down: 250, up: 25 },
+    { label: "Kabel 500", down: 500, up: 50 },
+    { label: "Kabel 1000", down: 1000, up: 50 }
+  ]
+};
+
+let anbindungCounter = document.querySelectorAll('.anbindung-block').length;
+
+function updatePresets(idx) {
+  const artSelect = document.getElementById(`art_${idx}`);
+  if (!artSelect) return;
+  const art = artSelect.value;
+  const select = document.getElementById(`speed_preset_${idx}`);
+  if (!select) return;
+
+  if (art === "DSL") {
+    const symSelect = document.querySelector(`select[name="symmetrisch_${idx}"]`);
+    if (symSelect) symSelect.value = "nein";
+  }
+
+  const currentDown = document.getElementById(`down_${idx}`) ? document.getElementById(`down_${idx}`).value : '';
+  const currentUp = document.getElementById(`up_${idx}`) ? document.getElementById(`up_${idx}`).value : '';
+
+  select.innerHTML = '<option value="">manuell / custom</option>';
+  if (speedPresets[art]) {
+    speedPresets[art].forEach(p => {
+      const selected = (String(p.down) === String(currentDown) && String(p.up) === String(currentUp)) ? 'selected' : '';
+      select.innerHTML += `<option value="${p.down}_${p.up}" ${selected}>${p.label} (${p.down}/${p.up} Mbit/s)</option>`;
+    });
+  }
+}
+
+function applySpeedPreset(idx) {
+  const select = document.getElementById(`speed_preset_${idx}`);
+  if (select && select.value) {
+    const parts = select.value.split('_');
+    if (document.getElementById(`down_${idx}`)) document.getElementById(`down_${idx}`).value = parts[0];
+    if (document.getElementById(`up_${idx}`)) document.getElementById(`up_${idx}`).value = parts[1];
+  }
+}
+
+function toggleFesteIP(idx) {
+  const valElement = document.getElementById(`feste_ip_${idx}`);
+  if (!valElement) return;
+  const details = document.getElementById(`ip_details_${idx}`);
+  if (details) details.style.display = valElement.value === 'ja' ? 'block' : 'none';
+}
+
+function addAnbindungBlock() {
+  const container = document.getElementById('anbindungen_container');
+  const idx = anbindungCounter++;
+  const blockHtml = `
+    <div class="repeat-block anbindung-block" id="anbindung_block_${idx}">
+      <input type="hidden" name="anbindung_vorhanden_${idx}" value="1">
+      <div class="repeat-head">
+        <h4>Leitung ${idx + 1} <span class="text-muted" style="font-weight:400;">Weitere Leitung</span></h4>
+        <button type="button" class="btn btn-sm btn-danger" onclick="removeAnbindungBlock(${idx})">Entfernen</button>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Anbieter</label>
+          <input type="text" name="anbieter_${idx}" list="anbieter_list_${idx}" class="form-control" placeholder="Bitte wählen oder tippen">
+          <datalist id="anbieter_list_${idx}">
+            <option value="Telekom"></option>
+            <option value="Vodafone"></option>
+            <option value="1&1"></option>
+            <option value="O2 / Telefónica"></option>
+            <option value="Deutsche Glasfaser"></option>
+            <option value="M-net"></option>
+            <option value="NetCologne"></option>
+          </datalist>
+        </div>
+        <div class="form-group">
+          <label>Anschlussart</label>
+          <select name="art_${idx}" id="art_${idx}" class="form-control" onchange="updatePresets(${idx})">
+            <option value="DSL">DSL</option>
+            <option value="Kabel">Kabel</option>
+            <option value="Glasfaser_FTTH">Glasfaser_FTTH</option>
+            <option value="Standleitung">Standleitung</option>
+            <option value="Richtfunk">Richtfunk</option>
+            <option value="LTE_5G">LTE_5G</option>
+            <option value="Starlink">Starlink</option>
+            <option value="Sonstiges">Sonstiges</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Profil / Vorauswahl</label>
+          <select class="form-control" id="speed_preset_${idx}" onchange="applySpeedPreset(${idx})">
+            <option value="">manuell / custom</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Down (Mbit/s)</label>
+          <input type="number" step="any" id="down_${idx}" name="bandbreite_down_mbit_${idx}" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Up (Mbit/s)</label>
+          <input type="number" step="any" id="up_${idx}" name="bandbreite_up_mbit_${idx}" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Symmetrisch?</label>
+          <select name="symmetrisch_${idx}" class="form-control">
+            <option value="nein">nein</option>
+            <option value="ja">ja</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Feste IP?</label>
+          <select id="feste_ip_${idx}" name="feste_ip_${idx}" class="form-control" onchange="toggleFesteIP(${idx})">
+            <option value="nein">nein</option>
+            <option value="ja">ja</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ist Backup-Leitung?</label>
+          <select name="ist_backup_leitung_${idx}" class="form-control">
+            <option value="nein">nein</option>
+            <option value="ja" selected>ja</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Failover-Verfahren (SLA)</label>
+          <input type="text" name="failover_verfahren_${idx}" class="form-control" placeholder="OSPF, BGP, statisch, manuell …">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>SLA / Entstörzeit</label>
+          <input type="text" name="sla_entstoerzeit_${idx}" class="form-control" placeholder="z. B. 4h rund um die Uhr">
+        </div>
+      </div>
+
+      <div class="conditional" id="ip_details_${idx}" style="display:none;">
+        <span class="eyebrow" style="display:block; margin-bottom:12px;">Feste IP-Adressierung</span>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Öffentliche IP-Adresse(n)</label>
+            <input type="text" name="ip_adressen_${idx}" class="form-control" placeholder="z. B. 198.51.100.1">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Subnetzmaske</label>
+            <input type="text" name="subnetzmaske_${idx}" list="subnet_list_${idx}" class="form-control" placeholder="z. B. /32 oder /29">
+            <datalist id="subnet_list_${idx}">
+              <option value="/32"></option>
+              <option value="/30"></option>
+              <option value="/29"></option>
+              <option value="/28"></option>
+              <option value="/24"></option>
+            </datalist>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  container.insertAdjacentHTML('beforeend', blockHtml);
+  updatePresets(idx);
+}
+
+function removeAnbindungBlock(idx) {
+  const elem = document.getElementById(`anbindung_block_${idx}`);
+  if (elem) elem.remove();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll('.anbindung-block').forEach((_, idx) => {
+    updatePresets(idx);
+    toggleFesteIP(idx);
+  });
+
+  if (window.location.hash) {
+    const targetElem = document.getElementById(window.location.hash.substring(1));
+    if (targetElem) {
+      setTimeout(() => {
+        targetElem.classList.add("field-highlight");
+        const inp = targetElem.querySelector("input, select, textarea");
+        if (inp) inp.focus({ preventScroll: false });
+      }, 200);
+    }
+  }
+});
+</script>
+{% endblock %}

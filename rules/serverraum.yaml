@@ -1,0 +1,205 @@
+schema_version: 1
+regeln:
+  - id: srv-zugang-frei
+    gilt_fuer: serverraum
+    bedingung:
+      alle:
+        - feld: zugangskontrolle
+          operator: gleich
+          wert: frei_zugaenglich
+    schweregrad: hoch
+    befund: Serverraum / IT-Raum ist frei zugänglich
+    risiko: Unbefugte Personen haben ungehinderten physischen Zugriff auf Server, Datenspeicher und Netzwerkgeräte.
+    empfehlung: Zutrittsschutz herstellen (z. B. Schließsystem, Transponder).
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Zutrittsschutz für Serverraum herstellen
+      beschreibung: Installation einer Schließanlage oder eines elektronischen Zutrittssystems.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: srv-schluessel-undokumentiert
+    gilt_fuer: serverraum
+    bedingung:
+      alle:
+        - feld: zugangskontrolle
+          operator: gleich
+          wert: schluessel_undokumentiert
+    schweregrad: mittel
+    befund: Schlüsselvergabe für Serverraum ist nicht schriftlich dokumentiert
+    risiko: Es fehlt die Transparenz, wer im Besitz von Serverraumschlüsseln ist.
+    empfehlung: Schlüsselbuch führen und Schließhierarchie dokumentieren.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Dokumentation der Schlüsselvergabe für Serverraum einführen
+      beschreibung: Erstellung eines Schlüsselbuchs und Erfassung aller Schlüsselträger.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: srv-keine-protokollierung
+    gilt_fuer: serverraum
+    bedingung:
+      alle:
+        - feld: zutrittsprotokollierung
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Keine Protokollierung von Raumzutritten im Serverraum
+    risiko: Zutritte von Mitarbeitern und Dienstleistern sind im Nachhinein nicht nachvollziehbar.
+    empfehlung: Elektronische Zutrittsprotokollierung einrichten oder Besuchermeldebuch führen.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Zutrittsprotokollierung für Serverraum einrichten
+      beschreibung: Konfiguration der Protokollierung im Zutrittssystem oder Einführung eines Meldebuchs.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: srv-berechtigte-undokumentiert
+    gilt_fuer: serverraum
+    bedingung:
+      alle:
+        - feld: zugangsberechtigte_dokumentiert
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Liste der zutrittsberechtigten Personen für den Serverraum fehlt
+    risiko: Fehlende Berechtigungsübersicht erschwert regelmäßige Audits der Zutrittsrechte.
+    empfehlung: Autorisierungsmatrix für den Serverraumzutritt erstellen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Autorisationsliste für Serverraumzutritt erstellen
+      beschreibung: Erfassung und regelmäßige Überprüfung aller zutrittsberechtigten Personen.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: srv-keine-sensorik
+    gilt_fuer: serverraum
+    bedingung:
+      alle:
+        - feld: umweltsensorik
+          operator: gleich
+          wert: keine
+    schweregrad: mittel
+    befund: Keine Umweltsensorik im Serverraum vorhanden
+    risiko: Temperaturanstieg, Wassereinbrüche oder Feuchtigkeitsprobleme werden nicht rechtzeitig bemerkt.
+    empfehlung: Installation einer netzwerkfähigen Umweltsensorik mit Alarmierung.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Umweltsensorik im Serverraum installieren
+      beschreibung: Beschaffung und Installation von Überwachungssensoren (z. B. Kentix / Thomas-Krenn).
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: srv-sensorik-ohne-alarm
+    gilt_fuer: serverraum
+    bedingung:
+      alle:
+        - feld: umweltsensorik
+          operator: gleich
+          wert: nur_messung
+    schweregrad: niedrig
+    befund: Umweltsensoren im Serverraum ohne automatische Alarmierung
+    risiko: Messwerte werden aufgezeichnet, lösen aber im Schwellwertfall keine Benachrichtigung aus.
+    empfehlung: Automatische Benachrichtigung (E-Mail / SMS / SNMP-Trap) bei Schwellwertüberschreitung einrichten.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Alarmierung für Serverraum-Umweltsensoren einrichten
+      beschreibung: Anbindung der Messwerte an E-Mail/SMS-Benachrichtigung oder Monitoring.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: srv-keine-brandmeldung
+    gilt_fuer: serverraum
+    bedingung:
+      alle:
+        - feld: brandmeldeanlage
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Serverraum ist nicht an eine Brandmeldeanlage angebunden
+    risiko: Entstehungsbrände führen zu unbemerktem Totalschaden der Hardware.
+    empfehlung: Rauchmelder / Anbindung an Brandmeldeanlage nachrüsten.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Brandmeldung für Serverraum nachrüsten
+      beschreibung: Installation von Rauchmeldern mit Anbindung an die Gebäude-BMA oder Alarmanlage.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: srv-eine-einspeisung
+    gilt_fuer: serverraum
+    bedingung:
+      alle:
+        - feld: stromeinspeisung
+          operator: gleich
+          wert: eine_einspeisung
+    schweregrad: niedrig
+    befund: Serverraum verfügt nur über eine einzelne Stromeinspeisung
+    risiko: Bei Störungen der Hauptzuleitung oder Arbeiten an der Verteilung besteht ein Versorgungsrisiko.
+    empfehlung: Trennung in zwei Strompfade (A/B-Einspeisung) bei zukünftigen Sanierungen prüfen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Prüfen zweiter Stromeinspeisung (A/B-Versorgung)
+      beschreibung: Machbarkeitsprüfung für redundante Stromzuführung.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: srv-aggregat-test-alt
+    gilt_fuer: serverraum
+    bedingung:
+      alle:
+        - feld: notstromaggregat
+          operator: gleich
+          wert: "ja"
+        - eines:
+            - feld: notstromaggregat_letzter_test
+              operator: datum_in_tagen_kleiner
+              wert: -365
+            - feld: notstromaggregat_letzter_test
+              operator: ist_leer
+    schweregrad: mittel
+    befund: Kein aktueller Test des Notstromaggregats nachweisbar (älter als 12 Monate)
+    risiko: Das Notstromaggregat springt im Ernstfall möglicherweise nicht zuverlässig an.
+    empfehlung: Probelauf des Notstromaggregats unter Last durchführen und dokumentieren.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Testlauf des Notstromaggregats durchführen
+      beschreibung: Durchführung und Protokollierung eines Probelaufs des Dieselaggregats.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: srv-keine-loeschanlage
+    gilt_fuer: serverraum
+    bedingung:
+      alle:
+        - feld: loeschanlage
+          operator: gleich
+          wert: keine
+    schweregrad: niedrig
+    befund: Keine automatische Lösch- oder Brandvermeidungsanlage im Serverraum
+    risiko: Ein Brandausbruch muss manuell gelöscht werden, was zu Folgeschäden führen kann.
+    empfehlung: Handfeuerlöscher (CO2) bereithalten und automatische Löschoptionen prüfen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: CO2-Handfeuerlöscher für Serverraum bereitstellen
+      beschreibung: Aufstellung von geeigneten Löschmitteln für elektrische Anlagen.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: srv-kein-notstromaggregat
+    gilt_fuer: serverraum
+    bedingung:
+      alle:
+        - feld: notstromaggregat
+          operator: gleich
+          wert: "nein"
+    schweregrad: niedrig
+    befund: Kein Notstromaggregat zur Absicherung längerer Netzausfälle vorhanden
+    risiko: Bei stundenlangem Stromausfall erschöpfen sich USV-Kapazitäten.
+    empfehlung: USV-Laufzeiten optimieren und mobiles Aggregat für Notfälle vordefinieren.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Notstromkonzept für Langzeitausfälle erstellen
+      beschreibung: Vorhaltung mobiler Einspeisemöglichkeiten oder Mietvereinbarungen.
+      kosten_richtwert: null
+      aufwand_richtwert: null

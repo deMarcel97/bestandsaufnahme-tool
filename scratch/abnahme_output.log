@@ -1,0 +1,329 @@
+ABNAHME — IT-Bestandsaufnahme-Tool
+Projekt: /Users/marcel/001_Vibe_Code/001_bestandsaufnahme_tool
+
+==============================================================================
+1  TESTLAUF
+==============================================================================
+============================= test session starts ==============================
+collecting ... collected 42 items
+
+tests/test_access_point.py::test_access_point_rule_triggering PASSED     [  2%]
+tests/test_evaluator.py::test_evaluator_worst_value_principle PASSED     [  4%]
+tests/test_evaluator.py::test_calculate_objekt_status_thresholds PASSED  [  7%]
+tests/test_evaluator.py::test_unrated_null_points_excluded PASSED        [  9%]
+tests/test_exporter.py::test_exporter_confidentiality_and_anonymization PASSED [ 11%]
+tests/test_exporter.py::test_csv_exporter PASSED                         [ 14%]
+tests/test_integration_routes.py::test_full_workflow PASSED              [ 16%]
+tests/test_netzwerkschrank.py::test_netzwerkschrank_rule_triggering PASSED [ 19%]
+tests/test_new_schemas_and_rules.py::test_all_new_schemas_loaded PASSED  [ 21%]
+tests/test_new_schemas_and_rules.py::test_all_new_rules_validated_and_loaded PASSED [ 23%]
+tests/test_new_schemas_and_rules.py::test_rule_evaluation_new_types PASSED [ 26%]
+tests/test_report_builder.py::test_report_builder_single_snippet_per_field PASSED [ 28%]
+tests/test_report_builder.py::test_structured_textbaustein_extraction PASSED [ 30%]
+tests/test_rule_engine.py::test_condition_evaluator_operators PASSED     [ 33%]
+tests/test_rule_engine.py::test_rule_engine_evaluate_all PASSED          [ 35%]
+tests/test_rule_engine.py::test_all_firewall_and_standort_rules PASSED   [ 38%]
+tests/test_rule_engine.py::test_empty_field_creates_open_point_not_finding PASSED [ 40%]
+tests/test_rule_engine.py::test_massnahme_richtwerte_transfer PASSED     [ 42%]
+tests/test_rule_engine.py::test_massnahme_richtwert_rule_transfer_and_manual_override PASSED [ 45%]
+tests/test_schema_loader.py::test_load_firewall_schema PASSED            [ 47%]
+tests/test_schema_loader.py::test_extensiveness_dummy_schema PASSED      [ 50%]
+tests/test_schema_loader.py::test_invalid_field_type_raises PASSED       [ 52%]
+tests/test_serverraum.py::test_serverraum_rule_triggering PASSED         [ 54%]
+tests/test_standort_form.py::test_standort_edit_and_save PASSED          [ 57%]
+tests/test_storage.py::test_slugify PASSED                               [ 59%]
+tests/test_storage.py::test_generate_slug_id_collision PASSED            [ 61%]
+tests/test_storage.py::test_storage_crud_and_duplication PASSED          [ 64%]
+tests/test_stufe1.py::test_1_1_anbindungsblocks_select_only_and_no_phantom PASSED [ 66%]
+tests/test_stufe1.py::test_1_2_sla_entstoerzeit_persistence PASSED       [ 69%]
+tests/test_stufe1.py::test_1_3_anschlusstyp_removed PASSED               [ 71%]
+tests/test_stufe1.py::test_1_4_ist_backup_leitung_options_selected PASSED [ 73%]
+tests/test_stufe1.py::test_1_5_anbindung_block_fields_aligned PASSED     [ 76%]
+tests/test_stufe1.py::test_1_6_finding_without_begruendung_and_resilient_storage PASSED [ 78%]
+tests/test_stufe1.py::test_1_7_delete_massnahme_resets_linked_findings PASSED [ 80%]
+tests/test_stufe1.py::test_1_8_uebernommen_finding_status_change PASSED  [ 83%]
+tests/test_stufe1.py::test_1_9_reevaluation_preserves_confirmed_status PASSED [ 85%]
+tests/test_stufe1.py::test_1_10_unbekannt_field_preserves_finding_status PASSED [ 88%]
+tests/test_stufe1.py::test_1_12_uncheck_all_modules PASSED               [ 90%]
+tests/test_stufe1.py::test_1_13_raw_json_confidentiality_filter PASSED   [ 92%]
+tests/test_stufe1.py::test_1_14_german_number_parsing PASSED             [ 95%]
+tests/test_switch.py::test_switch_rule_triggering PASSED                 [ 97%]
+tests/test_usv.py::test_usv_rule_triggering PASSED                       [100%]
+
+=============================== warnings summary ===============================
+venv/lib/python3.14/site-packages/fastapi/testclient.py:1
+  /Users/marcel/001_Vibe_Code/001_bestandsaufnahme_tool/venv/lib/python3.14/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 42 passed, 1 warning in 1.75s =========================
+
+  Vorher: 42 Tests   Jetzt: 42 Tests
+  Neu:      keine
+  Entfernt: keine
+  [BESTANDEN] T1: Kein Test wurde entfernt
+  [BESTANDEN] T2: pytest Rückgabewert 0
+
+==============================================================================
+2  REGELWERKS-LINTER
+==============================================================================
+  99 Regeln geladen, 10 Schemas geladen
+  [BESTANDEN] L1: Alle Regeln verweisen auf gültige Felder und Werte
+  [BESTANDEN] L2: Jedes bewertete Feld hat eine Regel
+  [BESTANDEN] L3: Alle Textbausteine sind zweiteilig
+
+==============================================================================
+3  REFERENZAUFTRAG
+==============================================================================
+  Auftrag 'abnahme-referenz' mit 3 Standorten und 9 Objekten
+  Temporäres Datenverzeichnis: /var/folders/b5/4bnzl8td72s5kmq29lw97kkh0000gn/T/abnahme-data-elqz9xnv
+  Storage umgebogen in: app.services.report_builder
+
+==============================================================================
+4  REGELABDECKUNG — welche Regel hat ausgelöst
+==============================================================================
+    ausgelöst      usv-batterie-alt
+    ausgelöst      usv-kein-batterietest
+    ausgelöst      usv-kein-abschaltsignal
+    ausgelöst      usv-ueberlastet
+    ausgelöst      usv-kein-wartungsvertrag
+    ausgelöst      usv-garantie-abgelaufen
+    ausgelöst      usv-batteriegarantie-abgelaufen
+    ausgelöst      usv-ueberbrueckung-kurz
+    ausgelöst      ap-wlan-veraltet
+    ausgelöst      ap-standalone
+    ausgelöst      ap-gastnetz-unsicher
+    ausgelöst      ap-kein-wpa3
+    ausgelöst      ap-firmware-veraltet
+    ausgelöst      ap-garantie-abgelaufen
+    ausgelöst      ap-kein-wartungsvertrag
+    ausgelöst      fw-security-abo-abgelaufen
+    ausgelöst      fw-exchange-onprem
+    ausgelöst      fw-firmware-eol
+    ausgelöst      fw-hardware-alt
+    ausgelöst      fw-kein-ersatzgeraet
+    ausgelöst      fw-wartungsvertrag-fehlt
+    ausgelöst      fw-konfig-sicherung-fehlt
+    ausgelöst      fw-konfig-sicherung-inaktuell
+    ausgelöst      fw-ips-inaktiv
+    ausgelöst      fw-web-protection-inaktiv
+    ausgelöst      fw-mfa-vpn-fehlt
+    ausgelöst      fw-vlan-fehlt
+    ausgelöst      standort-zugangsschutz-frei
+    ausgelöst      fw-dokumentation-fehlt
+    ausgelöst      sw-unmanaged
+    ausgelöst      sw-keine-netztrennung
+    ausgelöst      sw-firmware-veraltet
+    ausgelöst      sw-garantie-abgelaufen
+    ausgelöst      sw-kein-wartungsvertrag
+    ausgelöst      sw-konfig-sicherung-fehlt
+    ausgelöst      sw-zugangsschutz-unsicher
+    ausgelöst      sw-keine-port-security
+    ausgelöst      sw-kein-loop-protection
+    kein Objekt    srv-hardware-alt   [server_virtualisierung]
+    kein Objekt    srv-wartungsvertrag-fehlt   [server_virtualisierung]
+    kein Objekt    srv-hypervisor-eol   [server_virtualisierung]
+    kein Objekt    srv-os-eol   [server_virtualisierung]
+    kein Objekt    srv-patchstand-veraltet   [server_virtualisierung]
+    kein Objekt    srv-kein-ha-cluster   [server_virtualisierung]
+    kein Objekt    srv-netzteil-redundanz-fehlt   [server_virtualisierung]
+    kein Objekt    srv-raid-unsicher   [server_virtualisierung]
+    kein Objekt    srv-monitoring-fehlt   [server_virtualisierung]
+    kein Objekt    srv-dokumentation-fehlt   [server_virtualisierung]
+    kein Objekt    m365-mfa-admin-fehlt   [m365_security]
+    kein Objekt    m365-mfa-benutzer-fehlt   [m365_security]
+    kein Objekt    m365-legacy-auth-aktiv   [m365_security]
+    kein Objekt    m365-backup-fehlt   [m365_security]
+    kein Objekt    m365-conditional-access-fehlt   [m365_security]
+    kein Objekt    m365-defender-o365-fehlt   [m365_security]
+    kein Objekt    m365-too-many-global-admins   [m365_security]
+    kein Objekt    m365-audit-log-deaktiviert   [m365_security]
+    kein Objekt    m365-dokumentation-fehlt   [m365_security]
+    ausgelöst      standort-ohne-failover
+    ausgelöst      standort-ohne-backup-kennzeichnung
+    ausgelöst      standort-anbindungen-gleicher-typ
+    ausgelöst      netz-keine-redundanz
+    ausgelöst      netz-gleiche-trasse
+    ausgelöst      netz-keine-usv-absicherung
+    ausgelöst      nwschrank-offen
+    ausgelöst      nwschrank-nicht-abschliessbar
+    ausgelöst      nwschrank-keine-belueftung
+    ausgelöst      nwschrank-patchpanel-unbeschriftet
+    ausgelöst      nwschrank-keine-verkabelungsdoku
+    ausgelöst      nwschrank-gewachsen
+    ausgelöst      nwschrank-cat5
+    ausgelöst      nwschrank-keine-reserve
+    ausgelöst      nwschrank-verkabelung-alt
+    kein Objekt    bak-321-regel-nicht-erfuellt   [backup_storage]
+    kein Objekt    bak-kein-immutability   [backup_storage]
+    kein Objekt    bak-kein-offsite-backup   [backup_storage]
+    kein Objekt    bak-keine-verschluesselung   [backup_storage]
+    kein Objekt    bak-keine-restore-tests   [backup_storage]
+    kein Objekt    bak-storage-hardware-alt   [backup_storage]
+    kein Objekt    bak-monitoring-fehlt   [backup_storage]
+    kein Objekt    bak-konzept-fehlt   [backup_storage]
+    kein Objekt    cli-win10-eol-ungeplant   [clients]
+    kein Objekt    cli-patchmanagement-fehlt   [clients]
+    kein Objekt    cli-edr-antivirus-fehlt   [clients]
+    kein Objekt    cli-verschluesselung-fehlt   [clients]
+    kein Objekt    cli-lokale-adminrechte   [clients]
+    kein Objekt    cli-rmm-mdm-fehlt   [clients]
+    kein Objekt    cli-hardware-alt   [clients]
+    kein Objekt    cli-dokumentation-fehlt   [clients]
+    ausgelöst      srv-zugang-frei
+    ausgelöst      srv-schluessel-undokumentiert
+    ausgelöst      srv-keine-protokollierung
+    ausgelöst      srv-berechtigte-undokumentiert
+    ausgelöst      srv-keine-sensorik
+    ausgelöst      srv-sensorik-ohne-alarm
+    ausgelöst      srv-keine-brandmeldung
+    ausgelöst      srv-eine-einspeisung
+    ausgelöst      srv-aggregat-test-alt
+    ausgelöst      srv-keine-loeschanlage
+    ausgelöst      srv-kein-notstromaggregat
+
+  64 Findings, 11 offene Punkte
+  [BESTANDEN] R1: Alle Regeln mit passendem Objekt lösen aus
+  [BESTANDEN] R2: 11 offene Punkte aus leeren Feldern — leeres Feld erzeugt keinen Mangel
+  [NICHT PRÜFBAR] R3: 35 Regeln ungeprüft — Referenzauftrag hat keine Objekte der Typen: backup_storage, clients, m365_security, server_virtualisierung
+  64 Maßnahmen aus bestätigten Findings erzeugt
+
+==============================================================================
+5  EXPORTE UND KENNZAHLEN
+==============================================================================
+  Stufe            Objekte  Tabelle  Krit.  Feldabd.  Bausteinabd.   Score  Bilder
+  --------------------------------------------------------------------------------
+  intern                 9        9     47     85.5%        100.0%    0.0%       1
+  kundentauglich         8        8     47     85.5%        100.0%    0.0%       1
+  anonymisiert           9        9     47     85.5%        100.0%    0.0%       1
+  [BESTANDEN] E1: Keine Stufe verliert alle Objekte
+  [BESTANDEN] E2: anonymisiert hat 9 Objekte, intern hat 9 — müssen gleich sein
+  [BESTANDEN] E3: Gefilterte Objekte und Tabellenzeilen stimmen überein
+  [BESTANDEN] E4: Grafik eingebettet (Bilder je Stufe: [1, 1, 1])
+
+==============================================================================
+10  INHALT DER KAPITEL 5 UND 6
+==============================================================================
+  Feststellungen: 64 Findings erzeugt, 64 Zeilen im Dokument
+  [BESTANDEN] I1: Kapitel 5 enthält 64 Zeilen
+  Maßnahmenkatalog: 64 Maßnahmen übergeben, 21 Zeilen im Dokument
+  [BESTANDEN] I2: Kapitel 6 enthält 21 Zeilen
+  Erste drei Feststellungen:
+    Standort: Zentrale | anzahl_anbindungen | n/a | MITTEL | Mehrere Internetanbindungen ohne funkt | Bei Ausfall der Hauptleitung erfolgt k | mn-001
+    Standort: Zentrale | anzahl_anbindungen | n/a | NIEDRIG | Internetleitungen werden über dieselbe | Physische Beschädigung der Kabeltrasse | mn-002
+    Standort: Zentrale | usv_fuer_netzwerktechnik | n/a | HOCH | Zuleitungskomponenten / Netzübergabepu | Bei einem kurzen Stromunterbruch fällt | mn-003
+  Erste drei Maßnahmen:
+    Netzwerk-Übergabegeräte und Modems an  | hoch | noch zu kalkulieren | noch zu kalkulieren | noch zu kalkulieren | vorgeschlagen
+    Security-Abonnement der Firewall verlä | hoch | noch zu kalkulieren | noch zu kalkulieren | noch zu kalkulieren | vorgeschlagen
+    Firewall-Hardware oder Firmware auf ak | hoch | noch zu kalkulieren | noch zu kalkulieren | noch zu kalkulieren | vorgeschlagen
+
+==============================================================================
+6  VERTRAULICHKEIT IM TEXT
+==============================================================================
+  [BESTANDEN] V1: Keine internen Objektbezeichnungen im kundentauglichen Export
+  [BESTANDEN] V2: Im anonymisierten Export ist keine Originalbezeichnung zu finden
+
+==============================================================================
+7  TEXTBAUSTEINE — Feststellung und Auswirkung getrennt
+==============================================================================
+  56 Textbausteine haben Feststellung UND Auswirkung
+  [BESTANDEN] B1: Feststellung und Auswirkung stehen in getrennten Absätzen
+  [BESTANDEN] B2: Kein Absatz vermischt Texte verschiedener Felder
+
+==============================================================================
+8  MASSNAHMEN
+==============================================================================
+  Regeln mit hinterlegtem Richtwert: 0 von 99
+  [NICHT PRÜFBAR] M1: Kein Richtwert im Regelwerk gesetzt — derzeit gewollt, Übernahmepfad nur durch Test belegbar
+  [BESTANDEN] M5: routes_findings.py liest kosten_richtwert und aufwand_richtwert
+  [BESTANDEN] M2: Jede Regel hat eine Maßnahmenbezeichnung
+  [BESTANDEN] M3: Keine Bezeichnung trägt ein Präfix
+  [BESTANDEN] M4: Kein Regelwerkseintrag enthält noch ein Feld 'stufe'
+
+==============================================================================
+9  KAPITELSTRUKTUR (intern)
+==============================================================================
+    Analysebericht: IT-Bestandsaufnahme
+    Vertraulichkeitshinweis
+    1. Unternehmenskontext
+    2. Executive Summary & Bewertung der IT-Umgebung
+    Bewertung nach Kategorien
+    3. Technische Infrastruktur und Fachkapitel
+    Standort: Zentrale (München)
+    Firewall Zentrale (Firewall)
+    Firewall Management (Firewall)
+    Serverraum Nebenabteil (Serverraum / IT-Raum)
+    Standort: Aussenstelle (Augsburg)
+    Firewall Aussenstelle (Firewall)
+    USV Aussenstelle (USV (Unterbrechungsfreie Stromversorgung))
+    Serverraum Aussenstelle (Serverraum / IT-Raum)
+    Netzwerkschrank Aussenstelle (Netzwerkschrank / Verteiler)
+    Switch Aussenstelle (Switch / Aktive Netzwerktechnik)
+    Access Point Aussenstelle (Access Point / WLAN-Infrastruktur)
+    Standort: Filiale (Nürnberg)
+    4. Übersichtstabellen Erfasster Systeme
+    5. Feststellungen (Findings)
+    6. Priorisierter Maßnahmenkatalog
+    Umsetzungsstufe 1
+    Umsetzungsstufe 2
+    Umsetzungsstufe 3
+    Gesamtsumme Maßnahmenkatalog
+  [BESTANDEN] K1: Keine Markdown-Reste im Dokument
+  [BESTANDEN] K2: Alle Pflichtkapitel vorhanden
+
+==============================================================================
+11  PLATZHALTER IM MARKDOWN-EXPORT
+==============================================================================
+  [BESTANDEN] P1: Keine Platzhalter im Markdown-Export
+
+==============================================================================
+12  NACHPRÜFUNG STUFE 1
+==============================================================================
+  [BESTANDEN] S1: Übernommene Findings bleiben sichtbar und sind im Auswahlfeld
+  [BESTANDEN] S2: Maßnahmenkatalog filtert nach Vertraulichkeit
+  [BESTANDEN] S3: Keine Regelauswertung in einer Anzeigeroute
+  [BESTANDEN] S4: Keine Vorauswahl, die eine leere Anbindung als Eingabe erscheinen lässt
+  [BESTANDEN] S5: Begründungsfeld ist als Pflichtfeld markiert
+  [BESTANDEN] S6: Keine rohe Zahlenauswertung mehr in den Routen
+  [BESTANDEN] S7: Anonymisierung erfasst auch Straße und PLZ
+
+==============================================================================
+ERGEBNIS
+==============================================================================
+  T1  BESTANDEN       Kein Test wurde entfernt
+  T2  BESTANDEN       pytest Rückgabewert 0
+  L1  BESTANDEN       Alle Regeln verweisen auf gültige Felder und Werte
+  L2  BESTANDEN       Jedes bewertete Feld hat eine Regel
+  L3  BESTANDEN       Alle Textbausteine sind zweiteilig
+  R1  BESTANDEN       Alle Regeln mit passendem Objekt lösen aus
+  R2  BESTANDEN       11 offene Punkte aus leeren Feldern — leeres Feld erzeugt keinen Mangel
+  R3  NICHT PRÜFBAR   35 Regeln ungeprüft — Referenzauftrag hat keine Objekte der Typen: backup_storage, clients, m365_security, server_virtualisierung
+  E1  BESTANDEN       Keine Stufe verliert alle Objekte
+  E2  BESTANDEN       anonymisiert hat 9 Objekte, intern hat 9 — müssen gleich sein
+  E3  BESTANDEN       Gefilterte Objekte und Tabellenzeilen stimmen überein
+  E4  BESTANDEN       Grafik eingebettet (Bilder je Stufe: [1, 1, 1])
+  I1  BESTANDEN       Kapitel 5 enthält 64 Zeilen
+  I2  BESTANDEN       Kapitel 6 enthält 21 Zeilen
+  V1  BESTANDEN       Keine internen Objektbezeichnungen im kundentauglichen Export
+  V2  BESTANDEN       Im anonymisierten Export ist keine Originalbezeichnung zu finden
+  B1  BESTANDEN       Feststellung und Auswirkung stehen in getrennten Absätzen
+  B2  BESTANDEN       Kein Absatz vermischt Texte verschiedener Felder
+  M1  NICHT PRÜFBAR   Kein Richtwert im Regelwerk gesetzt — derzeit gewollt, Übernahmepfad nur durch Test belegbar
+  M5  BESTANDEN       routes_findings.py liest kosten_richtwert und aufwand_richtwert
+  M2  BESTANDEN       Jede Regel hat eine Maßnahmenbezeichnung
+  M3  BESTANDEN       Keine Bezeichnung trägt ein Präfix
+  M4  BESTANDEN       Kein Regelwerkseintrag enthält noch ein Feld 'stufe'
+  K1  BESTANDEN       Keine Markdown-Reste im Dokument
+  K2  BESTANDEN       Alle Pflichtkapitel vorhanden
+  P1  BESTANDEN       Keine Platzhalter im Markdown-Export
+  S1  BESTANDEN       Übernommene Findings bleiben sichtbar und sind im Auswahlfeld
+  S2  BESTANDEN       Maßnahmenkatalog filtert nach Vertraulichkeit
+  S3  BESTANDEN       Keine Regelauswertung in einer Anzeigeroute
+  S4  BESTANDEN       Keine Vorauswahl, die eine leere Anbindung als Eingabe erscheinen lässt
+  S5  BESTANDEN       Begründungsfeld ist als Pflichtfeld markiert
+  S6  BESTANDEN       Keine rohe Zahlenauswertung mehr in den Routen
+  S7  BESTANDEN       Anonymisierung erfasst auch Straße und PLZ
+
+  33 Prüfungen, 0 fehlgeschlagen
+  Exporte: /Users/marcel/001_Vibe_Code/001_bestandsaufnahme_tool/exports/abnahme
+

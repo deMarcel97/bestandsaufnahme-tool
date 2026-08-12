@@ -1,0 +1,514 @@
+schema_version: 1
+typ: firewall
+bezeichnung_anzeige: Firewall
+berichtskapitel: netzwerk_und_internet
+abschnitte:
+- id: was_ist_es
+  titel: Was ist es
+  felder:
+  - name: hersteller
+    typ: auswahl
+    pflicht: true
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+    werte:
+    - wert: Fortinet
+      textbaustein:
+        feststellung: Als zentrale Firewall kommt ein System des Herstellers Fortinet
+          zum Einsatz.
+        auswirkung: null
+    - wert: Sophos
+      textbaustein:
+        feststellung: Als zentrale Firewall kommt ein System des Herstellers Sophos
+          zum Einsatz.
+        auswirkung: null
+    - wert: Palo_Alto
+      textbaustein:
+        feststellung: Als zentrale Firewall kommt ein System des Herstellers Palo
+          Alto zum Einsatz.
+        auswirkung: null
+    - wert: Cisco
+      textbaustein:
+        feststellung: Als zentrale Firewall kommt ein System des Herstellers Cisco
+          zum Einsatz.
+        auswirkung: null
+    - wert: Watchguard
+      textbaustein:
+        feststellung: Als zentrale Firewall kommt ein System des Herstellers Watchguard
+          zum Einsatz.
+        auswirkung: null
+    - wert: pfSense_OPNsense
+      textbaustein:
+        feststellung: Als zentrale Firewall kommt eine pfSense/OPNsense Open-Source-Lösung
+          zum Einsatz.
+        auswirkung: null
+    - wert: Sonstiges
+      textbaustein:
+        feststellung: Als zentrale Firewall kommt ein System eines sonstigen Herstellers
+          zum Einsatz.
+        auswirkung: null
+    - wert: unbekannt
+      textbaustein: null
+  - name: modell
+    typ: text
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+  - name: firmware_version
+    typ: text
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+  - name: aufbau
+    typ: auswahl
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+    werte:
+    - wert: Einzelgeraet
+      textbaustein:
+        feststellung: Die Firewall ist als Einzelgerät aufgebaut.
+        auswirkung: null
+    - wert: Cluster_aktiv_passiv
+      textbaustein:
+        feststellung: Die Firewall ist als hochverfügbares Aktiv-Passiv-Cluster aufgebaut.
+        auswirkung: null
+    - wert: Cluster_aktiv_aktiv
+      textbaustein:
+        feststellung: Die Firewall ist als Aktiv-Aktiv-Cluster aufgebaut.
+        auswirkung: null
+    - wert: unbekannt
+      textbaustein: null
+  - name: anzahl_geraete
+    typ: zahl
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+  - name: ip_adressen
+    typ: text
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: intern
+- id: zustand
+  titel: In welchem Zustand ist es
+  felder:
+  - name: hardware_alter
+    typ: auswahl
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: hardware_und_software
+      kriterium: hardware_alter
+      max_punkte: 5
+    werte:
+    - wert: unter_3_jahre
+      punkte: 5
+      textbaustein:
+        feststellung: Die eingesetzte Hardware ist jünger als drei Jahre und befindet
+          sich im regulären Lebenszyklus.
+        auswirkung: null
+    - wert: 3_bis_5_jahre
+      punkte: 3
+      textbaustein:
+        feststellung: Die eingesetzte Hardware ist drei bis fünf Jahre alt. Ein Austausch
+          sollte mittelfristig eingeplant werden.
+        auswirkung: null
+    - wert: ueber_5_jahre
+      punkte: 0
+      textbaustein:
+        feststellung: Die eingesetzte Hardware ist älter als fünf Jahre und sollte
+          aus Leistungs- und Sicherheitsgründen ersetzt werden. Die Ausfallwahrscheinlichkeit
+          ist deutlich erhöht.
+        auswirkung: Die Ausfallwahrscheinlichkeit steigt mit fortschreitendem Alter
+          deutlich an und moderne Sicherheitsfunktionen werden nicht unterstützt.
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: wartungsvertrag_vorhanden
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: betriebsrisiken
+      kriterium: wartungsvertrag_firewall
+      max_punkte: 10
+    werte:
+    - wert: ja
+      punkte: 10
+      textbaustein:
+        feststellung: Für die Firewall besteht ein aktiver Wartungsvertrag.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Für die Firewall besteht kein Wartungsvertrag.
+        auswirkung: Bei Hardwaredefekten oder technischen Störungen steht kein direkter
+          Herstellersupport zur Verfügung, was die Wiederherstellungszeit verlängern
+          kann.
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: wartungsvertrag_bis
+    typ: datum
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+  - name: security_abo_vorhanden
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: it_security
+      kriterium: security_abo_firewall
+      max_punkte: 25
+    werte:
+    - wert: ja
+      punkte: 25
+      textbaustein:
+        feststellung: Die Sicherheitsfunktionen sind durch ein aktives Security-Abonnement
+          abgedeckt.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Es besteht kein aktives Security-Abonnement für die Firewall.
+        auswirkung: Sicherheits-Signaturen für Web-Filter, IPS und Antivirus werden
+          nicht mehr aktualisiert, wodurch der Bedrohungsschutz eingeschränkt ist.
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: security_abo_bis
+    typ: datum
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+  - name: firmware_eol
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: hardware_und_software
+      kriterium: firmware_eol_firewall
+      max_punkte: 15
+    werte:
+    - wert: ja
+      punkte: 0
+      textbaustein:
+        feststellung: Die Firmware der Firewall hat den End-of-Life-Status erreicht
+          und erhält keine Sicherheitsupdates mehr.
+        auswirkung: Herstellerseitig werden keine Sicherheits-Patches mehr bereitgestellt,
+          neu entdeckte Schwachstellen bleiben unkorrigiert.
+    - wert: nein
+      punkte: 15
+      textbaustein:
+        feststellung: Die Firmware befindet sich im Herstellersupport und wird regelmäßig
+          aktualisiert.
+        auswirkung: Herstellerseitig werden keine Sicherheits-Patches mehr bereitgestellt,
+          neu entdeckte Schwachstellen bleiben unkorrigiert.
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: letztes_firmware_update
+    typ: datum
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+  - name: dokumentation_vorhanden
+    typ: auswahl
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: rechtliche_anforderungen
+      kriterium: dokumentation_firewall
+      max_punkte: 10
+    werte:
+    - wert: vollstaendig
+      punkte: 10
+      textbaustein:
+        feststellung: Eine vollständige Dokumentation der Firewall-Konfiguration ist
+          vorhanden.
+        auswirkung: null
+    - wert: teilweise
+      punkte: 5
+      textbaustein:
+        feststellung: Die Dokumentation der Firewall ist nur teilweise vorhanden.
+        auswirkung: null
+    - wert: keine
+      punkte: 0
+      textbaustein:
+        feststellung: Es liegt keine Dokumentation für das Firewall-System vor.
+        auswirkung: Im Störungs- oder Vertretungsfall verzögert die fehlende Dokumentation
+          die Analyse und Behebung von Fehlern.
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: konfigurationssicherung_aktuell
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: betriebsrisiken
+      kriterium: konfigurationssicherung_firewall
+      max_punkte: 5
+    werte:
+    - wert: ja
+      punkte: 5
+      textbaustein:
+        feststellung: Eine aktuelle Konfigurationssicherung der Firewall liegt vor.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Es liegt keine aktuelle Konfigurationssicherung der Firewall
+          vor.
+        auswirkung: Bei Systemausfall droht Daten- und Konfigurationsverlust.
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: konfig_sicherung_automatisch
+    label: Automatische Konfigurationssicherung eingerichtet
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: betriebsrisiken
+      kriterium: konfig_sicherung_automatisch
+      max_punkte: 5
+    werte:
+    - wert: ja
+      punkte: 5
+      textbaustein:
+        feststellung: Die Konfigurationssicherung der Firewall erfolgt automatisch
+          in regelmäßigen Intervallen.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Die Konfiguration der Firewall wird nicht automatisch gesichert.
+        auswirkung: Manuelle Sicherungen bergen das Risiko veralteter Wiederherstellungsstände.
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: zugangsschutz_standort
+    typ: auswahl
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: betriebsrisiken
+      kriterium: zugangsschutz_firewall
+      max_punkte: 10
+    werte:
+    - wert: abgeschlossener_raum
+      punkte: 10
+      textbaustein:
+        feststellung: Die Firewall befindet sich in einem abgeschlossenen Serverraum.
+        auswirkung: null
+    - wert: abgeschlossener_schrank
+      punkte: 7
+      textbaustein:
+        feststellung: Die Firewall ist in einem abgeschlossenen Netzwerkschrank untergebracht.
+        auswirkung: null
+    - wert: frei_zugaenglich
+      punkte: 0
+      textbaustein:
+        feststellung: Das Firewall-Gerät ist frei zugänglich aufgestellt.
+        auswirkung: Unbefugte Personen haben physischen Zugriff auf das Gerät, was
+          Manipulationen oder unbeabsichtigte Unterbrechungen ermöglicht.
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: alarmanlage_vorhanden
+    label: Alarmanlage für Raum/Schrank vorhanden
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    werte:
+    - wert: ja
+      punkte: 5
+      textbaustein:
+        feststellung: Der Zugang zur Firewall wird durch eine Alarmanlage überwacht.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Es ist keine Alarmanlage zur Überwachung des Zugangs installiert.
+        auswirkung: Unbefugtes Betreten des Aufstellorts wird nicht automatisch gemeldet.
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: alarm_hersteller
+    label: Hersteller Alarmanlage
+    typ: auswahl
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+    werte:
+    - wert: abus
+    - wert: bosch
+    - wert: daitem
+    - wert: esser
+    - wert: jablotron
+    - wert: kentix
+    - wert: siemens
+    - wert: telenot
+    - wert: andere
+    - wert: unbekannt
+- id: ausfall
+  titel: Was passiert bei Ausfall
+  felder:
+  - name: ersatzgeraet_vorhanden
+    typ: ja_nein
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: betriebsrisiken
+      kriterium: ersatzgeraet_firewall
+      max_punkte: 15
+    werte:
+    - wert: ja
+      punkte: 15
+      textbaustein:
+        feststellung: Ein vorkonfiguriertes Ersatzgerät steht für Notfälle bereit.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Es ist kein Ersatzgerät für den Ausfallfall vorhanden.
+        auswirkung: Bei einem Hardware-Defekt ist das gesamte Netzwerk bis zur Lieferung
+          eines Austauschgeräts unterbrochen.
+  - name: sla_ersatz
+    typ: text
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+  - name: internetleitung_haengt_dran
+    typ: ja_nein
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+- id: funktionen
+  titel: Funktionen
+  felder:
+  - name: ssl_vpn_homeoffice
+    typ: ja_nein
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+  - name: site_to_site_vpn_anzahl
+    typ: zahl
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+  - name: web_protection_aktiv
+    typ: ja_nein
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: it_security
+      kriterium: web_protection_firewall
+      max_punkte: 15
+    werte:
+    - wert: ja
+      punkte: 15
+      textbaustein:
+        feststellung: Der Web-Filter (Web Protection) zur Absicherung des Internetverkehrs
+          ist aktiv.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Der Web-Filter (Web Protection) ist nicht aktiviert.
+        auswirkung: Benutzer sind beim Surfen im Internet nicht vor bösartigen Webseiten
+          und schädlichen Downloads geschützt.
+  - name: ips_aktiv
+    typ: ja_nein
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: it_security
+      kriterium: ips_schutz_firewall
+      max_punkte: 15
+    werte:
+    - wert: ja
+      punkte: 15
+      textbaustein:
+        feststellung: Das Intrusion Prevention System (IPS) zur Erkennung von Angriffsversuchen
+          ist aktiv.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Das Intrusion Prevention System (IPS) ist deaktiviert.
+        auswirkung: Bösartige Netzwerkzugriffe und bekannte Angriffsmuster werden
+          nicht automatisch erkannt und blockiert.
+  - name: anzahl_sicherheitszonen
+    typ: zahl
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+  - name: exchange_onprem_dahinter
+    typ: ja_nein
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+  - name: mfa_fuer_vpn
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: it_security
+      kriterium: mfa_vpn_firewall
+      max_punkte: 15
+    werte:
+    - wert: ja
+      punkte: 15
+      textbaustein:
+        feststellung: Der VPN-Zugang ist durch Multi-Faktor-Authentisierung (MFA)
+          abgesichert.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Der VPN-Zugang ist nur durch Passwörter ohne MFA geschützt.
+        auswirkung: Kompromittierte oder schwache Kennwörter ermöglichen Angreifern
+          direkten Fernzugriff auf das interne Netzwerk.
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: vlan_konzept_umgesetzt
+    typ: ja_nein_unbekannt
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: betriebsrisiken
+      kriterium: vlan_segmentierung_firewall
+      max_punkte: 10
+    werte:
+    - wert: ja
+      punkte: 10
+      textbaustein:
+        feststellung: Das Netz ist durch VLANs in logische Segmente unterteilt.
+        auswirkung: null
+    - wert: nein
+      punkte: 0
+      textbaustein:
+        feststellung: Das Netz ist nicht in VLANs segmentiert.
+        auswirkung: Schadsoftware kann sich im Infektionsfall ungehindert im gesamten
+          Firmennetzwerk ausbreiten.
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vorschau — gerenderte Übersicht</title>
+  <link rel="stylesheet" href="app/static/css/style.css">
+  <script>
+    (function () {
+      var saved = localStorage.getItem("bat-theme");
+      document.documentElement.setAttribute("data-theme", saved === "dark" ? "dark" : "light");
+    })();
+  </script>
+</head>
+<body>
+  <header>
+    <div style="display:flex; align-items:baseline;">
+      <h1>Bestandsaufnahme</h1>
+      <span class="brand-sub">Systemhaus</span>
+    </div>
+    <nav style="display:flex; align-items:center; gap:6px;">
+      <a href="#" class="active">Aufträge</a>
+      <button type="button" id="theme-toggle-btn" onclick="toggleDarkMode()" title="Hell / Dunkel umschalten">
+        <svg id="theme-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg>
+        <span id="theme-label">Theme</span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="layout-sidebar">
+      <aside class="sidebar">
+        <h3>Auftrag</h3>
+        <ul>
+          <li><a href="#" class="active">Übersicht &amp; Erfassung</a></li>
+          <li><a href="#">Stammdaten &amp; Kontext</a></li>
+          <li><a href="#">Offene Punkte <span class="count">17</span></a></li>
+          <li><a href="#">Findings <span class="count-accent">6</span></a></li>
+          <li><a href="#">Maßnahmenkatalog</a></li>
+          <li><a href="#">Bewertung</a></li>
+          <li><a href="#">Exporte</a></li>
+        </ul>
+
+        <div class="sidebar-head">
+          <span class="eyebrow">Aktive Bausteine</span>
+          <span class="eyebrow">4 / 10</span>
+        </div>
+
+        <ul class="baustein-list">
+          <li>
+            <div class="baustein-row"><span title="USV (Unterbrechungsfreie Stromversorgung)">USV (Unterbrechungsfreie Stromversorgung)</span><span>100 %</span></div>
+            <div class="progress-container"><div class="progress-bar" style="width: 100%;"></div></div>
+          </li>
+          <li>
+            <div class="baustein-row"><span>Serverraum / IT-Raum</span><span>75.0 %</span></div>
+            <div class="progress-container"><div class="progress-bar" style="width: 75%;"></div></div>
+          </li>
+          <li>
+            <div class="baustein-row"><span>Access Point / WLAN-Infrastruktur</span><span>62.5 %</span></div>
+            <div class="progress-container"><div class="progress-bar" style="width: 62.5%;"></div></div>
+          </li>
+          <li>
+            <div class="baustein-row"><span>Firewall</span><span>40.0 %</span></div>
+            <div class="progress-container"><div class="progress-bar" style="width: 40%;"></div></div>
+          </li>
+          <li style="margin-top:6px; padding-top:12px; border-top:1px solid var(--line);">
+            <div class="eyebrow" style="margin-bottom:8px;">Noch nicht erfasst</div>
+            <div class="chip-list">
+              <span class="chip">Switch / Aktive Netzwerktechnik</span>
+              <span class="chip">Server &amp; Virtualisierung</span>
+              <span class="chip">Microsoft 365 &amp; Security</span>
+              <span class="chip">Netzwerkschrank / Verteiler</span>
+              <span class="chip">Backup &amp; Storage</span>
+              <span class="chip">Clients &amp; Arbeitsplätze</span>
+            </div>
+          </li>
+        </ul>
+      </aside>
+
+      <main class="workspace">
+        <div class="page-head">
+          <div>
+            <div class="crumbs eyebrow">
+              <span>PROJ-1</span><span class="sep">/</span><span>Landratsamt Mustercity</span>
+            </div>
+            <h1>Infrastrukturanalyse 2026</h1>
+            <div class="meta-line">
+              <span class="badge">Vorbereitung</span>
+              <span>Vertraulichkeit intern</span>
+              <span class="sep">·</span>
+              <a href="#">Jira PROJ-1</a>
+            </div>
+          </div>
+          <form action="#" method="POST" style="margin-top:30px; flex:none;">
+            <button type="submit" class="btn btn-primary btn-lg">Neu bewerten</button>
+          </form>
+        </div>
+
+        <div class="alert alert-warning" style="margin-top:28px;">
+          <strong>Warnung</strong>
+          <span>Das Vorlagedatum des Entwurfs liegt nach dem Abgabedatum.</span>
+        </div>
+
+        <div class="kpi-band">
+          <div class="kpi-grid">
+            <div class="kpi">
+              <div class="eyebrow">Gesamtbewertung</div>
+              <div class="kpi-value is-word">Ausreichend</div>
+              <div class="kpi-sub tnum">52.4 % von 100</div>
+            </div>
+            <div class="kpi">
+              <div class="eyebrow">Feldabdeckung</div>
+              <div class="kpi-value">38.9 %</div>
+              <div class="kpi-sub">der bewertbaren Felder</div>
+            </div>
+            <a class="kpi" href="#">
+              <div class="eyebrow">Offene Punkte</div>
+              <div class="kpi-value">17</div>
+              <div class="kpi-link">Details anzeigen →</div>
+            </a>
+            <a class="kpi" href="#">
+              <div class="eyebrow">Findings</div>
+              <div class="kpi-value is-accent">6</div>
+              <div class="kpi-link">Details anzeigen →</div>
+            </a>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <div style="display:flex; align-items:baseline; gap:12px;">
+            <h2>Standorte</h2>
+            <span class="count">2 Standorte · 3 Geräte</span>
+          </div>
+          <a href="#" class="btn btn-outline">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Standort
+          </a>
+        </div>
+
+        <section class="standort">
+          <div class="standort-head">
+            <div style="min-width:0;">
+              <h3>Zentrale Mustercity</h3>
+              <div class="standort-meta">
+                <span>Musterstraße 1, 12345 Mustercity</span>
+                <span class="sep">·</span>
+                <span>180 User</span>
+                <span class="sep">·</span>
+                <span>2 Anbindungen</span>
+                <span class="sep">·</span>
+                <span>Max Mustermann (IT-Leitung)</span>
+              </div>
+            </div>
+            <div class="standort-actions">
+              <a href="#" class="btn">Bearbeiten</a>
+              <button type="button" class="btn btn-dark" data-menu-toggle="menu-1">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                Gerät
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="menu" id="menu-1">
+                <span class="eyebrow">Baustein wählen</span>
+                <a href="#">USV (Unterbrechungsfreie Stromversorgung)</a>
+                <a href="#">Access Point / WLAN-Infrastruktur</a>
+                <a href="#">Firewall</a>
+                <a href="#">Switch / Aktive Netzwerktechnik</a>
+                <a href="#">Server &amp; Virtualisierung</a>
+                <a href="#">Microsoft 365 &amp; Security</a>
+                <a href="#">Netzwerkschrank / Verteiler</a>
+                <a href="#">Backup &amp; Storage</a>
+                <a href="#">Clients &amp; Arbeitsplätze</a>
+                <a href="#">Serverraum / IT-Raum</a>
+              </div>
+            </div>
+          </div>
+
+          <table style="margin-top:18px;">
+            <thead>
+              <tr>
+                <th>Typ</th><th>Bezeichnung</th><th>Betreut durch</th><th>Status</th><th>Vertraulichkeit</th><th class="col-right">Aktionen</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="cell-typ">firewall</td>
+                <td class="cell-name"><a href="#">FW-Zentrale-01</a></td>
+                <td>wir</td>
+                <td><span class="status status-teilweise">teilweise</span></td>
+                <td class="text-muted">intern</td>
+                <td class="col-right"><span class="linkact"><a href="#">Bearbeiten</a><button class="subtle">Duplizieren</button><button class="subtle">Löschen</button></span></td>
+              </tr>
+              <tr>
+                <td class="cell-typ">serverraum</td>
+                <td class="cell-name"><a href="#">Serverraum EG</a></td>
+                <td>wir</td>
+                <td><span class="status status-vollstaendig">vollständig</span></td>
+                <td class="text-muted">intern</td>
+                <td class="col-right"><span class="linkact"><a href="#">Bearbeiten</a><button class="subtle">Duplizieren</button><button class="subtle">Löschen</button></span></td>
+              </tr>
+              <tr>
+                <td class="cell-typ">access point</td>
+                <td class="cell-name"><a href="#">WLAN Verwaltung</a></td>
+                <td>Kunde</td>
+                <td><span class="status status-teilweise">teilweise</span></td>
+                <td class="text-muted">kundentauglich</td>
+                <td class="col-right"><span class="linkact"><a href="#">Bearbeiten</a><button class="subtle">Duplizieren</button><button class="subtle">Löschen</button></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="standort">
+          <div class="standort-head">
+            <div style="min-width:0;">
+              <h3>Außenstelle Nord</h3>
+              <div class="standort-meta">
+                <span>Dorfstraße 8, 12349 Musterdorf</span>
+                <span class="sep">·</span>
+                <span>24 User</span>
+                <span class="sep">·</span>
+                <span>1 Anbindung</span>
+                <span class="sep">·</span>
+                <span>Kein Ansprechpartner</span>
+              </div>
+            </div>
+            <div class="standort-actions">
+              <a href="#" class="btn">Bearbeiten</a>
+              <button type="button" class="btn btn-dark" data-menu-toggle="menu-2">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                Gerät
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="menu" id="menu-2">
+                <span class="eyebrow">Baustein wählen</span>
+                <a href="#">USV (Unterbrechungsfreie Stromversorgung)</a>
+                <a href="#">Access Point / WLAN-Infrastruktur</a>
+                <a href="#">Firewall</a>
+                <a href="#">Switch / Aktive Netzwerktechnik</a>
+                <a href="#">Server &amp; Virtualisierung</a>
+                <a href="#">Microsoft 365 &amp; Security</a>
+                <a href="#">Netzwerkschrank / Verteiler</a>
+                <a href="#">Backup &amp; Storage</a>
+                <a href="#">Clients &amp; Arbeitsplätze</a>
+                <a href="#">Serverraum / IT-Raum</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="empty-state">
+            <strong>Noch keine Geräte erfasst</strong>
+            <span>Lege das erste Gerät für diesen Standort über „+ Gerät“ an.</span>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    var ICON_MOON = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>';
+    var ICON_SUN = '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.9 4.9 1.4 1.4"></path><path d="m17.7 17.7 1.4 1.4"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.3 17.7-1.4 1.4"></path><path d="m19.1 4.9-1.4 1.4"></path>';
+    function updateThemeBtn() {
+      var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      document.getElementById("theme-icon").innerHTML = isDark ? ICON_SUN : ICON_MOON;
+      document.getElementById("theme-label").textContent = isDark ? "Hell" : "Dunkel";
+    }
+    function toggleDarkMode() {
+      var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("bat-theme", next);
+      updateThemeBtn();
+    }
+    document.addEventListener("DOMContentLoaded", updateThemeBtn);
+
+    document.addEventListener("click", function (e) {
+      var trigger = e.target.closest("[data-menu-toggle]");
+      var openMenu = trigger ? document.getElementById(trigger.dataset.menuToggle) : null;
+      document.querySelectorAll(".menu.open").forEach(function (m) { if (m !== openMenu) m.classList.remove("open"); });
+      if (trigger) { e.preventDefault(); if (openMenu) openMenu.classList.toggle("open"); }
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") document.querySelectorAll(".menu.open").forEach(function (m) { m.classList.remove("open"); });
+    });
+  </script>
+</body>
+</html>

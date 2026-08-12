@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Offene Punkte - {{ auftrag.bezeichnung }}{% endblock %}
+
+{% block content %}
+<div class="layout-sidebar">
+  {% include "_sidebar.html" %}
+
+  <main class="workspace">
+    <div class="page-head">
+      <div>
+        <div class="crumbs eyebrow">
+          <span>{{ auftrag.projekt_nummer }}</span><span class="sep">/</span><span>{{ auftrag.kunde }}</span>
+        </div>
+        <h1>Offene Punkte</h1>
+        <div class="meta-line">
+          <span>{{ offene_punkte|length }} Punkt{% if offene_punkte|length != 1 %}e{% endif %} auftragsweit</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint" style="margin-top:24px;">
+      Diese Liste fasst automatisch alle Rückfragen aus Geräte-Formularen, unvollständige regelrelevante Felder und ausstehende Dokumentenanforderungen zusammen. Unvollständige Angaben führen zu keinem Punktabzug und keinem Finding.
+    </p>
+
+    {% if offene_punkte %}
+      {% for sto_name, dev_dict in grouped_punkte.items() %}
+      {% if dev_dict %}
+      <div class="group">
+        <div class="group-head">
+          <h3>{{ sto_name }}</h3>
+          <span class="eyebrow">Standort</span>
+        </div>
+
+        {% for comp_name, items in dev_dict.items() %}
+        <div class="subgroup">
+          <div class="subgroup-head">
+            <h4>{{ comp_name }}</h4>
+            <span class="cell-sub">{{ items|length }} offene Punkte</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:150px;">Quelle</th>
+                <th>Beschreibung</th>
+                <th style="width:130px;">Status</th>
+                <th class="col-right" style="width:180px;">Aktion</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for op in items %}
+              <tr>
+                <td class="cell-typ">{{ op.quelle }}</td>
+                <td>{{ op.text }}</td>
+                <td class="text-muted">{{ op.status }}</td>
+                <td class="col-right">
+                  {% if op.ziel_url %}
+                  <span class="linkact"><a href="{{ op.ziel_url }}">Direkt zur Eingabe →</a></span>
+                  {% else %}
+                  <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endfor %}
+    {% else %}
+    <div class="empty-state" style="margin-top:24px;">
+      <strong>Keine offenen Punkte</strong>
+      <span>Aktuell liegen keine Rückfragen oder ausstehenden Angaben vor.</span>
+    </div>
+    {% endif %}
+  </main>
+</div>
+{% endblock %}

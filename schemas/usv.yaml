@@ -1,0 +1,224 @@
+schema_version: 1
+typ: usv
+bezeichnung_anzeige: USV (Unterbrechungsfreie Stromversorgung)
+berichtskapitel: infrastruktur
+abschnitte:
+  - id: was_ist_es
+    titel: Was ist es
+    felder:
+      - name: hersteller
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: APC
+            textbaustein:
+              feststellung: "Als USV-System kommt ein Gerät des Herstellers APC / Schneider Electric zum Einsatz."
+              auswirkung: null
+          - wert: Eaton
+            textbaustein:
+              feststellung: "Als USV-System kommt ein Gerät des Herstellers Eaton zum Einsatz."
+              auswirkung: null
+          - wert: Riello
+            textbaustein:
+              feststellung: "Als USV-System kommt ein Gerät des Herstellers Riello zum Einsatz."
+              auswirkung: null
+          - wert: Online_USV
+            textbaustein:
+              feststellung: "Als USV-System kommt ein Gerät des Herstellers Online USV zum Einsatz."
+              auswirkung: null
+          - wert: Vertiv
+            textbaustein:
+              feststellung: "Als USV-System kommt ein Gerät des Herstellers Vertiv zum Einsatz."
+              auswirkung: null
+          - wert: Sonstiges
+            textbaustein:
+              feststellung: "Als USV-System kommt ein Gerät eines sonstigen Herstellers zum Einsatz."
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: modell
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+
+      - name: kapazitaet_va
+        typ: zahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+
+      - name: ueberbrueckungszeit_minuten
+        typ: zahl
+        label: Überbrückungszeit (Min.)
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: usv_ueberbrueckungszeit
+          max_punkte: 10
+
+      - name: versorgte_geraete_anzahl
+        typ: zahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+
+      - name: auslastung_prozent
+        typ: zahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: usv_auslastung
+          max_punkte: 10
+
+  - id: zustand
+    titel: In welchem Zustand ist es
+    felder:
+      - name: batterie_alter
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: hardware_und_software
+          kriterium: usv_batterie_alter
+          max_punkte: 15
+        werte:
+          - wert: unter_3_jahre
+            punkte: 15
+            textbaustein:
+              feststellung: "Die USV-Batterien sind jünger als drei Jahre und befinden sich im regulären Nutzungszyklus."
+              auswirkung: null
+          - wert: 3_bis_5_jahre
+            punkte: 8
+            textbaustein:
+              feststellung: "Die USV-Batterien sind zwischen drei und fünf Jahre alt."
+              auswirkung: "Die Restkapazität der Akkus kann vermindert sein; ein Austausch sollte mittelfristig eingeplant werden."
+          - wert: ueber_5_jahre
+            punkte: 0
+            textbaustein:
+              feststellung: "Die USV-Batterien sind älter als fünf Jahre."
+              auswirkung: "Akkus über fünf Jahre neigen zu spontanem Kapazitätsabfall unter Last, wodurch bei Stromausfall ein unkontrollierter Systemabsturz droht."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: garantie_geraet_bis
+        typ: datum
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: usv_garantie_geraet
+          max_punkte: 5
+
+      - name: garantie_batterie_bis
+        typ: datum
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: usv_garantie_batterie
+          max_punkte: 5
+
+      - name: wartungsvertrag_vorhanden
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: usv_wartungsvertrag
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: "Für das USV-System besteht ein aktiver Wartungsvertrag inkl. Batterieservice."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Für das USV-System besteht kein Wartungsvertrag."
+              auswirkung: "Bei Defekten oder Akku-Ausfällen steht kein vereinbarter Reaktions- und Ersatzteilservice zur Verfügung."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: letzter_batterietest
+        typ: datum
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: usv_letzter_batterietest
+          max_punkte: 15
+
+  - id: ausfall
+    titel: Was passiert bei Ausfall
+    felder:
+      - name: abschaltsignal_an_server
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: usv_abschaltsignal
+          max_punkte: 15
+        werte:
+          - wert: ja
+            punkte: 15
+            textbaustein:
+              feststellung: "Eine Signalverbindung für den automatischen, geordneten Server-Shutdown ist konfiguriert."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Es ist keine Signalverbindung für einen automatischen Server-Shutdown eingerichtet."
+              auswirkung: "Bei erschöpfter USV-Kapazität schalten die versorgten Server hart ab, was zu Dateisystem- und Datenbankschäden führen kann."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: signalisierungsart
+        typ: auswahl
+        label: Art der Signalisierung
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: abschaltsignal_an_server
+          operator: gleich
+          wert: ja
+        werte:
+          - wert: USB
+            textbaustein:
+              feststellung: "Die Abschaltsignalisierung erfolgt per USB mit lokaler Shutdown-Software (z. B. APC PowerChute, Eaton IPP, CyberPower PowerPanel)."
+              auswirkung: null
+          - wert: RS232_seriell
+            textbaustein:
+              feststellung: "Die Abschaltsignalisierung erfolgt über eine serielle RS232-Verbindung."
+              auswirkung: null
+          - wert: Netzwerk_SNMP_Karte
+            textbaustein:
+              feststellung: "Die Abschaltsignalisierung erfolgt über eine Netzwerk-/SNMP-Managementkarte in der USV."
+              auswirkung: null
+          - wert: Relaiskontakt
+            textbaustein:
+              feststellung: "Die Abschaltsignalisierung erfolgt über einen Trockenkontakt / Relaisausgang der USV."
+              auswirkung: null
+          - wert: Sonstiges
+            textbaustein: null
+          - wert: unbekannt
+            textbaustein: null

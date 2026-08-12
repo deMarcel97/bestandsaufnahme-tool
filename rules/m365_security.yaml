@@ -1,0 +1,154 @@
+schema_version: 1
+regeln:
+  - id: m365-mfa-admin-fehlt
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: mfa_fuer_administratoren
+          operator: gleich
+          wert: "nein"
+    schweregrad: kritisch
+    befund: Multi-Faktor-Authentisierung (MFA) für Administrator-Konten ist nicht erzwungen
+    risiko: Kompromittierte Admin-Zugangsdaten führen zur vollständigen Übernahme des M365 Tenants durch Angreifer.
+    empfehlung: MFA für alle Administratoren unverzüglich über Conditional Access oder Security Defaults erzwingen.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Errzwingung von Multi-Faktor-Authentisierung (MFA) für alle M365 Administratoren
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: m365-mfa-benutzer-fehlt
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: mfa_fuer_alle_benutzer
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: MFA ist nicht für alle Benutzerskonten aktiviert
+    risiko: Phishing und Credential Stuffing ermöglichen unbefugten Zugriff auf M365 E-Mails, Dokumente und Teams-Chats.
+    empfehlung: Flächendeckende MFA-Pflicht für alle M365-Benutzer ausrollen.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Rollout der Multi-Faktor-Authentisierung (MFA) für alle M365 Benutzer
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: m365-legacy-auth-aktiv
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: legacy_authentication_blockiert
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Veraltete Authentifizierungsprotokolle (Legacy Auth) sind nicht blockiert
+    risiko: Legacy-Protokolle (z.B. POP3, IMAP, SMTP) unterstützen kein MFA und sind Hauptziel für Password-Spray-Angriffe.
+    empfehlung: Legacy Authentication im Tenant vollständig deaktivieren.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Abschaltung veralteter Authentifizierungsprotokolle (Legacy Auth) im M365 Tenant
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: m365-backup-fehlt
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: m365_drittanbieter_backup_aktiv
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Kein unabhängiges Drittanbieter-Backup für M365 Cloud-Daten
+    risiko: Microsoft übernimmt keine Garantie für versehentliches oder bösartiges Löschen von Daten außerhalb kurzer Papierkorbfristen.
+    empfehlung: Drittanbieter Cloud-to-Cloud Backup für Exchange, SharePoint, OneDrive und Teams einrichten.
+    referenz: "DSGVO Art. 32"
+    massnahme_vorschlag:
+      bezeichnung: Einrichtung einer unabhängigen Cloud-to-Cloud Sicherung für M365 Daten
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: m365-conditional-access-fehlt
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: conditional_access_regelwerke
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Keine Richtlinien für bedingten Zugriff (Conditional Access) konfiguriert
+    risiko: Zugriffe aus beliebigen Ländern oder von unsicheren Geräten werden nicht eingeschränkt oder geprüft.
+    empfehlung: Conditional Access Richtlinien (z.B. Geo-Blocking, Compliance-Geraete-Pflicht) definieren.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Konfiguration von Conditional Access Richtlinien im Entra ID Admin Center
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: m365-defender-o365-fehlt
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: defender_for_office365_aktiv
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Microsoft Defender for Office 365 (Safe Links / Safe Attachments) ist nicht konfiguriert
+    risiko: Schadaktive Phishing-Links und bösartige E-Mail-Anhänge werden nicht dynamisch gecrawlt/geprüft.
+    empfehlung: Anti-Phishing und Safe Links / Safe Attachments Policies aktivieren.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Einrichtung von Defender for Office 365 Safe Links & Safe Attachments Policies
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: m365-too-many-global-admins
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: global_admin_anzahl_angemessen
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Zu viele permanente Konten mit Global Admin Rechten im Tenant
+    risiko: Unnötig große Angriffsfläche für Tenant-Übernahmen durch Exzessivrechte.
+    empfehlung: Anzahle der Global Admins auf max. 2-4 reduzieren, rollenbasierte administrative Rechte (RBAC) nutzen.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Bereinigung der Administratorrechte und Umstellung auf RBAC im Tenant
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: m365-audit-log-deaktiviert
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: audit_logging_aktiv
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: M365 Unified Audit Logging ist nicht aktiviert
+    risiko: Im Falle eines Sicherheitsvorfalls sind forensische Untersuchungen und Nachweise unmöglich.
+    empfehlung: Unified Audit Logging aktivieren und Aufbewahrungsfristen prüfen.
+    referenz: "DSGVO / BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Aktivierung des Unified Audit Loggings im Microsoft Purview Compliance Portal
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: m365-dokumentation-fehlt
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: dokumentation_vorhanden
+          operator: gleich
+          wert: keine
+    schweregrad: mittel
+    befund: Keine Dokumentation der Microsoft 365 Tenant-Konfiguration vorhanden
+    risiko: Mangelnde Transparenz bezüglich Lizenzen, Admin-Zugängen und Sicherheitseinstellungen.
+    empfehlung: Dokumentation des M365 Konzepts und der Tenant-Einstellungen anlegen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Erstellung einer vollständigen M365 Tenant- und Sicherheitsdokumentation
+      kosten_richtwert: null
+      aufwand_richtwert: null

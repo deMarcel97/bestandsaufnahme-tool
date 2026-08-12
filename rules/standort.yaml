@@ -1,0 +1,118 @@
+schema_version: 1
+regeln:
+  - id: standort-ohne-failover
+    gilt_fuer: standort
+    bedingung:
+      alle:
+        - feld: anzahl_anbindungen
+          operator: gleich
+          wert: 1
+    schweregrad: mittel
+    befund: Standort ohne redundante Internetanbindung
+    risiko: Bei Leitungsausfall ist der Standort vollständig offline.
+    empfehlung: Zweitanbindung oder Mobilfunk-Failover prüfen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Redundante Internetanbindung einrichten
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: standort-ohne-backup-kennzeichnung
+    gilt_fuer: standort
+    bedingung:
+      alle:
+        - feld: anzahl_anbindungen
+          operator: groesser
+          wert: 1
+        - feld: hat_backup_leitung
+          operator: gleich
+          wert: "nein"
+    schweregrad: niedrig
+    befund: Mehrere Internetanbindungen ohne ausgewiesene Backup-Leitung
+    risiko: Unklare Lastverteilung und fehlende automatische Failover-Priorisierung im Störungsfall.
+    empfehlung: Backup-Leitung im System und in den Routing-Regeln kennzeichnen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Failover-Priorisierung und Backup-Leitung konfigurieren
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: standort-anbindungen-gleicher-typ
+    gilt_fuer: standort
+    bedingung:
+      alle:
+        - feld: anzahl_anbindungen
+          operator: groesser
+          wert: 1
+        - feld: hat_gleiche_anbindungsart
+          operator: gleich
+          wert: "ja"
+    schweregrad: empfehlung
+    befund: Identische Anbindungstechnologie bei mehreren Internetleitungen
+    risiko: Kein Medienumbruch — Störungen des Anbieters oder Trägers betreffen potenziell alle Leitungen.
+    empfehlung: Anbindung über medienredundante Wege (z. B. Glasfaser + 5G) realisieren.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Medienredundante Zweitanbindung prüfen
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: netz-keine-redundanz
+    gilt_fuer: standort
+    bedingung:
+      alle:
+        - feld: anzahl_anbindungen
+          operator: groesser
+          wert: 1
+        - feld: redaktionskonzept_backup_leitung
+          operator: gleich
+          wert: keine_backup_leitung
+    schweregrad: mittel
+    befund: Mehrere Internetanbindungen ohne funktionierendes Redundanzkonzept (Failover)
+    risiko: Bei Ausfall der Hauptleitung erfolgt kein automatisiertes Umschalten auf die Ersatzleitung.
+    empfehlung: Automatisches Failover-Verfahren (z. B. VRRP / SD-WAN) auf dem Router / der Firewall einrichten.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Automatisches Failover-Verfahren für Backup-Leitung konfigurieren
+      beschreibung: Einrichtung automatischer Umschaltung bei Leitungsausfall.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: netz-gleiche-trasse
+    gilt_fuer: standort
+    bedingung:
+      alle:
+        - feld: anzahl_anbindungen
+          operator: groesser
+          wert: 1
+        - feld: trassenfuehrung_getrennt
+          operator: gleich
+          wert: "nein"
+    schweregrad: niedrig
+    befund: Internetleitungen werden über dieselbe Trasse in das Gebäude geführt
+    risiko: Physische Beschädigung der Kabeltrasse trennt alle Zuleitungen gleichzeitig.
+    empfehlung: Weitgehend getrennte Gebäudezuführungen oder Mobilfunk/Starlink als medienunabhängiges Backup nutzen.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Trassenführung der Gebäudezuführungen auf physische Redundanz prüfen
+      beschreibung: Ermittlung alternativer Hauseinführungen oder Funk-Backups.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: netz-keine-usv-absicherung
+    gilt_fuer: standort
+    bedingung:
+      alle:
+        - feld: usv_fuer_netzwerktechnik
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Zuleitungskomponenten / Netzübergabepunkte (Modems/NTBA/Switches) ohne USV-Absicherung
+    risiko: Bei einem kurzen Stromunterbruch fällt der gesamte Internetzugang und das Netz aus.
+    empfehlung: Einbindung aller aktiven Netz-Übergabegeräte in die USV-Versorgung.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Netzwerk-Übergabegeräte und Modems an USV anbinden
+      beschreibung: Unterbrechungsfreie Stromversorgung für Router, Modems und Übergabetechnik sicherstellen.
+      kosten_richtwert: null
+      aufwand_richtwert: null

@@ -1,0 +1,243 @@
+schema_version: 1
+regeln:
+  - id: fw-security-abo-abgelaufen
+    gilt_fuer: firewall
+    bedingung:
+      eines:
+        - feld: security_abo_vorhanden
+          operator: gleich
+          wert: nein
+        - feld: security_abo_bis
+          operator: datum_vor_heute
+    schweregrad: hoch
+    befund: Firewall ohne aktives Security-Abonnement
+    risiko: Bedrohungsschutz, Web-Filter und IPS sind ohne gültiges Abo wirkungslos.
+    empfehlung: Abonnement verlängern und Ablaufdatum überwachen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Security-Abonnement der Firewall verlängern
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: fw-exchange-onprem
+    gilt_fuer: firewall
+    bedingung:
+      alle:
+        - feld: exchange_onprem_dahinter
+          operator: gleich
+          wert: "ja"
+    schweregrad: empfehlung
+    befund: Lokaler Exchange-Server im Einsatz
+    risiko: Betriebs- und Sicherheitsaufwand für lokalen Mailserver.
+    empfehlung: Migration nach Microsoft 365 prüfen, Datenschutzanforderungen beachten.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Migration des lokalen Exchange nach Microsoft 365
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: fw-firmware-eol
+    gilt_fuer: firewall
+    bedingung:
+      alle:
+        - feld: firmware_eol
+          operator: gleich
+          wert: "ja"
+    schweregrad: hoch
+    befund: Firewall-Firmware ist End-of-Life (EOL)
+    risiko: Es werden keine Sicherheitsupdates mehr bereitgestellt, neu entdeckte Schwachstellen bleiben ungepatcht.
+    empfehlung: Firmware-Upgrade durchführen oder Firewall-Hardware austauschen.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Firewall-Hardware oder Firmware auf aktuelle Version erneuern
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: fw-hardware-alt
+    gilt_fuer: firewall
+    bedingung:
+      alle:
+        - feld: hardware_alter
+          operator: gleich
+          wert: ueber_5_jahre
+    schweregrad: mittel
+    befund: Firewall-Hardware ist älter als 5 Jahre
+    risiko: Erhöhte Ausfallwahrscheinlichkeit durch Alterung der Komponenten.
+    empfehlung: Ersatzbeschaffung der Firewall im Budget einplanen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Erneuerung veralteter Firewall-Hardware
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: fw-kein-ersatzgeraet
+    gilt_fuer: firewall
+    bedingung:
+      alle:
+        - feld: ersatzgeraet_vorhanden
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Kein Ersatzgerät oder Redundanz für Firewall vorhanden
+    risiko: Bei Hardware-Defekt ist das gesamte Netz bis zur Ersatzlieferung offline.
+    empfehlung: Cold-Standby-Gerät anschaffen oder Vor-Ort-Austausch-SLA vereinbaren.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Cold-Standby-Firewall oder Vor-Ort-SLA vereinbaren
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: fw-wartungsvertrag-fehlt
+    gilt_fuer: firewall
+    bedingung:
+      alle:
+        - feld: wartungsvertrag_vorhanden
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Für die Firewall besteht kein aktiver Wartungsvertrag
+    risiko: Bei Störungen oder Hardware-Defekten ist kein Herstellersupport gewährleistet.
+    empfehlung: Wartungsvertrag beim Hersteller oder Dienstleister abschließen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Wartungsvertrag für Firewall abschließen
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: fw-konfig-sicherung-fehlt
+    gilt_fuer: firewall
+    bedingung:
+      alle:
+        - feld: konfig_sicherung_automatisch
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Konfiguration der Firewall wird nicht automatisch gesichert
+    risiko: Bei Ausfall oder Konfigurationsverlust droht langer Systemstillstand durch veraltete Sicherungen.
+    empfehlung: Automatische Konfigurationssicherung einrichten.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Automatische Konfigurationssicherung der Firewall einrichten
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: fw-konfig-sicherung-inaktuell
+    gilt_fuer: firewall
+    bedingung:
+      alle:
+        - feld: konfigurationssicherung_aktuell
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Keine aktuelle Konfigurationssicherung der Firewall vorhanden
+    risiko: Die vorliegende Sicherung entspricht nicht dem aktuellen Stand der Firewall-Regeln.
+    empfehlung: Konfigurationssicherung unverzüglich aktualisieren.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Aktuelle Konfigurationssicherung der Firewall erstellen
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: fw-ips-inaktiv
+    gilt_fuer: firewall
+    bedingung:
+      alle:
+        - feld: ips_aktiv
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Intrusion Prevention System (IPS) ist deaktiviert
+    risiko: Angriffe auf bekannte Schwachstellen im Datenverkehr werden nicht blockiert.
+    empfehlung: IPS aktivieren und Regelwerke pflegen.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Intrusion Prevention System (IPS) auf der Firewall aktivieren
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: fw-web-protection-inaktiv
+    gilt_fuer: firewall
+    bedingung:
+      alle:
+        - feld: web_protection_aktiv
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Web-Protection und URL-Filterung sind deaktiviert
+    risiko: Benutzer können schädliche Webseiten und Phishing-Inhalte ungeschützt aufrufen.
+    empfehlung: Web-Protection aktivieren.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Web-Protection und Web-Filterung auf der Firewall aktivieren
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: fw-mfa-vpn-fehlt
+    # TODO: Gilt die MFA-Regel immer oder nur bei vpn_einwahl_aktiv = ja?
+    gilt_fuer: firewall
+    bedingung:
+      alle:
+        - feld: mfa_fuer_vpn
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: VPN-Zugang ist nicht durch Multi-Faktor-Authentisierung (MFA) geschützt
+    risiko: Kompromittierte Zugangsdaten ermöglichen unbefugten Zugriff auf das interne Netz.
+    empfehlung: MFA für alle VPN-Benutzer erzwingen.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Multi-Faktor-Authentisierung (MFA) für VPN-Zugang einrichten
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: fw-vlan-fehlt
+    gilt_fuer: firewall
+    bedingung:
+      alle:
+        - feld: vlan_konzept_umgesetzt
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Netz ist nicht in VLANs segmentiert (flaches Netz)
+    risiko: Schadsoftware kann sich im gesamten Netz ungehindert ausbreiten (Lateral Movement).
+    empfehlung: VLAN-Segmentierung planen und umsetzen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: VLAN-Netzwerksegmentierung umsetzen
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: standort-zugangsschutz-frei
+    gilt_fuer: firewall
+    bedingung:
+      alle:
+        - feld: zugangsschutz_standort
+          operator: gleich
+          wert: frei_zugaenglich
+    schweregrad: hoch
+    befund: Standort oder Serverraum ist frei zugänglich
+    risiko: Unbefugte Personen haben physischen Zugriff auf IT-Geräte und Verkabelung.
+    empfehlung: Physischen Zugangsschutz herstellen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Physischen Zugangsschutz zum Serverraum herstellen
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: fw-dokumentation-fehlt
+    # TODO: Soll dokumentation_vorhanden = teilweise eine eigene, schwächere Regel auslösen?
+    gilt_fuer: firewall
+    bedingung:
+      alle:
+        - feld: dokumentation_vorhanden
+          operator: gleich
+          wert: keine
+    schweregrad: mittel
+    befund: Keine IT-Dokumentation für das System vorhanden
+    risiko: Störungsbehebung und Administration hängen von Einzelwissen ab.
+    empfehlung: Dokumentation erstellen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: IT-Dokumentation für die Firewall erstellen
+      kosten_richtwert: null
+      aufwand_richtwert: null

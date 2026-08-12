@@ -1,0 +1,129 @@
+schema_version: 1
+regeln:
+  - id: ap-wlan-veraltet
+    gilt_fuer: access_point
+    bedingung:
+      alle:
+        - feld: wlan_standard
+          operator: gleich
+          wert: wifi4_oder_aelter
+    schweregrad: hoch
+    befund: Veraltete WLAN-Hardware (Wi-Fi 4 / 802.11n oder älter) im Einsatz
+    risiko: Geringe Übertragungsraten und unzureichender Schutz vor modernen WLAN-Angriffen.
+    empfehlung: Erneuerung der Access Points auf Wi-Fi 6 / Wi-Fi 6E veranlassen.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Veraltete WLAN Access Points auf Wi-Fi 6 / 6E erneuern
+      beschreibung: Austausch alter WLAN-Sender gegen moderne Wi-Fi 6/6E Access Points.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: ap-standalone
+    gilt_fuer: access_point
+    bedingung:
+      alle:
+        - feld: management
+          operator: gleich
+          wert: standalone
+    schweregrad: mittel
+    befund: Access Points werden ohne zentralen Controller betrieben (Standalone)
+    risiko: Kein nahtloses Roaming, aufwendige dezentrale Pflege und fehlendes zentrales Monitoring.
+    empfehlung: Einbindung der Access Points in eine zentrale Management-Lösung (Cloud oder On-Premise).
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Zentrales WLAN-Management (Controller) einführen
+      beschreibung: Anbindung aller Access Points an ein zentrales Management-System.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: ap-gastnetz-unsicher
+    gilt_fuer: access_point
+    bedingung:
+      alle:
+        - feld: gast_wlan_vorhanden
+          operator: gleich
+          wert: "ja"
+        - feld: gast_wlan_isoliert
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Gast-WLAN ist nicht vom internen Unternehmensnetz isoliert
+    risiko: Externe Besucher und private Mobilgeräte erhalten Zugriff auf interne Server und Netzwerkfreigaben.
+    empfehlung: Gast-WLAN in eigenes VLAN legen und Client Isolation aktivieren.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Gast-WLAN durch eigenes VLAN und Client-Isolation vom Firmennetz trennen
+      beschreibung: Konfiguration eines isolierten Gastnetzes ohne Zugriff auf interne Netze.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: ap-kein-wpa3
+    gilt_fuer: access_point
+    bedingung:
+      alle:
+        - feld: verschluesselung_wpa3
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Keine WPA3- / WPA2-Enterprise-Verschlüsselung im WLAN aktiviert
+    risiko: WPA2-PSK Netze sind anfällig für Offline-Wörterbuchangriffe (Handshake Cracking).
+    empfehlung: Umstellung auf WPA3-Personal / WPA3-Enterprise oder 802.1X mit RADIUS prüfen.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: WLAN-Verschlüsselung auf WPA3 oder WPA2-Enterprise aufrüsten
+      beschreibung: Anpassung der WLAN-Sicherheitseinstellungen auf moderne Standards.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: ap-firmware-veraltet
+    gilt_fuer: access_point
+    bedingung:
+      alle:
+        - feld: firmware_aktuell
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Access-Point-Firmware ist veraltet
+    risiko: Bekannte Schwachstellen in den WLAN-Controllern und Access Points gefährden die Vertraulichkeit des Funkverkehrs.
+    empfehlung: Einspielung aktueller Firmware-Updates veranlassen.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Firmware der WLAN Access Points aktualisieren
+      beschreibung: Einspielen aktueller Software-Patches auf den Access Points.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: ap-garantie-abgelaufen
+    gilt_fuer: access_point
+    bedingung:
+      alle:
+        - feld: garantie_bis
+          operator: datum_vor_heute
+    schweregrad: niedrig
+    befund: Herstellergarantie für Access Points ist abgelaufen
+    risiko: Defekte Access Points können nicht mehr kostenfrei über den Hersteller ersetzt werden.
+    empfehlung: Hardware-Austauschzyklus planen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Garantie und Lebenszyklus der WLAN-Hardware prüfen
+      beschreibung: Überprüfung des Herstellersupport-Status.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: ap-kein-wartungsvertrag
+    gilt_fuer: access_point
+    bedingung:
+      alle:
+        - feld: wartungsvertrag_vorhanden
+          operator: gleich
+          wert: "nein"
+    schweregrad: niedrig
+    befund: Kein Wartungs- / Supportvertrag für die WLAN-Infrastruktur abgeschlossen
+    risiko: Im Fehlerfall steht kein vereinbarter Herstellersupport zur Verfügung.
+    empfehlung: Aufnahme der WLAN-Komponenten in den Systemhaus-Wartungsvertrag.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Supportvertrag für WLAN-Infrastruktur vereinbaren
+      beschreibung: Einbindung der Access Points in den IT-Servicevertrag.
+      kosten_richtwert: null
+      aufwand_richtwert: null

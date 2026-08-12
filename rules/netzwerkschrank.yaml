@@ -1,0 +1,163 @@
+schema_version: 1
+regeln:
+  - id: nwschrank-offen
+    gilt_fuer: netzwerkschrank
+    bedingung:
+      alle:
+        - feld: art
+          operator: gleich
+          wert: offen_im_raum
+    schweregrad: hoch
+    befund: Netzwerk- / Servertechnik ist offen im Raum aufgestellt
+    risiko: Die Hardware ist unbefugtem physischem Zugriff, Verschmutzung und Beschädigung ausgesetzt.
+    empfehlung: Unterbringung in einem verschließbaren 19-Zoll-Schrank oder Wandgehäuse.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Verschlussfähigen Netzwerkschrank beschaffen und montieren
+      beschreibung: Einbau der offenen Netzwerk- und Serverkomponenten in ein geschütztes Rack.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: nwschrank-nicht-abschliessbar
+    gilt_fuer: netzwerkschrank
+    bedingung:
+      alle:
+        - feld: abschliessbar
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Netzwerkschrank / Gehäuse ist nicht abgeschlossen
+    risiko: Unbefugte Personen haben direkten physischen Zugriff auf Verkabelung und Switchports.
+    empfehlung: Schließzylinder nachrüsten und Schrank stets verschlossen halten.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Netzwerkschrank mit Schließzylinder sichern
+      beschreibung: Nachrüstung eines Schlossgriffs und Reglementierung der Schlüssel.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: nwschrank-keine-belueftung
+    gilt_fuer: netzwerkschrank
+    bedingung:
+      alle:
+        - feld: belueftung
+          operator: gleich
+          wert: keine
+    schweregrad: mittel
+    befund: Keine ausreichende Belüftung im Netzwerkschrank vorhanden
+    risiko: Wärmestau im Schrank führt zur Überhitzung von aktiven Komponenten und reduziert deren Lebensdauer.
+    empfehlung: Dachlüftereinheit oder Klimatisierung nachrüsten.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Lüftereinheit für Netzwerkschrank nachrüsten
+      beschreibung: Einbau einer temperaturgesteuerten Schrankbelüftung.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: nwschrank-patchpanel-unbeschriftet
+    gilt_fuer: netzwerkschrank
+    bedingung:
+      alle:
+        - feld: patchpanel_beschriftung
+          operator: gleich
+          wert: keine
+    schweregrad: mittel
+    befund: Patchpanel-Ports sind nicht beschriftet
+    risiko: Fehlende Beschriftungen erschweren die Zuordnung von Dosen und führen zu Verzögerungen bei Fehlersuchen.
+    empfehlung: Eindeutige Port-Beschriftung nach einheitlichem Schema durchführen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Patchfelder im Netzwerkschrank durchgehend beschriften
+      beschreibung: Beschriftung aller Ports gemäß Netzplan.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: nwschrank-keine-verkabelungsdoku
+    gilt_fuer: netzwerkschrank
+    bedingung:
+      alle:
+        - feld: verkabelungsdokumentation
+          operator: gleich
+          wert: keine
+    schweregrad: mittel
+    befund: Keine Verkabelungsdokumentation für das Gebäudenetz vorhanden
+    risiko: Kabelverläufe und Dosenbelegungen sind im Störungsfall nicht nachvollziehbar.
+    empfehlung: Netzwerkkabel-Messung und Erstellung eines Belegungsplans veranlassen.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Verkabelungsdokumentation und Belegungsplan erstellen
+      beschreibung: Dokumentation aller Patchfelder, Dosen und Kabelstrecken.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: nwschrank-gewachsen
+    gilt_fuer: netzwerkschrank
+    bedingung:
+      alle:
+        - feld: ausfuehrung_durch
+          operator: gleich
+          wert: gewachsen_ohne_dokumentation
+    schweregrad: mittel
+    befund: Netzschrankverkabelung ist ungeordnet historisch gewachsen
+    risiko: Unverlegte Patchkabel („Kabelverhau“) erschweren Wartungen und verdecken Lüftungswege.
+    empfehlung: Netzwerkschrank neu ordnen, Kabelleitführungen montieren und umschalten.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Netzwerkschrank neu strukturieren und umschalten
+      beschreibung: Ausbau ungenutzter Kabel, Montage von Rangierpanels und Neuverlegung passender Patchkabel.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: nwschrank-cat5
+    gilt_fuer: netzwerkschrank
+    bedingung:
+      alle:
+        - feld: kabeltyp
+          operator: gleich
+          wert: cat5
+    schweregrad: mittel
+    befund: Veraltete Cat-5-Verkabelung im Netz vorhanden
+    risiko: Cat-5-Kabel sind auf 100 Mbit/s beschränkt und bilden einen Engpass für moderne Netzwerkanforderungen.
+    empfehlung: Erneuerung der Kabelstrecken auf Cat 6a / Cat 7 planen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Veraltete Cat-5-Kabelstrecken auf Cat 6a / 7 erneuern
+      beschreibung: Austausch alter Netzwerkstrecken gegen zukunftssichere Verkabelung.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: nwschrank-keine-reserve
+    gilt_fuer: netzwerkschrank
+    bedingung:
+      alle:
+        - feld: erweiterungsreserve
+          operator: gleich
+          wert: keine
+    schweregrad: niedrig
+    befund: Keine Erweiterungsreserve im Netzwerkschrank vorhanden
+    risiko: Zukünftige Server-, Switch- oder USV-Erweiterungen können nicht im bestehenden Schrank montiert werden.
+    empfehlung: Erweiterung durch Anbauschrank oder Austausch gegen größeres Rack prüfen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Netzwerkschrank-Kapazität für zukünftige Erweiterungen planen
+      beschreibung: Bewertung von Umbau- oder Anbauoptionen für den Netzwerkschrank.
+      kosten_richtwert: null
+      aufwand_richtwert: null
+
+  - id: nwschrank-verkabelung-alt
+    gilt_fuer: netzwerkschrank
+    bedingung:
+      alle:
+        - feld: verkabelung_alter
+          operator: gleich
+          wert: ueber_10_jahre
+    schweregrad: niedrig
+    befund: Netzverkabelung ist älter als 10 Jahre
+    risiko: Alterungsmaterialschäden an Steckern und Isolierungen erhöhen das Risiko von Übertragungsfehlern.
+    empfehlung: Messung aller Kabelstrecken (Fluke-Test) und schrittweise Erneuerung einplanen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Messtechnische Überprüfung der Netzwerkkabelstrecken durchführen
+      beschreibung: Qualifizierungsmessung der Bestandsverkabelung zur Feststellung der Zukunftsfähigkeit.
+      kosten_richtwert: null
+      aufwand_richtwert: null
