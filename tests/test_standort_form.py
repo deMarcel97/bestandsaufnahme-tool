@@ -92,3 +92,25 @@ def test_standort_edit_and_save():
     assert sto_updated.usv_fuer_netzwerktechnik == "nein"
     assert len(sto_updated.anbindungen) == 2
     assert sto_updated.anbindungen[1].anbieter == "Vodafone"
+
+def test_neuer_standort_erbt_vertraulichkeit_default_vom_auftrag():
+    from app.services.storage import storage
+
+    client.post("/auftrag/neu", data={
+        "projekt_nummer": "auf-vertraulichkeit-test",
+        "kunde": "Test GmbH",
+        "bezeichnung": "Vertraulichkeit-Test",
+        "vertraulichkeit_default": "intern",
+        "aktive_bausteine": ["firewall"]
+    })
+    auftrag_id = "auf-vertraulichkeit-test"
+
+    # Kein 'vertraulichkeit'-Feld im POST -> muss den Auftrags-Default erben, nicht "kundentauglich"
+    res = client.post(f"/auftrag/{auftrag_id}/standort/neu", data={
+        "bezeichnung": "Filiale Ost",
+    }, follow_redirects=True)
+    assert res.status_code == 200
+
+    sto = storage.load_standort(auftrag_id, "sto-filiale-ost")
+    assert sto is not None
+    assert sto.vertraulichkeit == "intern"

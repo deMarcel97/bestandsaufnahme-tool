@@ -112,6 +112,7 @@
             <div class="form-group">
               <label>Anschlussart</label>
               <select name="art_{{ idx }}" id="art_{{ idx }}" class="form-control" onchange="updatePresets({{ idx }}); updateRedundanzRelevanz();">
+                <option value="" {% if not anb or not anb.art %}selected{% endif %}>bitte auswählen</option>
                 {% for opt in ["DSL", "Kabel", "Glasfaser_FTTH", "Standleitung", "Ethernet", "Richtfunk", "LTE_5G", "Starlink", "Sonstiges"] %}
                 <option value="{{ opt }}" {% if anb and anb.art == opt %}selected{% endif %}>{{ opt }}</option>
                 {% endfor %}
@@ -414,6 +415,7 @@ function addAnbindungBlock() {
         <div class="form-group">
           <label>Anschlussart</label>
           <select name="art_${idx}" id="art_${idx}" class="form-control" onchange="updatePresets(${idx}); updateRedundanzRelevanz();">
+            <option value="" selected>bitte auswählen</option>
             <option value="DSL">DSL</option>
             <option value="Kabel">Kabel</option>
             <option value="Glasfaser_FTTH">Glasfaser_FTTH</option>

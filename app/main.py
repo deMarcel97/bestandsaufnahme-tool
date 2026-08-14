@@ -14,7 +14,7 @@ from app.web import (
     routes_export
 )
 
-app = FastAPI(title="IT-Bestandsaufnahme Tool", version="2.0.0")
+app = FastAPI(title="IT-Bestandsaufnahme Tool", version="2.1.0")
 
 UNSAFE_METHODS = {"POST", "PUT", "DELETE", "PATCH"}
 
