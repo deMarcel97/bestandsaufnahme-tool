@@ -14,8 +14,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Erneuerung veralteter Server-Hardware
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 5000
+      aufwand_richtwert: 8
 
   - id: srv-wartungsvertrag-fehlt
     gilt_fuer: server_virtualisierung
@@ -31,8 +31,8 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Herstellersupport und Hardware-Wartungsvertrag abschließen
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: srv-hypervisor-eol
     gilt_fuer: server_virtualisierung
@@ -48,8 +48,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Upgrade der Hypervisor-Software auf eine aktuelle Version
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 6
 
   - id: srv-os-eol
     gilt_fuer: server_virtualisierung
@@ -65,8 +65,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Migration veralteter Server-Betriebssysteme
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 16
 
   - id: srv-patchstand-veraltet
     gilt_fuer: server_virtualisierung
@@ -82,8 +82,8 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Einspielen aktueller Sicherheitsupdates für Hypervisor und Server
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 4
 
   - id: srv-kein-ha-cluster
     gilt_fuer: server_virtualisierung
@@ -99,8 +99,8 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Konzeption und Aufbau eines Server-HA-Clusters
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 4000
+      aufwand_richtwert: 24
 
   - id: srv-netzteil-redundanz-fehlt
     gilt_fuer: server_virtualisierung
@@ -116,8 +116,8 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Nachrüstung redundanter Netzteile für Server-Hosts
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 500
+      aufwand_richtwert: 3
 
   - id: srv-raid-unsicher
     gilt_fuer: server_virtualisierung
@@ -133,8 +133,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Umstellung des Server-Speichers auf redundante RAID-Konfiguration
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 1000
+      aufwand_richtwert: 6
 
   - id: srv-monitoring-fehlt
     gilt_fuer: server_virtualisierung
@@ -150,8 +150,8 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Einrichtung eines proaktiven Monitoring-Systems für Server und VMs
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 1000
+      aufwand_richtwert: 6
 
   - id: srv-dokumentation-fehlt
     gilt_fuer: server_virtualisierung
@@ -167,5 +167,5 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Erstellung einer vollständigen Server- und Virtualisierungsdokumentation
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 6

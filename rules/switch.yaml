@@ -15,8 +15,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Unmanaged Switches gegen verwaltbare Modelle austauschen
       beschreibung: Beschaffung und Konfiguration von Managed Layer-2/3 Switches.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 500
+      aufwand_richtwert: 3
 
   - id: sw-keine-netztrennung
     gilt_fuer: switch
@@ -33,8 +33,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: VLAN-Netzwerksegmentierung konzipieren und konfigurieren
       beschreibung: Einrichtung virtueller Netze zur Isolation sensibler Fachbereiche und Server.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 12
 
   - id: sw-firmware-veraltet
     gilt_fuer: switch
@@ -51,8 +51,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Switch-Firmware auf den neuesten Stand aktualisieren
       beschreibung: Wartungsfenster vereinbaren und Firmware-Updates durchführen.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 3
 
   - id: sw-garantie-abgelaufen
     gilt_fuer: switch
@@ -68,8 +68,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Garantieabdeckung für Switches prüfen und erneuern
       beschreibung: Prüfung von Care-Pack-Verlängerungen oder Modellwechsel.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 1
 
   - id: sw-kein-wartungsvertrag
     gilt_fuer: switch
@@ -86,8 +86,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Wartungsvertrag mit Ersatzgeräteservice für Switches abschließen
       beschreibung: Vereinbarung von NBD- / 4h-Austauschservice mit Hersteller oder Systemhaus.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: sw-konfig-sicherung-fehlt
     gilt_fuer: switch
@@ -104,8 +104,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Automatische Sicherung der Switch-Konfigurationen einrichten
       beschreibung: Anbindung der Switches an ein zentrales Konfigurations-Backup-Tool.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 3
 
   - id: sw-zugangsschutz-unsicher
     gilt_fuer: switch
@@ -122,8 +122,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: HTTP und Telnet auf Switches deaktivieren und HTTPS/SSH erzwingen
       beschreibung: Abschaltung unverschlüsselter Verwaltungsdienste in der Switch-Konfiguration.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: sw-keine-port-security
     gilt_fuer: switch
@@ -140,8 +140,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Port-Security und Deaktivierung ungenutzter Switchports umsetzen
       beschreibung: Sperrung ungenutzter Dosen und Einrichtung von MAC-Limits oder 802.1X.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: sw-kein-loop-protection
     gilt_fuer: switch
@@ -158,5 +158,23 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Spanning Tree Protocol (STP) und BPDU-Guard aktivieren
       beschreibung: Einschalten von Loop Protection Mechanismen im gesamten Switch-Netz.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 3
+
+  - id: sw-keine-redundanten-uplinks
+    gilt_fuer: switch
+    bedingung:
+      alle:
+        - feld: redundante_uplinks
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Keine redundanten Uplinks am Switch konfiguriert
+    risiko: Ausfall des einzigen Uplink-Ports führt zum vollständigen Verlust der Verbindung zu anderen Netzwerksegmenten oder zur Firewall.
+    empfehlung: Redundante Uplinks (z. B. LAG oder mehrere einzelne Uplinks) einrichten.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Redundante Uplinks am Switch einrichten
+      beschreibung: Konfiguration mehrerer Uplink-Ports (LAG oder Einzelports) für Failover und Lastverteilung.
+      kosten_richtwert: 0
+      aufwand_richtwert: 2

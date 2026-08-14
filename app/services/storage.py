@@ -1,4 +1,5 @@
 from pathlib import Path
+import copy
 import shutil
 import logging
 from typing import List, Optional, Dict, Any
@@ -230,10 +231,22 @@ class StorageService:
             vertraulichkeit=source.vertraulichkeit,
             erfassungsstatus=source.erfassungsstatus,
             offene_punkte=[],  # Cleared on duplication
-            daten=dict(source.daten)
+            daten=copy.deepcopy(source.daten)
         )
         self.save_objekt(copy_obj)
         return copy_obj
+
+    def resolve_objekt_referenz(self, auftrag_id: str, objekt_id: str, ziel_typen: List[str]) -> Optional[TechnikObjekt]:
+        """Löst einen 'objekt_referenz'-Wert auf. Der gespeicherte Wert ist nur eine id,
+        ohne Typ-Information - daher werden alle erlaubten Zieltypen durchprobiert.
+        Gibt None zurück statt zu crashen, falls das Zielobjekt inzwischen gelöscht wurde."""
+        if not objekt_id:
+            return None
+        for zt in ziel_typen:
+            obj = self.load_objekt(auftrag_id, zt, objekt_id)
+            if obj:
+                return obj
+        return None
 
     # --- FINDINGS ---
     def save_findings(self, auftrag_id: str, findings: List[Finding]):

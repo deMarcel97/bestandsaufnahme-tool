@@ -318,3 +318,172 @@ abschnitte:
           - wert: unbekannt
             punkte: null
             textbaustein: null
+
+  - id: anbindung_und_verbindungen
+    titel: Anbindung und Verbindungen
+    felder:
+    - name: anbindung_firewall_typ
+      label: Anbindung an Firewall
+      typ: auswahl
+      pflicht: false
+      regelrelevant: false
+      vertraulichkeit: kundentauglich
+      werte:
+      - wert: single_link
+        textbaustein:
+          feststellung: Der Switch ist mit einem einzelnen Link an die Firewall angebunden.
+          auswirkung: Single Point of Failure für die Firewall-Anbindung.
+      - wert: lag
+        textbaustein:
+          feststellung: Der Switch ist mit einem LAG (Link Aggregation Group) an die Firewall angebunden.
+          auswirkung: Redundante Anbindung mit Lastverteilung und Failover-Fähigkeit.
+      - wert: unbekannt
+        textbaustein: null
+    - name: anbindung_firewall_geschwindigkeit_gbit
+      label: Geschwindigkeit Firewall-Anbindung (Gbit)
+      typ: zahl
+      pflicht: false
+      regelrelevant: false
+      vertraulichkeit: kundentauglich
+      sichtbar_wenn:
+        feld: anbindung_firewall_typ
+        operator: gleich
+        wert: single_link
+    - name: cluster_verbund
+      label: Cluster-Verbund
+      typ: ja_nein
+      pflicht: false
+      regelrelevant: false
+      vertraulichkeit: kundentauglich
+    - name: cluster_verbund_mitglieder
+      label: Cluster-Mitglieder-Anbindung
+      typ: text
+      pflicht: false
+      regelrelevant: false
+      vertraulichkeit: kundentauglich
+      sichtbar_wenn:
+        feld: cluster_verbund
+        operator: gleich
+        wert: ja
+    - name: server_anbindung_geschwindigkeit
+      label: Server-Anbindung Geschwindigkeit
+      typ: auswahl
+      pflicht: false
+      regelrelevant: false
+      vertraulichkeit: kundentauglich
+      werte:
+      - wert: 1g
+        textbaustein:
+          feststellung: Die Server sind mit 1 Gbit/s angebunden.
+          auswirkung: null
+      - wert: 2_5g
+        textbaustein:
+          feststellung: Die Server sind mit 2,5 Gbit/s angebunden.
+          auswirkung: null
+      - wert: 10g
+        textbaustein:
+          feststellung: Die Server sind mit 10 Gbit/s angebunden.
+          auswirkung: null
+      - wert: gemischt
+        textbaustein:
+          feststellung: Die Server-Anbindung erfolgt mit gemischten Geschwindigkeiten.
+          auswirkung: null
+      - wert: unbekannt
+        textbaustein: null
+    - name: server_anbindung_lag
+      label: Server-Anbindung LAG
+      typ: ja_nein
+      pflicht: false
+      regelrelevant: false
+      vertraulichkeit: kundentauglich
+    - name: access_point_anbindung_geschwindigkeit
+      label: Access-Point-Anbindung Geschwindigkeit
+      typ: auswahl
+      pflicht: false
+      regelrelevant: false
+      vertraulichkeit: kundentauglich
+      werte:
+      - wert: 1g
+        textbaustein:
+          feststellung: Access Points sind mit 1 Gbit/s angebunden.
+          auswirkung: null
+      - wert: 2_5g
+        textbaustein:
+          feststellung: Access Points sind mit 2,5 Gbit/s angebunden.
+          auswirkung: null
+      - wert: unbekannt
+        textbaustein: null
+    - name: access_point_poe_stufe
+      label: PoE-Stufe für Access-Points
+      typ: auswahl
+      pflicht: false
+      regelrelevant: false
+      vertraulichkeit: kundentauglich
+      werte:
+      - wert: poe
+        textbaustein:
+          feststellung: Die Access Points werden mit PoE (IEEE 802.3af) versorgt.
+          auswirkung: Bis zu 15,4 Watt pro Port.
+      - wert: poe_plus
+        textbaustein:
+          feststellung: Die Access Points werden mit PoE+ (IEEE 802.3at) versorgt.
+          auswirkung: Bis zu 30 Watt pro Port.
+      - wert: poe_plus_plus
+        textbaustein:
+          feststellung: Die Access Points werden mit PoE++ (IEEE 802.3bt) versorgt.
+          auswirkung: Bis zu 60 Watt pro Port.
+      - wert: nicht_anwendbar
+        textbaustein:
+          feststellung: Keine PoE-Versorgung für Access Points erforderlich.
+          auswirkung: null
+      - wert: unbekannt
+        textbaustein: null
+    - name: vlan_segmentierung
+      label: VLAN-Segmentierung
+      typ: mehrzeiliger_text
+      pflicht: false
+      regelrelevant: false
+      vertraulichkeit: kundentauglich
+    - name: uplink_typen
+      label: Uplink-Typen
+      typ: liste
+      pflicht: false
+      regelrelevant: false
+      vertraulichkeit: kundentauglich
+      felder:
+      - name: typ
+        typ: auswahl
+        label: Typ
+        werte:
+        - wert: trunk
+        - wert: access
+      - name: vlan_ids
+        typ: text
+        label: VLAN-IDs
+    - name: redundante_uplinks
+      label: Redundante Uplinks
+      typ: ja_nein
+      pflicht: false
+      regelrelevant: true
+      vertraulichkeit: kundentauglich
+      bewertung:
+        kategorie: betriebsrisiken
+        kriterium: switch_redundante_uplinks
+        max_punkte: 10
+      werte:
+      - wert: ja
+        punkte: 10
+        textbaustein:
+          feststellung: Der Switch verfügt über redundante Uplinks.
+          auswirkung: Ausfall eines Uplink-Ports führt nicht zum Verlust der Verbindung.
+      - wert: nein
+        punkte: 0
+        textbaustein:
+          feststellung: Der Switch hat keine redundanten Uplinks.
+          auswirkung: Single Point of Failure für die Uplink-Verbindung.
+    - name: anbindung_kommentar
+      label: Kommentar
+      typ: mehrzeiliger_text
+      pflicht: false
+      regelrelevant: false
+      vertraulichkeit: intern

@@ -14,8 +14,8 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Redundante Internetanbindung einrichten
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 3000
+      aufwand_richtwert: 6
 
   - id: standort-ohne-backup-kennzeichnung
     gilt_fuer: standort
@@ -34,8 +34,8 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Failover-Priorisierung und Backup-Leitung konfigurieren
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: standort-anbindungen-gleicher-typ
     gilt_fuer: standort
@@ -54,8 +54,8 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Medienredundante Zweitanbindung prüfen
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 3
 
   - id: netz-keine-redundanz
     gilt_fuer: standort
@@ -75,8 +75,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Automatisches Failover-Verfahren für Backup-Leitung konfigurieren
       beschreibung: Einrichtung automatischer Umschaltung bei Leitungsausfall.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 3
 
   - id: netz-gleiche-trasse
     gilt_fuer: standort
@@ -96,8 +96,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Trassenführung der Gebäudezuführungen auf physische Redundanz prüfen
       beschreibung: Ermittlung alternativer Hauseinführungen oder Funk-Backups.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: netz-keine-usv-absicherung
     gilt_fuer: standort
@@ -114,5 +114,5 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Netzwerk-Übergabegeräte und Modems an USV anbinden
       beschreibung: Unterbrechungsfreie Stromversorgung für Router, Modems und Übergabetechnik sicherstellen.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 500
+      aufwand_richtwert: 2

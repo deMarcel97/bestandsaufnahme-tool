@@ -1,0 +1,88 @@
+schema_version: 1
+typ: server_cluster
+bezeichnung_anzeige: Server-Cluster
+berichtskapitel: infrastruktur
+abschnitte:
+  - id: cluster
+    titel: Cluster
+    felder:
+      - name: anzahl_knoten
+        label: Anzahl Knoten
+        typ: zahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: shared_storage_typ
+        label: Shared-Storage-Typ
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: cluster_shared_storage
+          max_punkte: 15
+        werte:
+        - wert: san
+          punkte: 15
+          textbaustein:
+            feststellung: Als Shared-Storage kommt ein SAN (Storage Area Network) zum Einsatz.
+            auswirkung: null
+        - wert: nfs
+          punkte: 10
+          textbaustein:
+            feststellung: Als Shared-Storage kommt NFS (Network File System) zum Einsatz.
+            auswirkung: NFS bietet gute Performance für Dateifreigaben, aber weniger Block-Storage-Funktionen als SAN.
+        - wert: vsan
+          punkte: 15
+          textbaustein:
+            feststellung: Als Shared-Storage kommt VMware vSAN zum Einsatz.
+            auswirkung: Hochverfügbare, software-definierte Storage-Lösung direkt auf den Cluster-Knoten.
+        - wert: ceph
+          punkte: 15
+          textbaustein:
+            feststellung: Als Shared-Storage kommt Ceph zum Einsatz.
+            auswirkung: Skalierbare, verteile Storage-Architektur mit hoher Redundanz.
+        - wert: zfs
+          punkte: 12
+          textbaustein:
+            feststellung: Als Shared-Storage kommt ZFS zum Einsatz.
+            auswirkung: Enterprise-Dateisystem mit Snapshots, Kompression und Checksum-Prüfung.
+        - wert: sonstiges
+          punkte: 5
+          textbaustein:
+            feststellung: Als Shared-Storage kommt ein sonstiger Typ zum Einsatz.
+            auswirkung: null
+        - wert: unbekannt
+          punkte: null
+          textbaustein: null
+      - name: failover_verhalten
+        label: Failover-Verhalten
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: cluster_failover
+          max_punkte: 15
+        werte:
+        - wert: automatisch
+          punkte: 15
+          textbaustein:
+            feststellung: Das Failover-Verhalten ist automatisch konfiguriert.
+            auswirkung: VMs werden bei Host-Ausfall automatisch auf andere Knoten migriert, was die Ausfallzeit minimiert.
+        - wert: manuell
+          punkte: 5
+          textbaustein:
+            feststellung: Das Failover-Verhalten erfordert manuelles Eingreifen.
+            auswirkung: Bei Host-Ausfall müssen VMs manuell auf andere Knoten gestartet werden, was zu längeren Ausfallzeiten führt.
+        - wert: unbekannt
+          punkte: null
+          textbaustein: null
+      - name: kommentar
+        label: Kommentar
+        typ: mehrzeiliger_text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: intern

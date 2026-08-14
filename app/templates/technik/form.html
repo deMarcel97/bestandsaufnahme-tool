@@ -70,7 +70,7 @@
     </fieldset>
 
     {% for abschnitt in schema.abschnitte %}
-    <fieldset class="fieldset">
+    <fieldset class="fieldset" {% if abschnitt.sichtbar_wenn %}data-sw-feld="{{ abschnitt.sichtbar_wenn.feld }}" data-sw-operator="{{ abschnitt.sichtbar_wenn.operator }}" data-sw-wert="{{ abschnitt.sichtbar_wenn.wert }}"{% endif %}>
       <div class="fieldset-head">
         <h2>{{ abschnitt.titel }}</h2>
         <span class="eyebrow">{{ abschnitt.felder|length }} Felder</span>
@@ -132,6 +132,72 @@
             {% endfor %}
             <option value="rueckfrage" {% if current_val == 'rueckfrage' %}selected{% endif %}>Rückfrage erforderlich</option>
           </select>
+
+          {% elif field.typ == 'objekt_referenz' %}
+          <select name="{{ field.name }}" id="input_{{ field.name }}" class="form-control">
+            <option value="" {% if current_val is none or current_val == '' %}selected{% endif %}>bitte wählen</option>
+            {% for opt in (objekt_referenz_candidates.get(field.name, []) if objekt_referenz_candidates else []) %}
+            <option value="{{ opt.id }}" {% if current_val == opt.id %}selected{% endif %}>{{ opt.label }}</option>
+            {% endfor %}
+          </select>
+
+          {% elif field.typ == 'liste' %}
+          {% set rows = current_val if current_val else [] %}
+          <div class="repeat-block" data-liste-feld="{{ field.name }}">
+            <div class="repeat-rows" id="repeatrows_{{ field.name }}">
+              {% for row in rows %}
+              <div class="repeat-row" data-idx="{{ loop.index0 }}">
+                <div class="form-row">
+                  {% for sf in field.felder %}
+                  <div class="repeat-subfield">
+                    <label>{{ sf.label if sf.label else sf.name.replace('_', ' ').capitalize() }}</label>
+                    {% set sub_val = row.get(sf.name) %}
+                    {% if sf.typ == 'auswahl' %}
+                    <select name="{{ field.name }}_{{ loop.index0 }}_{{ sf.name }}" class="form-control">
+                      <option value="">bitte wählen</option>
+                      {% for w in sf.werte %}
+                      <option value="{{ w.wert }}" {% if sub_val == w.wert %}selected{% endif %}>{{ w.wert.replace('_', ' ') }}</option>
+                      {% endfor %}
+                    </select>
+                    {% elif sf.typ == 'zahl' %}
+                    <input type="number" name="{{ field.name }}_{{ loop.index0 }}_{{ sf.name }}" value="{{ sub_val if sub_val is not none else '' }}" class="form-control">
+                    {% else %}
+                    <input type="text" name="{{ field.name }}_{{ loop.index0 }}_{{ sf.name }}" value="{{ sub_val if sub_val else '' }}" class="form-control">
+                    {% endif %}
+                  </div>
+                  {% endfor %}
+                </div>
+                <button type="button" class="btn btn-sm btn-danger repeat-remove">Entfernen</button>
+              </div>
+              {% endfor %}
+            </div>
+            <button type="button" class="btn btn-outline repeat-add" data-add-for="{{ field.name }}">+ Zeile hinzufügen</button>
+
+            <template id="repeattpl_{{ field.name }}">
+              <div class="repeat-row" data-idx="%%IDX%%">
+                <div class="form-row">
+                  {% for sf in field.felder %}
+                  <div class="repeat-subfield">
+                    <label>{{ sf.label if sf.label else sf.name.replace('_', ' ').capitalize() }}</label>
+                    {% if sf.typ == 'auswahl' %}
+                    <select name="{{ field.name }}_%%IDX%%_{{ sf.name }}" class="form-control">
+                      <option value="">bitte wählen</option>
+                      {% for w in sf.werte %}
+                      <option value="{{ w.wert }}">{{ w.wert.replace('_', ' ') }}</option>
+                      {% endfor %}
+                    </select>
+                    {% elif sf.typ == 'zahl' %}
+                    <input type="number" name="{{ field.name }}_%%IDX%%_{{ sf.name }}" class="form-control">
+                    {% else %}
+                    <input type="text" name="{{ field.name }}_%%IDX%%_{{ sf.name }}" class="form-control">
+                    {% endif %}
+                  </div>
+                  {% endfor %}
+                </div>
+                <button type="button" class="btn btn-sm btn-danger repeat-remove">Entfernen</button>
+              </div>
+            </template>
+          </div>
           {% endif %}
         </div>
         {% endfor %}
@@ -188,7 +254,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let total = 0;
     let filled = 0;
     document.querySelectorAll('[id^="field_"]').forEach(group => {
-      if (group.style.display === "none") return;
+      // offsetParent statt style.display: erkennt auch Ausblenden über ein
+      // übergeordnetes Element (z.B. ein per sichtbar_wenn verstecktes Fieldset/Abschnitt).
+      if (group.offsetParent === null) return;
       const field = group.querySelector("input, select, textarea");
       if (!field) return;
       total++;
@@ -210,6 +278,31 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     updateErfassungsstatus();
   }
+  document.querySelectorAll("[data-liste-feld]").forEach(block => {
+    const fname = block.dataset.listeFeld;
+    const rowsContainer = block.querySelector("#repeatrows_" + fname);
+    const tpl = block.querySelector("#repeattpl_" + fname);
+    if (!rowsContainer || !tpl) return;
+    let nextIdx = rowsContainer.querySelectorAll(".repeat-row").length;
+
+    const addBtn = block.querySelector(".repeat-add");
+    if (addBtn) {
+      addBtn.addEventListener("click", () => {
+        const html = tpl.innerHTML.replaceAll("%%IDX%%", String(nextIdx));
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = html.trim();
+        rowsContainer.appendChild(wrapper.firstElementChild);
+        nextIdx++;
+      });
+    }
+
+    block.addEventListener("click", (e) => {
+      if (e.target.classList.contains("repeat-remove")) {
+        e.target.closest(".repeat-row").remove();
+      }
+    });
+  });
+
   updateConditionalVisibility();
   const objektForm = document.querySelector("form");
   if (objektForm) {

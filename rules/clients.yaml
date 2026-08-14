@@ -14,8 +14,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Erstellung und Umsetzung eines Windows 11 Rollout-Plans
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 24
 
   - id: cli-patchmanagement-fehlt
     gilt_fuer: clients
@@ -31,8 +31,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Implementierung eines zentralen Patchmanagements für alle Clients
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 1000
+      aufwand_richtwert: 16
 
   - id: cli-edr-antivirus-fehlt
     gilt_fuer: clients
@@ -48,8 +48,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Rollout einer zentral verwalteten EDR- / Antivirus-Lösung
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 500
+      aufwand_richtwert: 12
 
   - id: cli-verschluesselung-fehlt
     gilt_fuer: clients
@@ -65,8 +65,8 @@ regeln:
     referenz: "DSGVO Art. 32 / BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Aktivierung der Festplattenverschlüsselung (BitLocker / FileVault) auf allen Laptops
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 6
 
   - id: cli-lokale-adminrechte
     gilt_fuer: clients
@@ -82,8 +82,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Entzug permanenter lokaler Administratorrechte auf allen Client-Arbeitsplätzen
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 8
 
   - id: cli-rmm-mdm-fehlt
     gilt_fuer: clients
@@ -99,8 +99,8 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Einführung einer zentralen RMM- / MDM-Verwaltungslösung
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 1000
+      aufwand_richtwert: 12
 
   - id: cli-hardware-alt
     gilt_fuer: clients
@@ -116,8 +116,8 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Staffelweise Erneuerung veralteter Client-Hardware
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 1000
+      aufwand_richtwert: 4
 
   - id: cli-dokumentation-fehlt
     gilt_fuer: clients
@@ -133,5 +133,5 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Erstellung von Standard-Installations-Dokumentationen und IT-Nutzungsrichtlinien
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 6

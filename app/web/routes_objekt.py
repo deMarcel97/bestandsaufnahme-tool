@@ -11,6 +11,67 @@ from app.utils.number_parser import parse_float_german, parse_int_german
 router = APIRouter()
 templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
 
+def _collect_objekt_referenz_candidates(auftrag_id: str, schema: dict) -> dict:
+    """Baut für jedes 'objekt_referenz'-Feld im Schema die Liste wählbarer Zielobjekte
+    (über alle 'ziel_typen' hinweg, mit Typ + Standort im Label zur Unterscheidung)."""
+    candidates = {}
+    standorte_map = None
+    for abschnitt in schema.get("abschnitte", []):
+        for feldef in abschnitt.get("felder", []):
+            if feldef.get("typ") != "objekt_referenz":
+                continue
+            if standorte_map is None:
+                standorte_map = {s.id: s.bezeichnung for s in storage.list_standorte(auftrag_id)}
+            opts = []
+            for zt in feldef.get("ziel_typen", []):
+                zt_schema = schema_loader.get_schema(zt)
+                zt_label = zt_schema.get("bezeichnung_anzeige", zt.capitalize()).split("/")[0].strip() if zt_schema else zt.capitalize()
+                for o in storage.list_objekte(auftrag_id, typ=zt):
+                    sto_name = standorte_map.get(o.standort_id, "")
+                    label = f"{zt_label}: {o.bezeichnung}" + (f" ({sto_name})" if sto_name else "")
+                    opts.append({"id": o.id, "label": label})
+            candidates[feldef.get("name")] = opts
+    return candidates
+
+def _parse_liste_field(form_data, feldef: dict) -> list:
+    """Parst wiederholbare Zeilen eines 'liste'-Feldes aus Formulardaten mit Keys der
+    Form '{feldname}_{idx}_{unterfeldname}', analog zu _parse_anbindungen_from_form."""
+    fname = feldef.get("name")
+    sub_felder = feldef.get("felder", [])
+    prefix = f"{fname}_"
+    indices = set()
+    for key in form_data.keys():
+        if not key.startswith(prefix):
+            continue
+        rest = key[len(prefix):]
+        if "_" not in rest:
+            continue
+        idx_str, sub_name = rest.split("_", 1)
+        if idx_str.isdigit() and any(sf.get("name") == sub_name for sf in sub_felder):
+            indices.add(int(idx_str))
+
+    rows = []
+    for idx in sorted(indices):
+        row = {}
+        has_value = False
+        for sf in sub_felder:
+            sf_name = sf.get("name")
+            val = form_data.get(f"{fname}_{idx}_{sf_name}")
+            if val is None:
+                continue
+            if sf.get("typ") == "zahl":
+                if str(val).strip() != "":
+                    row[sf_name] = parse_float_german(val)
+                    has_value = True
+            else:
+                val = val.strip() if isinstance(val, str) else val
+                row[sf_name] = val
+                if val:
+                    has_value = True
+        if has_value:
+            rows.append(row)
+    return rows
+
 @router.get("/auftrag/{auftrag_id}/objekt/neu")
 def new_objekt_form(request: Request, auftrag_id: str, typ: str = "firewall", standort_id: str = ""):
     auftrag = storage.load_auftrag(auftrag_id)
@@ -40,6 +101,7 @@ def new_objekt_form(request: Request, auftrag_id: str, typ: str = "firewall", st
             "standorte": standorte,
             "selected_standort_id": standort_id,
             "default_bezeichnung": default_bezeichnung,
+            "objekt_referenz_candidates": _collect_objekt_referenz_candidates(auftrag_id, schema),
             "obj": None,
             "active_nav": "auftrag"
         }
@@ -73,7 +135,9 @@ async def new_objekt_submit(request: Request, auftrag_id: str, typ: str = "firew
         for abschnitt in schema.get("abschnitte", []):
             for feldef in abschnitt.get("felder", []):
                 fname = feldef.get("name")
-                if fname in form_data:
+                if feldef.get("typ") == "liste":
+                    daten[fname] = _parse_liste_field(form_data, feldef)
+                elif fname in form_data:
                     val = form_data.get(fname)
                     if feldef.get("typ") == "zahl" and val is not None and str(val).strip() != "":
                         daten[fname] = parse_float_german(val)
@@ -114,6 +178,7 @@ def edit_objekt_form(request: Request, auftrag_id: str, typ: str, objekt_id: str
             "schema": schema,
             "standorte": standorte,
             "selected_standort_id": obj.standort_id,
+            "objekt_referenz_candidates": _collect_objekt_referenz_candidates(auftrag_id, schema),
             "obj": obj,
             "active_nav": "auftrag"
         }
@@ -139,7 +204,9 @@ async def edit_objekt_submit(request: Request, auftrag_id: str, typ: str, objekt
         for abschnitt in schema.get("abschnitte", []):
             for feldef in abschnitt.get("felder", []):
                 fname = feldef.get("name")
-                if fname in form_data:
+                if feldef.get("typ") == "liste":
+                    obj.daten[fname] = _parse_liste_field(form_data, feldef)
+                elif fname in form_data:
                     val = form_data.get(fname)
                     if feldef.get("typ") == "zahl" and val is not None and str(val).strip() != "":
                         obj.daten[fname] = parse_float_german(val)
