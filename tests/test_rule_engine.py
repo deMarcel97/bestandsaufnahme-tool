@@ -138,17 +138,32 @@ def test_empty_field_creates_open_point_not_finding():
 
 def test_massnahme_richtwerte_transfer(tmp_path):
     from app.services.storage import storage
+    from app.services.rule_engine import rule_engine
     from app.web.routes_findings import create_massnahme_from_finding
     from app.models.auftrag import Auftrag
 
     old_dir = storage.data_dir
     storage.data_dir = tmp_path
+
+    # Synthetic rule with null richtwerte (all real rules now have values filled in)
+    test_rule = {
+        "id": "rule-without-richtwert",
+        "gilt_fuer": "firewall",
+        "befund": "Abo abgelaufen",
+        "massnahme_vorschlag": {
+            "bezeichnung": "Test Maßnahme ohne Richtwert",
+            "kosten_richtwert": None,
+            "aufwand_richtwert": None
+        }
+    }
+    rule_engine.rules.append(test_rule)
+
     try:
         auf = Auftrag(id="auf-a2-test", projekt_nummer="P-A2", kunde="A2 Kunde", bezeichnung="A2 Test")
         storage.save_auftrag(auf)
 
         # Finding from rule with null richtwert
-        f1 = Finding(id="f1", auftrag_id="auf-a2-test", standort_id="s1", quelle="fw-security-abo-abgelaufen", befund="Abo abgelaufen", schweregrad="hoch", status="bestaetigt")
+        f1 = Finding(id="f1", auftrag_id="auf-a2-test", standort_id="s1", quelle="rule-without-richtwert", befund="Abo abgelaufen", schweregrad="hoch", status="bestaetigt")
         storage.save_findings("auf-a2-test", [f1])
 
         create_massnahme_from_finding("auf-a2-test", "f1")
@@ -157,6 +172,7 @@ def test_massnahme_richtwerte_transfer(tmp_path):
         assert m1.kosten_quelle == "offen"
         assert m1.investitionskosten == 0.0
     finally:
+        rule_engine.rules = [r for r in rule_engine.rules if r.get("id") != "rule-without-richtwert"]
         storage.data_dir = old_dir
 
 def test_massnahme_richtwert_rule_transfer_and_manual_override(tmp_path):

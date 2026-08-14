@@ -15,8 +15,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: USV-Akkusatz erneuern
       beschreibung: Austausch der gealterten Batterien gegen neue Originalakkus.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 800
+      aufwand_richtwert: 2
 
   - id: usv-kein-batterietest
     gilt_fuer: usv
@@ -35,8 +35,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: USV-Belastungstest durchführen und dokumentieren
       beschreibung: Manuelle oder automatische Prüfentladung durchführen.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: usv-kein-abschaltsignal
     gilt_fuer: usv
@@ -53,8 +53,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Automatisches USV-Shutdown-Signal an Server anbinden
       beschreibung: Installation und Konfiguration von Network Shutdown Agenten.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 3
 
   - id: usv-ueberlastet
     gilt_fuer: usv
@@ -71,8 +71,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: USV-Auslastung reduzieren oder größeres USV-Modell beschaffen
       beschreibung: Umverteilung der Verbraucher oder Erhöhung der Nennleistung.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 2000
+      aufwand_richtwert: 3
 
   - id: usv-kein-wartungsvertrag
     gilt_fuer: usv
@@ -89,8 +89,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Wartungsvertrag für USV-System abschließen
       beschreibung: Vereinbarung von Service-Level-Agreements und Vor-Ort-Austausch.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: usv-garantie-abgelaufen
     gilt_fuer: usv
@@ -106,8 +106,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Garantieerweiterung oder Gerätetausch für USV prüfen
       beschreibung: Überprüfung von Herstellersupport-Optionen.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 1
 
   - id: usv-batteriegarantie-abgelaufen
     gilt_fuer: usv
@@ -123,8 +123,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Akkugarantie und Zustand der USV-Batterien prüfen
       beschreibung: Überprüfung der Batterieabdeckung im Servicevertrag.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 1
 
   - id: usv-ueberbrueckung-kurz
     gilt_fuer: usv
@@ -141,5 +141,5 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: USV-Laufzeit durch Zusatz-Akkupacks erweitern
       beschreibung: Montage externer Batteriemodule zur Verlängerung der Überbrückungszeit.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 1000
+      aufwand_richtwert: 2

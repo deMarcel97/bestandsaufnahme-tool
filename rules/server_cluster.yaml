@@ -1,0 +1,71 @@
+schema_version: 1
+regeln:
+  - id: cluster-kein-shared-storage
+    gilt_fuer: server_cluster
+    bedingung:
+      alle:
+        - feld: shared_storage_typ
+          operator: ist_leer
+    schweregrad: hoch
+    befund: Kein Shared-Storage-Typ für den Cluster definiert
+    risiko: Ohne Shared-Storage können VMs nicht zwischen Cluster-Knoten migriert werden und es gibt keinen zentralen Speicherpool.
+    empfehlung: Shared-Storage-Lösung (SAN, vSAN, Ceph, NFS) für den Cluster einrichten und konfigurieren.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Shared-Storage für Cluster einrichten
+      beschreibung: Beschaffung und Konfiguration einer Shared-Storage-Lösung für den VMware/Hyper-V/Proxmox-Cluster.
+      kosten_richtwert: 8000
+      aufwand_richtwert: 12
+
+  - id: cluster-manuelles-failover
+    gilt_fuer: server_cluster
+    bedingung:
+      alle:
+        - feld: failover_verhalten
+          operator: gleich
+          wert: manuell
+    schweregrad: hoch
+    befund: Failover-Verhalten ist manuell konfiguriert
+    risiko: Bei Ausfall eines Cluster-Knotens müssen VMs manuell auf andere Knoten gestartet werden, was zu längeren Ausfallzeiten und manuellen Fehlern führen kann.
+    empfehlung: Automatisches Failover (HA) für den Cluster konfigurieren.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Automatisches Failover für Cluster konfigurieren
+      beschreibung: Einrichtung von automatischem VM-Failover und Heartbeat-Monitoring im Cluster.
+      kosten_richtwert: 0
+      aufwand_richtwert: 6
+
+  - id: cluster-kein-failover
+    gilt_fuer: server_cluster
+    bedingung:
+      alle:
+        - feld: failover_verhalten
+          operator: ist_leer
+    schweregrad: hoch
+    befund: Keine Failover-Konfiguration für den Cluster vorhanden
+    risiko: Bei Ausfall eines Knotens fallen alle darauf laufenden VMs aus und bleiben offline.
+    empfehlung: Hochverfügbarkeitskonfiguration (HA) für den Cluster umgehend einrichten.
+    referenz: BSI IT-Grundschutz
+    massnahme_vorschlag:
+      bezeichnung: Hochverfügbarkeitskonfiguration für Cluster einrichten
+      beschreibung: Komplette HA-Konfiguration inkl. Shared-Storage, Heartbeat und automatischem Failover.
+      kosten_richtwert: 10000
+      aufwand_richtwert: 16
+
+  - id: cluster-nfs-storage
+    gilt_fuer: server_cluster
+    bedingung:
+      alle:
+        - feld: shared_storage_typ
+          operator: gleich
+          wert: nfs
+    schweregrad: mittel
+    befund: NFS als Shared-Storage für Cluster im Einsatz
+    risiko: NFS bietet gute Dateifreigabe-Performance, aber für VM-Datenspeicher (Block-Storage) sind SAN, vSAN oder Ceph besser geeignet.
+    empfehlung: Migration auf eine Block-Storage-Lösung (SAN, vSAN, Ceph) für bessere Performance und VM-Migration prüfen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Migration von NFS auf Block-Storage-Lösung für Cluster
+      beschreibung: Bewertung und Migration auf eine für VM-Storage optimierte Lösung wie iSCSI-SAN oder vSAN.
+      kosten_richtwert: 5000
+      aufwand_richtwert: 8

@@ -14,8 +14,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Errzwingung von Multi-Faktor-Authentisierung (MFA) für alle M365 Administratoren
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: m365-mfa-benutzer-fehlt
     gilt_fuer: m365_security
@@ -31,8 +31,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Rollout der Multi-Faktor-Authentisierung (MFA) für alle M365 Benutzer
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 6
 
   - id: m365-legacy-auth-aktiv
     gilt_fuer: m365_security
@@ -48,8 +48,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Abschaltung veralteter Authentifizierungsprotokolle (Legacy Auth) im M365 Tenant
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: m365-backup-fehlt
     gilt_fuer: m365_security
@@ -65,8 +65,8 @@ regeln:
     referenz: "DSGVO Art. 32"
     massnahme_vorschlag:
       bezeichnung: Einrichtung einer unabhängigen Cloud-to-Cloud Sicherung für M365 Daten
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 1500
+      aufwand_richtwert: 6
 
   - id: m365-conditional-access-fehlt
     gilt_fuer: m365_security
@@ -82,8 +82,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Konfiguration von Conditional Access Richtlinien im Entra ID Admin Center
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 6
 
   - id: m365-defender-o365-fehlt
     gilt_fuer: m365_security
@@ -99,8 +99,8 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Einrichtung von Defender for Office 365 Safe Links & Safe Attachments Policies
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 3
 
   - id: m365-too-many-global-admins
     gilt_fuer: m365_security
@@ -116,8 +116,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Bereinigung der Administratorrechte und Umstellung auf RBAC im Tenant
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 4
 
   - id: m365-audit-log-deaktiviert
     gilt_fuer: m365_security
@@ -133,8 +133,8 @@ regeln:
     referenz: "DSGVO / BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Aktivierung des Unified Audit Loggings im Microsoft Purview Compliance Portal
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: m365-dokumentation-fehlt
     gilt_fuer: m365_security
@@ -150,5 +150,5 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Erstellung einer vollständigen M365 Tenant- und Sicherheitsdokumentation
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 6

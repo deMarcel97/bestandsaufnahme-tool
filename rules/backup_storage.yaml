@@ -14,8 +14,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Umstellung der Datensicherung auf die 3-2-1-Backup-Regel
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 2000
+      aufwand_richtwert: 8
 
   - id: bak-kein-immutability
     gilt_fuer: backup_storage
@@ -31,8 +31,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Einrichtung unveränderbarer Backup-Speicherbereiche (Immutable Storage)
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 1000
+      aufwand_richtwert: 4
 
   - id: bak-kein-offsite-backup
     gilt_fuer: backup_storage
@@ -48,8 +48,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Einrichtung einer verschlüsselten Offsite-Datensicherung
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 2000
+      aufwand_richtwert: 6
 
   - id: bak-keine-verschluesselung
     gilt_fuer: backup_storage
@@ -65,8 +65,8 @@ regeln:
     referenz: "DSGVO Art. 32"
     massnahme_vorschlag:
       bezeichnung: Aktivierung der End-to-End Verschlüsselung aller Datensicherungen
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: bak-keine-restore-tests
     gilt_fuer: backup_storage
@@ -82,8 +82,8 @@ regeln:
     referenz: "BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Einführung regelmäßiger, protokollierter Restore-Tests
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: bak-storage-hardware-alt
     gilt_fuer: backup_storage
@@ -99,8 +99,8 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Austausch veralteter Backup-Storage Hardware
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 3000
+      aufwand_richtwert: 6
 
   - id: bak-monitoring-fehlt
     gilt_fuer: backup_storage
@@ -116,8 +116,8 @@ regeln:
     referenz: ""
     massnahme_vorschlag:
       bezeichnung: Einrichtung von automatischem Mail-Alerting und Job-Monitoring
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 3
 
   - id: bak-konzept-fehlt
     gilt_fuer: backup_storage
@@ -133,5 +133,5 @@ regeln:
     referenz: "DSGVO / BSI IT-Grundschutz"
     massnahme_vorschlag:
       bezeichnung: Erstellung eines DSGVO-konformen Backup- und Disaster-Recovery-Konzepts
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 8

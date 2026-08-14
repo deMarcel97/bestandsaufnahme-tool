@@ -122,13 +122,44 @@ class ReportBuilder:
                 lines.append("Für diesen Standort wurden noch keine Technik-Objekte erfasst.\n")
                 continue
 
-            for obj in sto_objekte:
+            # Separate VMs from other objects for grouped rendering
+            vm_objekte = [o for o in sto_objekte if o.typ == "vm"]
+            sto_objekte_ohne_vms = [o for o in sto_objekte if o.typ != "vm"]
+            
+            # Build lookup map: host_id -> list of VMs
+            vms_by_host_id = {}
+            for vm in vm_objekte:
+                host_ref = vm.daten.get("host_referenz")
+                if host_ref:
+                    if host_ref not in vms_by_host_id:
+                        vms_by_host_id[host_ref] = []
+                    vms_by_host_id[host_ref].append(vm)
+
+            for obj in sto_objekte_ohne_vms:
                 schema = schema_loader.get_schema(obj.typ)
                 if not schema:
                     continue
 
                 kapitel_titel = schema.get("bezeichnung_anzeige", obj.typ.capitalize())
                 lines.append(f"#### {obj.bezeichnung} ({kapitel_titel})")
+                
+                # Render VMs grouped under their host
+                if obj.id in vms_by_host_id:
+                    for vm in vms_by_host_id[obj.id]:
+                        vm_name = vm.daten.get("name", "Unbenannte VM")
+                        vm_os = vm.daten.get("betriebssystem", "n/a")
+                        vm_cpu = vm.daten.get("cpu_kerne", "n/a")
+                        vm_ram = vm.daten.get("ram_gb", "n/a")
+                        vm_funktion = vm.daten.get("funktion_dienst", "n/a")
+                        vm_ha = vm.daten.get("ha_faehig", "n/a")
+                        ha_str = "JA" if vm_ha == "ja" else "NEIN" if vm_ha == "nein" else vm_ha
+                        lines.append(f"##### VM: {vm_name}")
+                        lines.append(f"- **Betriebssystem:** {vm_os}")
+                        lines.append(f"- **CPU-Kerne:** {vm_cpu}")
+                        lines.append(f"- **RAM (GB):** {vm_ram}")
+                        lines.append(f"- **Funktion/Dienst:** {vm_funktion}")
+                        lines.append(f"- **HA-fähig:** {ha_str}")
+                        lines.append("")
 
                 snippets = []
                 for abschnitt in schema.get("abschnitte", []):
@@ -147,6 +178,26 @@ class ReportBuilder:
                         lines.append("")
                 else:
                     lines.append("Keine detaillierten Angaben zu diesem Objekt vorhanden.")
+                    lines.append("")
+            
+            # Render orphaned VMs (host reference not found in this location's objects)
+            all_host_ids = {o.id for o in sto_objekte_ohne_vms}
+            for vm in vm_objekte:
+                host_ref = vm.daten.get("host_referenz")
+                if host_ref and host_ref not in all_host_ids:
+                    vm_name = vm.daten.get("name", "Unbenannte VM")
+                    vm_os = vm.daten.get("betriebssystem", "n/a")
+                    vm_cpu = vm.daten.get("cpu_kerne", "n/a")
+                    vm_ram = vm.daten.get("ram_gb", "n/a")
+                    vm_funktion = vm.daten.get("funktion_dienst", "n/a")
+                    vm_ha = vm.daten.get("ha_faehig", "n/a")
+                    ha_str = "JA" if vm_ha == "ja" else "NEIN" if vm_ha == "nein" else vm_ha
+                    lines.append(f"#### VM: {vm_name} (Host nicht gefunden)")
+                    lines.append(f"- **Betriebssystem:** {vm_os}")
+                    lines.append(f"- **CPU-Kerne:** {vm_cpu}")
+                    lines.append(f"- **RAM (GB):** {vm_ram}")
+                    lines.append(f"- **Funktion/Dienst:** {vm_funktion}")
+                    lines.append(f"- **HA-fähig:** {ha_str}")
                     lines.append("")
 
         # 6. Übersichtstabellen Erfasster Systeme (Chapter 4)

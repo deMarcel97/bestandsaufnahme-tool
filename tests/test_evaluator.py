@@ -66,22 +66,39 @@ def test_calculate_objekt_status_thresholds():
     )
     assert evaluator.calculate_objekt_status(full_fw) == "vollständig"
 
-def test_unrated_null_points_excluded():
+def test_unrated_fields_excluded_from_numerator_and_denominator():
+    evaluator = EvaluatorService()
+
+    # Nur ein Feld gesetzt, und das mit "unbekannt" -> nichts wirklich beantwortet.
+    fw = TechnikObjekt(
+        id="fw-1", typ="firewall", bezeichnung="FW 1", auftrag_id="a1", standort_id="s1",
+        daten={"hardware_alter": "unbekannt"}
+    )
+
+    res = evaluator.evaluate_auftrag(["firewall"], [fw])
+    # Bugfix (2026-08): unbeantwortete Kriterien fallen aus Zähler UND Nenner raus,
+    # statt fälschlich als 0 Punkte gewertet zu werden (das hätte Teil-Erfassungen
+    # unfair schlecht bewertet). Da hier nichts beantwortet wurde, darf keine Kategorie
+    # ins Ergebnis aufgenommen werden und der Erfassungsgrad bleibt bei 0.
+    assert res.kategorien == []
+    assert res.erfassungsgrad_bewertet_anzahl == 0
+
+def test_partially_rated_object_only_counts_answered_fields():
     evaluator = EvaluatorService()
 
     fw = TechnikObjekt(
         id="fw-1", typ="firewall", bezeichnung="FW 1", auftrag_id="a1", standort_id="s1",
-        daten={"hardware_alter": "unbekannt"}  # unrated -> 0.0 points out of max_punkte!
+        daten={"hardware_alter": "unbekannt", "security_abo_vorhanden": "ja"}
     )
 
     res = evaluator.evaluate_auftrag(["firewall"], [fw])
-    # Per Fix-Auftrag v6 Stufe 2.1: Unerfasste Kriterien zählen als null Punkte
-    kat_ids = [k.id for k in res.kategorien]
-    assert "hardware_und_software" in kat_ids
-    hw_kat = next(k for k in res.kategorien if k.id == "hardware_und_software")
-    alter_krit = next(kr for kr in hw_kat.kriterien if kr.kriterium_id == "hardware_alter")
-    assert alter_krit.erreichte_punkte == 0.0
-    assert alter_krit.max_punkte > 0.0
+    all_krit_ids = [kr.kriterium_id for kat in res.kategorien for kr in kat.kriterien]
+    # Das unbeantwortete Feld darf in keiner Kategorie als Kriterium auftauchen...
+    assert "hardware_alter" not in all_krit_ids
+    # ...während das beantwortete Feld (kriterium_id laut Schema: security_abo_firewall)
+    # ganz normal mitgezählt wird.
+    assert "security_abo_firewall" in all_krit_ids
+    assert res.erfassungsgrad_bewertet_anzahl == 1
 
 def test_stufe2_objekt_status_zero_false_empty_list():
     evaluator = EvaluatorService()

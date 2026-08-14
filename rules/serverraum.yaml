@@ -15,8 +15,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Zutrittsschutz für Serverraum herstellen
       beschreibung: Installation einer Schließanlage oder eines elektronischen Zutrittssystems.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 1000
+      aufwand_richtwert: 4
 
   - id: srv-schluessel-undokumentiert
     gilt_fuer: serverraum
@@ -33,8 +33,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Dokumentation der Schlüsselvergabe für Serverraum einführen
       beschreibung: Erstellung eines Schlüsselbuchs und Erfassung aller Schlüsselträger.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: srv-keine-protokollierung
     gilt_fuer: serverraum
@@ -51,8 +51,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Zutrittsprotokollierung für Serverraum einrichten
       beschreibung: Konfiguration der Protokollierung im Zutrittssystem oder Einführung eines Meldebuchs.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 500
+      aufwand_richtwert: 2
 
   - id: srv-berechtigte-undokumentiert
     gilt_fuer: serverraum
@@ -69,8 +69,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Autorisationsliste für Serverraumzutritt erstellen
       beschreibung: Erfassung und regelmäßige Überprüfung aller zutrittsberechtigten Personen.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: srv-keine-sensorik
     gilt_fuer: serverraum
@@ -87,8 +87,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Umweltsensorik im Serverraum installieren
       beschreibung: Beschaffung und Installation von Überwachungssensoren (z. B. Kentix / Thomas-Krenn).
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 800
+      aufwand_richtwert: 3
 
   - id: srv-sensorik-ohne-alarm
     gilt_fuer: serverraum
@@ -105,8 +105,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Alarmierung für Serverraum-Umweltsensoren einrichten
       beschreibung: Anbindung der Messwerte an E-Mail/SMS-Benachrichtigung oder Monitoring.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: srv-keine-brandmeldung
     gilt_fuer: serverraum
@@ -123,8 +123,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Brandmeldung für Serverraum nachrüsten
       beschreibung: Installation von Rauchmeldern mit Anbindung an die Gebäude-BMA oder Alarmanlage.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 800
+      aufwand_richtwert: 4
 
   - id: srv-eine-einspeisung
     gilt_fuer: serverraum
@@ -141,8 +141,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Prüfen zweiter Stromeinspeisung (A/B-Versorgung)
       beschreibung: Machbarkeitsprüfung für redundante Stromzuführung.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 3
 
   - id: srv-aggregat-test-alt
     gilt_fuer: serverraum
@@ -165,8 +165,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Testlauf des Notstromaggregats durchführen
       beschreibung: Durchführung und Protokollierung eines Probelaufs des Dieselaggregats.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 3
 
   - id: srv-keine-loeschanlage
     gilt_fuer: serverraum
@@ -183,8 +183,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: CO2-Handfeuerlöscher für Serverraum bereitstellen
       beschreibung: Aufstellung von geeigneten Löschmitteln für elektrische Anlagen.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 200
+      aufwand_richtwert: 1
 
   - id: srv-kein-notstromaggregat
     gilt_fuer: serverraum
@@ -201,5 +201,5 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Notstromkonzept für Langzeitausfälle erstellen
       beschreibung: Vorhaltung mobiler Einspeisemöglichkeiten oder Mietvereinbarungen.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 4

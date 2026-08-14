@@ -1,0 +1,55 @@
+schema_version: 1
+regeln:
+  - id: vm-kein-host
+    gilt_fuer: vm
+    bedingung:
+      alle:
+        - feld: host_referenz
+          operator: ist_leer
+    schweregrad: hoch
+    befund: VM ohne Host-Zuordnung
+    risiko: Die virtuelle Maschine ist keinem Host-Server oder Cluster zugeordnet, was die Verwaltung und Identifizierung der Laufzeitumgebung unmöglich macht.
+    empfehlung: VM einem gültigen Host (Server oder Cluster) zuordnen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: VM einem Host-Server oder Cluster zuordnen
+      beschreibung: Zuordnung der virtuellen Maschine zu einem server_virtualisierung-Objekt oder server_cluster-Objekt im Bestandsaufnahme-Tool.
+      kosten_richtwert: 0
+      aufwand_richtwert: 1
+
+  - id: vm-nicht-ha-faehig
+    gilt_fuer: vm
+    bedingung:
+      alle:
+        - feld: ha_faehig
+          operator: gleich
+          wert: nein
+    schweregrad: mittel
+    befund: VM ist nicht HA-fähig
+    risiko: Bei Ausfall des Host-Servers fällt die VM aus und muss manuell neu gestartet werden, was zu längeren Ausfallzeiten führt.
+    empfehlung: VM als HA-fähig konfigurieren, sofern der Host in einem Cluster betrieben wird.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: VM als HA-fähig konfigurieren
+      beschreibung: Konfiguration der VM-Einstellungen für High Availability im Hypervisor (VMware HA, Hyper-V Live Migration, Proxmox HA).
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
+
+  - id: vm-keine-ressourcen
+    gilt_fuer: vm
+    bedingung:
+      alle:
+        - feld: cpu_kerne
+          operator: ist_leer
+        - feld: ram_gb
+          operator: ist_leer
+    schweregrad: niedrig
+    befund: VM hat keine CPU- und RAM-Ressourcenzuordnung
+    risiko: Unklare Ressourcenallokation erschwert die Kapazitätsplanung und Performance-Optimierung.
+    empfehlung: CPU-Kerne und RAM für die VM dokumentieren.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: VM-Ressourcen (CPU, RAM) dokumentieren
+      beschreibung: Erfassung der zugewiesenen CPU-Kerne und RAM-Menge für die virtuelle Maschine im Bestandsaufnahme-Tool.
+      kosten_richtwert: 0
+      aufwand_richtwert: 1

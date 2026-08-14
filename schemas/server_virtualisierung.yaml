@@ -15,8 +15,7 @@ abschnitte:
     werte:
     - wert: vmware_vsphere
       textbaustein:
-        feststellung: Als Virtualisierungsplattform kommt VMware ESXi / vSphere zum
-          Einsatz.
+        feststellung: Als Virtualisierungsplattform kommt VMware ESXi / vSphere zum Einsatz.
         auswirkung: null
     - wert: hyper_v
       textbaustein:
@@ -36,13 +35,11 @@ abschnitte:
         auswirkung: null
     - wert: bare_metal
       textbaustein:
-        feststellung: Die Server werden ohne Virtualisierungsschicht direkt auf der
-          Hardware (Bare Metal) betrieben.
+        feststellung: Die Server werden ohne Virtualisierungsschicht direkt auf der Hardware (Bare Metal) betrieben.
         auswirkung: null
     - wert: sonstiges
       textbaustein:
-        feststellung: Als Virtualisierungsplattform kommt ein sonstiges System zum
-          Einsatz.
+        feststellung: Als Virtualisierungsplattform kommt ein sonstiges System zum Einsatz.
         auswirkung: null
     - wert: unbekannt
       textbaustein: null
@@ -73,6 +70,277 @@ abschnitte:
   - name: ip_adressen
     label: IP-Adressen / Management-IPs
     typ: text
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: intern
+
+- id: hardware
+  titel: Hardware
+  felder:
+  - name: hersteller
+    label: Hersteller
+    typ: auswahl
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+    werte:
+    - wert: dell
+      textbaustein:
+        feststellung: Als Server-Hersteller kommt Dell zum Einsatz.
+        auswirkung: null
+    - wert: hp
+      textbaustein:
+        feststellung: Als Server-Hersteller kommt Hewlett Packard Enterprise (HPE) zum Einsatz.
+        auswirkung: null
+    - wert: lenovo
+      textbaustein:
+        feststellung: Als Server-Hersteller kommt Lenovo zum Einsatz.
+        auswirkung: null
+    - wert: fujitsu
+      textbaustein:
+        feststellung: Als Server-Hersteller kommt Fujitsu zum Einsatz.
+        auswirkung: null
+    - wert: ibm
+      textbaustein:
+        feststellung: Als Server-Hersteller kommt IBM zum Einsatz.
+        auswirkung: null
+    - wert: supermicro
+      textbaustein:
+        feststellung: Als Server-Hersteller kommt Supermicro zum Einsatz.
+        auswirkung: null
+    - wert: sonstiges
+      textbaustein:
+        feststellung: Als Server-Hersteller kommt ein sonstiger Hersteller zum Einsatz.
+        auswirkung: null
+    - wert: unbekannt
+      textbaustein: null
+  - name: modell
+    label: Modell
+    typ: text
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+  - name: seriennummer
+    label: Seriennummer
+    typ: text
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: intern
+  - name: garantie_status
+    label: Garantie-Status
+    typ: auswahl
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: betriebsrisiken
+      kriterium: server_garantie_status
+      max_punkte: 10
+    werte:
+    - wert: aktiv
+      punkte: 10
+      textbaustein:
+        feststellung: Die Server-Hardware befindet sich innerhalb der Herstellergarantie.
+        auswirkung: null
+    - wert: abgelaufen
+      punkte: 0
+      textbaustein:
+        feststellung: Die Herstellergarantie für die Server-Hardware ist abgelaufen.
+        auswirkung: Reparaturen und Ersatzteilbeschaffung erfolgen auf eigenes finanzielles Risiko.
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: garantie_ablaufdatum
+    label: Garantie-Ablaufdatum
+    typ: datum
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+  - name: sockel_anzahl
+    label: Sockel-Anzahl
+    typ: auswahl
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+    werte:
+    - wert: single
+      textbaustein:
+        feststellung: Der Server verfügt über einen einzelnen CPU-Sockel.
+        auswirkung: null
+    - wert: dual
+      textbaustein:
+        feststellung: Der Server verfügt über zwei CPU-Sockel.
+        auswirkung: null
+    - wert: multi
+      textbaustein:
+        feststellung: Der Server verfügt über mehrere CPU-Sockel.
+        auswirkung: null
+    - wert: unbekannt
+      textbaustein: null
+  - name: ram_ausbau
+    label: RAM-Ausbau
+    typ: text
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+  - name: festplatten_slots
+    label: Festplatten-Slots
+    typ: liste
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+    felder:
+    - name: platten_typ
+      typ: auswahl
+      label: Typ
+      werte:
+      - wert: ssd
+      - wert: hdd
+    - name: anbindung
+      typ: auswahl
+      label: Anbindung
+      werte:
+      - wert: sata
+      - wert: sas
+      - wert: nvme
+    - name: kapazitaet_gb
+      typ: zahl
+      label: Kapazität (GB)
+  - name: netzwerkkarten
+    label: Netzwerkkarten
+    typ: liste
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+    felder:
+    - name: anzahl_ports
+      typ: zahl
+      label: Anzahl Ports
+    - name: geschwindigkeit
+      typ: auswahl
+      label: Geschwindigkeit
+      werte:
+      - wert: 1g
+      - wert: 10g
+      - wert: 25g
+    - name: anbindungsart
+      typ: auswahl
+      label: Anbindungsart
+      werte:
+      - wert: onboard
+      - wert: steckkarte
+  - name: erweiterungs_slots
+    label: Erweiterungs-Slots
+    typ: liste
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+    felder:
+    - name: bezeichnung
+      typ: text
+      label: Bezeichnung
+    - name: belegt_mit
+      typ: text
+      label: Belegt mit
+  - name: hardware_kommentar
+    label: Kommentar
+    typ: mehrzeiliger_text
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: intern
+
+- id: virtualisierung
+  titel: Virtualisierung
+  felder:
+  - name: wird_virtualisiert
+    label: Wird virtualisiert
+    typ: ja_nein
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+
+- id: virtualisierung_details
+  titel: Virtualisierungs-Details
+  sichtbar_wenn:
+    feld: wird_virtualisiert
+    operator: gleich
+    wert: ja
+  felder:
+  - name: hypervisor_typ_virt
+    label: Hypervisor-Typ
+    typ: auswahl
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+    werte:
+    - wert: vmware
+      textbaustein:
+        feststellung: Als Virtualisierungsplattform kommt VMware ESXi / vSphere zum Einsatz.
+        auswirkung: null
+    - wert: hyperv
+      textbaustein:
+        feststellung: Als Virtualisierungsplattform kommt Microsoft Hyper-V zum Einsatz.
+        auswirkung: null
+    - wert: proxmox
+      textbaustein:
+        feststellung: Als Virtualisierungsplattform kommt Proxmox VE zum Einsatz.
+        auswirkung: null
+    - wert: sonstiges
+      textbaustein:
+        feststellung: Als Virtualisierungsplattform kommt ein sonstiges System zum Einsatz.
+        auswirkung: null
+    - wert: unbekannt
+      textbaustein: null
+  - name: hypervisor_version_virt
+    label: Version
+    typ: text
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+  - name: betriebsmodus
+    label: Betriebsmodus
+    typ: auswahl
+    pflicht: false
+    regelrelevant: true
+    vertraulichkeit: kundentauglich
+    bewertung:
+      kategorie: betriebsrisiken
+      kriterium: server_betriebsmodus
+      max_punkte: 10
+    werte:
+    - wert: einzelserver
+      punkte: 5
+      textbaustein:
+        feststellung: Der Server wird als Einzelserver betrieben.
+        auswirkung: Keine automatische Ausfallsicherheit bei Hardwaredefekt des Hosts.
+    - wert: cluster
+      punkte: 10
+      textbaustein:
+        feststellung: Der Server ist Teil eines Clusters.
+        auswirkung: Hohe Verfügbarkeit durch automatisches Failover zwischen Cluster-Knoten.
+    - wert: unbekannt
+      punkte: null
+      textbaustein: null
+  - name: raid_konfiguration
+    label: RAID-Konfiguration
+    typ: text
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+  - name: cluster_referenz
+    label: Cluster-Zugehörigkeit
+    typ: objekt_referenz
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+    ziel_typen: [server_cluster]
+    sichtbar_wenn:
+      feld: betriebsmodus
+      operator: gleich
+      wert: cluster
+  - name: virtualisierung_kommentar
+    label: Kommentar
+    typ: mehrzeiliger_text
     pflicht: false
     regelrelevant: false
     vertraulichkeit: intern

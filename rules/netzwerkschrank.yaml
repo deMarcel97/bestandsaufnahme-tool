@@ -15,8 +15,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Verschlussfähigen Netzwerkschrank beschaffen und montieren
       beschreibung: Einbau der offenen Netzwerk- und Serverkomponenten in ein geschütztes Rack.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 1500
+      aufwand_richtwert: 6
 
   - id: nwschrank-nicht-abschliessbar
     gilt_fuer: netzwerkschrank
@@ -33,8 +33,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Netzwerkschrank mit Schließzylinder sichern
       beschreibung: Nachrüstung eines Schlossgriffs und Reglementierung der Schlüssel.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 150
+      aufwand_richtwert: 1
 
   - id: nwschrank-keine-belueftung
     gilt_fuer: netzwerkschrank
@@ -51,8 +51,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Lüftereinheit für Netzwerkschrank nachrüsten
       beschreibung: Einbau einer temperaturgesteuerten Schrankbelüftung.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 400
+      aufwand_richtwert: 2
 
   - id: nwschrank-patchpanel-unbeschriftet
     gilt_fuer: netzwerkschrank
@@ -69,8 +69,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Patchfelder im Netzwerkschrank durchgehend beschriften
       beschreibung: Beschriftung aller Ports gemäß Netzplan.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 3
 
   - id: nwschrank-keine-verkabelungsdoku
     gilt_fuer: netzwerkschrank
@@ -87,8 +87,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Verkabelungsdokumentation und Belegungsplan erstellen
       beschreibung: Dokumentation aller Patchfelder, Dosen und Kabelstrecken.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 6
 
   - id: nwschrank-gewachsen
     gilt_fuer: netzwerkschrank
@@ -105,8 +105,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Netzwerkschrank neu strukturieren und umschalten
       beschreibung: Ausbau ungenutzter Kabel, Montage von Rangierpanels und Neuverlegung passender Patchkabel.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 300
+      aufwand_richtwert: 6
 
   - id: nwschrank-cat5
     gilt_fuer: netzwerkschrank
@@ -123,8 +123,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Veraltete Cat-5-Kabelstrecken auf Cat 6a / 7 erneuern
       beschreibung: Austausch alter Netzwerkstrecken gegen zukunftssichere Verkabelung.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 500
+      aufwand_richtwert: 6
 
   - id: nwschrank-keine-reserve
     gilt_fuer: netzwerkschrank
@@ -141,8 +141,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Netzwerkschrank-Kapazität für zukünftige Erweiterungen planen
       beschreibung: Bewertung von Umbau- oder Anbauoptionen für den Netzwerkschrank.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: nwschrank-verkabelung-alt
     gilt_fuer: netzwerkschrank
@@ -159,5 +159,5 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Messtechnische Überprüfung der Netzwerkkabelstrecken durchführen
       beschreibung: Qualifizierungsmessung der Bestandsverkabelung zur Feststellung der Zukunftsfähigkeit.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 4

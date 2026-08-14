@@ -15,8 +15,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Veraltete WLAN Access Points auf Wi-Fi 6 / 6E erneuern
       beschreibung: Austausch alter WLAN-Sender gegen moderne Wi-Fi 6/6E Access Points.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 400
+      aufwand_richtwert: 3
 
   - id: ap-standalone
     gilt_fuer: access_point
@@ -33,8 +33,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Zentrales WLAN-Management (Controller) einführen
       beschreibung: Anbindung aller Access Points an ein zentrales Management-System.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 6
 
   - id: ap-gastnetz-unsicher
     gilt_fuer: access_point
@@ -54,8 +54,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Gast-WLAN durch eigenes VLAN und Client-Isolation vom Firmennetz trennen
       beschreibung: Konfiguration eines isolierten Gastnetzes ohne Zugriff auf interne Netze.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: ap-kein-wpa3
     gilt_fuer: access_point
@@ -72,8 +72,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: WLAN-Verschlüsselung auf WPA3 oder WPA2-Enterprise aufrüsten
       beschreibung: Anpassung der WLAN-Sicherheitseinstellungen auf moderne Standards.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: ap-firmware-veraltet
     gilt_fuer: access_point
@@ -90,8 +90,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Firmware der WLAN Access Points aktualisieren
       beschreibung: Einspielen aktueller Software-Patches auf den Access Points.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
 
   - id: ap-garantie-abgelaufen
     gilt_fuer: access_point
@@ -107,8 +107,8 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Garantie und Lebenszyklus der WLAN-Hardware prüfen
       beschreibung: Überprüfung des Herstellersupport-Status.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 1
 
   - id: ap-kein-wartungsvertrag
     gilt_fuer: access_point
@@ -125,5 +125,5 @@ regeln:
     massnahme_vorschlag:
       bezeichnung: Supportvertrag für WLAN-Infrastruktur vereinbaren
       beschreibung: Einbindung der Access Points in den IT-Servicevertrag.
-      kosten_richtwert: null
-      aufwand_richtwert: null
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
