@@ -245,14 +245,15 @@ nav a:hover, nav a.active { color: inherit; text-decoration: underline; }
 }
 
 .chip-list { display: flex; flex-wrap: wrap; gap: 5px; }
-.chip {
+.chip-list .chip {
+  display: inline-block;
   font-size: 11.5px;
   padding: 3px 7px;
   border: 1px solid var(--line);
   color: var(--muted);
   text-decoration: none;
 }
-a.chip:hover { background: var(--ink); border-color: var(--ink); color: var(--panel); }
+.chip-list a.chip:hover { background: var(--ink); border-color: var(--ink); color: var(--panel); }
 
 /* ── Inhaltsspalte ───────────────────────────────────────────────────── */
 .workspace { padding: 28px 40px 80px; min-width: 0; }
