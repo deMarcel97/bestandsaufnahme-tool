@@ -13,7 +13,7 @@
 
   {% if progress_data %}
   {% set erfasst_count = progress_data.values() | selectattr('prozent') | list | length %}
-  {% set offen_liste = progress_data.values() | rejectattr('prozent') | list %}
+  {% set offen_liste = progress_data.items() | rejectattr('1.prozent') | list %}
 
   <div class="sidebar-head">
     <span class="eyebrow">Aktive Bausteine</span>
@@ -35,8 +35,8 @@
     <li style="margin-top:6px; padding-top:12px; border-top:1px solid var(--line);">
       <div class="eyebrow" style="margin-bottom:8px;">Noch nicht erfasst</div>
       <div class="chip-list">
-        {% for pdata in offen_liste %}
-        <span class="chip">{{ pdata.titel }}</span>
+        {% for typ, pdata in offen_liste %}
+        <a class="chip" href="/auftrag/{{ auftrag.id }}/objekt/neu?typ={{ typ }}">{{ pdata.titel }}</a>
         {% endfor %}
       </div>
     </li>
