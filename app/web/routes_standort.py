@@ -94,7 +94,6 @@ async def new_standort_submit(
     anzahl_user = parse_int_german(form_data.get("anzahl_user"))
     funktion = form_data.get("funktion", "").strip()
     ansprechpartner_vor_ort = form_data.get("ansprechpartner_vor_ort", "").strip()
-    vertraulichkeit = form_data.get("vertraulichkeit", "kundentauglich")
     begehung_am = form_data.get("begehung_am", "").strip()
     redaktionskonzept_backup_leitung = form_data.get("redaktionskonzept_backup_leitung", "automatische_umschaltung")
     trassenfuehrung_getrennt = form_data.get("trassenfuehrung_getrennt", "ja")
@@ -104,6 +103,8 @@ async def new_standort_submit(
     auftrag = storage.load_auftrag(auftrag_id)
     if not auftrag:
         return RedirectResponse(url="/auftrag", status_code=303)
+
+    vertraulichkeit = form_data.get("vertraulichkeit", auftrag.vertraulichkeit_default)
 
     existing_ids = [s.id for s in storage.list_standorte(auftrag_id)]
     sto_id = generate_slug_id("standort", bezeichnung, existing_ids)
