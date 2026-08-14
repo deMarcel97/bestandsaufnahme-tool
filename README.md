@@ -1,4 +1,4 @@
-# IT-Bestandsaufnahme-Tool (v2.1.0)
+# IT-Bestandsaufnahme-Tool (v2.2.0)
 
 Ein spezialisiertes Web-Tool für IT-Systemhäuser zur strukturierten Erfassung, automatischen Risikobewertung und professionellen Berichtserstellung von IT-Kundeninfrastrukturen.
 
