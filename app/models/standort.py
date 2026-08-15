@@ -28,6 +28,7 @@ class Internetanbindung(BaseModel):
 
 class Standort(BaseModel):
     schema_version: int = 1
+    version: int = 1  # Konflikterkennung, siehe Auftrag.version
     id: str
     auftrag_id: str
     bezeichnung: str = ""

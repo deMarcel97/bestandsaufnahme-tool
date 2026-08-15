@@ -78,6 +78,11 @@ class Rahmenbedingungen(BaseModel):
 
 class Auftrag(BaseModel):
     schema_version: int = 1
+    # Zählt bei jedem Speichern hoch. Formulare führen den beim Laden
+    # gesehenen Stand mit; weicht er beim Speichern ab, hat jemand anderes
+    # zwischenzeitlich gespeichert (siehe StorageService). Bestandsdaten ohne
+    # dieses Feld starten bei 1.
+    version: int = 1
     id: str
     projekt_nummer: str = ""
     jira_url: Optional[str] = None

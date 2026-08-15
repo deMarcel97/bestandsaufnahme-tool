@@ -1,5 +1,6 @@
 from pathlib import Path
 import copy
+import os
 import shutil
 import logging
 from typing import List, Optional, Dict, Any
@@ -13,10 +14,76 @@ from app.models.finding import Finding
 from app.models.massnahme import Massnahme
 from app.services.slug import generate_slug_id, is_valid_id
 
+
+class KonfliktFehler(Exception):
+    """Der Datensatz wurde zwischenzeitlich von jemand anderem geändert.
+
+    Wird ausgelöst, statt die fremden Änderungen stillschweigend zu
+    überschreiben — der aufrufende Code kann daraus einen sichtbaren Hinweis
+    machen."""
+
+    def __init__(self, bezeichnung: str = ""):
+        self.bezeichnung = bezeichnung
+        super().__init__(
+            f"'{bezeichnung}' wurde zwischenzeitlich von jemand anderem geändert."
+            if bezeichnung
+            else "Der Datensatz wurde zwischenzeitlich von jemand anderem geändert."
+        )
+
+
+def write_yaml_atomic(fpath: Path, data: Any) -> None:
+    """Schreibt YAML so, dass die Zieldatei nie in einem halben Zustand liegt.
+
+    `open(fpath, "w")` würde die Zieldatei sofort leeren — bricht der Prozess
+    danach ab (Dienst-Neustart, OOM, Stromausfall), bliebe eine leere oder
+    abgeschnittene Datei zurück und der Datensatz wäre nicht veraltet, sondern
+    kaputt. Stattdessen wird vollständig in eine Nachbardatei geschrieben und
+    erst dann umbenannt: `os.replace()` ist auf POSIX atomar, es existiert also
+    immer entweder der alte oder der neue Stand.
+    """
+    tmp = fpath.with_name(f".{fpath.name}.tmp")
+    try:
+        with open(tmp, "w", encoding="utf-8") as f:
+            yaml.dump(data, f, allow_unicode=True, sort_keys=False)
+            # Ohne fsync könnte das Umbenennen den Dateipuffer überholen und
+            # nach einem Absturz auf eine leere Datei zeigen.
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, fpath)
+    except BaseException:
+        # Der Torso darf nicht liegenbleiben; die Zieldatei ist unberührt.
+        tmp.unlink(missing_ok=True)
+        raise
+
+
 class StorageService:
     def __init__(self, data_dir: Path = DATA_DIR):
         self.data_dir = data_dir
         self.data_dir.mkdir(parents=True, exist_ok=True)
+
+    # --- KONFLIKTERKENNUNG ---
+    def _pruefe_version(self, fpath: Path, version: int, bezeichnung: str) -> None:
+        """Vergleicht die mitgeführte Version mit der auf der Platte.
+
+        Der Ablauf ist bewusst optimistisch: es wird nicht gesperrt, sondern
+        beim Speichern geprüft. Für die Schreibhäufigkeit dieses Tools ist das
+        angemessen und vermeidet hängende Sperren bei abgebrochenen
+        Bearbeitungen. Fehlt die Datei, ist es ein Neuanlegen — dann gibt es
+        nichts zu prüfen."""
+        if not fpath.exists():
+            return
+        try:
+            with open(fpath, "r", encoding="utf-8") as f:
+                data = yaml.safe_load(f)
+        except (OSError, yaml.YAMLError):
+            # Unlesbarer Bestand darf das Speichern nicht blockieren — sonst
+            # liesse sich eine kaputte Datei nie wieder überschreiben.
+            return
+        if not data:
+            return
+        gespeicherte_version = data.get("version", 1) if isinstance(data, dict) else 1
+        if gespeicherte_version != version:
+            raise KonfliktFehler(bezeichnung)
 
     # --- AUFTRAG ---
     def get_auftrag_dir(self, auftrag_id: str, create: bool = False) -> Optional[Path]:
@@ -28,12 +95,15 @@ class StorageService:
         return p
 
     def save_auftrag(self, auftrag: Auftrag) -> Optional[str]:
+        """Speichert den Auftrag. Löst KonfliktFehler aus, wenn auf der Platte
+        bereits ein neuerer Stand liegt."""
         d = self.get_auftrag_dir(auftrag.id, create=True)
         if d is None:
             return None
         fpath = d / "auftrag.yaml"
-        with open(fpath, "w", encoding="utf-8") as f:
-            yaml.dump(auftrag.model_dump(), f, allow_unicode=True, sort_keys=False)
+        self._pruefe_version(fpath, auftrag.version, auftrag.bezeichnung or auftrag.id)
+        auftrag.version += 1
+        write_yaml_atomic(fpath, auftrag.model_dump())
         return auftrag.id
 
     def load_auftrag(self, auftrag_id: str) -> Optional[Auftrag]:
@@ -87,8 +157,9 @@ class StorageService:
         d = base / "standorte"
         d.mkdir(parents=True, exist_ok=True)
         fpath = d / f"{standort.id}.yaml"
-        with open(fpath, "w", encoding="utf-8") as f:
-            yaml.dump(standort.model_dump(), f, allow_unicode=True, sort_keys=False)
+        self._pruefe_version(fpath, standort.version, standort.bezeichnung or standort.id)
+        standort.version += 1
+        write_yaml_atomic(fpath, standort.model_dump())
         return standort.id
 
     def load_standort(self, auftrag_id: str, standort_id: str) -> Optional[Standort]:
@@ -148,8 +219,9 @@ class StorageService:
         d = base / "objekte" / obj.typ
         d.mkdir(parents=True, exist_ok=True)
         fpath = d / f"{obj.id}.yaml"
-        with open(fpath, "w", encoding="utf-8") as f:
-            yaml.dump(obj.model_dump(), f, allow_unicode=True, sort_keys=False)
+        self._pruefe_version(fpath, obj.version, obj.bezeichnung or obj.id)
+        obj.version += 1
+        write_yaml_atomic(fpath, obj.model_dump())
         return obj.id
 
     def load_objekt(self, auftrag_id: str, typ: str, objekt_id: str) -> Optional[TechnikObjekt]:
@@ -255,8 +327,7 @@ class StorageService:
             return
         fpath = d / "findings.yaml"
         data = [f.model_dump() for f in findings]
-        with open(fpath, "w", encoding="utf-8") as f:
-            yaml.dump(data, f, allow_unicode=True, sort_keys=False)
+        write_yaml_atomic(fpath, data)
 
     def list_findings(self, auftrag_id: str) -> List[Finding]:
         d = self.get_auftrag_dir(auftrag_id)
@@ -284,8 +355,7 @@ class StorageService:
             return
         fpath = d / "massnahmen.yaml"
         data = [m.model_dump() for m in massnahmen]
-        with open(fpath, "w", encoding="utf-8") as f:
-            yaml.dump(data, f, allow_unicode=True, sort_keys=False)
+        write_yaml_atomic(fpath, data)
 
     def list_massnahmen(self, auftrag_id: str) -> List[Massnahme]:
         d = self.get_auftrag_dir(auftrag_id)
