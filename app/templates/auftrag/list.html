@@ -53,8 +53,16 @@
             </select>
           </form>
         </td>
-        <td class="text-muted">{{ a.vertraulichkeit_default }}</td>
-        <td class="col-right">
+        <td>
+          <form action="/auftrag/{{ a.id }}/vertraulichkeit" method="POST">
+            <input type="hidden" name="next" value="/auftrag">
+            <select name="vertraulichkeit_default" class="form-control badge-select" onchange="this.form.submit()">
+              {% for opt in ["intern", "kundentauglich", "anonymisiert"] %}
+              <option value="{{ opt }}" {% if a.vertraulichkeit_default == opt %}selected{% endif %}>{{ opt }}</option>
+              {% endfor %}
+            </select>
+          </form>
+        </td>        <td class="col-right">
           <span class="linkact">
             <a href="/auftrag/{{ a.id }}">Öffnen</a>
             <form action="/auftrag/{{ a.id }}/delete" method="POST" style="display:inline;" onsubmit="return confirm('Auftrag wirklich löschen?');">

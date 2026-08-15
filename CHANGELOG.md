@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.6.0] - 2026-08-15
+
+### Added
+- **Auftragsstatus & Vertraulichkeit editierbar (#283)**: Die Vertraulichkeit (intern, kundentauglich, anonymisiert) lässt sich nun, genau wie der Status, direkt aus der Auftragsübersicht (`list.html`) und der Detailansicht (`detail.html`) als Dropdown umschalten und wird gespeichert.
+
 ## [2.5.0] - 2026-08-15
 
 ### Fixed
