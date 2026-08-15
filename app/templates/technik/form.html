@@ -16,7 +16,7 @@
       <h1>{% if obj %}{{ obj.bezeichnung }}{% else %}Neue {{ schema.bezeichnung_anzeige }}{% endif %}</h1>
       <div class="meta-line"><span>{% if obj %}Objekt bearbeiten{% else %}Objekt erfassen{% endif %}</span></div>
     </div>
-    <a href="/auftrag/{{ auftrag.id }}" class="btn" style="flex:none;">Zurück zum Auftrag</a>
+    <a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn" style="flex:none;">Zurück zur Erfassung</a>
   </div>
 
   <form action="{% if obj %}/auftrag/{{ auftrag.id }}/objekt/{{ schema.typ }}/{{ obj.id }}{% else %}/auftrag/{{ auftrag.id }}/objekt/neu?typ={{ schema.typ }}{% endif %}" method="POST">
@@ -218,7 +218,7 @@
 
     <div class="form-bar">
       <button type="submit" class="btn btn-primary">Objekt speichern</button>
-      {% if obj %}<a href="/auftrag/{{ auftrag.id }}" class="btn">Abbrechen</a>{% endif %}
+      {% if obj %}<a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn">Abbrechen</a>{% endif %}
     </div>
   </form>
   </main>

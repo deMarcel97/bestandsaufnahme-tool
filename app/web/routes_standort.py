@@ -77,7 +77,7 @@ def new_standort_form(request: Request, auftrag_id: str):
             "auftrag": auftrag,
             "standort": None,
             "heutiges_datum": date.today().isoformat(),
-            "active_tab": "uebersicht",
+            "active_tab": "erfassung",
             "active_nav": "auftrag",
             **sidebar_context
         }
@@ -133,14 +133,14 @@ async def new_standort_submit(
     )
     storage.save_standort(standort)
 
-    return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
 
 @router.get("/auftrag/{auftrag_id}/standort/{standort_id}/bearbeiten")
 def edit_standort_form(request: Request, auftrag_id: str, standort_id: str):
     auftrag = storage.load_auftrag(auftrag_id)
     standort = storage.load_standort(auftrag_id, standort_id)
     if not auftrag or not standort:
-        return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+        return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
     sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
         request=request,
@@ -148,7 +148,7 @@ def edit_standort_form(request: Request, auftrag_id: str, standort_id: str):
         context={
             "auftrag": auftrag,
             "standort": standort,
-            "active_tab": "uebersicht",
+            "active_tab": "erfassung",
             "active_nav": "auftrag",
             **sidebar_context
         }
@@ -163,7 +163,7 @@ async def edit_standort_submit(
     form_data = await request.form()
     standort = storage.load_standort(auftrag_id, standort_id)
     if not standort:
-        return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+        return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
 
     standort.bezeichnung = form_data.get("bezeichnung", standort.bezeichnung).strip()
     standort.strasse = form_data.get("strasse", "").strip()
@@ -187,4 +187,4 @@ async def edit_standort_submit(
     standort.anbindungen = _parse_anbindungen_from_form(form_data)
     storage.save_standort(standort)
 
-    return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)

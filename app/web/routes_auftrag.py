@@ -7,7 +7,6 @@ from app.services.schema_loader import schema_loader
 from app.services.slug import generate_slug_id
 from app.services.rule_engine import rule_engine
 from app.services.evaluator import evaluator_service
-from app.services.progress import progress_service
 from app.web.templates import templates
 from app.web.shared_context import build_sidebar_context
 from app.models.auftrag import Auftrag, Termine, Unternehmenskontext
@@ -116,33 +115,52 @@ def update_auftrag_vertraulichkeit(auftrag_id: str, vertraulichkeit_default: str
 
 @router.get("/auftrag/{auftrag_id}")
 def detail_auftrag(request: Request, auftrag_id: str):
+    """Übersicht: Status auf einen Blick (Kennzahlen), nichts zum Bearbeiten.
+    Nur hier läuft die teure Gesamtbewertung — die Erfassungsseite braucht sie nicht."""
     auftrag = storage.load_auftrag(auftrag_id)
     if not auftrag:
         return RedirectResponse(url="/auftrag", status_code=303)
 
     standorte = storage.list_standorte(auftrag_id)
     objekte = storage.list_objekte(auftrag_id)
-    progress_data = progress_service.calculate_progress(auftrag.aktive_bausteine, objekte)
+    sidebar_context = build_sidebar_context(auftrag, standorte, objekte)
     bewertung = evaluator_service.evaluate_auftrag(auftrag.aktive_bausteine, objekte, standorte)
-    findings = storage.list_findings(auftrag_id)
-    offene_punkte = progress_service.collect_offene_punkte(auftrag, standorte, objekte, [])
-    active_findings = findings
 
-    bausteine_labels = get_bausteine_labels()
     return templates.TemplateResponse(
         request=request,
         name="auftrag/detail.html",
         context={
             "auftrag": auftrag,
+            "bewertung": bewertung,
+            "active_tab": "uebersicht",
+            "active_nav": "auftrag",
+            **sidebar_context
+        }
+    )
+
+@router.get("/auftrag/{auftrag_id}/erfassung")
+def erfassung_auftrag(request: Request, auftrag_id: str):
+    """Erfassung: die Arbeitsfläche mit Standorten, Bausteinauswahl und erfassten
+    Objekten. Ohne Gesamtbewertung, die gehört auf die Übersicht."""
+    auftrag = storage.load_auftrag(auftrag_id)
+    if not auftrag:
+        return RedirectResponse(url="/auftrag", status_code=303)
+
+    standorte = storage.list_standorte(auftrag_id)
+    objekte = storage.list_objekte(auftrag_id)
+    sidebar_context = build_sidebar_context(auftrag, standorte, objekte)
+
+    return templates.TemplateResponse(
+        request=request,
+        name="auftrag/erfassung.html",
+        context={
+            "auftrag": auftrag,
             "standorte": standorte,
             "objekte": objekte,
-            "progress_data": progress_data,
-            "bewertung": bewertung,
-            "findings": active_findings,
-            "offene_punkte": offene_punkte,
-            "bausteine_labels": bausteine_labels,
-            "active_tab": "uebersicht",
-            "active_nav": "auftrag"
+            "bausteine_labels": get_bausteine_labels(),
+            "active_tab": "erfassung",
+            "active_nav": "auftrag",
+            **sidebar_context
         }
     )
 
