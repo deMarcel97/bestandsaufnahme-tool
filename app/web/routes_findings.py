@@ -7,6 +7,7 @@ from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.slug import generate_slug_id
 from app.services.rule_engine import rule_engine
+from app.web.shared_context import build_sidebar_context
 from app.models.finding import Finding
 from app.models.massnahme import Massnahme
 
@@ -69,6 +70,7 @@ def list_findings_page(request: Request, auftrag_id: str):
     standorte = storage.list_standorte(auftrag_id)
     findings = storage.list_findings(auftrag_id)
 
+    sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
         request=request,
         name="findings/index.html",
@@ -77,7 +79,8 @@ def list_findings_page(request: Request, auftrag_id: str):
             "findings": findings,
             "standorte": standorte,
             "active_tab": "findings",
-            "active_nav": "auftrag"
+            "active_nav": "auftrag",
+            **sidebar_context
         }
     )
 

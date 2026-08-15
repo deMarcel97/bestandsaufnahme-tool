@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.evaluator import evaluator_service
+from app.web.shared_context import build_sidebar_context
 
 router = APIRouter()
 templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
@@ -18,6 +19,7 @@ def bewertung_dashboard(request: Request, auftrag_id: str):
     objekte = storage.list_objekte(auftrag_id)
     bewertung = evaluator_service.evaluate_auftrag(auftrag.aktive_bausteine, objekte, standorte)
 
+    sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
         request=request,
         name="bewertung/index.html",
@@ -25,6 +27,7 @@ def bewertung_dashboard(request: Request, auftrag_id: str):
             "auftrag": auftrag,
             "bewertung": bewertung,
             "active_tab": "bewertung",
-            "active_nav": "auftrag"
+            "active_nav": "auftrag",
+            **sidebar_context
         }
     )

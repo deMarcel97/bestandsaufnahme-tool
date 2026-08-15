@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.slug import generate_slug_id
+from app.web.shared_context import build_sidebar_context
 from app.models.massnahme import Massnahme
 from app.utils.number_parser import parse_float_german, parse_int_german
 
@@ -24,6 +25,7 @@ def list_massnahmen_page(request: Request, auftrag_id: str):
     verworfen = request.query_params.get("verworfen")
     uebernommen = request.query_params.get("uebernommen")
 
+    sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
         request=request,
         name="massnahmen/index.html",
@@ -36,7 +38,8 @@ def list_massnahmen_page(request: Request, auftrag_id: str):
             "verworfen": verworfen,
             "uebernommen": uebernommen,
             "active_tab": "massnahmen",
-            "active_nav": "auftrag"
+            "active_nav": "auftrag",
+            **sidebar_context
         }
     )
 

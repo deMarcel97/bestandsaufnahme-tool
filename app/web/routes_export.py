@@ -6,6 +6,7 @@ from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.evaluator import evaluator_service
 from app.services.exporter import exporter_service
+from app.web.shared_context import build_sidebar_context
 
 router = APIRouter()
 templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
@@ -27,6 +28,7 @@ def export_page(request: Request, auftrag_id: str, ziel_vertraulichkeit: Optiona
         auftrag, standorte, objekte, massnahmen, ziel_vertraulichkeit
     )
 
+    sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
         request=request,
         name="export/index.html",
@@ -35,7 +37,8 @@ def export_page(request: Request, auftrag_id: str, ziel_vertraulichkeit: Optiona
             "ziel_vertraulichkeit": ziel_vertraulichkeit,
             "bericht_preview": bericht_preview,
             "active_tab": "export",
-            "active_nav": "auftrag"
+            "active_nav": "auftrag",
+            **sidebar_context
         }
     )
 

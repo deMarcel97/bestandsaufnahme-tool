@@ -6,6 +6,7 @@ from app.services.storage import storage
 from app.services.schema_loader import schema_loader
 from app.services.slug import generate_slug_id
 from app.services.rule_engine import ConditionEvaluator
+from app.web.shared_context import build_sidebar_context
 from app.models.technik import TechnikObjekt
 from app.utils.number_parser import parse_float_german, parse_int_german
 
@@ -104,6 +105,7 @@ def new_objekt_form(request: Request, auftrag_id: str, typ: str = "firewall", st
     schema_label = schema.get("bezeichnung_anzeige", typ.capitalize()).split("/")[0].strip()
     default_bezeichnung = f"{schema_label} {sto_label}"
 
+    sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
         request=request,
         name="technik/form.html",
@@ -115,7 +117,9 @@ def new_objekt_form(request: Request, auftrag_id: str, typ: str = "firewall", st
             "default_bezeichnung": default_bezeichnung,
             "objekt_referenz_candidates": _collect_objekt_referenz_candidates(auftrag_id, schema),
             "obj": None,
-            "active_nav": "auftrag"
+            "active_tab": "uebersicht",
+            "active_nav": "auftrag",
+            **sidebar_context
         }
     )
 
@@ -189,6 +193,7 @@ def edit_objekt_form(request: Request, auftrag_id: str, typ: str, objekt_id: str
         return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
 
     standorte = storage.list_standorte(auftrag_id)
+    sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
         request=request,
         name="technik/form.html",
@@ -199,7 +204,9 @@ def edit_objekt_form(request: Request, auftrag_id: str, typ: str, objekt_id: str
             "selected_standort_id": obj.standort_id,
             "objekt_referenz_candidates": _collect_objekt_referenz_candidates(auftrag_id, schema),
             "obj": obj,
-            "active_nav": "auftrag"
+            "active_tab": "uebersicht",
+            "active_nav": "auftrag",
+            **sidebar_context
         }
     )
 
