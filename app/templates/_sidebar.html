@@ -2,7 +2,8 @@
 <aside class="sidebar">
   <h3>Auftrag</h3>
   <ul>
-    <li><a href="/auftrag/{{ auftrag.id }}" {% if active_tab == 'uebersicht' %}class="active"{% endif %}>Übersicht &amp; Erfassung</a></li>
+    <li><a href="/auftrag/{{ auftrag.id }}" {% if active_tab == 'uebersicht' %}class="active"{% endif %}>Übersicht</a></li>
+    <li><a href="/auftrag/{{ auftrag.id }}/erfassung" {% if active_tab == 'erfassung' %}class="active"{% endif %}>Erfassung</a></li>
     <li><a href="/auftrag/{{ auftrag.id }}/einstellungen" {% if active_tab == 'einstellungen' %}class="active"{% endif %}>Stammdaten &amp; Kontext</a></li>
     <li><a href="/auftrag/{{ auftrag.id }}/offene_punkte" {% if active_tab == 'offene_punkte' %}class="active"{% endif %}>Offene Punkte {% if offene_punkte %}<span class="count">{{ offene_punkte|length }}</span>{% endif %}</a></li>
     <li><a href="/auftrag/{{ auftrag.id }}/findings" {% if active_tab == 'findings' %}class="active"{% endif %}>Findings {% if findings %}<span class="count-accent">{{ findings|length }}</span>{% endif %}</a></li>

@@ -4,6 +4,13 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.6] - 2026-08-15
+
+### Changed
+- **„Übersicht & Erfassung" ist jetzt zwei Menüpunkte (#306)**: Der Sidebar-Eintrag vereinte zwei Dinge, die im Arbeitsalltag getrennt genutzt werden — den Blick auf den Stand und das eigentliche Erfassen. Neu: **„Übersicht"** (`/auftrag/{id}`, unverändert erreichbar) mit den vier Kennzahlen-Kacheln und **„Erfassung"** (`/auftrag/{id}/erfassung`, neues Template `app/templates/auftrag/erfassung.html`) mit Standorten, Bausteinauswahl und den erfassten Objekten.
+- **Weniger Rechenarbeit pro Seitenaufruf (#306)**: Die gemeinsame Route lud beides zusammen. Die teure `evaluator_service.evaluate_auftrag(...)` läuft jetzt nur noch auf der Übersicht, wo die Kennzahlen sie brauchen — die Erfassungsseite kommt ohne sie aus. `build_sidebar_context()` nimmt Standorte und Objekte optional entgegen, damit dieselben Dateien nicht zweimal von der Platte gelesen werden.
+- **Weiterleitung nach dem Speichern (#306)**: Wer ein Objekt oder einen Standort anlegt, bearbeitet, dupliziert oder löscht, landet jetzt auf der **Erfassung** statt auf der Übersicht — das ist der Arbeitsfluss, in dem man sich dann befindet. Die „Abbrechen"- und „Zurück"-Links der Formulare führen entsprechend dorthin zurück.
+
 ## [2.7.1] - 2026-08-15
 
 ### Added

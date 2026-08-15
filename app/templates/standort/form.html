@@ -16,7 +16,7 @@
       <h1>{% if standort %}{{ standort.bezeichnung }}{% else %}Neuer Standort{% endif %}</h1>
       <div class="meta-line"><span>{% if standort %}Standort bearbeiten{% else %}Standort anlegen{% endif %}</span></div>
     </div>
-    <a href="/auftrag/{{ auftrag.id }}" class="btn" style="flex:none;">Zurück zum Auftrag</a>
+    <a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn" style="flex:none;">Zurück zur Erfassung</a>
   </div>
 
   <form action="{% if standort %}/auftrag/{{ auftrag.id }}/standort/{{ standort.id }}/bearbeiten{% else %}/auftrag/{{ auftrag.id }}/standort/neu{% endif %}" method="POST">
@@ -253,7 +253,7 @@
 
     <div class="form-bar">
       <button type="submit" class="btn btn-primary">Standort speichern</button>
-      <a href="/auftrag/{{ auftrag.id }}" class="btn">Abbrechen</a>
+      <a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn">Abbrechen</a>
     </div>
   </form>
   </main>

@@ -1,8 +1,8 @@
-# IT-Bestandsaufnahme-Tool (v2.7.1)
+# IT-Bestandsaufnahme-Tool (v2.7.6)
 
 Ein spezialisiertes Web-Tool für IT-Systemhäuser zur strukturierten Erfassung, automatischen Risikobewertung und professionellen Berichtserstellung von IT-Kundeninfrastrukturen.
 
-> Aktuelle Version: **2.7.1** — Änderungshistorie siehe [CHANGELOG.md](CHANGELOG.md).
+> Aktuelle Version: **2.7.6** — Änderungshistorie siehe [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
@@ -13,6 +13,7 @@ Ein spezialisiertes Web-Tool für IT-Systemhäuser zur strukturierten Erfassung,
 - **Bewertungssystem**: Berechnet Ampel-Scores und Gesamteinschätzungen zur IT-Sicherheit und Operational Readiness pro Standort und Kunde.
 - **Berichtsexport (.docx)**: Erzeugt mit `python-docx` strukturierte Kundenberichte inklusive Handlungsempfehlungen.
 - **Erfassungs-Fortschritt**: Übersichtlicher Fortschrittsbalken pro Auftrag und Standort.
+- **Getrennte Navigation**: „Übersicht" (`/auftrag/{id}`) zeigt nur die Kennzahlen des Auftrags, „Erfassung" (`/auftrag/{id}/erfassung`) ist die Arbeitsfläche für Standorte und Objekte.
 
 ---
 

@@ -91,7 +91,7 @@ def new_objekt_form(request: Request, auftrag_id: str, typ: str = "firewall", st
 
     schema = schema_loader.get_schema(typ)
     if not schema:
-        return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+        return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
 
     standorte = storage.list_standorte(auftrag_id)
     selected_sto = next((s for s in standorte if s.id == standort_id), None)
@@ -115,7 +115,7 @@ def new_objekt_form(request: Request, auftrag_id: str, typ: str = "firewall", st
             "default_bezeichnung": default_bezeichnung,
             "objekt_referenz_candidates": _collect_objekt_referenz_candidates(auftrag_id, schema),
             "obj": None,
-            "active_tab": "uebersicht",
+            "active_tab": "erfassung",
             "active_nav": "auftrag",
             **sidebar_context
         }
@@ -129,7 +129,7 @@ async def new_objekt_submit(request: Request, auftrag_id: str, typ: str = "firew
 
     schema = schema_loader.get_schema(typ)
     if not schema:
-        return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+        return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
 
     form_data = await request.form()
     bezeichnung = form_data.get("bezeichnung", f"{typ.capitalize()} Objekt")
@@ -180,7 +180,7 @@ async def new_objekt_submit(request: Request, auftrag_id: str, typ: str = "firew
         daten=daten
     )
     storage.save_objekt(obj)
-    return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
 
 @router.get("/auftrag/{auftrag_id}/objekt/{typ}/{objekt_id}")
 def edit_objekt_form(request: Request, auftrag_id: str, typ: str, objekt_id: str):
@@ -188,7 +188,7 @@ def edit_objekt_form(request: Request, auftrag_id: str, typ: str, objekt_id: str
     obj = storage.load_objekt(auftrag_id, typ, objekt_id)
     schema = schema_loader.get_schema(typ)
     if not auftrag or not obj or not schema:
-        return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+        return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
 
     standorte = storage.list_standorte(auftrag_id)
     sidebar_context = build_sidebar_context(auftrag)
@@ -202,7 +202,7 @@ def edit_objekt_form(request: Request, auftrag_id: str, typ: str, objekt_id: str
             "selected_standort_id": obj.standort_id,
             "objekt_referenz_candidates": _collect_objekt_referenz_candidates(auftrag_id, schema),
             "obj": obj,
-            "active_tab": "uebersicht",
+            "active_tab": "erfassung",
             "active_nav": "auftrag",
             **sidebar_context
         }
@@ -212,7 +212,7 @@ def edit_objekt_form(request: Request, auftrag_id: str, typ: str, objekt_id: str
 async def edit_objekt_submit(request: Request, auftrag_id: str, typ: str, objekt_id: str):
     obj = storage.load_objekt(auftrag_id, typ, objekt_id)
     if not obj:
-        return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+        return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
 
     form_data = await request.form()
     obj.bezeichnung = form_data.get("bezeichnung", obj.bezeichnung)
@@ -243,17 +243,17 @@ async def edit_objekt_submit(request: Request, auftrag_id: str, typ: str, objekt
                         obj.daten[fname] = val
 
     storage.save_objekt(obj)
-    return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
 
 @router.post("/auftrag/{auftrag_id}/objekt/{typ}/{objekt_id}/duplizieren")
 def duplicate_objekt_action(auftrag_id: str, typ: str, objekt_id: str):
     storage.duplicate_objekt(auftrag_id, typ, objekt_id)
-    return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
 
 @router.post("/auftrag/{auftrag_id}/objekt/{typ}/{objekt_id}/loeschen")
 def delete_objekt_action(auftrag_id: str, typ: str, objekt_id: str):
     storage.delete_objekt(auftrag_id, typ, objekt_id)
-    return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
 
 @router.post("/auftrag/{auftrag_id}/objekt/mehrere_anlegen")
 def batch_create_objekte_submit(
@@ -268,7 +268,7 @@ def batch_create_objekte_submit(
 
     schema = schema_loader.get_schema(typ)
     if not schema:
-        return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+        return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
 
     standorte = storage.list_standorte(auftrag_id)
     sto = next((s for s in standorte if s.id == standort_id), None)
@@ -303,4 +303,4 @@ def batch_create_objekte_submit(
         )
         storage.save_objekt(obj)
 
-    return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
