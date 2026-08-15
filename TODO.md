@@ -25,26 +25,24 @@ Alles ist **schema-getrieben**, kein Code pro Objekttyp:
 
 ## Aktueller Stand (zuletzt fertiggestellt)
 
-- **PR #6 (gemerged)**: Business-Software-Themenblock — ein Baustein `software` mit Kategorie-Auswahl CRM/DMS/ERP statt drei separaten Bausteinen; Anbieter-Dropdown mit „sonstige"+Freitext-Fallback als wiederverwendbares Muster für künftige Software-Hersteller-Felder.
-- **PR #7 (gemerged)**: „Noch nicht erfasst"-Leiste erschien bisher nur auf der Auftrags-Übersichtsseite, jetzt auf allen Auftragsseiten inkl. der Objekt-/Standort-Erfassungsformulare sichtbar.
-- Superthread-Board „Bestandsaufnahme-Tool" (Space „Software", board_id 15) enthält die laufende Kartenhistorie aller Änderungen — dort auch nachlesbar, was zuletzt warum entschieden wurde (Kommentare „Lösungsweg"/„Lösung" pro Karte).
+- **v2.6.0 (2026-08-15)**: Alle 10 offenen Backlog-Karten (#281, #283, #284, #286, #287, #295, #296, #297, #298, #299) wurden implementiert, getestet (88/88 Tests grün) und in `main` konsolidiert:
+  1. ✅ **#281 – QA-Testdaten bereinigen**: Bereinigung der „QA Inspector Team"-Reste aus den Testaufträgen.
+  2. ✅ **#283 – Auftragsstatus & Vertraulichkeit editierbar**: Vertraulichkeit und Status lassen sich nun direkt aus Auftragsübersicht und Detailansicht ändern und persistieren.
+  3. ✅ **#284 – Automatische Empfehlung bei Stammdaten-Änderung**: Client- und modellseitige Empfehlungen im Kontext (Rufbereitschaft bei 24/7, IT-Dienstleister bei fehlender IT).
+  4. ✅ **#286 – Trennung Stammdaten & Kontext**: Visuelle Aufteilung im Bearbeitungsformular in getrennte Fieldsets für Stammdaten, Auftragssteuerung und Kontext.
+  5. ✅ **#287 – Offene Punkte strukturieren**: Hierarchische Gruppierung nach Standort und Baustein/Hardware-Typ.
+  6. ✅ **#295 – Status-Anpassungen / Ampelfarben**: Ampelfarben in der Standortübersicht vereinheitlicht (Vollständig=grün, Teilweise=gelb/orange, Unbekannt=grau).
+  7. ✅ **#296 – Server-Detailfragen**: Schema um `standort_rack` (Rack/Höheneinheit) und `baujahr` erweitert.
+  8. ✅ **#297 – Server & Virtualisierung: Pflichtfeld & Sichtbarkeit**: `wird_virtualisiert` als Pflichtfeld ganz oben; Hypervisor-spezifische Fragen nur sichtbar bei „ja".
+  9. ✅ **#298 – Feld Festplatten-Slots**: `festplatten_slots` als `liste`-Typ mit Anbindungstypen (SATA/SAS/NVMe/M.2) in `server_virtualisierung` und `backup_storage`.
+  10. ✅ **#299 – Feld Kommentar**: Kommentarfeld in allen 13 Schemas einheitlich ans Ende des letzten Abschnitts verschoben.
+- **PR #6 (gemerged)**: Business-Software-Themenblock (CRM/DMS/ERP).
+- **PR #7 (gemerged)**: „Noch nicht erfasst"-Leiste auf allen Auftragsseiten.
+- Superthread-Board „Bestandsaufnahme-Tool" (Space „Software", board_id 15) enthält die laufende Kartenhistorie aller Änderungen.
 
-## Offene Backlog-Karten (Superthread, Stand 2026-08-15)
+## Abgeschlossene Backlog-Karten (v2.6.0)
 
-Diese liegen aktuell in der Spalte „Backlog" des Boards und sind noch nicht begonnen:
-
-1. **#299 – Feld Kommentar**: Das Kommentarfeld in der Objekt-Erfassung muss ans Ende des Formulars (aktuell falsch positioniert).
-2. **#298 – Feld Festplatten-Slots**: Fehlt aktuell die Anbindung (SATA/SAS/NVMe o.ä.) sowie ein Feld, um mehrere Festplatten auf einmal hinzuzufügen (vermutlich `typ: liste` passend, siehe `server_virtualisierung`/`server_cluster`-Schemas als Vorbild).
-3. **#297 – Server & Virtualisierung Feld**: „Wird virtualisiert?" muss ganz nach oben und Pflichtfeld werden; die Hypervisor-spezifischen Folgefragen sollen erst nach „Ja" erscheinen (vorher als Bare-Metal-Host behandeln). Klingt nach demselben `sichtbar_wenn`-Muster wie bei Software-Kategorie → Anbieter.
-4. **#296 – Server**: Unterobjekt/Kind-Karte zu #297, vermutlich Detailfragen zum eigentlichen Server-Objekt.
-5. **#295 – Status-Anpassungen**: Ampelfarben in der Standortübersicht: Vollständig = grün, Teilweise = gelb/orange, Unbekannt = grau (aktuell offenbar nicht korrekt/konsistent).
-6. **#287 – Offene Punkte strukturieren**: Die „Offene Punkte"-Liste soll nicht nur nach Standort, sondern zusätzlich nach Hardware/Baustein gruppiert werden, damit man bei einer langen unübersichtlichen Liste gezielt nachschauen kann, wo noch was fehlt.
-7. **#286 – Trennung Stammdaten & Kontext**: Der Unternehmenskontext soll als eigener, klar abgegrenzter Punkt von den reinen Stammdaten getrennt werden.
-8. **#284 – Empfehlung bei Stammdaten-Änderung**: Wenn z. B. Geschäftszeiten auf 24/7 gesetzt werden, soll automatisch eine Empfehlung erscheinen, dass eine Rufbereitschaft hinterlegt werden sollte.
-9. **#283 – Bei den Aufträgen**: Status und „Vorbereitung" bei Aufträgen sollen editierbar sein (aktuell offenbar nicht/nicht ausreichend).
-10. ✅ **#281 – QA-Testdaten bereinigen**: Im Test-Auftrag taucht wiederholt „QA Inspector Team (Updated)" in der Betreut-durch-Spalte auf — vom User nicht beauftragt, wirkt wie Testdaten-Reste, die aufgeräumt werden sollten.
-
-Aktuellen Stand vor Umsetzung jeweils per `find_tasks`/`task_get` auf Superthread gegenchecken — Karten können sich zwischen Planung und Umsetzung verschieben.
+Alle 10 Karten aus der ursprünglichen Backlog-Liste wurden erfolgreich umgesetzt und verifiziert.
 
 ## Größere offene strategische Fragen (noch nicht im Detail geplant — hier ansetzen)
 

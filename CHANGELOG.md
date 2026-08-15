@@ -8,16 +8,22 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionieru
 
 ### Added
 - **Auftragsstatus & Vertraulichkeit editierbar (#283)**: Die Vertraulichkeit (intern, kundentauglich, anonymisiert) lässt sich nun, genau wie der Status, direkt aus der Auftragsübersicht (`list.html`) und der Detailansicht (`detail.html`) als Dropdown umschalten und wird gespeichert.
+- **Server & Virtualisierung: „Wird virtualisiert?" als Pflichtfeld (#297)**: `wird_virtualisiert` (ja/nein) steht jetzt als Pflichtfeld ganz oben im Schema. Hypervisor-spezifische Fragen (Hypervisor-Typ, Version, VMs, Cluster etc.) werden via `sichtbar_wenn` nur bei „Ja" eingeblendet. Bei „Nein" wird der Server als Bare-Metal-Host behandelt.
+- **Server-Detailfragen (#296)**: Schema `server_virtualisierung.yaml` um präzise Felder für `standort_rack` (Standort/Rack inkl. Höheneinheit) und `baujahr` (Baujahr / Anschaffungsjahr) erweitert.
+- **Festplatten-Slots mit Anbindungstypen (#298)**: `festplatten_slots` als strukturierter `liste`-Feldtyp in `backup_storage.yaml` integriert und um Anbindungstyp `m2` (M.2) in `server_virtualisierung.yaml` und `backup_storage.yaml` erweitert.
+- **Offene Punkte nach Baustein gruppieren (#287)**: Die Liste der offenen Punkte gruppiert nun nicht mehr nur nach Standort, sondern zusätzlich hierarchisch nach dem jeweiligen Baustein-Typ (Firewall, Switch, Server etc.).
+- **Stammdaten & Kontext visuell trennen (#286)**: Das Auftragsbearbeitungsformular (`edit.html`) trennt Stammdaten, Auftragssteuerung und Unternehmenskontext jetzt in saubere, eigenständige Abschnitte/Fieldsets.
+- **Automatische Empfehlungen bei Stammdaten-Änderungen (#284)**: Clientseitige und modellgestützte Empfehlungen im Unternehmenskontext (z. B. Hinweis auf Rufbereitschaft bei 24/7-Betrieb und Empfehlung eines IT-Dienstleisters bei fehlender IT-Abteilung).
+
+### Fixed
+- **Kommentarfeld-Position (#299)**: Das Kommentarfeld wurde über alle 13 Schemas (`schemas/*.yaml`) hinweg konsistent als letztes Feld in den jeweils letzten Abschnitt verschoben.
+- **Ampelfarben Standortübersicht (#295)**: Farbskala in `app/static/css/style.css` und Templates korrigiert (Vollständig = grün, Teilweise = gelb/orange, Noch nicht erfasst/Unbekannt = grau).
+- **QA-Testdaten bereinigt (#281)**: Reste von „QA Inspector Team" aus den Test-Auftragsdaten bereinigt.
 
 ## [2.5.0] - 2026-08-15
 
 ### Fixed
 - **„Noch nicht erfasst"-Leiste (#275)**: Die Fortschrittsanzeige „Aktive Bausteine" und die klickbare „Noch nicht erfasst"-Chipliste in der Auftrags-Navigation erschienen bisher nur auf der Übersichtsseite eines Auftrags, weil die übrigen Routen (Stammdaten & Kontext, Offene Punkte, Findings, Maßnahmenkatalog, Bewertung, Exporte) den dafür nötigen Kontext nicht an `_sidebar.html` übergaben. Neuer gemeinsamer Helper `app/web/shared_context.py::build_sidebar_context()` liefert diesen Kontext jetzt auf allen sieben Unterseiten. Zusätzlich binden die Formulare „Neues/Objekt bearbeiten" und „Standort anlegen/bearbeiten" (`technik/form.html`, `standort/form.html`), die die Sidebar bisher gar nicht einbanden, sie jetzt ebenfalls ein — man kann so mitten in der Erfassung direkt zu einem anderen fehlenden Baustein springen, ohne erst zur Übersicht zurückzugehen.
-
-## [2.5.1] - 2026-08-15
-
-### Fixed
-- **QA-Testdaten bereinigt (#281)**: QA-Testdaten ('QA Inspector Team') aus Test-Auftrag bereinigt, damit sie in der Übersicht nicht mehr auftauchen.
 
 ## [2.4.0] - 2026-08-15
 
