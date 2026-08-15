@@ -19,26 +19,28 @@ abschnitte:
           - wert: serverraum
             punkte: 10
             textbaustein:
-              feststellung: "Die Netzwerktechnik ist in einem dedizierten Serverraum untergebracht."
-              auswirkung: null
+              feststellung: "Die Netzwerktechnik ist in einem dedizierten Serverraum
+                untergebracht."
+              auswirkung:
           - wert: 19_zoll_schrank
             punkte: 8
             textbaustein:
               feststellung: "Die Technik befindet sich in einem 19-Zoll-Stand-Netzwerkschrank."
-              auswirkung: null
+              auswirkung:
           - wert: wandschrank
             punkte: 5
             textbaustein:
               feststellung: "Die Technik befindet sich in einem Wandgehäuse."
-              auswirkung: null
+              auswirkung:
           - wert: offen_im_raum
             punkte: 0
             textbaustein:
               feststellung: "Die Netzwerk- und Servertechnik ist offen im Raum aufgestellt."
-              auswirkung: "Ohne Gehäuseschutz ist die Hardware physischen Einwirkungen, Verschmutzung und direktem Zugriff ausgesetzt."
+              auswirkung: "Ohne Gehäuseschutz ist die Hardware physischen Einwirkungen,
+                Verschmutzung und direktem Zugriff ausgesetzt."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: abschliessbar
         typ: ja_nein_unbekannt
@@ -54,15 +56,16 @@ abschnitte:
             punkte: 10
             textbaustein:
               feststellung: "Der Netzwerkschrank / das Gehäuse ist abgeschlossen."
-              auswirkung: null
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
               feststellung: "Der Netzwerkschrank / das Gehäuse ist nicht abgeschlossen."
-              auswirkung: "Unbefugte Personen haben physischen Zugriff auf Switchports, Server-Interfaces und Verkabelung."
+              auswirkung: "Unbefugte Personen haben physischen Zugriff auf Switchports,
+                Server-Interfaces und Verkabelung."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: belueftung
         typ: auswahl
@@ -78,25 +81,28 @@ abschnitte:
             punkte: 10
             textbaustein:
               feststellung: "Der Netzwerkschrank ist aktiv klimatisiert."
-              auswirkung: null
+              auswirkung:
           - wert: zwangsbelueftet
             punkte: 7
             textbaustein:
               feststellung: "Der Netzwerkschrank ist mit einer Lüftereinheit zwangsbelüftet."
-              auswirkung: null
+              auswirkung:
           - wert: passiv
             punkte: 4
             textbaustein:
-              feststellung: "Der Netzwerkschrank wird passiv über Lüftungsschlitze gekühlt."
-              auswirkung: null
+              feststellung: "Der Netzwerkschrank wird passiv über Lüftungsschlitze
+                gekühlt."
+              auswirkung:
           - wert: keine
             punkte: 0
             textbaustein:
-              feststellung: "Für den Netzwerkschrank ist keine ausreichende Belüftung vorhanden."
-              auswirkung: "Wärmestau im Schrank führt zur Überhitzung von Geräten und verkürzt deren Lebensdauer."
+              feststellung: "Für den Netzwerkschrank ist keine ausreichende Belüftung
+                vorhanden."
+              auswirkung: "Wärmestau im Schrank führt zur Überhitzung von Geräten
+                und verkürzt deren Lebensdauer."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
   - id: verkabelung_und_patchfelder
     titel: Verkabelung und Patchfelder
@@ -110,13 +116,13 @@ abschnitte:
           - wert: ja
             textbaustein:
               feststellung: "Im Schrank sind Patchfelder für die Netzstruktur verbaut."
-              auswirkung: null
+              auswirkung:
           - wert: nein
             textbaustein:
               feststellung: "Im Schrank sind keine Patchfelder verbaut."
-              auswirkung: null
+              auswirkung:
           - wert: unbekannt
-            textbaustein: null
+            textbaustein:
 
       - name: patchpanel_beschriftung
         typ: auswahl
@@ -135,21 +141,24 @@ abschnitte:
           - wert: vollstaendig
             punkte: 10
             textbaustein:
-              feststellung: "Alle Patchpanel-Ports sind vollständig und eindeutig beschriftet."
-              auswirkung: null
+              feststellung: "Alle Patchpanel-Ports sind vollständig und eindeutig
+                beschriftet."
+              auswirkung:
           - wert: teilweise
             punkte: 5
             textbaustein:
-              feststellung: "Die Beschriftung der Patchpanel-Ports ist nur teilweise vorhanden."
-              auswirkung: null
+              feststellung: "Die Beschriftung der Patchpanel-Ports ist nur teilweise
+                vorhanden."
+              auswirkung:
           - wert: keine
             punkte: 0
             textbaustein:
               feststellung: "Die Patchpanel-Ports sind nicht beschriftet."
-              auswirkung: "Fehlende Port-Beschriftungen erschweren die Fehlersuche und führen bei Umpatchungen zu Verwechslungen."
+              auswirkung: "Fehlende Port-Beschriftungen erschweren die Fehlersuche
+                und führen bei Umpatchungen zu Verwechslungen."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: verkabelungsdokumentation
         typ: auswahl
@@ -164,21 +173,22 @@ abschnitte:
           - wert: vollstaendig
             punkte: 10
             textbaustein:
-              feststellung: "Eine vollständige Verkabelungsdokumentation und Belegungsübersicht liegt vor."
-              auswirkung: null
+              feststellung: "Eine vollständige Verkabelungsdokumentation und Belegungsübersicht
+                liegt vor."
+              auswirkung:
           - wert: teilweise
             punkte: 5
             textbaustein:
               feststellung: "Die Verkabelungsdokumentation ist nur teilweise vorhanden."
-              auswirkung: null
+              auswirkung:
           - wert: keine
             punkte: 0
             textbaustein:
               feststellung: "Es liegt keine Verkabelungsdokumentation vor."
               auswirkung: "Im Störungsfall sind Kabelwege und Verteilungen nicht nachvollziehbar."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: ausfuehrung_durch
         typ: auswahl
@@ -193,26 +203,30 @@ abschnitte:
           - wert: fachfirma
             punkte: 5
             textbaustein:
-              feststellung: "Die Netzwerkverkabelung wurde durch einen IT-Netzwerkspezialisten ausgeführt."
-              auswirkung: null
+              feststellung: "Die Netzwerkverkabelung wurde durch einen IT-Netzwerkspezialisten
+                ausgeführt."
+              auswirkung:
           - wert: elektriker
             punkte: 4
             textbaustein:
-              feststellung: "Die Verkabelung wurde durch einen Elektroinstallationsbetrieb ausgeführt."
-              auswirkung: null
+              feststellung: "Die Verkabelung wurde durch einen Elektroinstallationsbetrieb
+                ausgeführt."
+              auswirkung:
           - wert: intern
             punkte: 3
             textbaustein:
               feststellung: "Die Verkabelung wurde intern durchgeführt."
-              auswirkung: null
+              auswirkung:
           - wert: gewachsen_ohne_dokumentation
             punkte: 0
             textbaustein:
-              feststellung: "Die Verkabelung ist historisch gewachsen und weist keine einheitliche Struktur auf."
-              auswirkung: "Unstrukturierter Kabelaushang behindert die Luftzirkulation und erhöht die Fehleranfälligkeit bei Wartungsarbeiten."
+              feststellung: "Die Verkabelung ist historisch gewachsen und weist keine
+                einheitliche Struktur auf."
+              auswirkung: "Unstrukturierter Kabelaushang behindert die Luftzirkulation
+                und erhöht die Fehleranfälligkeit bei Wartungsarbeiten."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: kabeltyp
         typ: auswahl
@@ -228,35 +242,37 @@ abschnitte:
             punkte: 10
             textbaustein:
               feststellung: "Die Gebäudeverkabelung entspricht der Kategorie Cat 7."
-              auswirkung: null
+              auswirkung:
           - wert: cat6a
             punkte: 10
             textbaustein:
               feststellung: "Die Gebäudeverkabelung entspricht der Kategorie Cat 6a."
-              auswirkung: null
+              auswirkung:
           - wert: cat6
             punkte: 8
             textbaustein:
               feststellung: "Die Gebäudeverkabelung entspricht der Kategorie Cat 6."
-              auswirkung: null
+              auswirkung:
           - wert: cat5e
             punkte: 5
             textbaustein:
-              feststellung: "Die Gebäudeverkabelung basiert auf der Kategorie Cat 5e."
-              auswirkung: null
+              feststellung: "Die Gebäudeverkabelung basiert auf der Kategorie Cat
+                5e."
+              auswirkung:
           - wert: gemischt
             punkte: 4
             textbaustein:
               feststellung: "Im Netz kommen gemischte Kabelkategorien zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: cat5
             punkte: 0
             textbaustein:
               feststellung: "Die Verkabelung basiert teilweise auf veralteten Cat-5-Kabeln."
-              auswirkung: "Cat-5-Kabel begrenzen die Übertragungsrate auf 100 Mbit/s und sind anfällig für Übersprechen."
+              auswirkung: "Cat-5-Kabel begrenzen die Übertragungsrate auf 100 Mbit/s
+                und sind anfällig für Übersprechen."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: verkabelung_alter
         typ: auswahl
@@ -272,20 +288,21 @@ abschnitte:
             punkte: 5
             textbaustein:
               feststellung: "Die Verkabelung ist jünger als 5 Jahre."
-              auswirkung: null
+              auswirkung:
           - wert: 5_bis_10_jahre
             punkte: 3
             textbaustein:
               feststellung: "Die Verkabelung ist zwischen 5 und 10 Jahre alt."
-              auswirkung: null
+              auswirkung:
           - wert: ueber_10_jahre
             punkte: 0
             textbaustein:
               feststellung: "Die Verkabelung ist älter als 10 Jahre."
-              auswirkung: "Alternde Isolierungen und Kontakte können zu spontanen Verbindungsabbrüchen führen."
+              auswirkung: "Alternde Isolierungen und Kontakte können zu spontanen
+                Verbindungsabbrüchen führen."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: erweiterungsreserve
         typ: auswahl
@@ -300,18 +317,26 @@ abschnitte:
           - wert: ausreichend
             punkte: 5
             textbaustein:
-              feststellung: "Der Schrank verfügt über ausreichende Höheneinheiten- und Portreserven."
-              auswirkung: null
+              feststellung: "Der Schrank verfügt über ausreichende Höheneinheiten-
+                und Portreserven."
+              auswirkung:
           - wert: knapp
             punkte: 2
             textbaustein:
               feststellung: "Die Erweiterungsreserve im Schrank ist knapp."
-              auswirkung: null
+              auswirkung:
           - wert: keine
             punkte: 0
             textbaustein:
               feststellung: "Es ist keine Erweiterungsreserve im Schrank mehr vorhanden."
-              auswirkung: "Neue Geräte können nicht mehr geordnet im Schrank nachgerüstet werden."
+              auswirkung: "Neue Geräte können nicht mehr geordnet im Schrank nachgerüstet
+                werden."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
+      - name: kommentar
+        label: Kommentar
+        typ: mehrzeiliger_text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: intern

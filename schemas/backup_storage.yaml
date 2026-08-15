@@ -3,364 +3,357 @@ typ: backup_storage
 bezeichnung_anzeige: Backup & Storage
 berichtskapitel: infrastruktur
 abschnitte:
-- id: was_ist_es
-  titel: Was ist es
-  felder:
-  - name: backup_software
-    label: Eingesetzte Backup-Software
-    typ: auswahl
-    pflicht: true
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-    werte:
-    - wert: veeam
-      textbaustein:
-        feststellung: Als zentrale Datensicherungslösung kommt Veeam Backup & Replication
-          zum Einsatz.
-        auswirkung: null
-    - wert: synology_active_backup
-      textbaustein:
-        feststellung: Als Datensicherungslösung kommt Synology Active Backup zum Einsatz.
-        auswirkung: null
-    - wert: datto
-      textbaustein:
-        feststellung: Als Datensicherungslösung kommt Datto BCDR zum Einsatz.
-        auswirkung: null
-    - wert: acronis
-      textbaustein:
-        feststellung: Als Datensicherungslösung kommt Acronis Cyber Protect zum Einsatz.
-        auswirkung: null
-    - wert: commvault
-      textbaustein:
-        feststellung: Als Datensicherungslösung kommt Commvault zum Einsatz.
-        auswirkung: null
-    - wert: m365_backup_drittanbieter
-      textbaustein:
-        feststellung: Für Cloud-Daten kommt ein spezielles M365 Backup eines Drittanbieters
-          zum Einsatz.
-        auswirkung: null
-    - wert: sonstige
-      textbaustein:
-        feststellung: Als Datensicherungslösung kommt eine sonstige Software zum Einsatz.
-        auswirkung: null
-    - wert: unbekannt
-      textbaustein: null
-  - name: storage_typ
-    label: Primäres Speichermedium / Storage-Typ
-    typ: auswahl
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-    werte:
-    - wert: nas_synology_qnap
-      textbaustein:
-        feststellung: Als Speichermedium kommt ein NAS-System (Synology / QNAP) zum
-          Einsatz.
-        auswirkung: null
-    - wert: san_iscsi_fc
-      textbaustein:
-        feststellung: Als Speichermedium kommt ein hochverfügbares SAN (iSCSI / Fibre
-          Channel) zum Einsatz.
-        auswirkung: null
-    - wert: cloud_storage
-      textbaustein:
-        feststellung: Als Speichermedium kommt Cloud-Storage (z.B. AWS S3, Wasabi,
-          Azure) zum Einsatz.
-        auswirkung: null
-    - wert: tape_lto
-      textbaustein:
-        feststellung: Als Datenspeicher werden Bandlaufwerke (Tape / LTO) verwendet.
-        auswirkung: null
-    - wert: lokale_disks
-      textbaustein:
-        feststellung: Als Datenspeicher werden lokale Festplatten verwendet.
-        auswirkung: null
-    - wert: sonstige
-      textbaustein:
-        feststellung: Als Speichermedium kommt ein sonstiges System zum Einsatz.
-        auswirkung: null
-    - wert: unbekannt
-      textbaustein: null
-  - name: storage_hersteller
-    label: Storage-Hersteller / Modell
-    typ: text
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: kapazitaet_tb
-    label: Gesamtkapazität in Terabyte (TB)
-    typ: zahl
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: festplatten_slots
-    label: Festplatten-Slots
-    typ: liste
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
+  - id: was_ist_es
+    titel: Was ist es
     felder:
-    - name: platten_typ
-      typ: auswahl
-      label: Typ
-      werte:
-      - wert: ssd
-      - wert: hdd
-    - name: anbindung
-      typ: auswahl
-      label: Anbindung
-      werte:
-      - wert: sata
-      - wert: sas
-      - wert: nvme
-      - wert: m2
-    - name: kapazitaet_gb
-      typ: zahl
-      label: Kapazität (GB)
-  - name: sicherungs_intervall
-    label: Datensicherungsintervall
-    typ: auswahl
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-    werte:
-    - wert: mehrmals_taeglich
-      textbaustein:
-        feststellung: Datensicherungen erfolgen mehrmals täglich.
-        auswirkung: null
-    - wert: taeglich
-      textbaustein:
-        feststellung: Datensicherungen erfolgen täglich.
-        auswirkung: null
-    - wert: woechentlich
-      textbaustein:
-        feststellung: Datensicherungen erfolgen wöchentlich.
-        auswirkung: null
-    - wert: unregelmaessig
-      textbaustein:
-        feststellung: Datensicherungen erfolgen in unregelmäßigen Abständen.
-        auswirkung: null
-    - wert: unbekannt
-      textbaustein: null
-- id: zustand_und_sicherheit
-  titel: Zustand und Sicherheit der Sicherung
-  felder:
-  - name: 3_2_1_regel_erfuellt
-    label: 3-2-1 Backup-Regel erfüllt (3 Kopien, 2 Medien, 1 Offsite)
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: betriebsrisiken
-      kriterium: backup_321_regel
-      max_punkte: 25
-    werte:
-    - wert: ja
-      punkte: 25
-      textbaustein:
-        feststellung: Die anerkannten Grundsätze der 3-2-1-Backup-Regel werden eingehalten.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Die 3-2-1-Backup-Regel wird nicht vollständig erfüllt.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: immutability_ransomware_schutz
-    label: Unveränderbares Backup (Immutability / Air-Gap)
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: it_security
-      kriterium: backup_immutability
-      max_punkte: 20
-    werte:
-    - wert: ja
-      punkte: 20
-      textbaustein:
-        feststellung: Ein Teil der Datensicherungen ist durch Immutability vor Löschung/Verschlüsselung
-          durch Ransomware geschützt.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Es sind keine unveränderbaren (immutable) Backups eingerichtet.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: offsite_backup_vorhanden
-    label: Ausser-Haus Datensicherung (Offsite Backup)
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: betriebsrisiken
-      kriterium: backup_offsite
-      max_punkte: 20
-    werte:
-    - wert: ja
-      punkte: 20
-      textbaustein:
-        feststellung: Eine Datensicherung wird an einem externen, räumlich getrennten
-          Standort aufbewahrt.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Es existiert keine Ausser-Haus Datensicherung (Offsite Backup).
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: backup_verschluesselung
-    label: Verschlüsselung der Sicherungsdaten
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: it_security
-      kriterium: backup_verschluesselung
-      max_punkte: 15
-    werte:
-    - wert: ja
-      punkte: 15
-      textbaustein:
-        feststellung: Alle Datensicherungsarchive werden verschlüsselt gespeichert.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Die Datensicherungen sind unverschlüsselt abgelegt.
-        auswirkung: Unverschlüsselte Sicherungsmedien bergen bei Verlust oder Diebstahl
-          das Risiko von Datenschutzverstößen.
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: hardware_alter_storage
-    label: Alter des Backup-Storages / NAS
-    typ: auswahl
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: hardware_und_software
-      kriterium: hardware_alter_storage
-      max_punkte: 5
-    werte:
-    - wert: unter_3_jahre
-      punkte: 5
-      textbaustein:
-        feststellung: Das Storage-System ist jünger als 3 Jahre.
-        auswirkung: null
-    - wert: 3_bis_5_jahre
-      punkte: 3
-      textbaustein:
-        feststellung: Das Storage-System ist 3 bis 5 Jahre alt.
-        auswirkung: null
-    - wert: ueber_5_jahre
-      punkte: 0
-      textbaustein:
-        feststellung: Das Storage-System ist älter als 5 Jahre und sollte ausgetauscht
-          werden.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-- id: wiederherstellung_und_betrieb
-  titel: Wiederherstellung und Betrieb
-  felder:
-  - name: regelmaessige_restore_tests
-    label: Regelmäßige Wiederherstellungstests durchgeführt
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: betriebsrisiken
-      kriterium: restore_tests
-      max_punkte: 15
-    werte:
-    - wert: ja
-      punkte: 15
-      textbaustein:
-        feststellung: Es werden regelmäßig Test-Wiederherstellungen durchgeführt und
-          protokolliert.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Es werden keine regelmäßigen Wiederherstellungstests durchgeführt.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: letzter_restore_test_datum
-    label: Datum des letzten Restore-Tests
-    typ: datum
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-  - name: backup_monitoring_und_alarming
-    label: Automatische Benachrichtigung / Alarming bei Fehlern
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: betriebsrisiken
-      kriterium: backup_monitoring
-      max_punkte: 10
-    werte:
-    - wert: ja
-      punkte: 10
-      textbaustein:
-        feststellung: Fehlgeschlagene Sicherungen werden automatisch an die IT-Betreuung
-          gemeldet.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Es erfolgt keine automatische Alarmierung bei fehlgeschlagenen
-          Sicherungen.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: backup_konzept_dokumentiert
-    label: Dokumentiertes Backup- & Wiederherstellungskonzept
-    typ: auswahl
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: rechtliche_anforderungen
-      kriterium: dokumentation_backup
-      max_punkte: 10
-    werte:
-    - wert: vollstaendig
-      punkte: 10
-      textbaustein:
-        feststellung: Ein vollständiges Sicherungs- und Wiederherstellungskonzept
-          liegt vor.
-        auswirkung: null
-    - wert: teilweise
-      punkte: 5
-      textbaustein:
-        feststellung: Das Sicherungskonzept ist nur unvollständig dokumentiert.
-        auswirkung: null
-    - wert: keine
-      punkte: 0
-      textbaustein:
-        feststellung: Es liegt kein schriftliches Datensicherungskonzept vor.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
+      - name: backup_software
+        label: Eingesetzte Backup-Software
+        typ: auswahl
+        pflicht: true
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: veeam
+            textbaustein:
+              feststellung: Als zentrale Datensicherungslösung kommt Veeam Backup & Replication zum Einsatz.
+              auswirkung: null
+          - wert: synology_active_backup
+            textbaustein:
+              feststellung: Als Datensicherungslösung kommt Synology Active Backup zum Einsatz.
+              auswirkung: null
+          - wert: datto
+            textbaustein:
+              feststellung: Als Datensicherungslösung kommt Datto BCDR zum Einsatz.
+              auswirkung: null
+          - wert: acronis
+            textbaustein:
+              feststellung: Als Datensicherungslösung kommt Acronis Cyber Protect zum Einsatz.
+              auswirkung: null
+          - wert: commvault
+            textbaustein:
+              feststellung: Als Datensicherungslösung kommt Commvault zum Einsatz.
+              auswirkung: null
+          - wert: m365_backup_drittanbieter
+            textbaustein:
+              feststellung: Für Cloud-Daten kommt ein spezielles M365 Backup eines Drittanbieters zum Einsatz.
+              auswirkung: null
+          - wert: sonstige
+            textbaustein:
+              feststellung: Als Datensicherungslösung kommt eine sonstige Software zum Einsatz.
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+      - name: storage_typ
+        label: Primäres Speichermedium / Storage-Typ
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: nas_synology_qnap
+            textbaustein:
+              feststellung: Als Speichermedium kommt ein NAS-System (Synology / QNAP) zum Einsatz.
+              auswirkung: null
+          - wert: san_iscsi_fc
+            textbaustein:
+              feststellung: Als Speichermedium kommt ein hochverfügbares SAN (iSCSI / Fibre Channel) zum Einsatz.
+              auswirkung: null
+          - wert: cloud_storage
+            textbaustein:
+              feststellung: Als Speichermedium kommt Cloud-Storage (z.B. AWS S3, Wasabi, Azure) zum Einsatz.
+              auswirkung: null
+          - wert: tape_lto
+            textbaustein:
+              feststellung: Als Datenspeicher werden Bandlaufwerke (Tape / LTO) verwendet.
+              auswirkung: null
+          - wert: lokale_disks
+            textbaustein:
+              feststellung: Als Datenspeicher werden lokale Festplatten verwendet.
+              auswirkung: null
+          - wert: sonstige
+            textbaustein:
+              feststellung: Als Speichermedium kommt ein sonstiges System zum Einsatz.
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+      - name: storage_hersteller
+        label: Storage-Hersteller / Modell
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: kapazitaet_tb
+        label: Gesamtkapazität in Terabyte (TB)
+        typ: zahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: festplatten_slots
+        label: Festplatten-Slots
+        typ: liste
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        felder:
+          - name: platten_typ
+            typ: auswahl
+            label: Typ
+            werte:
+              - wert: ssd
+              - wert: hdd
+          - name: anbindung
+            typ: auswahl
+            label: Anbindung
+            werte:
+              - wert: sata
+              - wert: sas
+              - wert: nvme
+              - wert: m2
+          - name: kapazitaet_gb
+            typ: zahl
+            label: Kapazität (GB)
+      - name: sicherungs_intervall
+        label: Datensicherungsintervall
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: mehrmals_taeglich
+            textbaustein:
+              feststellung: Datensicherungen erfolgen mehrmals täglich.
+              auswirkung: null
+          - wert: taeglich
+            textbaustein:
+              feststellung: Datensicherungen erfolgen täglich.
+              auswirkung: null
+          - wert: woechentlich
+            textbaustein:
+              feststellung: Datensicherungen erfolgen wöchentlich.
+              auswirkung: null
+          - wert: unregelmaessig
+            textbaustein:
+              feststellung: Datensicherungen erfolgen in unregelmäßigen Abständen.
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+  - id: zustand_und_sicherheit
+    titel: Zustand und Sicherheit der Sicherung
+    felder:
+      - name: 3_2_1_regel_erfuellt
+        label: 3-2-1 Backup-Regel erfüllt (3 Kopien, 2 Medien, 1 Offsite)
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: backup_321_regel
+          max_punkte: 25
+        werte:
+          - wert: ja
+            punkte: 25
+            textbaustein:
+              feststellung: Die anerkannten Grundsätze der 3-2-1-Backup-Regel werden eingehalten.
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Die 3-2-1-Backup-Regel wird nicht vollständig erfüllt.
+              auswirkung: null
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+      - name: immutability_ransomware_schutz
+        label: Unveränderbares Backup (Immutability / Air-Gap)
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: backup_immutability
+          max_punkte: 20
+        werte:
+          - wert: ja
+            punkte: 20
+            textbaustein:
+              feststellung: Ein Teil der Datensicherungen ist durch Immutability vor Löschung/Verschlüsselung durch Ransomware geschützt.
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Es sind keine unveränderbaren (immutable) Backups eingerichtet.
+              auswirkung: null
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+      - name: offsite_backup_vorhanden
+        label: Ausser-Haus Datensicherung (Offsite Backup)
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: backup_offsite
+          max_punkte: 20
+        werte:
+          - wert: ja
+            punkte: 20
+            textbaustein:
+              feststellung: Eine Datensicherung wird an einem externen, räumlich getrennten Standort aufbewahrt.
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Es existiert keine Ausser-Haus Datensicherung (Offsite Backup).
+              auswirkung: null
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+      - name: backup_verschluesselung
+        label: Verschlüsselung der Sicherungsdaten
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: backup_verschluesselung
+          max_punkte: 15
+        werte:
+          - wert: ja
+            punkte: 15
+            textbaustein:
+              feststellung: Alle Datensicherungsarchive werden verschlüsselt gespeichert.
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Die Datensicherungen sind unverschlüsselt abgelegt.
+              auswirkung: Unverschlüsselte Sicherungsmedien bergen bei Verlust oder Diebstahl das Risiko von Datenschutzverstößen.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+      - name: hardware_alter_storage
+        label: Alter des Backup-Storages / NAS
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: hardware_und_software
+          kriterium: hardware_alter_storage
+          max_punkte: 5
+        werte:
+          - wert: unter_3_jahre
+            punkte: 5
+            textbaustein:
+              feststellung: Das Storage-System ist jünger als 3 Jahre.
+              auswirkung: null
+          - wert: 3_bis_5_jahre
+            punkte: 3
+            textbaustein:
+              feststellung: Das Storage-System ist 3 bis 5 Jahre alt.
+              auswirkung: null
+          - wert: ueber_5_jahre
+            punkte: 0
+            textbaustein:
+              feststellung: Das Storage-System ist älter als 5 Jahre und sollte ausgetauscht werden.
+              auswirkung: null
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+  - id: wiederherstellung_und_betrieb
+    titel: Wiederherstellung und Betrieb
+    felder:
+      - name: regelmaessige_restore_tests
+        label: Regelmäßige Wiederherstellungstests durchgeführt
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: restore_tests
+          max_punkte: 15
+        werte:
+          - wert: ja
+            punkte: 15
+            textbaustein:
+              feststellung: Es werden regelmäßig Test-Wiederherstellungen durchgeführt und protokolliert.
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Es werden keine regelmäßigen Wiederherstellungstests durchgeführt.
+              auswirkung: null
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+      - name: letzter_restore_test_datum
+        label: Datum des letzten Restore-Tests
+        typ: datum
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+      - name: backup_monitoring_und_alarming
+        label: Automatische Benachrichtigung / Alarming bei Fehlern
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: backup_monitoring
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: Fehlgeschlagene Sicherungen werden automatisch an die IT-Betreuung gemeldet.
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Es erfolgt keine automatische Alarmierung bei fehlgeschlagenen Sicherungen.
+              auswirkung: null
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+      - name: backup_konzept_dokumentiert
+        label: Dokumentiertes Backup- & Wiederherstellungskonzept
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: rechtliche_anforderungen
+          kriterium: dokumentation_backup
+          max_punkte: 10
+        werte:
+          - wert: vollstaendig
+            punkte: 10
+            textbaustein:
+              feststellung: Ein vollständiges Sicherungs- und Wiederherstellungskonzept liegt vor.
+              auswirkung: null
+          - wert: teilweise
+            punkte: 5
+            textbaustein:
+              feststellung: Das Sicherungskonzept ist nur unvollständig dokumentiert.
+              auswirkung: null
+          - wert: keine
+            punkte: 0
+            textbaustein:
+              feststellung: Es liegt kein schriftliches Datensicherungskonzept vor.
+              auswirkung: null
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+      - name: kommentar
+        label: Kommentar
+        typ: mehrzeiliger_text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: intern

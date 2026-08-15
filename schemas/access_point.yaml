@@ -14,34 +14,37 @@ abschnitte:
         werte:
           - wert: Cisco
             textbaustein:
-              feststellung: "Im WLAN kommen Access Points des Herstellers Cisco / Meraki zum Einsatz."
-              auswirkung: null
+              feststellung: "Im WLAN kommen Access Points des Herstellers Cisco /
+                Meraki zum Einsatz."
+              auswirkung:
           - wert: Aruba_HPE
             textbaustein:
               feststellung: "Im WLAN kommen Access Points von Aruba / HPE zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: Ubiquiti
             textbaustein:
               feststellung: "Im WLAN kommen Access Points von Ubiquiti UniFi zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: Sophos
             textbaustein:
               feststellung: "Im WLAN kommen Access Points von Sophos zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: Fortinet
             textbaustein:
-              feststellung: "Im WLAN kommen Access Points von Fortinet (FortiAP) zum Einsatz."
-              auswirkung: null
+              feststellung: "Im WLAN kommen Access Points von Fortinet (FortiAP) zum
+                Einsatz."
+              auswirkung:
           - wert: Netgear
             textbaustein:
               feststellung: "Im WLAN kommen Access Points von Netgear zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: Sonstiges
             textbaustein:
-              feststellung: "Im WLAN kommen Access Points eines sonstigen Herstellers zum Einsatz."
-              auswirkung: null
+              feststellung: "Im WLAN kommen Access Points eines sonstigen Herstellers
+                zum Einsatz."
+              auswirkung:
           - wert: unbekannt
-            textbaustein: null
+            textbaustein:
 
       - name: modell
         typ: text
@@ -63,35 +66,38 @@ abschnitte:
             punkte: 10
             textbaustein:
               feststellung: "Das WLAN unterstützt den neuesten Standard Wi-Fi 7 (802.11be)."
-              auswirkung: null
+              auswirkung:
           - wert: wifi6e
             punkte: 10
             textbaustein:
-              feststellung: "Das WLAN unterstützt den Standard Wi-Fi 6E (802.11ax 6 GHz)."
-              auswirkung: null
+              feststellung: "Das WLAN unterstützt den Standard Wi-Fi 6E (802.11ax
+                6 GHz)."
+              auswirkung:
           - wert: wifi6
             punkte: 10
             textbaustein:
               feststellung: "Das WLAN unterstützt den Standard Wi-Fi 6 (802.11ax)."
-              auswirkung: null
+              auswirkung:
           - wert: wifi5
             punkte: 7
             textbaustein:
               feststellung: "Das WLAN basiert auf dem Standard Wi-Fi 5 (802.11ac)."
-              auswirkung: null
+              auswirkung:
           - wert: gemischt
             punkte: 5
             textbaustein:
               feststellung: "Im WLAN kommen gemischte Standards zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: wifi4_oder_aelter
             punkte: 0
             textbaustein:
-              feststellung: "Im WLAN werden veraltete Access Points (Wi-Fi 4 / 802.11n oder älter) eingesetzt."
-              auswirkung: "Veraltete WLAN-Standards bieten nur geringe Bandbreiten und weisen bekannte Sicherheitsschwachstellen auf."
+              feststellung: "Im WLAN werden veraltete Access Points (Wi-Fi 4 / 802.11n
+                oder älter) eingesetzt."
+              auswirkung: "Veraltete WLAN-Standards bieten nur geringe Bandbreiten
+                und weisen bekannte Sicherheitsschwachstellen auf."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: management
         typ: auswahl
@@ -106,21 +112,25 @@ abschnitte:
           - wert: cloud_controller
             punkte: 10
             textbaustein:
-              feststellung: "Die Access Points werden zentral über einen Cloud-Controller verwaltet."
-              auswirkung: null
+              feststellung: "Die Access Points werden zentral über einen Cloud-Controller
+                verwaltet."
+              auswirkung:
           - wert: onprem_controller
             punkte: 10
             textbaustein:
-              feststellung: "Die Access Points werden zentral über einen On-Premise-Controller verwaltet."
-              auswirkung: null
+              feststellung: "Die Access Points werden zentral über einen On-Premise-Controller
+                verwaltet."
+              auswirkung:
           - wert: standalone
             punkte: 0
             textbaustein:
-              feststellung: "Die Access Points werden einzeln (Standalone) ohne zentralen Controller betrieben."
-              auswirkung: "Standalone-Betrieb erschwert Konfigurationsanpassungen, Roaming und die Überwachung von WLAN-Sicherheitsvorfällen."
+              feststellung: "Die Access Points werden einzeln (Standalone) ohne zentralen
+                Controller betrieben."
+              auswirkung: "Standalone-Betrieb erschwert Konfigurationsanpassungen,
+                Roaming und die Überwachung von WLAN-Sicherheitsvorfällen."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
   - id: sicherheit_und_gastnetz
     titel: WLAN-Sicherheit und Gastnetz
@@ -134,13 +144,13 @@ abschnitte:
           - wert: ja
             textbaustein:
               feststellung: "Ein separates Gast-WLAN ist eingerichtet."
-              auswirkung: null
+              auswirkung:
           - wert: nein
             textbaustein:
               feststellung: "Es ist kein separates Gast-WLAN vorhanden."
-              auswirkung: null
+              auswirkung:
           - wert: unbekannt
-            textbaustein: null
+            textbaustein:
 
       - name: gast_wlan_isoliert
         typ: ja_nein_nicht_relevant
@@ -159,19 +169,22 @@ abschnitte:
           - wert: ja
             punkte: 15
             textbaustein:
-              feststellung: "Das Gast-WLAN ist vollständig vom internen Firmennetzwerk isoliert (VLAN / Client Isolation)."
-              auswirkung: null
+              feststellung: "Das Gast-WLAN ist vollständig vom internen Firmennetzwerk
+                isoliert (VLAN / Client Isolation)."
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
-              feststellung: "Das Gast-WLAN ist nicht vollständig vom internen Firmennetz getrennt."
-              auswirkung: "Gäste und private Endgeräte erhalten Zugriff auf interne Netzwerkressourcen und Server."
+              feststellung: "Das Gast-WLAN ist nicht vollständig vom internen Firmennetz
+                getrennt."
+              auswirkung: "Gäste und private Endgeräte erhalten Zugriff auf interne
+                Netzwerkressourcen und Server."
           - wert: nicht_relevant
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: verschluesselung_wpa3
         typ: ja_nein_unbekannt
@@ -187,15 +200,17 @@ abschnitte:
             punkte: 15
             textbaustein:
               feststellung: "Das WLAN nutzt moderne WPA3- / WPA2-Enterprise-Verschlüsselung."
-              auswirkung: null
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
-              feststellung: "Das WLAN unterstützt noch kein WPA3 oder verwendet veraltete Verschlüsselungsverfahren (WPA1 / WEP / Preshared Key ohne PMF)."
-              auswirkung: "Fehlendes WPA3 oder reine WPA2-PSK-Verschlüsselung ist anfällig für Wörterbuch- und Offlinetrennungsangriffe."
+              feststellung: "Das WLAN unterstützt noch kein WPA3 oder verwendet veraltete
+                Verschlüsselungsverfahren (WPA1 / WEP / Preshared Key ohne PMF)."
+              auswirkung: "Fehlendes WPA3 oder reine WPA2-PSK-Verschlüsselung ist
+                anfällig für Wörterbuch- und Offlinetrennungsangriffe."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
   - id: wartung_und_garantie
     titel: Wartung und Garantie
@@ -214,15 +229,16 @@ abschnitte:
             punkte: 10
             textbaustein:
               feststellung: "Die Access-Point-Firmware wird regelmäßig aktualisiert."
-              auswirkung: null
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
               feststellung: "Die Access-Point-Firmware ist veraltet."
-              auswirkung: "Veraltete Software auf Funk-Schnittstellen birgt Sicherheitsrisiken für den gesamten Netzbetrieb."
+              auswirkung: "Veraltete Software auf Funk-Schnittstellen birgt Sicherheitsrisiken
+                für den gesamten Netzbetrieb."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: garantie_bis
         typ: datum
@@ -247,13 +263,21 @@ abschnitte:
           - wert: ja
             punkte: 10
             textbaustein:
-              feststellung: "Für die WLAN-Infrastruktur besteht ein aktiver Wartungs- und Supportvertrag."
-              auswirkung: null
+              feststellung: "Für die WLAN-Infrastruktur besteht ein aktiver Wartungs-
+                und Supportvertrag."
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
               feststellung: "Für die Access Points besteht kein Wartungsvertrag."
-              auswirkung: "Bei Defekten steht kein zugesicherter Support des Herstellers zur Verfügung."
+              auswirkung: "Bei Defekten steht kein zugesicherter Support des Herstellers
+                zur Verfügung."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
+      - name: kommentar
+        label: Kommentar
+        typ: mehrzeiliger_text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: intern

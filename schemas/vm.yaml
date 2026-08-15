@@ -60,21 +60,21 @@ abschnitte:
           kriterium: vm_ha_faehig
           max_punkte: 10
         werte:
-        - wert: ja
-          punkte: 10
-          textbaustein:
-            feststellung: Die virtuelle Maschine ist HA-fähig konfiguriert.
-            auswirkung: Bei Host-Ausfall wird die VM automatisch auf einen anderen Knoten migriert.
-        - wert: nein
-          punkte: 0
-          textbaustein:
-            feststellung: Die virtuelle Maschine ist nicht HA-fähig.
-            auswirkung: Bei Host-Ausfall fällt die VM aus und muss manuell neu gestartet werden.
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: Die virtuelle Maschine ist HA-fähig konfiguriert.
+              auswirkung: Bei Host-Ausfall wird die VM automatisch auf einen 
+                anderen Knoten migriert.
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Die virtuelle Maschine ist nicht HA-fähig.
+              auswirkung: Bei Host-Ausfall fällt die VM aus und muss manuell neu
+                gestartet werden.
       - name: kommentar
         label: Kommentar
         typ: mehrzeiliger_text
         pflicht: false
         regelrelevant: false
         vertraulichkeit: intern
-
-# TODO Backup-Baustein: pro VM einen Backup-Plan ergänzen (Häufigkeit je nach Volatilität), sobald der Backup-Themenblock bearbeitet wird

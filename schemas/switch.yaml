@@ -14,34 +14,37 @@ abschnitte:
         werte:
           - wert: Cisco
             textbaustein:
-              feststellung: "Im Netzwerk kommen Switches des Herstellers Cisco zum Einsatz."
-              auswirkung: null
+              feststellung: "Im Netzwerk kommen Switches des Herstellers Cisco zum
+                Einsatz."
+              auswirkung:
           - wert: Aruba_HPE
             textbaustein:
               feststellung: "Im Netzwerk kommen Switches von Aruba / HPE zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: Ubiquiti
             textbaustein:
               feststellung: "Im Netzwerk kommen Switches von Ubiquiti UniFi zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: Fortinet
             textbaustein:
-              feststellung: "Im Netzwerk kommen Switches von Fortinet (FortiSwitch) zum Einsatz."
-              auswirkung: null
+              feststellung: "Im Netzwerk kommen Switches von Fortinet (FortiSwitch)
+                zum Einsatz."
+              auswirkung:
           - wert: Dell
             textbaustein:
               feststellung: "Im Netzwerk kommen Switches von Dell Networking zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: Netgear
             textbaustein:
               feststellung: "Im Netzwerk kommen Switches von Netgear zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: Sonstiges
             textbaustein:
-              feststellung: "Im Netzwerk kommen Switches eines sonstigen Herstellers zum Einsatz."
-              auswirkung: null
+              feststellung: "Im Netzwerk kommen Switches eines sonstigen Herstellers
+                zum Einsatz."
+              auswirkung:
           - wert: unbekannt
-            textbaustein: null
+            textbaustein:
 
       - name: modell
         typ: text
@@ -64,25 +67,26 @@ abschnitte:
           - wert: 1G
             textbaustein:
               feststellung: "Die Switches arbeiten mit 1 Gbit/s Portgeschwindigkeit."
-              auswirkung: null
+              auswirkung:
           - wert: 2.5G
             textbaustein:
               feststellung: "Die Switches unterstützen Multigigabit (2,5 Gbit/s)."
-              auswirkung: null
+              auswirkung:
           - wert: 10G
             textbaustein:
               feststellung: "Die Switches unterstützen 10 Gbit/s Port- / Uplinkgeschwindigkeiten."
-              auswirkung: null
+              auswirkung:
           - wert: 25G
             textbaustein:
-              feststellung: "Die Switches verfügen über High-Speed Uplinks mit 25 Gbit/s."
-              auswirkung: null
+              feststellung: "Die Switches verfügen über High-Speed Uplinks mit 25
+                Gbit/s."
+              auswirkung:
           - wert: gemischt
             textbaustein:
               feststellung: "Im Netz kommen gemischte Portgeschwindigkeiten zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: unbekannt
-            textbaustein: null
+            textbaustein:
 
       - name: poe_vorhanden
         typ: ja_nein_unbekannt
@@ -92,14 +96,15 @@ abschnitte:
         werte:
           - wert: ja
             textbaustein:
-              feststellung: "Die Switches unterstützen Power-over-Ethernet (PoE) zur Stromversorgung von Endgeräten."
-              auswirkung: null
+              feststellung: "Die Switches unterstützen Power-over-Ethernet (PoE) zur
+                Stromversorgung von Endgeräten."
+              auswirkung:
           - wert: nein
             textbaustein:
               feststellung: "Die Switches verfügen über keine PoE-Unterstützung."
-              auswirkung: null
+              auswirkung:
           - wert: unbekannt
-            textbaustein: null
+            textbaustein:
 
       - name: management_typ
         typ: auswahl
@@ -114,21 +119,24 @@ abschnitte:
           - wert: fully_managed
             punkte: 10
             textbaustein:
-              feststellung: "Es kommen voll verwaltbare (Fully Managed) Switches zum Einsatz."
-              auswirkung: null
+              feststellung: "Es kommen voll verwaltbare (Fully Managed) Switches zum
+                Einsatz."
+              auswirkung:
           - wert: smart_managed
             punkte: 7
             textbaustein:
-              feststellung: "Es kommen Smart-Managed Switches mit grundlegenden Verwaltungsfunktionen zum Einsatz."
-              auswirkung: null
+              feststellung: "Es kommen Smart-Managed Switches mit grundlegenden Verwaltungsfunktionen
+                zum Einsatz."
+              auswirkung:
           - wert: unmanaged
             punkte: 0
             textbaustein:
               feststellung: "Es werden nicht-verwaltbare (Unmanaged) Switches eingesetzt."
-              auswirkung: "Unmanaged Switches erlauben keine VLAN-Segmentierung, Protokollierung oder zentrale Überwachung."
+              auswirkung: "Unmanaged Switches erlauben keine VLAN-Segmentierung, Protokollierung
+                oder zentrale Überwachung."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
   - id: sicherheit_und_segmentierung
     titel: Sicherheit und Segmentierung
@@ -146,16 +154,19 @@ abschnitte:
           - wert: ja
             punkte: 15
             textbaustein:
-              feststellung: "Eine Netztrennung mittels VLANs (z. B. Server, Clients, IoT, Gast) ist eingerichtet."
-              auswirkung: null
+              feststellung: "Eine Netztrennung mittels VLANs (z. B. Server, Clients,
+                IoT, Gast) ist eingerichtet."
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
-              feststellung: "Es ist keine VLAN-Netztrennung konfiguriert; alle Systeme befinden sich in einer flachen Netzstruktur."
-              auswirkung: "Ohne Netztrennung können sich Schadsoftware und Angreifer ungehindert im gesamten Unternehmensnetz ausbreiten."
+              feststellung: "Es ist keine VLAN-Netztrennung konfiguriert; alle Systeme
+                befinden sich in einer flachen Netzstruktur."
+              auswirkung: "Ohne Netztrennung können sich Schadsoftware und Angreifer
+                ungehindert im gesamten Unternehmensnetz ausbreiten."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: zugangsschutz_management
         typ: auswahl
@@ -170,21 +181,25 @@ abschnitte:
           - wert: mfa_und_ssh_https
             punkte: 15
             textbaustein:
-              feststellung: "Der Management-Zugriff erfolgt abgesichert über verschlüsselte Protokolle (SSH/HTTPS) und Mehrfaktor-Authentifizierung."
-              auswirkung: null
+              feststellung: "Der Management-Zugriff erfolgt abgesichert über verschlüsselte
+                Protokolle (SSH/HTTPS) und Mehrfaktor-Authentifizierung."
+              auswirkung:
           - wert: ssh_https
             punkte: 10
             textbaustein:
-              feststellung: "Der Management-Zugriff erfolgt über verschlüsselte Protokolle (SSH/HTTPS)."
-              auswirkung: null
+              feststellung: "Der Management-Zugriff erfolgt über verschlüsselte Protokolle
+                (SSH/HTTPS)."
+              auswirkung:
           - wert: http_telnet
             punkte: 0
             textbaustein:
-              feststellung: "Der Management-Zugriff auf Switches erlaubt unverschlüsselte Protokolle (HTTP / Telnet)."
-              auswirkung: "Zugangsdaten und Konfigurationen können im Netzwerk im Klartext abgefangen werden."
+              feststellung: "Der Management-Zugriff auf Switches erlaubt unverschlüsselte
+                Protokolle (HTTP / Telnet)."
+              auswirkung: "Zugangsdaten und Konfigurationen können im Netzwerk im
+                Klartext abgefangen werden."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: port_security_aktiv
         typ: ja_nein_unbekannt
@@ -199,16 +214,18 @@ abschnitte:
           - wert: ja
             punkte: 10
             textbaustein:
-              feststellung: "Port Security oder 802.1X-Zugangskontrolle ist auf den Switchports aktiviert."
-              auswirkung: null
+              feststellung: "Port Security oder 802.1X-Zugangskontrolle ist auf den
+                Switchports aktiviert."
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
               feststellung: "Port-Security / 802.1X ist nicht konfiguriert."
-              auswirkung: "Jeder freie Netzwerkport in Büros oder Besprechungsräumen ermöglicht das Anstecken fremder Geräte."
+              auswirkung: "Jeder freie Netzwerkport in Büros oder Besprechungsräumen
+                ermöglicht das Anstecken fremder Geräte."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: loop_protection_aktiv
         typ: ja_nein_unbekannt
@@ -224,15 +241,17 @@ abschnitte:
             punkte: 10
             textbaustein:
               feststellung: "Loop Protection / Spanning Tree Protocol (STP) ist aktiviert."
-              auswirkung: null
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
-              feststellung: "Spanning Tree / Loop Protection ist auf den Switches nicht aktiviert."
-              auswirkung: "Versehentlich gesteckte Schleifen (Looping) führen zum sofortigen Ausfall des gesamten Netzwerks."
+              feststellung: "Spanning Tree / Loop Protection ist auf den Switches
+                nicht aktiviert."
+              auswirkung: "Versehentlich gesteckte Schleifen (Looping) führen zum
+                sofortigen Ausfall des gesamten Netzwerks."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
   - id: wartung_und_sicherung
     titel: Wartung und Konfigurationssicherung
@@ -251,15 +270,16 @@ abschnitte:
             punkte: 10
             textbaustein:
               feststellung: "Die Switch-Firmware ist auf einem aktuellen Stand."
-              auswirkung: null
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
               feststellung: "Die Switch-Firmware ist veraltet."
-              auswirkung: "Bekannte Sicherheitslücken in der Switch-Software können von Angreifern ausgenutzt werden."
+              auswirkung: "Bekannte Sicherheitslücken in der Switch-Software können
+                von Angreifern ausgenutzt werden."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: garantie_bis
         typ: datum
@@ -284,16 +304,18 @@ abschnitte:
           - wert: ja
             punkte: 10
             textbaustein:
-              feststellung: "Für die Switches besteht ein aktiver Wartungsvertrag mit Vor-Ort-Service."
-              auswirkung: null
+              feststellung: "Für die Switches besteht ein aktiver Wartungsvertrag
+                mit Vor-Ort-Service."
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
               feststellung: "Es besteht kein Wartungsvertrag für die Switches."
-              auswirkung: "Bei Hardwareausfällen steht kein zugesicherter Ersatzgeräte-Service zur Verfügung."
+              auswirkung: "Bei Hardwareausfällen steht kein zugesicherter Ersatzgeräte-Service
+                zur Verfügung."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: konfigurationssicherung_aktuell
         typ: ja_nein_unbekannt
@@ -308,182 +330,192 @@ abschnitte:
           - wert: ja
             punkte: 10
             textbaustein:
-              feststellung: "Die Switch-Konfigurationen werden regelmäßig und automatisch gesichert."
-              auswirkung: null
+              feststellung: "Die Switch-Konfigurationen werden regelmäßig und automatisch
+                gesichert."
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
               feststellung: "Die Switch-Konfigurationen werden nicht regelmäßig gesichert."
-              auswirkung: "Im Austauschfall muss das Ersatzgerät zeitaufwendig von Grund auf neu konfiguriert werden."
+              auswirkung: "Im Austauschfall muss das Ersatzgerät zeitaufwendig von
+                Grund auf neu konfiguriert werden."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
   - id: anbindung_und_verbindungen
     titel: Anbindung und Verbindungen
     felder:
-    - name: anbindung_firewall_typ
-      label: Anbindung an Firewall
-      typ: auswahl
-      pflicht: false
-      regelrelevant: false
-      vertraulichkeit: kundentauglich
-      werte:
-      - wert: single_link
-        textbaustein:
-          feststellung: Der Switch ist mit einem einzelnen Link an die Firewall angebunden.
-          auswirkung: Single Point of Failure für die Firewall-Anbindung.
-      - wert: lag
-        textbaustein:
-          feststellung: Der Switch ist mit einem LAG (Link Aggregation Group) an die Firewall angebunden.
-          auswirkung: Redundante Anbindung mit Lastverteilung und Failover-Fähigkeit.
-      - wert: unbekannt
-        textbaustein: null
-    - name: anbindung_firewall_geschwindigkeit_gbit
-      label: Geschwindigkeit Firewall-Anbindung (Gbit)
-      typ: zahl
-      pflicht: false
-      regelrelevant: false
-      vertraulichkeit: kundentauglich
-      sichtbar_wenn:
-        feld: anbindung_firewall_typ
-        operator: gleich
-        wert: single_link
-    - name: cluster_verbund
-      label: Cluster-Verbund
-      typ: ja_nein
-      pflicht: false
-      regelrelevant: false
-      vertraulichkeit: kundentauglich
-    - name: cluster_verbund_mitglieder
-      label: Cluster-Mitglieder-Anbindung
-      typ: text
-      pflicht: false
-      regelrelevant: false
-      vertraulichkeit: kundentauglich
-      sichtbar_wenn:
-        feld: cluster_verbund
-        operator: gleich
-        wert: ja
-    - name: server_anbindung_geschwindigkeit
-      label: Server-Anbindung Geschwindigkeit
-      typ: auswahl
-      pflicht: false
-      regelrelevant: false
-      vertraulichkeit: kundentauglich
-      werte:
-      - wert: 1g
-        textbaustein:
-          feststellung: Die Server sind mit 1 Gbit/s angebunden.
-          auswirkung: null
-      - wert: 2_5g
-        textbaustein:
-          feststellung: Die Server sind mit 2,5 Gbit/s angebunden.
-          auswirkung: null
-      - wert: 10g
-        textbaustein:
-          feststellung: Die Server sind mit 10 Gbit/s angebunden.
-          auswirkung: null
-      - wert: gemischt
-        textbaustein:
-          feststellung: Die Server-Anbindung erfolgt mit gemischten Geschwindigkeiten.
-          auswirkung: null
-      - wert: unbekannt
-        textbaustein: null
-    - name: server_anbindung_lag
-      label: Server-Anbindung LAG
-      typ: ja_nein
-      pflicht: false
-      regelrelevant: false
-      vertraulichkeit: kundentauglich
-    - name: access_point_anbindung_geschwindigkeit
-      label: Access-Point-Anbindung Geschwindigkeit
-      typ: auswahl
-      pflicht: false
-      regelrelevant: false
-      vertraulichkeit: kundentauglich
-      werte:
-      - wert: 1g
-        textbaustein:
-          feststellung: Access Points sind mit 1 Gbit/s angebunden.
-          auswirkung: null
-      - wert: 2_5g
-        textbaustein:
-          feststellung: Access Points sind mit 2,5 Gbit/s angebunden.
-          auswirkung: null
-      - wert: unbekannt
-        textbaustein: null
-    - name: access_point_poe_stufe
-      label: PoE-Stufe für Access-Points
-      typ: auswahl
-      pflicht: false
-      regelrelevant: false
-      vertraulichkeit: kundentauglich
-      werte:
-      - wert: poe
-        textbaustein:
-          feststellung: Die Access Points werden mit PoE (IEEE 802.3af) versorgt.
-          auswirkung: Bis zu 15,4 Watt pro Port.
-      - wert: poe_plus
-        textbaustein:
-          feststellung: Die Access Points werden mit PoE+ (IEEE 802.3at) versorgt.
-          auswirkung: Bis zu 30 Watt pro Port.
-      - wert: poe_plus_plus
-        textbaustein:
-          feststellung: Die Access Points werden mit PoE++ (IEEE 802.3bt) versorgt.
-          auswirkung: Bis zu 60 Watt pro Port.
-      - wert: nicht_anwendbar
-        textbaustein:
-          feststellung: Keine PoE-Versorgung für Access Points erforderlich.
-          auswirkung: null
-      - wert: unbekannt
-        textbaustein: null
-    - name: vlan_segmentierung
-      label: VLAN-Segmentierung
-      typ: mehrzeiliger_text
-      pflicht: false
-      regelrelevant: false
-      vertraulichkeit: kundentauglich
-    - name: uplink_typen
-      label: Uplink-Typen
-      typ: liste
-      pflicht: false
-      regelrelevant: false
-      vertraulichkeit: kundentauglich
-      felder:
-      - name: typ
+      - name: anbindung_firewall_typ
+        label: Anbindung an Firewall
         typ: auswahl
-        label: Typ
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
         werte:
-        - wert: trunk
-        - wert: access
-      - name: vlan_ids
+          - wert: single_link
+            textbaustein:
+              feststellung: Der Switch ist mit einem einzelnen Link an die 
+                Firewall angebunden.
+              auswirkung: Single Point of Failure für die Firewall-Anbindung.
+          - wert: lag
+            textbaustein:
+              feststellung: Der Switch ist mit einem LAG (Link Aggregation 
+                Group) an die Firewall angebunden.
+              auswirkung: Redundante Anbindung mit Lastverteilung und 
+                Failover-Fähigkeit.
+          - wert: unbekannt
+            textbaustein:
+      - name: anbindung_firewall_geschwindigkeit_gbit
+        label: Geschwindigkeit Firewall-Anbindung (Gbit)
+        typ: zahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: anbindung_firewall_typ
+          operator: gleich
+          wert: single_link
+      - name: cluster_verbund
+        label: Cluster-Verbund
+        typ: ja_nein
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: cluster_verbund_mitglieder
+        label: Cluster-Mitglieder-Anbindung
         typ: text
-        label: VLAN-IDs
-    - name: redundante_uplinks
-      label: Redundante Uplinks
-      typ: ja_nein
-      pflicht: false
-      regelrelevant: true
-      vertraulichkeit: kundentauglich
-      bewertung:
-        kategorie: betriebsrisiken
-        kriterium: switch_redundante_uplinks
-        max_punkte: 10
-      werte:
-      - wert: ja
-        punkte: 10
-        textbaustein:
-          feststellung: Der Switch verfügt über redundante Uplinks.
-          auswirkung: Ausfall eines Uplink-Ports führt nicht zum Verlust der Verbindung.
-      - wert: nein
-        punkte: 0
-        textbaustein:
-          feststellung: Der Switch hat keine redundanten Uplinks.
-          auswirkung: Single Point of Failure für die Uplink-Verbindung.
-    - name: anbindung_kommentar
-      label: Kommentar
-      typ: mehrzeiliger_text
-      pflicht: false
-      regelrelevant: false
-      vertraulichkeit: intern
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: cluster_verbund
+          operator: gleich
+          wert: ja
+      - name: server_anbindung_geschwindigkeit
+        label: Server-Anbindung Geschwindigkeit
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: 1g
+            textbaustein:
+              feststellung: Die Server sind mit 1 Gbit/s angebunden.
+              auswirkung:
+          - wert: 2_5g
+            textbaustein:
+              feststellung: Die Server sind mit 2,5 Gbit/s angebunden.
+              auswirkung:
+          - wert: 10g
+            textbaustein:
+              feststellung: Die Server sind mit 10 Gbit/s angebunden.
+              auswirkung:
+          - wert: gemischt
+            textbaustein:
+              feststellung: Die Server-Anbindung erfolgt mit gemischten 
+                Geschwindigkeiten.
+              auswirkung:
+          - wert: unbekannt
+            textbaustein:
+      - name: server_anbindung_lag
+        label: Server-Anbindung LAG
+        typ: ja_nein
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: access_point_anbindung_geschwindigkeit
+        label: Access-Point-Anbindung Geschwindigkeit
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: 1g
+            textbaustein:
+              feststellung: Access Points sind mit 1 Gbit/s angebunden.
+              auswirkung:
+          - wert: 2_5g
+            textbaustein:
+              feststellung: Access Points sind mit 2,5 Gbit/s angebunden.
+              auswirkung:
+          - wert: unbekannt
+            textbaustein:
+      - name: access_point_poe_stufe
+        label: PoE-Stufe für Access-Points
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: poe
+            textbaustein:
+              feststellung: Die Access Points werden mit PoE (IEEE 802.3af) 
+                versorgt.
+              auswirkung: Bis zu 15,4 Watt pro Port.
+          - wert: poe_plus
+            textbaustein:
+              feststellung: Die Access Points werden mit PoE+ (IEEE 802.3at) 
+                versorgt.
+              auswirkung: Bis zu 30 Watt pro Port.
+          - wert: poe_plus_plus
+            textbaustein:
+              feststellung: Die Access Points werden mit PoE++ (IEEE 802.3bt) 
+                versorgt.
+              auswirkung: Bis zu 60 Watt pro Port.
+          - wert: nicht_anwendbar
+            textbaustein:
+              feststellung: Keine PoE-Versorgung für Access Points erforderlich.
+              auswirkung:
+          - wert: unbekannt
+            textbaustein:
+      - name: vlan_segmentierung
+        label: VLAN-Segmentierung
+        typ: mehrzeiliger_text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: uplink_typen
+        label: Uplink-Typen
+        typ: liste
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        felder:
+          - name: typ
+            typ: auswahl
+            label: Typ
+            werte:
+              - wert: trunk
+              - wert: access
+          - name: vlan_ids
+            typ: text
+            label: VLAN-IDs
+      - name: redundante_uplinks
+        label: Redundante Uplinks
+        typ: ja_nein
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: switch_redundante_uplinks
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: Der Switch verfügt über redundante Uplinks.
+              auswirkung: Ausfall eines Uplink-Ports führt nicht zum Verlust der
+                Verbindung.
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Der Switch hat keine redundanten Uplinks.
+              auswirkung: Single Point of Failure für die Uplink-Verbindung.
+      - name: kommentar
+        label: Kommentar
+        typ: mehrzeiliger_text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: intern

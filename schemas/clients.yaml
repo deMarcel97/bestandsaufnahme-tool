@@ -3,275 +3,289 @@ typ: clients
 bezeichnung_anzeige: Clients & Arbeitsplätze
 berichtskapitel: clients
 abschnitte:
-- id: was_ist_es
-  titel: Was ist es
-  felder:
-  - name: anzahl_windows_clients
-    label: Anzahl Windows-Clients
-    typ: zahl
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: anzahl_mac_clients
-    label: Anzahl Mac-Clients (macOS)
-    typ: zahl
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: anzahl_linux_clients
-    label: Anzahl Linux-Clients
-    typ: zahl
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: haupt_betriebssystem_version
-    label: Hauptsächlich eingesetzte Betriebssystem-Versionen
-    typ: text
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: einsatzart
-    label: Verteilung der Geräte-Typen
-    typ: auswahl
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-    werte:
-    - wert: festarbeitsplaetze_und_notebooks
-      textbaustein:
-        feststellung: Die Client-Landschaft besteht sowohl aus festen Desktop-Arbeitsplätzen
-          als auch aus mobilen Laptops.
-        auswirkung: null
-    - wert: nur_festarbeitsplaetze
-      textbaustein:
-        feststellung: Im Unternehmen kommen ausschließlich feste Desktop-Arbeitsplätze
-          zum Einsatz.
-        auswirkung: null
-    - wert: nur_notebooks
-      textbaustein:
-        feststellung: Die Mitarbeiter arbeiten ausschließlich mit mobilen Laptops.
-        auswirkung: null
-    - wert: unbekannt
-      textbaustein: null
-- id: zustand_und_patchmanagement
-  titel: Zustand und Patchmanagement
-  felder:
-  - name: windows_10_eol_migration_geplant
-    label: Windows 10 EOL Migration auf Win11 geplant / umgesetzt
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: hardware_und_software
-      kriterium: win10_eol_clients
-      max_punkte: 20
-    werte:
-    - wert: ja
-      punkte: 20
-      textbaustein:
-        feststellung: Die Migration aller Windows 10 Arbeitsplätze auf Windows 11
-          ist abgeschlossen oder terminiert.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Es liegt kein Plan zur Ablösung von Windows 10 vor dem offiziellen
-          End-of-Life vor.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: zentrales_patchmanagement_aktiv
-    label: Zentrales Patchmanagement für OS & Dritthersteller-Software
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: it_security
-      kriterium: patchmanagement_clients
-      max_punkte: 20
-    werte:
-    - wert: ja
-      punkte: 20
-      textbaustein:
-        feststellung: Sicherheits-Patches für Betriebssysteme und Drittsoftware werden
-          zentral gesteuert eingespielt.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Es existiert kein zentrales Patchmanagement für Arbeitsplatzrechner.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: hardware_alter_durchschnitt
-    label: Durchschnittliches Alter des Client-Fuhrparks
-    typ: auswahl
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: hardware_und_software
-      kriterium: hardware_alter_clients
-      max_punkte: 10
-    werte:
-    - wert: unter_3_jahre
-      punkte: 10
-      textbaustein:
-        feststellung: Der Client-Fuhrpark ist im Durchschnitt jünger als 3 Jahre.
-        auswirkung: null
-    - wert: 3_bis_5_jahre
-      punkte: 5
-      textbaustein:
-        feststellung: Der Client-Fuhrpark ist im Durchschnitt 3 bis 5 Jahre alt.
-        auswirkung: null
-    - wert: ueber_5_jahre
-      punkte: 0
-      textbaustein:
-        feststellung: Die Arbeitsplatz-Hardware ist im Durchschnitt älter als 5 Jahre.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-- id: sicherheit_und_schutz
-  titel: Sicherheit und Schutz
-  felder:
-  - name: edr_antivirus_zentral_gemanagt
-    label: Zentral verwalteter EDR- / Antiviren-Schutz
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: it_security
-      kriterium: edr_antivirus_clients
-      max_punkte: 20
-    werte:
-    - wert: ja
-      punkte: 20
-      textbaustein:
-        feststellung: Alle Clients sind durch ein zentral verwaltetes EDR- / Antivirensystem
-          geschützt.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Auf den Endgeräten ist kein zentral überwachter Viren- oder
-          EDR-Schutz vorhanden.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: festplattenverschluesselung_aktiv
-    label: Festplattenverschlüsselung aktiv (BitLocker / FileVault)
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: it_security
-      kriterium: verschluesselung_clients
-      max_punkte: 15
-    werte:
-    - wert: ja
-      punkte: 15
-      textbaustein:
-        feststellung: Festplatten mobiler Geräte sind durch Vollverschlüsselung (z.B.
-          BitLocker) geschützt.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Die Datenträger von Arbeitsplatzgeräten/Laptops sind unverschlüsselt.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: lokale_adminrechte_eingeschraenkt
-    label: Lokale Administratorrechte für Standardbenutzer entzogen
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: it_security
-      kriterium: adminrechte_clients
-      max_punkte: 15
-    werte:
-    - wert: ja
-      punkte: 15
-      textbaustein:
-        feststellung: Standardbenutzer arbeiten ohne lokale Administratorrechte.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Benutzer besitzen dauerhafte lokale Administratorrechte auf
-          ihren Arbeitsplätzen.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: mdm_rmm_software_im_einsatz
-    label: Zentrales RMM / MDM System (Intune, Datto RMM, NinjaOne)
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: betriebsrisiken
-      kriterium: rmm_mdm_clients
-      max_punkte: 10
-    werte:
-    - wert: ja
-      punkte: 10
-      textbaustein:
-        feststellung: Die Arbeitsplätze werden über ein zentrales MDM- / RMM-System
-          gemanagt.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Es ist kein zentrales Verwaltungswerkzeug (RMM/MDM) für Clients
-          im Einsatz.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-- id: organisation
-  titel: Organisation und Richtlinien
-  felder:
-  - name: dokumentation_vorhanden
-    label: Client-Standardkonfiguration & Dokumentation vorhanden
-    typ: auswahl
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: rechtliche_anforderungen
-      kriterium: dokumentation_clients
-      max_punkte: 10
-    werte:
-    - wert: vollstaendig
-      punkte: 10
-      textbaustein:
-        feststellung: Eine vollständige Client-Standardkonfiguration und Inventarliste
-          ist vorhanden.
-        auswirkung: null
-    - wert: teilweise
-      punkte: 5
-      textbaustein:
-        feststellung: Die Client-Dokumentation ist unvollständig.
-        auswirkung: null
-    - wert: keine
-      punkte: 0
-      textbaustein:
-        feststellung: Es existiert keine Dokumentation oder Richtlinie für Endgeräte.
-        auswirkung: Im Störungs- oder Vertretungsfall verzögert die fehlende Dokumentation
-          die Analyse und Behebung von Fehlern.
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
+  - id: was_ist_es
+    titel: Was ist es
+    felder:
+      - name: anzahl_windows_clients
+        label: Anzahl Windows-Clients
+        typ: zahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: anzahl_mac_clients
+        label: Anzahl Mac-Clients (macOS)
+        typ: zahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: anzahl_linux_clients
+        label: Anzahl Linux-Clients
+        typ: zahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: haupt_betriebssystem_version
+        label: Hauptsächlich eingesetzte Betriebssystem-Versionen
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: einsatzart
+        label: Verteilung der Geräte-Typen
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: festarbeitsplaetze_und_notebooks
+            textbaustein:
+              feststellung: Die Client-Landschaft besteht sowohl aus festen 
+                Desktop-Arbeitsplätzen als auch aus mobilen Laptops.
+              auswirkung:
+          - wert: nur_festarbeitsplaetze
+            textbaustein:
+              feststellung: Im Unternehmen kommen ausschließlich feste 
+                Desktop-Arbeitsplätze zum Einsatz.
+              auswirkung:
+          - wert: nur_notebooks
+            textbaustein:
+              feststellung: Die Mitarbeiter arbeiten ausschließlich mit mobilen 
+                Laptops.
+              auswirkung:
+          - wert: unbekannt
+            textbaustein:
+  - id: zustand_und_patchmanagement
+    titel: Zustand und Patchmanagement
+    felder:
+      - name: windows_10_eol_migration_geplant
+        label: Windows 10 EOL Migration auf Win11 geplant / umgesetzt
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: hardware_und_software
+          kriterium: win10_eol_clients
+          max_punkte: 20
+        werte:
+          - wert: ja
+            punkte: 20
+            textbaustein:
+              feststellung: Die Migration aller Windows 10 Arbeitsplätze auf 
+                Windows 11 ist abgeschlossen oder terminiert.
+              auswirkung:
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Es liegt kein Plan zur Ablösung von Windows 10 vor 
+                dem offiziellen End-of-Life vor.
+              auswirkung:
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: zentrales_patchmanagement_aktiv
+        label: Zentrales Patchmanagement für OS & Dritthersteller-Software
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: patchmanagement_clients
+          max_punkte: 20
+        werte:
+          - wert: ja
+            punkte: 20
+            textbaustein:
+              feststellung: Sicherheits-Patches für Betriebssysteme und 
+                Drittsoftware werden zentral gesteuert eingespielt.
+              auswirkung:
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Es existiert kein zentrales Patchmanagement für 
+                Arbeitsplatzrechner.
+              auswirkung:
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: hardware_alter_durchschnitt
+        label: Durchschnittliches Alter des Client-Fuhrparks
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: hardware_und_software
+          kriterium: hardware_alter_clients
+          max_punkte: 10
+        werte:
+          - wert: unter_3_jahre
+            punkte: 10
+            textbaustein:
+              feststellung: Der Client-Fuhrpark ist im Durchschnitt jünger als 3
+                Jahre.
+              auswirkung:
+          - wert: 3_bis_5_jahre
+            punkte: 5
+            textbaustein:
+              feststellung: Der Client-Fuhrpark ist im Durchschnitt 3 bis 5 
+                Jahre alt.
+              auswirkung:
+          - wert: ueber_5_jahre
+            punkte: 0
+            textbaustein:
+              feststellung: Die Arbeitsplatz-Hardware ist im Durchschnitt älter 
+                als 5 Jahre.
+              auswirkung:
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+  - id: sicherheit_und_schutz
+    titel: Sicherheit und Schutz
+    felder:
+      - name: edr_antivirus_zentral_gemanagt
+        label: Zentral verwalteter EDR- / Antiviren-Schutz
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: edr_antivirus_clients
+          max_punkte: 20
+        werte:
+          - wert: ja
+            punkte: 20
+            textbaustein:
+              feststellung: Alle Clients sind durch ein zentral verwaltetes EDR-
+                / Antivirensystem geschützt.
+              auswirkung:
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Auf den Endgeräten ist kein zentral überwachter 
+                Viren- oder EDR-Schutz vorhanden.
+              auswirkung:
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: festplattenverschluesselung_aktiv
+        label: Festplattenverschlüsselung aktiv (BitLocker / FileVault)
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: verschluesselung_clients
+          max_punkte: 15
+        werte:
+          - wert: ja
+            punkte: 15
+            textbaustein:
+              feststellung: Festplatten mobiler Geräte sind durch 
+                Vollverschlüsselung (z.B. BitLocker) geschützt.
+              auswirkung:
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Die Datenträger von Arbeitsplatzgeräten/Laptops sind
+                unverschlüsselt.
+              auswirkung:
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: lokale_adminrechte_eingeschraenkt
+        label: Lokale Administratorrechte für Standardbenutzer entzogen
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: adminrechte_clients
+          max_punkte: 15
+        werte:
+          - wert: ja
+            punkte: 15
+            textbaustein:
+              feststellung: Standardbenutzer arbeiten ohne lokale 
+                Administratorrechte.
+              auswirkung:
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Benutzer besitzen dauerhafte lokale 
+                Administratorrechte auf ihren Arbeitsplätzen.
+              auswirkung:
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: mdm_rmm_software_im_einsatz
+        label: Zentrales RMM / MDM System (Intune, Datto RMM, NinjaOne)
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: rmm_mdm_clients
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: Die Arbeitsplätze werden über ein zentrales MDM- / 
+                RMM-System gemanagt.
+              auswirkung:
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Es ist kein zentrales Verwaltungswerkzeug (RMM/MDM) 
+                für Clients im Einsatz.
+              auswirkung:
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+  - id: organisation
+    titel: Organisation und Richtlinien
+    felder:
+      - name: dokumentation_vorhanden
+        label: Client-Standardkonfiguration & Dokumentation vorhanden
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: rechtliche_anforderungen
+          kriterium: dokumentation_clients
+          max_punkte: 10
+        werte:
+          - wert: vollstaendig
+            punkte: 10
+            textbaustein:
+              feststellung: Eine vollständige Client-Standardkonfiguration und 
+                Inventarliste ist vorhanden.
+              auswirkung:
+          - wert: teilweise
+            punkte: 5
+            textbaustein:
+              feststellung: Die Client-Dokumentation ist unvollständig.
+              auswirkung:
+          - wert: keine
+            punkte: 0
+            textbaustein:
+              feststellung: Es existiert keine Dokumentation oder Richtlinie für
+                Endgeräte.
+              auswirkung: Im Störungs- oder Vertretungsfall verzögert die 
+                fehlende Dokumentation die Analyse und Behebung von Fehlern.
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: kommentar
+        label: Kommentar
+        typ: mehrzeiliger_text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: intern

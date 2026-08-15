@@ -13,11 +13,11 @@ abschnitte:
         vertraulichkeit: kundentauglich
         werte:
           - wert: CRM
-            textbaustein: null
+            textbaustein:
           - wert: DMS
-            textbaustein: null
+            textbaustein:
           - wert: ERP
-            textbaustein: null
+            textbaustein:
 
       - name: anbieter_crm
         label: Anbieter (CRM)
@@ -33,21 +33,21 @@ abschnitte:
           - wert: Salesforce
             textbaustein:
               feststellung: "Als CRM-System kommt Salesforce zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: Microsoft_Dynamics_365
             textbaustein:
               feststellung: "Als CRM-System kommt Microsoft Dynamics 365 zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: HubSpot
             textbaustein:
               feststellung: "Als CRM-System kommt HubSpot zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: sonstige
             textbaustein:
               feststellung: "Als CRM-System kommt eine sonstige Lösung zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: unbekannt
-            textbaustein: null
+            textbaustein:
 
       - name: anbieter_crm_freitext
         label: Anbieter CRM (Sonstige)
@@ -75,29 +75,31 @@ abschnitte:
           - wert: ELO
             textbaustein:
               feststellung: "Als Dokumentenmanagementsystem kommt ELO zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: DocuWare
             textbaustein:
               feststellung: "Als Dokumentenmanagementsystem kommt DocuWare zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: d.velop
             textbaustein:
               feststellung: "Als Dokumentenmanagementsystem kommt d.velop zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: enaio
             textbaustein:
               feststellung: "Als Dokumentenmanagementsystem kommt enaio zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: DATEV_DMS
             textbaustein:
-              feststellung: "Als Dokumentenmanagement kommt DATEV DMS zum Einsatz — eine kanzleispezifische Lösung für Steuerberater/Wirtschaftsprüfer."
-              auswirkung: null
+              feststellung: "Als Dokumentenmanagement kommt DATEV DMS zum Einsatz
+                — eine kanzleispezifische Lösung für Steuerberater/Wirtschaftsprüfer."
+              auswirkung:
           - wert: sonstige
             textbaustein:
-              feststellung: "Als Dokumentenmanagementsystem kommt eine sonstige Lösung zum Einsatz."
-              auswirkung: null
+              feststellung: "Als Dokumentenmanagementsystem kommt eine sonstige Lösung
+                zum Einsatz."
+              auswirkung:
           - wert: unbekannt
-            textbaustein: null
+            textbaustein:
 
       - name: anbieter_dms_freitext
         label: Anbieter DMS (Sonstige)
@@ -124,21 +126,22 @@ abschnitte:
           - wert: SAP_S/4HANA
             textbaustein:
               feststellung: "Als ERP-System kommt SAP S/4HANA zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: Microsoft_Dynamics_365_Business_Central
             textbaustein:
-              feststellung: "Als ERP-System kommt Microsoft Dynamics 365 Business Central zum Einsatz."
-              auswirkung: null
+              feststellung: "Als ERP-System kommt Microsoft Dynamics 365 Business
+                Central zum Einsatz."
+              auswirkung:
           - wert: Sage
             textbaustein:
               feststellung: "Als ERP-System kommt Sage zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: sonstige
             textbaustein:
               feststellung: "Als ERP-System kommt eine sonstige Lösung zum Einsatz."
-              auswirkung: null
+              auswirkung:
           - wert: unbekannt
-            textbaustein: null
+            textbaustein:
 
       - name: anbieter_erp_freitext
         label: Anbieter ERP (Sonstige)
@@ -167,17 +170,18 @@ abschnitte:
           - wert: cloud
             textbaustein:
               feststellung: "Die Software wird als Cloud-/SaaS-Lösung betrieben."
-              auswirkung: null
+              auswirkung:
           - wert: on_premise
             textbaustein:
-              feststellung: "Die Software wird On-Premise im eigenen Rechenzentrum betrieben."
-              auswirkung: null
+              feststellung: "Die Software wird On-Premise im eigenen Rechenzentrum
+                betrieben."
+              auswirkung:
           - wert: hybrid
             textbaustein:
               feststellung: "Die Software wird in einer hybriden Konfiguration betrieben."
-              auswirkung: null
+              auswirkung:
           - wert: unbekannt
-            textbaustein: null
+            textbaustein:
 
   - id: zustand
     titel: In welchem Zustand ist es
@@ -197,15 +201,16 @@ abschnitte:
             punkte: 10
             textbaustein:
               feststellung: "Für die Software besteht ein aktiver Wartungs-/Supportvertrag."
-              auswirkung: null
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
               feststellung: "Für die Software besteht kein Wartungs-/Supportvertrag."
-              auswirkung: "Bei Störungen oder Fehlern steht kein vereinbarter Herstellersupport zur Verfügung."
+              auswirkung: "Bei Störungen oder Fehlern steht kein vereinbarter Herstellersupport
+                zur Verfügung."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: datensicherung_vorhanden
         label: Datensicherung der Software-Daten vorhanden
@@ -222,15 +227,19 @@ abschnitte:
             punkte: 20
             textbaustein:
               feststellung: "Die Daten der Software werden regelmäßig gesichert."
-              auswirkung: null
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
               feststellung: "Für die Daten der Software besteht keine Datensicherung."
-              auswirkung: "Bei Datenverlust, Fehlbedienung oder Cyberangriff können geschäftskritische Daten (z. B. Kunden-, Vertriebs-, Dokumenten- oder Finanzdaten) unwiederbringlich verloren gehen; je nach Softwarekategorie können zusätzlich revisionssichere Aufbewahrungspflichten verletzt werden."
+              auswirkung: "Bei Datenverlust, Fehlbedienung oder Cyberangriff können
+                geschäftskritische Daten (z. B. Kunden-, Vertriebs-, Dokumenten- oder
+                Finanzdaten) unwiederbringlich verloren gehen; je nach Softwarekategorie
+                können zusätzlich revisionssichere Aufbewahrungspflichten verletzt
+                werden."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: dokumentation_vorhanden
         typ: auswahl
@@ -246,17 +255,24 @@ abschnitte:
             punkte: 10
             textbaustein:
               feststellung: "Eine vollständige Dokumentation der Software liegt vor."
-              auswirkung: null
+              auswirkung:
           - wert: teilweise
             punkte: 5
             textbaustein:
               feststellung: "Die Dokumentation der Software ist nur teilweise vorhanden."
-              auswirkung: null
+              auswirkung:
           - wert: keine
             punkte: 0
             textbaustein:
               feststellung: "Es liegt keine Dokumentation für die Software vor."
-              auswirkung: "Im Störungs- oder Vertretungsfall verzögert die fehlende Dokumentation die Analyse und Behebung von Fehlern."
+              auswirkung: "Im Störungs- oder Vertretungsfall verzögert die fehlende
+                Dokumentation die Analyse und Behebung von Fehlern."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
+      - name: kommentar
+        label: Kommentar
+        typ: mehrzeiliger_text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: intern
