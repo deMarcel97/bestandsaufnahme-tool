@@ -93,6 +93,30 @@ abschnitte:
     pflicht: false
     regelrelevant: false
     vertraulichkeit: kundentauglich
+  - name: festplatten_slots
+    label: Festplatten-Slots
+    typ: liste
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
+    felder:
+    - name: platten_typ
+      typ: auswahl
+      label: Typ
+      werte:
+      - wert: ssd
+      - wert: hdd
+    - name: anbindung
+      typ: auswahl
+      label: Anbindung
+      werte:
+      - wert: sata
+      - wert: sas
+      - wert: nvme
+      - wert: m2
+    - name: kapazitaet_gb
+      typ: zahl
+      label: Kapazität (GB)
   - name: sicherungs_intervall
     label: Datensicherungsintervall
     typ: auswahl
