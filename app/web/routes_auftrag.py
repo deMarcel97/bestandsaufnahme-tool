@@ -100,6 +100,15 @@ def update_auftrag_status(auftrag_id: str, status: str = Form(...), next: str = 
     redirect_url = next if next in ("/auftrag", f"/auftrag/{auftrag_id}") else f"/auftrag/{auftrag_id}"
     return RedirectResponse(url=redirect_url, status_code=303)
 
+@router.post("/auftrag/{auftrag_id}/vertraulichkeit")
+def update_auftrag_vertraulichkeit(auftrag_id: str, vertraulichkeit_default: str = Form(...), next: str = Form(default="")):
+    auftrag = storage.load_auftrag(auftrag_id)
+    if auftrag and vertraulichkeit_default in ["intern", "kundentauglich", "anonymisiert"]:
+        auftrag.vertraulichkeit_default = vertraulichkeit_default
+        storage.save_auftrag(auftrag)
+    redirect_url = next if next in ("/auftrag", f"/auftrag/{auftrag_id}") else f"/auftrag/{auftrag_id}"
+    return RedirectResponse(url=redirect_url, status_code=303)
+
 @router.get("/auftrag/{auftrag_id}")
 def detail_auftrag(request: Request, auftrag_id: str):
     auftrag = storage.load_auftrag(auftrag_id)

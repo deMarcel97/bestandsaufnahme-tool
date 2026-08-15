@@ -25,7 +25,14 @@
               {% endfor %}
             </select>
           </form>
-          <span>Vertraulichkeit {{ auftrag.vertraulichkeit_default }}</span>
+          <form action="/auftrag/{{ auftrag.id }}/vertraulichkeit" method="POST" style="display:inline;">
+            <input type="hidden" name="next" value="/auftrag/{{ auftrag.id }}">
+            <select name="vertraulichkeit_default" class="form-control badge-select" onchange="this.form.submit()">
+              {% for opt in ["intern", "kundentauglich", "anonymisiert"] %}
+              <option value="{{ opt }}" {% if auftrag.vertraulichkeit_default == opt %}selected{% endif %}>{{ opt }}</option>
+              {% endfor %}
+            </select>
+          </form>
           {% if auftrag.jira_url %}
           <span class="sep">·</span>
           <a href="{{ auftrag.jira_url }}" target="_blank" rel="noopener">Jira {{ auftrag.projekt_nummer }}</a>
