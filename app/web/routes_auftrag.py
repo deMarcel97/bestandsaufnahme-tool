@@ -10,6 +10,7 @@ from app.services.slug import generate_slug_id
 from app.services.rule_engine import rule_engine
 from app.services.evaluator import evaluator_service
 from app.services.progress import progress_service
+from app.web.shared_context import build_sidebar_context
 from app.models.auftrag import Auftrag, Termine, Unternehmenskontext
 from app.utils.number_parser import parse_int_german, parse_float_german
 
@@ -139,6 +140,7 @@ def edit_auftrag_form(request: Request, auftrag_id: str):
 
     verfuegbare_typen = schema_loader.get_all_types()
     bausteine_labels = get_bausteine_labels()
+    sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
         request=request,
         name="auftrag/edit.html",
@@ -147,7 +149,8 @@ def edit_auftrag_form(request: Request, auftrag_id: str):
             "verfuegbare_typen": verfuegbare_typen,
             "bausteine_labels": bausteine_labels,
             "active_tab": "einstellungen",
-            "active_nav": "auftrag"
+            "active_nav": "auftrag",
+            **sidebar_context
         }
     )
 

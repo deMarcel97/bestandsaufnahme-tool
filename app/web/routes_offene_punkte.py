@@ -5,6 +5,7 @@ from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.progress import progress_service
 from app.services.schema_loader import schema_loader
+from app.web.shared_context import build_sidebar_context
 
 router = APIRouter()
 templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
@@ -63,6 +64,7 @@ def offene_punkte_page(request: Request, auftrag_id: str):
 
         grouped[matched_sto][comp_label].append(op)
 
+    sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
         request=request,
         name="offene_punkte/index.html",
@@ -71,6 +73,7 @@ def offene_punkte_page(request: Request, auftrag_id: str):
             "offene_punkte": offene_punkte,
             "grouped_punkte": grouped,
             "active_tab": "offene_punkte",
-            "active_nav": "auftrag"
+            "active_nav": "auftrag",
+            **sidebar_context
         }
     )

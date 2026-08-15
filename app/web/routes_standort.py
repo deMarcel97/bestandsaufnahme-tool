@@ -6,6 +6,7 @@ from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.slug import generate_slug_id
 from app.services.rule_engine import rule_engine
+from app.web.shared_context import build_sidebar_context
 from app.models.standort import Standort, Internetanbindung
 from app.utils.number_parser import parse_float_german, parse_int_german
 
@@ -70,6 +71,7 @@ def new_standort_form(request: Request, auftrag_id: str):
     auftrag = storage.load_auftrag(auftrag_id)
     if not auftrag:
         return RedirectResponse(url="/auftrag", status_code=303)
+    sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
         request=request,
         name="standort/form.html",
@@ -77,7 +79,9 @@ def new_standort_form(request: Request, auftrag_id: str):
             "auftrag": auftrag,
             "standort": None,
             "heutiges_datum": date.today().isoformat(),
-            "active_nav": "auftrag"
+            "active_tab": "uebersicht",
+            "active_nav": "auftrag",
+            **sidebar_context
         }
     )
 
@@ -139,13 +143,16 @@ def edit_standort_form(request: Request, auftrag_id: str, standort_id: str):
     standort = storage.load_standort(auftrag_id, standort_id)
     if not auftrag or not standort:
         return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+    sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
         request=request,
         name="standort/form.html",
         context={
             "auftrag": auftrag,
             "standort": standort,
-            "active_nav": "auftrag"
+            "active_tab": "uebersicht",
+            "active_nav": "auftrag",
+            **sidebar_context
         }
     )
 

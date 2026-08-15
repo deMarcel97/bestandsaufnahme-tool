@@ -3,7 +3,10 @@
 {% block title %}Standort bearbeiten - {{ auftrag.bezeichnung }}{% endblock %}
 
 {% block content %}
-<div class="workspace">
+<div class="layout-sidebar">
+  {% include "_sidebar.html" %}
+
+  <main class="workspace">
 
   <div class="page-head">
     <div>
@@ -253,6 +256,7 @@
       <a href="/auftrag/{{ auftrag.id }}" class="btn">Abbrechen</a>
     </div>
   </form>
+  </main>
 </div>
 
 <script>

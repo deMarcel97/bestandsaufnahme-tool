@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.5.0] - 2026-08-15
+
+### Fixed
+- **„Noch nicht erfasst"-Leiste (#275)**: Die Fortschrittsanzeige „Aktive Bausteine" und die klickbare „Noch nicht erfasst"-Chipliste in der Auftrags-Navigation erschienen bisher nur auf der Übersichtsseite eines Auftrags, weil die übrigen Routen (Stammdaten & Kontext, Offene Punkte, Findings, Maßnahmenkatalog, Bewertung, Exporte) den dafür nötigen Kontext nicht an `_sidebar.html` übergaben. Neuer gemeinsamer Helper `app/web/shared_context.py::build_sidebar_context()` liefert diesen Kontext jetzt auf allen sieben Unterseiten. Zusätzlich binden die Formulare „Neues/Objekt bearbeiten" und „Standort anlegen/bearbeiten" (`technik/form.html`, `standort/form.html`), die die Sidebar bisher gar nicht einbanden, sie jetzt ebenfalls ein — man kann so mitten in der Erfassung direkt zu einem anderen fehlenden Baustein springen, ohne erst zur Übersicht zurückzugehen.
+
 ## [2.4.0] - 2026-08-15
 
 ### Added
