@@ -55,7 +55,7 @@
           <div class="form-group">
             <label>Grundlage</label>
             <select name="grundlage" class="form-control">
-              {% for opt in ["Ausschreibung", "Angebot", "Rahmenvertrag", "Sonstiges"] %}
+              {% for opt in grundlage_options %}
               <option value="{{ opt }}" {% if auftrag.grundlage == opt %}selected{% endif %}>{{ opt }}</option>
               {% endfor %}
             </select>

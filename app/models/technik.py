@@ -21,7 +21,7 @@ class TechnikObjekt(BaseModel):
     betreut_durch: str = "Kunde"  # wir, Kunde, Dritter
     dienstleister_name: str = ""
     notiz: str = ""
-    vertraulichkeit: str = "kundentauglich"  # intern, kundentauglich, anonymisiert
+    vertraulichkeit: str = "intern"  # intern, kundentauglich, anonymisiert
     erfassungsstatus: str = "unbekannt"  # vollstaendig, teilweise, unbekannt
     offene_punkte: List[OffenerPunktItem] = Field(default_factory=list)
     daten: Dict[str, Any] = Field(default_factory=dict)

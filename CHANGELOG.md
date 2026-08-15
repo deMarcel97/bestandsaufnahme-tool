@@ -16,6 +16,16 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionieru
 
   `findings.yaml` und `massnahmen.yaml` werden als ganze Liste geschrieben und bekommen vorerst nur das atomare Schreiben, keine Versionsprüfung.
 
+## [2.7.2] - 2026-08-15
+
+### Added
+- **Grundlage „Analyse" (#302)**: Die Auswahl „Grundlage" beim Anlegen und Bearbeiten eines Auftrags kennt jetzt zusätzlich „Analyse" — Aufträge, die aus einer vorangegangenen Analyse hervorgehen, mussten bisher als „Sonstiges" abgelegt werden. Reihenfolge: Ausschreibung, Angebot, Analyse, Rahmenvertrag, Sonstiges.
+
+### Changed
+- **Grundlage-Auswahl zentralisiert (#302)**: Die Optionsliste stand doppelt hart kodiert in `auftrag/list.html` und `auftrag/edit.html`, sodass eine neue Option an beiden Stellen nachgetragen werden musste. Sie kommt jetzt als `GRUNDLAGE_OPTIONS` aus `app/web/routes_auftrag.py` (analog zu `STATUS_OPTIONS`) und wird über den Template-Kontext durchgereicht. Ein Test schlägt an, falls die Liste wieder in ein Template wandert.
+- **Vertraulichkeit standardmässig „intern" (#302)**: Neue Aufträge, Standorte und Objekte sind jetzt per Vorgabe „intern" statt „kundentauglich". Die Freigabe für Kundenunterlagen ist damit eine bewusste Entscheidung und kein Nebeneffekt der Vorbelegung. Betrifft die Modell-Defaults (`auftrag.py`, `standort.py`, `technik.py`), die Formular-Defaults der Auftragsrouten und die Vorauswahl im Anlege-Dialog. Bereits gespeicherte Werte bleiben unverändert.
+
+
 ## [2.7.1] - 2026-08-15
 
 ### Added
