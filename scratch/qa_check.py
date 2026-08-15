@@ -43,7 +43,9 @@ routes_to_test = [
     ("/auftrag/auf-test/bewertung", 200),
     ("/auftrag/auf-test/export", 200),
     ("/auftrag/auf-test/offene_punkte", 200),
-    ("/auftrag/auf-test/einstellungen", 200),
+    ("/auftrag/auf-test/stammdaten", 200),
+    ("/auftrag/auf-test/unternehmenskontext", 200),
+    ("/auftrag/auf-test/einstellungen", 303),  # alte Sammelseite, leitet auf Stammdaten weiter
     ("/static/css/style.css", 200),
     ("/static/js/dialog.js", 200)
 ]

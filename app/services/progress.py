@@ -148,7 +148,7 @@ class ProgressService:
                     text=f"Ausstehendes Dokument: '{doc.bezeichnung}' (Status: {doc.status})",
                     status="offen",
                     quelle="dokument",
-                    ziel_url=f"/auftrag/{auftrag.id}/einstellungen"
+                    ziel_url=f"/auftrag/{auftrag.id}/stammdaten"
                 ))
 
         return consolidated
