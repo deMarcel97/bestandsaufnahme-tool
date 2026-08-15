@@ -14,30 +14,36 @@ abschnitte:
         werte:
           - wert: APC
             textbaustein:
-              feststellung: "Als USV-System kommt ein Gerät des Herstellers APC / Schneider Electric zum Einsatz."
-              auswirkung: null
+              feststellung: "Als USV-System kommt ein Gerät des Herstellers APC /
+                Schneider Electric zum Einsatz."
+              auswirkung:
           - wert: Eaton
             textbaustein:
-              feststellung: "Als USV-System kommt ein Gerät des Herstellers Eaton zum Einsatz."
-              auswirkung: null
+              feststellung: "Als USV-System kommt ein Gerät des Herstellers Eaton
+                zum Einsatz."
+              auswirkung:
           - wert: Riello
             textbaustein:
-              feststellung: "Als USV-System kommt ein Gerät des Herstellers Riello zum Einsatz."
-              auswirkung: null
+              feststellung: "Als USV-System kommt ein Gerät des Herstellers Riello
+                zum Einsatz."
+              auswirkung:
           - wert: Online_USV
             textbaustein:
-              feststellung: "Als USV-System kommt ein Gerät des Herstellers Online USV zum Einsatz."
-              auswirkung: null
+              feststellung: "Als USV-System kommt ein Gerät des Herstellers Online
+                USV zum Einsatz."
+              auswirkung:
           - wert: Vertiv
             textbaustein:
-              feststellung: "Als USV-System kommt ein Gerät des Herstellers Vertiv zum Einsatz."
-              auswirkung: null
+              feststellung: "Als USV-System kommt ein Gerät des Herstellers Vertiv
+                zum Einsatz."
+              auswirkung:
           - wert: Sonstiges
             textbaustein:
-              feststellung: "Als USV-System kommt ein Gerät eines sonstigen Herstellers zum Einsatz."
-              auswirkung: null
+              feststellung: "Als USV-System kommt ein Gerät eines sonstigen Herstellers
+                zum Einsatz."
+              auswirkung:
           - wert: unbekannt
-            textbaustein: null
+            textbaustein:
 
       - name: modell
         typ: text
@@ -94,21 +100,25 @@ abschnitte:
           - wert: unter_3_jahre
             punkte: 15
             textbaustein:
-              feststellung: "Die USV-Batterien sind jünger als drei Jahre und befinden sich im regulären Nutzungszyklus."
-              auswirkung: null
+              feststellung: "Die USV-Batterien sind jünger als drei Jahre und befinden
+                sich im regulären Nutzungszyklus."
+              auswirkung:
           - wert: 3_bis_5_jahre
             punkte: 8
             textbaustein:
               feststellung: "Die USV-Batterien sind zwischen drei und fünf Jahre alt."
-              auswirkung: "Die Restkapazität der Akkus kann vermindert sein; ein Austausch sollte mittelfristig eingeplant werden."
+              auswirkung: "Die Restkapazität der Akkus kann vermindert sein; ein Austausch
+                sollte mittelfristig eingeplant werden."
           - wert: ueber_5_jahre
             punkte: 0
             textbaustein:
               feststellung: "Die USV-Batterien sind älter als fünf Jahre."
-              auswirkung: "Akkus über fünf Jahre neigen zu spontanem Kapazitätsabfall unter Last, wodurch bei Stromausfall ein unkontrollierter Systemabsturz droht."
+              auswirkung: "Akkus über fünf Jahre neigen zu spontanem Kapazitätsabfall
+                unter Last, wodurch bei Stromausfall ein unkontrollierter Systemabsturz
+                droht."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: garantie_geraet_bis
         typ: datum
@@ -143,16 +153,18 @@ abschnitte:
           - wert: ja
             punkte: 10
             textbaustein:
-              feststellung: "Für das USV-System besteht ein aktiver Wartungsvertrag inkl. Batterieservice."
-              auswirkung: null
+              feststellung: "Für das USV-System besteht ein aktiver Wartungsvertrag
+                inkl. Batterieservice."
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
               feststellung: "Für das USV-System besteht kein Wartungsvertrag."
-              auswirkung: "Bei Defekten oder Akku-Ausfällen steht kein vereinbarter Reaktions- und Ersatzteilservice zur Verfügung."
+              auswirkung: "Bei Defekten oder Akku-Ausfällen steht kein vereinbarter
+                Reaktions- und Ersatzteilservice zur Verfügung."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: letzter_batterietest
         typ: datum
@@ -180,16 +192,19 @@ abschnitte:
           - wert: ja
             punkte: 15
             textbaustein:
-              feststellung: "Eine Signalverbindung für den automatischen, geordneten Server-Shutdown ist konfiguriert."
-              auswirkung: null
+              feststellung: "Eine Signalverbindung für den automatischen, geordneten
+                Server-Shutdown ist konfiguriert."
+              auswirkung:
           - wert: nein
             punkte: 0
             textbaustein:
-              feststellung: "Es ist keine Signalverbindung für einen automatischen Server-Shutdown eingerichtet."
-              auswirkung: "Bei erschöpfter USV-Kapazität schalten die versorgten Server hart ab, was zu Dateisystem- und Datenbankschäden führen kann."
+              feststellung: "Es ist keine Signalverbindung für einen automatischen
+                Server-Shutdown eingerichtet."
+              auswirkung: "Bei erschöpfter USV-Kapazität schalten die versorgten Server
+                hart ab, was zu Dateisystem- und Datenbankschäden führen kann."
           - wert: unbekannt
-            punkte: null
-            textbaustein: null
+            punkte:
+            textbaustein:
 
       - name: signalisierungsart
         typ: auswahl
@@ -204,21 +219,31 @@ abschnitte:
         werte:
           - wert: USB
             textbaustein:
-              feststellung: "Die Abschaltsignalisierung erfolgt per USB mit lokaler Shutdown-Software (z. B. APC PowerChute, Eaton IPP, CyberPower PowerPanel)."
-              auswirkung: null
+              feststellung: "Die Abschaltsignalisierung erfolgt per USB mit lokaler
+                Shutdown-Software (z. B. APC PowerChute, Eaton IPP, CyberPower PowerPanel)."
+              auswirkung:
           - wert: RS232_seriell
             textbaustein:
-              feststellung: "Die Abschaltsignalisierung erfolgt über eine serielle RS232-Verbindung."
-              auswirkung: null
+              feststellung: "Die Abschaltsignalisierung erfolgt über eine serielle
+                RS232-Verbindung."
+              auswirkung:
           - wert: Netzwerk_SNMP_Karte
             textbaustein:
-              feststellung: "Die Abschaltsignalisierung erfolgt über eine Netzwerk-/SNMP-Managementkarte in der USV."
-              auswirkung: null
+              feststellung: "Die Abschaltsignalisierung erfolgt über eine Netzwerk-/SNMP-Managementkarte
+                in der USV."
+              auswirkung:
           - wert: Relaiskontakt
             textbaustein:
-              feststellung: "Die Abschaltsignalisierung erfolgt über einen Trockenkontakt / Relaisausgang der USV."
-              auswirkung: null
+              feststellung: "Die Abschaltsignalisierung erfolgt über einen Trockenkontakt
+                / Relaisausgang der USV."
+              auswirkung:
           - wert: Sonstiges
-            textbaustein: null
+            textbaustein:
           - wert: unbekannt
-            textbaustein: null
+            textbaustein:
+      - name: kommentar
+        label: Kommentar
+        typ: mehrzeiliger_text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: intern

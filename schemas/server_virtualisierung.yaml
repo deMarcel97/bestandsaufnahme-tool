@@ -3,647 +3,669 @@ typ: server_virtualisierung
 bezeichnung_anzeige: Server & Virtualisierung
 berichtskapitel: infrastruktur
 abschnitte:
-- id: was_ist_es
-  titel: Was ist es
-  felder:
-  - name: hypervisor_typ
-    label: Hypervisor / Virtualisierungslösung
-    typ: auswahl
-    pflicht: true
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-    werte:
-    - wert: vmware_vsphere
-      textbaustein:
-        feststellung: Als Virtualisierungsplattform kommt VMware ESXi / vSphere zum Einsatz.
-        auswirkung: null
-    - wert: hyper_v
-      textbaustein:
-        feststellung: Als Virtualisierungsplattform kommt Microsoft Hyper-V zum Einsatz.
-        auswirkung: null
-    - wert: proxmox
-      textbaustein:
-        feststellung: Als Virtualisierungsplattform kommt Proxmox VE zum Einsatz.
-        auswirkung: null
-    - wert: xenserver
-      textbaustein:
-        feststellung: Als Virtualisierungsplattform kommt XenServer / XCP-ng zum Einsatz.
-        auswirkung: null
-    - wert: nutanix
-      textbaustein:
-        feststellung: Als Virtualisierungsplattform kommt Nutanix AHV zum Einsatz.
-        auswirkung: null
-    - wert: bare_metal
-      textbaustein:
-        feststellung: Die Server werden ohne Virtualisierungsschicht direkt auf der Hardware (Bare Metal) betrieben.
-        auswirkung: null
-    - wert: sonstiges
-      textbaustein:
-        feststellung: Als Virtualisierungsplattform kommt ein sonstiges System zum Einsatz.
-        auswirkung: null
-    - wert: unbekannt
-      textbaustein: null
-  - name: hypervisor_version
-    label: Hypervisor Version
-    typ: text
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: anzahl_host_server
-    label: Anzahl Host-Server (Physisch)
-    typ: zahl
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: anzahl_vms
-    label: Anzahl Virtuelle Maschinen (VMs)
-    typ: zahl
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: betriebssysteme_vms
-    label: Betriebssysteme der VMs
-    typ: text
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: ip_adressen
-    label: IP-Adressen / Management-IPs
-    typ: text
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: intern
-
-- id: hardware
-  titel: Hardware
-  felder:
-  - name: hersteller
-    label: Hersteller
-    typ: auswahl
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-    werte:
-    - wert: dell
-      textbaustein:
-        feststellung: Als Server-Hersteller kommt Dell zum Einsatz.
-        auswirkung: null
-    - wert: hp
-      textbaustein:
-        feststellung: Als Server-Hersteller kommt Hewlett Packard Enterprise (HPE) zum Einsatz.
-        auswirkung: null
-    - wert: lenovo
-      textbaustein:
-        feststellung: Als Server-Hersteller kommt Lenovo zum Einsatz.
-        auswirkung: null
-    - wert: fujitsu
-      textbaustein:
-        feststellung: Als Server-Hersteller kommt Fujitsu zum Einsatz.
-        auswirkung: null
-    - wert: ibm
-      textbaustein:
-        feststellung: Als Server-Hersteller kommt IBM zum Einsatz.
-        auswirkung: null
-    - wert: supermicro
-      textbaustein:
-        feststellung: Als Server-Hersteller kommt Supermicro zum Einsatz.
-        auswirkung: null
-    - wert: sonstiges
-      textbaustein:
-        feststellung: Als Server-Hersteller kommt ein sonstiger Hersteller zum Einsatz.
-        auswirkung: null
-    - wert: unbekannt
-      textbaustein: null
-  - name: modell
-    label: Modell
-    typ: text
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: seriennummer
-    label: Seriennummer
-    typ: text
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: intern
-  - name: garantie_status
-    label: Garantie-Status
-    typ: auswahl
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: betriebsrisiken
-      kriterium: server_garantie_status
-      max_punkte: 10
-    werte:
-    - wert: aktiv
-      punkte: 10
-      textbaustein:
-        feststellung: Die Server-Hardware befindet sich innerhalb der Herstellergarantie.
-        auswirkung: null
-    - wert: abgelaufen
-      punkte: 0
-      textbaustein:
-        feststellung: Die Herstellergarantie für die Server-Hardware ist abgelaufen.
-        auswirkung: Reparaturen und Ersatzteilbeschaffung erfolgen auf eigenes finanzielles Risiko.
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: garantie_ablaufdatum
-    label: Garantie-Ablaufdatum
-    typ: datum
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: sockel_anzahl
-    label: Sockel-Anzahl
-    typ: auswahl
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-    werte:
-    - wert: single
-      textbaustein:
-        feststellung: Der Server verfügt über einen einzelnen CPU-Sockel.
-        auswirkung: null
-    - wert: dual
-      textbaustein:
-        feststellung: Der Server verfügt über zwei CPU-Sockel.
-        auswirkung: null
-    - wert: multi
-      textbaustein:
-        feststellung: Der Server verfügt über mehrere CPU-Sockel.
-        auswirkung: null
-    - wert: unbekannt
-      textbaustein: null
-  - name: ram_ausbau
-    label: RAM-Ausbau
-    typ: text
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: festplatten_slots
-    label: Festplatten-Slots
-    typ: liste
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
+  - id: was_ist_es
+    titel: Was ist es
     felder:
-    - name: platten_typ
-      typ: auswahl
-      label: Typ
-      werte:
-      - wert: ssd
-      - wert: hdd
-    - name: anbindung
-      typ: auswahl
-      label: Anbindung
-      werte:
-      - wert: sata
-      - wert: sas
-      - wert: nvme
-    - name: kapazitaet_gb
-      typ: zahl
-      label: Kapazität (GB)
-  - name: netzwerkkarten
-    label: Netzwerkkarten
-    typ: liste
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-    felder:
-    - name: anzahl_ports
-      typ: zahl
-      label: Anzahl Ports
-    - name: geschwindigkeit
-      typ: auswahl
-      label: Geschwindigkeit
-      werte:
-      - wert: 1g
-      - wert: 10g
-      - wert: 25g
-    - name: anbindungsart
-      typ: auswahl
-      label: Anbindungsart
-      werte:
-      - wert: onboard
-      - wert: steckkarte
-  - name: erweiterungs_slots
-    label: Erweiterungs-Slots
-    typ: liste
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-    felder:
-    - name: bezeichnung
-      typ: text
-      label: Bezeichnung
-    - name: belegt_mit
-      typ: text
-      label: Belegt mit
-  - name: hardware_kommentar
-    label: Kommentar
-    typ: mehrzeiliger_text
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: intern
+      - name: hypervisor_typ
+        label: Hypervisor / Virtualisierungslösung
+        typ: auswahl
+        pflicht: true
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: vmware_vsphere
+            textbaustein:
+              feststellung: Als Virtualisierungsplattform kommt VMware ESXi / 
+                vSphere zum Einsatz.
+              auswirkung:
+          - wert: hyper_v
+            textbaustein:
+              feststellung: Als Virtualisierungsplattform kommt Microsoft 
+                Hyper-V zum Einsatz.
+              auswirkung:
+          - wert: proxmox
+            textbaustein:
+              feststellung: Als Virtualisierungsplattform kommt Proxmox VE zum 
+                Einsatz.
+              auswirkung:
+          - wert: xenserver
+            textbaustein:
+              feststellung: Als Virtualisierungsplattform kommt XenServer / 
+                XCP-ng zum Einsatz.
+              auswirkung:
+          - wert: nutanix
+            textbaustein:
+              feststellung: Als Virtualisierungsplattform kommt Nutanix AHV zum 
+                Einsatz.
+              auswirkung:
+          - wert: bare_metal
+            textbaustein:
+              feststellung: Die Server werden ohne Virtualisierungsschicht 
+                direkt auf der Hardware (Bare Metal) betrieben.
+              auswirkung:
+          - wert: sonstiges
+            textbaustein:
+              feststellung: Als Virtualisierungsplattform kommt ein sonstiges 
+                System zum Einsatz.
+              auswirkung:
+          - wert: unbekannt
+            textbaustein:
+      - name: hypervisor_version
+        label: Hypervisor Version
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: anzahl_host_server
+        label: Anzahl Host-Server (Physisch)
+        typ: zahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: anzahl_vms
+        label: Anzahl Virtuelle Maschinen (VMs)
+        typ: zahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: betriebssysteme_vms
+        label: Betriebssysteme der VMs
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: ip_adressen
+        label: IP-Adressen / Management-IPs
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: intern
 
-- id: virtualisierung
-  titel: Virtualisierung
-  felder:
-  - name: wird_virtualisiert
-    label: Wird virtualisiert
-    typ: ja_nein
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
+  - id: hardware
+    titel: Hardware
+    felder:
+      - name: hersteller
+        label: Hersteller
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: dell
+            textbaustein:
+              feststellung: Als Server-Hersteller kommt Dell zum Einsatz.
+              auswirkung:
+          - wert: hp
+            textbaustein:
+              feststellung: Als Server-Hersteller kommt Hewlett Packard 
+                Enterprise (HPE) zum Einsatz.
+              auswirkung:
+          - wert: lenovo
+            textbaustein:
+              feststellung: Als Server-Hersteller kommt Lenovo zum Einsatz.
+              auswirkung:
+          - wert: fujitsu
+            textbaustein:
+              feststellung: Als Server-Hersteller kommt Fujitsu zum Einsatz.
+              auswirkung:
+          - wert: ibm
+            textbaustein:
+              feststellung: Als Server-Hersteller kommt IBM zum Einsatz.
+              auswirkung:
+          - wert: supermicro
+            textbaustein:
+              feststellung: Als Server-Hersteller kommt Supermicro zum Einsatz.
+              auswirkung:
+          - wert: sonstiges
+            textbaustein:
+              feststellung: Als Server-Hersteller kommt ein sonstiger Hersteller
+                zum Einsatz.
+              auswirkung:
+          - wert: unbekannt
+            textbaustein:
+      - name: modell
+        label: Modell
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: seriennummer
+        label: Seriennummer
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: intern
+      - name: garantie_status
+        label: Garantie-Status
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: server_garantie_status
+          max_punkte: 10
+        werte:
+          - wert: aktiv
+            punkte: 10
+            textbaustein:
+              feststellung: Die Server-Hardware befindet sich innerhalb der 
+                Herstellergarantie.
+              auswirkung:
+          - wert: abgelaufen
+            punkte: 0
+            textbaustein:
+              feststellung: Die Herstellergarantie für die Server-Hardware ist 
+                abgelaufen.
+              auswirkung: Reparaturen und Ersatzteilbeschaffung erfolgen auf 
+                eigenes finanzielles Risiko.
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: garantie_ablaufdatum
+        label: Garantie-Ablaufdatum
+        typ: datum
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: sockel_anzahl
+        label: Sockel-Anzahl
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: single
+            textbaustein:
+              feststellung: Der Server verfügt über einen einzelnen CPU-Sockel.
+              auswirkung:
+          - wert: dual
+            textbaustein:
+              feststellung: Der Server verfügt über zwei CPU-Sockel.
+              auswirkung:
+          - wert: multi
+            textbaustein:
+              feststellung: Der Server verfügt über mehrere CPU-Sockel.
+              auswirkung:
+          - wert: unbekannt
+            textbaustein:
+      - name: ram_ausbau
+        label: RAM-Ausbau
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: festplatten_slots
+        label: Festplatten-Slots
+        typ: liste
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        felder:
+          - name: platten_typ
+            typ: auswahl
+            label: Typ
+            werte:
+              - wert: ssd
+              - wert: hdd
+          - name: anbindung
+            typ: auswahl
+            label: Anbindung
+            werte:
+              - wert: sata
+              - wert: sas
+              - wert: nvme
+          - name: kapazitaet_gb
+            typ: zahl
+            label: Kapazität (GB)
+      - name: netzwerkkarten
+        label: Netzwerkkarten
+        typ: liste
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        felder:
+          - name: anzahl_ports
+            typ: zahl
+            label: Anzahl Ports
+          - name: geschwindigkeit
+            typ: auswahl
+            label: Geschwindigkeit
+            werte:
+              - wert: 1g
+              - wert: 10g
+              - wert: 25g
+          - name: anbindungsart
+            typ: auswahl
+            label: Anbindungsart
+            werte:
+              - wert: onboard
+              - wert: steckkarte
+      - name: erweiterungs_slots
+        label: Erweiterungs-Slots
+        typ: liste
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        felder:
+          - name: bezeichnung
+            typ: text
+            label: Bezeichnung
+          - name: belegt_mit
+            typ: text
+            label: Belegt mit
+  - id: virtualisierung
+    titel: Virtualisierung
+    felder:
+      - name: wird_virtualisiert
+        label: Wird virtualisiert
+        typ: ja_nein
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
 
-- id: virtualisierung_details
-  titel: Virtualisierungs-Details
-  sichtbar_wenn:
-    feld: wird_virtualisiert
-    operator: gleich
-    wert: ja
-  felder:
-  - name: hypervisor_typ_virt
-    label: Hypervisor-Typ
-    typ: auswahl
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-    werte:
-    - wert: vmware
-      textbaustein:
-        feststellung: Als Virtualisierungsplattform kommt VMware ESXi / vSphere zum Einsatz.
-        auswirkung: null
-    - wert: hyperv
-      textbaustein:
-        feststellung: Als Virtualisierungsplattform kommt Microsoft Hyper-V zum Einsatz.
-        auswirkung: null
-    - wert: proxmox
-      textbaustein:
-        feststellung: Als Virtualisierungsplattform kommt Proxmox VE zum Einsatz.
-        auswirkung: null
-    - wert: sonstiges
-      textbaustein:
-        feststellung: Als Virtualisierungsplattform kommt ein sonstiges System zum Einsatz.
-        auswirkung: null
-    - wert: unbekannt
-      textbaustein: null
-  - name: hypervisor_version_virt
-    label: Version
-    typ: text
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: betriebsmodus
-    label: Betriebsmodus
-    typ: auswahl
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: betriebsrisiken
-      kriterium: server_betriebsmodus
-      max_punkte: 10
-    werte:
-    - wert: einzelserver
-      punkte: 5
-      textbaustein:
-        feststellung: Der Server wird als Einzelserver betrieben.
-        auswirkung: Keine automatische Ausfallsicherheit bei Hardwaredefekt des Hosts.
-    - wert: cluster
-      punkte: 10
-      textbaustein:
-        feststellung: Der Server ist Teil eines Clusters.
-        auswirkung: Hohe Verfügbarkeit durch automatisches Failover zwischen Cluster-Knoten.
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: raid_konfiguration
-    label: RAID-Konfiguration
-    typ: text
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-  - name: cluster_referenz
-    label: Cluster-Zugehörigkeit
-    typ: objekt_referenz
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-    ziel_typen: [server_cluster]
+  - id: virtualisierung_details
+    titel: Virtualisierungs-Details
     sichtbar_wenn:
-      feld: betriebsmodus
+      feld: wird_virtualisiert
       operator: gleich
-      wert: cluster
-  - name: virtualisierung_kommentar
-    label: Kommentar
-    typ: mehrzeiliger_text
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: intern
-- id: zustand
-  titel: In welchem Zustand ist es
-  felder:
-  - name: hardware_alter
-    label: Alter der Host-Hardware
-    typ: auswahl
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: hardware_und_software
-      kriterium: hardware_alter_server
-      max_punkte: 5
-    werte:
-    - wert: unter_3_jahre
-      punkte: 5
-      textbaustein:
-        feststellung: Die Server-Hardware ist jünger als 3 Jahre.
-        auswirkung: null
-    - wert: 3_bis_5_jahre
-      punkte: 3
-      textbaustein:
-        feststellung: Die Server-Hardware ist 3 bis 5 Jahre alt. Ein Austausch sollte
-          mittelfristig geplant werden.
-        auswirkung: null
-    - wert: ueber_5_jahre
-      punkte: 0
-      textbaustein:
-        feststellung: Die Server-Hardware ist älter als 5 Jahre und sollte aus Sicherheits-
-          und Performancegründen ausgetauscht werden.
-        auswirkung: Die Ausfallwahrscheinlichkeit steigt mit fortschreitendem Alter
-          deutlich an und moderne Sicherheitsfunktionen werden nicht unterstützt.
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: wartungsvertrag_vorhanden
-    label: Herstellersupport / Wartungsvertrag vorhanden
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: betriebsrisiken
-      kriterium: wartungsvertrag_server
-      max_punkte: 10
-    werte:
-    - wert: ja
-      punkte: 10
-      textbaustein:
-        feststellung: Für die Server-Hardware besteht ein aktiver Wartungsvertrag
-          des Herstellers.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Für die Server-Hardware besteht kein aktiver Wartungsvertrag.
-        auswirkung: Bei Hardwaredefekten oder technischen Störungen steht kein direkter
-          Herstellersupport zur Verfügung, was die Wiederherstellungszeit verlängern
-          kann.
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: wartungsvertrag_bis
-    label: Wartungsvertrag gültig bis
-    typ: datum
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-  - name: hypervisor_eol
-    label: Hypervisor End-of-Life (EOL)
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: hardware_und_software
-      kriterium: hypervisor_eol_server
-      max_punkte: 15
-    werte:
-    - wert: ja
-      punkte: 0
-      textbaustein:
-        feststellung: Die Hypervisor-Software hat ihren End-of-Life Status erreicht
-          und erhält keine Updates mehr.
-        auswirkung: null
-    - wert: nein
-      punkte: 15
-      textbaustein:
-        feststellung: Die Hypervisor-Software wird vom Hersteller offiziell unterstützt.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: os_eol_vms_vorhanden
-    label: EOL-Betriebssysteme auf VMs vorhanden
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: hardware_und_software
-      kriterium: vm_os_eol_server
-      max_punkte: 15
-    werte:
-    - wert: ja
-      punkte: 0
-      textbaustein:
-        feststellung: Es sind noch veraltete Betriebssysteme (End-of-Life) auf den
-          virtuellen Maschinen im Einsatz.
-        auswirkung: null
-    - wert: nein
-      punkte: 15
-      textbaustein:
-        feststellung: Alle Server-Betriebssysteme sind auf unterstützten Versionen.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: patchstand_aktuell
-    label: Patchstand Server & Hypervisor aktuell
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: it_security
-      kriterium: patchstand_server
-      max_punkte: 15
-    werte:
-    - wert: ja
-      punkte: 15
-      textbaustein:
-        feststellung: Sicherheits-Patches für Server und Hypervisor werden regelmäßig
-          eingespielt.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Der Patchstand der Server- und Virtualisierungsumgebung ist
-          veraltet.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: dokumentation_vorhanden
-    label: Systemdokumentation vorhanden
-    typ: auswahl
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: rechtliche_anforderungen
-      kriterium: dokumentation_server
-      max_punkte: 10
-    werte:
-    - wert: vollstaendig
-      punkte: 10
-      textbaustein:
-        feststellung: Eine vollständige Server- und Netzwerkkonfigurations-Dokumentation
-          liegt vor.
-        auswirkung: null
-    - wert: teilweise
-      punkte: 5
-      textbaustein:
-        feststellung: Die Dokumentation der Serverumgebung ist nur unvollständig vorhanden.
-        auswirkung: null
-    - wert: keine
-      punkte: 0
-      textbaustein:
-        feststellung: Es ist keine Dokumentation der Serverumgebung vorhanden.
-        auswirkung: Im Störungs- oder Vertretungsfall verzögert die fehlende Dokumentation
-          die Analyse und Behebung von Fehlern.
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-- id: ausfall
-  titel: Was passiert bei Ausfall
-  felder:
-  - name: ha_cluster_eingerichtet
-    label: Hochverfügbarkeits-Cluster (HA) eingerichtet
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: betriebsrisiken
-      kriterium: ha_cluster_server
-      max_punkte: 15
-    werte:
-    - wert: ja
-      punkte: 15
-      textbaustein:
-        feststellung: Die Virtualisierung ist als hochverfügbares Cluster mit automatischer
-          Failover-Funktion aufgebaut.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Es ist kein Hochverfügbarkeits-Cluster vorhanden (Single Point
-          of Failure bei Hostausfall).
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: redundante_netzteil_stromversorgung
-    label: Redundante Netzteile verbaut
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: betriebsrisiken
-      kriterium: netzteil_redundanz_server
-      max_punkte: 10
-    werte:
-    - wert: ja
-      punkte: 10
-      textbaustein:
-        feststellung: Die Server-Hosts verfügen über redundante Netzteile.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Die Server-Hosts besitzen keine redundante Stromversorgung.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: raid_konfiguration
-    label: RAID-Absicherung des lokalen/SAN-Speichers
-    typ: auswahl
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: betriebsrisiken
-      kriterium: raid_server
-      max_punkte: 10
-    werte:
-    - wert: raid_10_oder_6
-      punkte: 10
-      textbaustein:
-        feststellung: Der Datenspeicher ist durch hochredundantes RAID (RAID 6 / RAID
-          10) geschützt.
-        auswirkung: null
-    - wert: raid_1_oder_5
-      punkte: 5
-      textbaustein:
-        feststellung: Der Datenspeicher ist durch Standard-RAID (RAID 1 / RAID 5)
-          geschützt.
-        auswirkung: null
-    - wert: raid_0_oder_kein_raid
-      punkte: 0
-      textbaustein:
-        feststellung: Der Speicher bietet keine Redundanz (RAID 0 oder kein RAID).
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-- id: funktionen
-  titel: Funktionen und Überwachung
-  felder:
-  - name: monitoring_aktiv
-    label: Zentrales Monitoring der Server/VMs aktiv
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: true
-    vertraulichkeit: kundentauglich
-    bewertung:
-      kategorie: betriebsrisiken
-      kriterium: monitoring_server
-      max_punkte: 5
-    werte:
-    - wert: ja
-      punkte: 5
-      textbaustein:
-        feststellung: Die Server und virtuellen Maschinen werden kontinuierlich überwacht.
-        auswirkung: null
-    - wert: nein
-      punkte: 0
-      textbaustein:
-        feststellung: Es ist kein automatisches Server-Monitoring eingerichtet.
-        auswirkung: null
-    - wert: unbekannt
-      punkte: null
-      textbaustein: null
-  - name: snapshot_management
-    label: Reguläres Konsolidieren/Löschen alter VM-Snapshots
-    typ: ja_nein_unbekannt
-    pflicht: false
-    regelrelevant: false
-    vertraulichkeit: kundentauglich
-    werte:
-    - wert: ja
-      textbaustein:
-        feststellung: VM-Snapshots werden regelmäßig bereinigt.
-        auswirkung: null
-    - wert: nein
-      textbaustein:
-        feststellung: Alte VM-Snapshots verbleiben unbeaufsichtigt auf dem Datenspeicher.
-        auswirkung: null
-    - wert: unbekannt
-      textbaustein: null
+      wert: ja
+    felder:
+      - name: hypervisor_typ_virt
+        label: Hypervisor-Typ
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: vmware
+            textbaustein:
+              feststellung: Als Virtualisierungsplattform kommt VMware ESXi / 
+                vSphere zum Einsatz.
+              auswirkung:
+          - wert: hyperv
+            textbaustein:
+              feststellung: Als Virtualisierungsplattform kommt Microsoft 
+                Hyper-V zum Einsatz.
+              auswirkung:
+          - wert: proxmox
+            textbaustein:
+              feststellung: Als Virtualisierungsplattform kommt Proxmox VE zum 
+                Einsatz.
+              auswirkung:
+          - wert: sonstiges
+            textbaustein:
+              feststellung: Als Virtualisierungsplattform kommt ein sonstiges 
+                System zum Einsatz.
+              auswirkung:
+          - wert: unbekannt
+            textbaustein:
+      - name: hypervisor_version_virt
+        label: Version
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: betriebsmodus
+        label: Betriebsmodus
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: server_betriebsmodus
+          max_punkte: 10
+        werte:
+          - wert: einzelserver
+            punkte: 5
+            textbaustein:
+              feststellung: Der Server wird als Einzelserver betrieben.
+              auswirkung: Keine automatische Ausfallsicherheit bei 
+                Hardwaredefekt des Hosts.
+          - wert: cluster
+            punkte: 10
+            textbaustein:
+              feststellung: Der Server ist Teil eines Clusters.
+              auswirkung: Hohe Verfügbarkeit durch automatisches Failover 
+                zwischen Cluster-Knoten.
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: raid_konfiguration
+        label: RAID-Konfiguration
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+      - name: cluster_referenz
+        label: Cluster-Zugehörigkeit
+        typ: objekt_referenz
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        ziel_typen: [server_cluster]
+        sichtbar_wenn:
+          feld: betriebsmodus
+          operator: gleich
+          wert: cluster
+  - id: zustand
+    titel: In welchem Zustand ist es
+    felder:
+      - name: hardware_alter
+        label: Alter der Host-Hardware
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: hardware_und_software
+          kriterium: hardware_alter_server
+          max_punkte: 5
+        werte:
+          - wert: unter_3_jahre
+            punkte: 5
+            textbaustein:
+              feststellung: Die Server-Hardware ist jünger als 3 Jahre.
+              auswirkung:
+          - wert: 3_bis_5_jahre
+            punkte: 3
+            textbaustein:
+              feststellung: Die Server-Hardware ist 3 bis 5 Jahre alt. Ein 
+                Austausch sollte mittelfristig geplant werden.
+              auswirkung:
+          - wert: ueber_5_jahre
+            punkte: 0
+            textbaustein:
+              feststellung: Die Server-Hardware ist älter als 5 Jahre und sollte
+                aus Sicherheits- und Performancegründen ausgetauscht werden.
+              auswirkung: Die Ausfallwahrscheinlichkeit steigt mit 
+                fortschreitendem Alter deutlich an und moderne 
+                Sicherheitsfunktionen werden nicht unterstützt.
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: wartungsvertrag_vorhanden
+        label: Herstellersupport / Wartungsvertrag vorhanden
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: wartungsvertrag_server
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: Für die Server-Hardware besteht ein aktiver 
+                Wartungsvertrag des Herstellers.
+              auswirkung:
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Für die Server-Hardware besteht kein aktiver 
+                Wartungsvertrag.
+              auswirkung: Bei Hardwaredefekten oder technischen Störungen steht 
+                kein direkter Herstellersupport zur Verfügung, was die 
+                Wiederherstellungszeit verlängern kann.
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: wartungsvertrag_bis
+        label: Wartungsvertrag gültig bis
+        typ: datum
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+      - name: hypervisor_eol
+        label: Hypervisor End-of-Life (EOL)
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: hardware_und_software
+          kriterium: hypervisor_eol_server
+          max_punkte: 15
+        werte:
+          - wert: ja
+            punkte: 0
+            textbaustein:
+              feststellung: Die Hypervisor-Software hat ihren End-of-Life Status
+                erreicht und erhält keine Updates mehr.
+              auswirkung:
+          - wert: nein
+            punkte: 15
+            textbaustein:
+              feststellung: Die Hypervisor-Software wird vom Hersteller 
+                offiziell unterstützt.
+              auswirkung:
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: os_eol_vms_vorhanden
+        label: EOL-Betriebssysteme auf VMs vorhanden
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: hardware_und_software
+          kriterium: vm_os_eol_server
+          max_punkte: 15
+        werte:
+          - wert: ja
+            punkte: 0
+            textbaustein:
+              feststellung: Es sind noch veraltete Betriebssysteme (End-of-Life)
+                auf den virtuellen Maschinen im Einsatz.
+              auswirkung:
+          - wert: nein
+            punkte: 15
+            textbaustein:
+              feststellung: Alle Server-Betriebssysteme sind auf unterstützten 
+                Versionen.
+              auswirkung:
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: patchstand_aktuell
+        label: Patchstand Server & Hypervisor aktuell
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: patchstand_server
+          max_punkte: 15
+        werte:
+          - wert: ja
+            punkte: 15
+            textbaustein:
+              feststellung: Sicherheits-Patches für Server und Hypervisor werden
+                regelmäßig eingespielt.
+              auswirkung:
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Der Patchstand der Server- und 
+                Virtualisierungsumgebung ist veraltet.
+              auswirkung:
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: dokumentation_vorhanden
+        label: Systemdokumentation vorhanden
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: rechtliche_anforderungen
+          kriterium: dokumentation_server
+          max_punkte: 10
+        werte:
+          - wert: vollstaendig
+            punkte: 10
+            textbaustein:
+              feststellung: Eine vollständige Server- und 
+                Netzwerkkonfigurations-Dokumentation liegt vor.
+              auswirkung:
+          - wert: teilweise
+            punkte: 5
+            textbaustein:
+              feststellung: Die Dokumentation der Serverumgebung ist nur 
+                unvollständig vorhanden.
+              auswirkung:
+          - wert: keine
+            punkte: 0
+            textbaustein:
+              feststellung: Es ist keine Dokumentation der Serverumgebung 
+                vorhanden.
+              auswirkung: Im Störungs- oder Vertretungsfall verzögert die 
+                fehlende Dokumentation die Analyse und Behebung von Fehlern.
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+  - id: ausfall
+    titel: Was passiert bei Ausfall
+    felder:
+      - name: ha_cluster_eingerichtet
+        label: Hochverfügbarkeits-Cluster (HA) eingerichtet
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: ha_cluster_server
+          max_punkte: 15
+        werte:
+          - wert: ja
+            punkte: 15
+            textbaustein:
+              feststellung: Die Virtualisierung ist als hochverfügbares Cluster 
+                mit automatischer Failover-Funktion aufgebaut.
+              auswirkung:
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Es ist kein Hochverfügbarkeits-Cluster vorhanden 
+                (Single Point of Failure bei Hostausfall).
+              auswirkung:
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: redundante_netzteil_stromversorgung
+        label: Redundante Netzteile verbaut
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: netzteil_redundanz_server
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: Die Server-Hosts verfügen über redundante Netzteile.
+              auswirkung:
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Die Server-Hosts besitzen keine redundante 
+                Stromversorgung.
+              auswirkung:
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: raid_konfiguration
+        label: RAID-Absicherung des lokalen/SAN-Speichers
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: raid_server
+          max_punkte: 10
+        werte:
+          - wert: raid_10_oder_6
+            punkte: 10
+            textbaustein:
+              feststellung: Der Datenspeicher ist durch hochredundantes RAID 
+                (RAID 6 / RAID 10) geschützt.
+              auswirkung:
+          - wert: raid_1_oder_5
+            punkte: 5
+            textbaustein:
+              feststellung: Der Datenspeicher ist durch Standard-RAID (RAID 1 / 
+                RAID 5) geschützt.
+              auswirkung:
+          - wert: raid_0_oder_kein_raid
+            punkte: 0
+            textbaustein:
+              feststellung: Der Speicher bietet keine Redundanz (RAID 0 oder 
+                kein RAID).
+              auswirkung:
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+  - id: funktionen
+    titel: Funktionen und Überwachung
+    felder:
+      - name: monitoring_aktiv
+        label: Zentrales Monitoring der Server/VMs aktiv
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: monitoring_server
+          max_punkte: 5
+        werte:
+          - wert: ja
+            punkte: 5
+            textbaustein:
+              feststellung: Die Server und virtuellen Maschinen werden 
+                kontinuierlich überwacht.
+              auswirkung:
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Es ist kein automatisches Server-Monitoring 
+                eingerichtet.
+              auswirkung:
+          - wert: unbekannt
+            punkte:
+            textbaustein:
+      - name: snapshot_management
+        label: Reguläres Konsolidieren/Löschen alter VM-Snapshots
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: ja
+            textbaustein:
+              feststellung: VM-Snapshots werden regelmäßig bereinigt.
+              auswirkung:
+          - wert: nein
+            textbaustein:
+              feststellung: Alte VM-Snapshots verbleiben unbeaufsichtigt auf dem
+                Datenspeicher.
+              auswirkung:
+          - wert: unbekannt
+            textbaustein:
+      - name: kommentar
+        label: Kommentar
+        typ: mehrzeiliger_text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: intern
