@@ -43,21 +43,34 @@ def offene_punkte_page(request: Request, auftrag_id: str):
             matched_sto = "Allgemein / Unternehmenskontext"
 
         # Determine hardware/component label
+        comp_label = None
         if op.objekt_typ:
             comp_label = _hardware_label(op.objekt_typ)
-        elif op.quelle == "struktur_fehlt":
-            comp_label = "Fehlende Erfassung"
-        elif op.quelle == "dokument":
-            comp_label = "Dokumentenanforderungen"
-        elif "Objekt '" in op.text:
-            try:
-                comp_label = op.text.split("Objekt '")[1].split("'")[0]
-            except IndexError:
-                comp_label = "Standort-Stammdaten & Anbindung"
-        elif "Firewall" in op.text or "firewall" in op.ziel_url:
-            comp_label = "Firewall-System"
         else:
-            comp_label = "Standort-Stammdaten & Anbindung"
+            obj_match = None
+            if "Objekt '" in op.text:
+                try:
+                    obj_name = op.text.split("Objekt '")[1].split("'")[0]
+                    obj_match = next((o for o in objekte if o.bezeichnung == obj_name), None)
+                except IndexError:
+                    pass
+            if not obj_match and op.ziel_url:
+                for o in objekte:
+                    if o.id in op.ziel_url:
+                        obj_match = o
+                        break
+            if obj_match:
+                comp_label = _hardware_label(obj_match.typ)
+
+        if not comp_label:
+            if op.quelle == "struktur_fehlt":
+                comp_label = "Fehlende Erfassung"
+            elif op.quelle == "dokument":
+                comp_label = "Dokumentenanforderungen"
+            elif "Firewall" in op.text or "firewall" in (op.ziel_url or ""):
+                comp_label = "Firewall-System"
+            else:
+                comp_label = "Standort-Stammdaten & Anbindung"
 
         if comp_label not in grouped[matched_sto]:
             grouped[matched_sto][comp_label] = []
