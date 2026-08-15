@@ -52,14 +52,26 @@ def test_grundlage_optionen_enthalten_analyse_in_richtiger_reihenfolge():
 
 
 def test_grundlage_steht_nur_noch_an_einer_stelle():
-    """Vorher war die Liste in beiden Templates hart kodiert. Wenn hier wieder
-    ein literaler Eintrag auftaucht, ist die Zentralisierung aufgeweicht."""
-    for name in ("list.html", "edit.html"):
-        inhalt = (TEMPLATE_DIR / name).read_text(encoding="utf-8")
-        for wert in GRUNDLAGE_OPTIONS:
-            if wert == "Sonstiges":
-                continue  # bleibt als Vorauswahl-Bedingung im Anlege-Dialog
-            assert wert not in inhalt, f"{name} kodiert '{wert}' wieder hart"
+    """Vorher war die Liste in mehreren Templates hart kodiert. Wenn irgendwo
+    wieder ein literaler Eintrag auftaucht, ist die Zentralisierung aufgeweicht.
+
+    Bewusst über alle Templates statt über feste Dateinamen: die ursprüngliche
+    Fassung prüfte `edit.html`, das beim Aufteilen in `stammdaten.html` und
+    `unternehmenskontext.html` (#303) verschwand — der Test wäre damit
+    stillschweigend an einer nicht mehr existierenden Datei vorbeigelaufen.
+
+    Geprüft wird nur auf „Ausschreibung" und „Rahmenvertrag": diese beiden
+    Begriffe kommen ausschliesslich in dieser Auswahlliste vor. „Analyse" und
+    „Angebot" wären mehrdeutig — sie stecken als Teilwort auch in
+    „Analysebericht" (`export/index.html`) und im Maßnahmenkatalog."""
+    eindeutige_werte = ["Ausschreibung", "Rahmenvertrag"]
+    assert set(eindeutige_werte) <= set(GRUNDLAGE_OPTIONS), \
+        "Sentinel-Werte müssen Teil der Optionsliste bleiben"
+
+    for pfad in sorted(TEMPLATE_DIR.parent.rglob("*.html")):
+        inhalt = pfad.read_text(encoding="utf-8")
+        for wert in eindeutige_werte:
+            assert wert not in inhalt, f"{pfad.name} kodiert '{wert}' wieder hart"
 
 
 def test_anlegedialog_bietet_analyse_an():
@@ -102,10 +114,11 @@ def test_neuer_auftrag_ohne_angabe_ist_intern():
 
 
 def test_einstellungen_ohne_angabe_fallen_auf_intern_zurueck():
+    """Seit #303 heisst die Route /stammdaten statt /einstellungen."""
     from app.services.storage import storage
 
     auftrag_id = _auftrag_anlegen("auf-karte-302", vertraulichkeit_default="anonymisiert")
-    res = client.post(f"/auftrag/{auftrag_id}/einstellungen", data={
+    res = client.post(f"/auftrag/{auftrag_id}/stammdaten", data={
         "kunde": "Test GmbH",
         "bezeichnung": "Karte 302",
     }, follow_redirects=True)
