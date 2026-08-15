@@ -34,3 +34,17 @@ def test_csv_exporter():
     csv_out = exporter.export_massnahmenkatalog_csv([m])
     assert "USV Erneuern" in csv_out
     assert "1500.00" in csv_out
+
+def test_docx_exporter():
+    exporter = ExporterService()
+    auftrag = Auftrag(id="a1", projekt_nummer="P100", kunde="Musterkunde", bezeichnung="IT-Check")
+    sto = Standort(id="sto-1", auftrag_id="a1", bezeichnung="Zentrale")
+    fw = TechnikObjekt(
+        id="fw-1", typ="firewall", bezeichnung="FW 1", auftrag_id="a1", standort_id="sto-1",
+        vertraulichkeit="kundentauglich",
+        daten={"hersteller": "Fortinet", "hardware_alter": "1_bis_3_jahre"}
+    )
+    docx_stream = exporter.export_analysebericht_docx(auftrag, [sto], [fw], [], ziel_vertraulichkeit="kundentauglich")
+    assert docx_stream is not None
+    assert docx_stream.getbuffer().nbytes > 0
+

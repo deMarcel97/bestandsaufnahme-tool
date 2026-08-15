@@ -1,5 +1,6 @@
 from datetime import datetime, date
 from typing import List, Dict, Any, Optional, Tuple
+from app.models.standort import Standort
 from app.models.technik import TechnikObjekt
 from app.models.bewertung import (
     KriteriumBewertung, KategorieBewertung, GesamtBewertung
@@ -11,7 +12,8 @@ class EvaluatorService:
     def evaluate_auftrag(
         self,
         aktive_bausteine: List[str],
-        objekte: List[TechnikObjekt]
+        objekte: List[TechnikObjekt],
+        standorte: Optional[List[Standort]] = None
     ) -> GesamtBewertung:
         """
         Calculates category scores, overall score, coverage rate, worst location, and scale rating.
@@ -133,7 +135,8 @@ class EvaluatorService:
         if standort_scores:
             worst_sto_id = min(standort_scores.keys(), key=lambda k: standort_scores[k][2])
             schlechtester_id = worst_sto_id
-            schlechtester_bez = worst_sto_id
+            standort_map = {s.id: s.bezeichnung for s in standorte} if standorte else {}
+            schlechtester_bez = standort_map.get(worst_sto_id, worst_sto_id)
             schlechtester_pct = round(standort_scores[worst_sto_id][2], 1)
 
         # Process categories

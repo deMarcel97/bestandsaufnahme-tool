@@ -66,7 +66,7 @@ class ExporterService:
             ]
             auftrag_copy = auftrag
 
-        filtered_bewertung = evaluator_service.evaluate_auftrag(auftrag.aktive_bausteine, filtered_objekte)
+        filtered_bewertung = evaluator_service.evaluate_auftrag(auftrag.aktive_bausteine, filtered_objekte, filtered_standorte)
         return auftrag_copy, filtered_standorte, filtered_objekte, filtered_bewertung
 
     def _filter_findings(

@@ -74,7 +74,7 @@ def download_export(auftrag_id: str, filename: str, ziel_vertraulichkeit: Option
         return Response(content=content, media_type="text/csv", headers={"Content-Disposition": f"attachment; filename=massnahmen_{auftrag_id}.csv"})
 
     elif filename == "summary.md":
-        bewertung = evaluator_service.evaluate_auftrag(auftrag.aktive_bausteine, objekte)
+        bewertung = evaluator_service.evaluate_auftrag(auftrag.aktive_bausteine, objekte, standorte)
         content = exporter_service.export_managementsummary(auftrag, standorte, objekte, findings, massnahmen, bewertung, ziel_vertraulichkeit)
         return Response(content=content, media_type="text/markdown", headers={"Content-Disposition": f"attachment; filename=summary_{auftrag_id}.md"})
 
