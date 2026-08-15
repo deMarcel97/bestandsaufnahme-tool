@@ -11,7 +11,7 @@
         <span>{{ auftrag.projekt_nummer }}</span><span class="sep">/</span><span>{{ schema.bezeichnung_anzeige }}</span>
       </div>
       <h1>{% if obj %}{{ obj.bezeichnung }}{% else %}Neue {{ schema.bezeichnung_anzeige }}{% endif %}</h1>
-      <div class="meta-line"><span>{% if obj %}Gerät bearbeiten{% else %}Gerät erfassen{% endif %}</span></div>
+      <div class="meta-line"><span>{% if obj %}Objekt bearbeiten{% else %}Objekt erfassen{% endif %}</span></div>
     </div>
     <a href="/auftrag/{{ auftrag.id }}" class="btn" style="flex:none;">Zurück zum Auftrag</a>
   </div>
@@ -238,6 +238,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const wert = el.dataset.swWert;
     const sourceEl = document.querySelector(`[name="${feld}"]`);
     if (!sourceEl) return true;
+
+    // Verkettete Bedingungen (z.B. Kategorie -> Anbieter -> Anbieter-Freitext): Ist das
+    // Quellfeld selbst über eine eigene sichtbar_wenn-Bedingung ausgeblendet, gilt diese
+    // Bedingung ebenfalls als nicht erfüllt — unabhängig vom (evtl. veralteten) Feldwert.
+    const sourceGroup = sourceEl.closest("[data-sw-feld]");
+    if (sourceGroup && sourceGroup !== el && sourceGroup.style.display === "none") {
+      return false;
+    }
+
     const val = sourceEl.value;
     switch (operator) {
       case "gleich": return String(val).toLowerCase() === String(wert).toLowerCase();

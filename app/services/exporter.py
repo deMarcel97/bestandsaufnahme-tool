@@ -42,7 +42,7 @@ class ExporterService:
         if target_level == VertraulichkeitsStufe.ANONYMISIERT:
             filtered_objekte = [copy.deepcopy(o) for o in objekte]
             for idx, o in enumerate(filtered_objekte, start=1):
-                o.bezeichnung = f"Gerät {idx} ({o.typ.capitalize()})"
+                o.bezeichnung = f"Objekt {idx} ({o.typ.capitalize()})"
                 if o.betreut_durch == "Dritter":
                     o.betreut_durch = "[Dienstleister Anonymisiert]"
 

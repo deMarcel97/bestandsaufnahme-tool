@@ -14,9 +14,7 @@ NEW_TYPES = [
     "netzwerkschrank",
     "clients",
     "m365_security",
-    "crm",
-    "dms",
-    "erp"
+    "software"
 ]
 
 def test_all_new_schemas_loaded():
@@ -136,17 +134,8 @@ def test_rule_evaluation_new_types():
             "audit_logging_aktiv": "nein",
             "dokumentation_vorhanden": "keine"
         },
-        "crm": {
-            "wartungsvertrag_support_vorhanden": "nein",
-            "datensicherung_vorhanden": "nein",
-            "dokumentation_vorhanden": "keine"
-        },
-        "dms": {
-            "wartungsvertrag_support_vorhanden": "nein",
-            "datensicherung_vorhanden": "nein",
-            "dokumentation_vorhanden": "keine"
-        },
-        "erp": {
+        "software": {
+            "kategorie": "CRM",
             "wartungsvertrag_support_vorhanden": "nein",
             "datensicherung_vorhanden": "nein",
             "dokumentation_vorhanden": "keine"

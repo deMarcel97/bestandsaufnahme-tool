@@ -87,7 +87,7 @@ class ProgressService:
             label = schema.get("bezeichnung_anzeige", typ.capitalize()) if schema else typ.capitalize()
             consolidated.append(OffenerPunktItem(
                 id=f"op-struktur-fehlt-{typ}",
-                text=f"{label} fehlt — noch kein Gerät erfasst",
+                text=f"{label} fehlt — noch kein Objekt erfasst",
                 status="offen",
                 quelle="struktur_fehlt",
                 ziel_url=f"/auftrag/{auftrag.id}/objekt/neu?typ={typ}",
@@ -109,7 +109,7 @@ class ProgressService:
                     if val == "rueckfrage":
                         consolidated.append(OffenerPunktItem(
                             id=f"op-rf-{obj.id}-{fname}",
-                            text=f"Rückfrage erforderlich bei '{flabel}' für Gerät '{obj.bezeichnung}'",
+                            text=f"Rückfrage erforderlich bei '{flabel}' für Objekt '{obj.bezeichnung}'",
                             status="offen",
                             quelle="rueckfrage",
                             ziel_url=f"/auftrag/{auftrag.id}/objekt/{obj.typ}/{obj.id}#field_{fname}",
@@ -119,7 +119,7 @@ class ProgressService:
                     elif feldef.get("regelrelevant", False) and (val is None or val == "" or val == "unbekannt"):
                         consolidated.append(OffenerPunktItem(
                             id=f"op-rr-{obj.id}-{fname}",
-                            text=f"Regelrelevantes Feld '{flabel}' ist unvollständig/unbekannt bei Gerät '{obj.bezeichnung}'",
+                            text=f"Regelrelevantes Feld '{flabel}' ist unvollständig/unbekannt bei Objekt '{obj.bezeichnung}'",
                             status="offen",
                             quelle="regelrelevant_leer",
                             ziel_url=f"/auftrag/{auftrag.id}/objekt/{obj.typ}/{obj.id}#field_{fname}",

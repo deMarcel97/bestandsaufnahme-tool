@@ -8,7 +8,7 @@ Ein spezialisiertes Web-Tool für IT-Systemhäuser zur strukturierten Erfassung,
 
 ## 🚀 Übersicht & Hauptfunktionen
 
-- **Strukturierte Erfassung**: Formularbasierte Bestandsaufnahme für **11 IT-Infrastruktur-Kategorien** (Firewall, USV, Serverraum, Netzwerkschrank, Switch, Access Points, M365 Security, Clients, Backup/Storage, Server & Virtualisierung, Business-Software (CRM, DMS, ERP)).
+- **Strukturierte Erfassung**: Formularbasierte Bestandsaufnahme für **11 IT-Infrastruktur-Kategorien** (Firewall, USV, Serverraum, Netzwerkschrank, Switch, Access Points, M365 Security, Clients, Backup/Storage, Server & Virtualisierung, Software (Kategorie CRM, DMS oder ERP wählbar)).
 - **Automatische Risiko-Analyse (Rule Engine)**: Überprüft Erfassungsdaten gegen konfigurierbare Regelwerke in `rules/*.yaml` und deckt Schwachstellen, Risiken und Abweichungen automatisch auf.
 - **Bewertungssystem**: Berechnet Ampel-Scores und Gesamteinschätzungen zur IT-Sicherheit und Operational Readiness pro Standort und Kunde.
 - **Berichtsexport (.docx)**: Erzeugt mit `python-docx` strukturierte Kundenberichte inklusive Handlungsempfehlungen.

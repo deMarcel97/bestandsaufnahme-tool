@@ -48,9 +48,9 @@ def offene_punkte_page(request: Request, auftrag_id: str):
             comp_label = "Fehlende Erfassung"
         elif op.quelle == "dokument":
             comp_label = "Dokumentenanforderungen"
-        elif "Gerät '" in op.text:
+        elif "Objekt '" in op.text:
             try:
-                comp_label = op.text.split("Gerät '")[1].split("'")[0]
+                comp_label = op.text.split("Objekt '")[1].split("'")[0]
             except IndexError:
                 comp_label = "Standort-Stammdaten & Anbindung"
         elif "Firewall" in op.text or "firewall" in op.ziel_url:

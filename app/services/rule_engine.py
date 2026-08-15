@@ -216,7 +216,7 @@ class RuleEngine:
                     f_anchor = f"#field_{c_fields[0]}" if c_fields else ""
                     new_open_points.append(OffenerPunktItem(
                         id=f"op-{fid}",
-                        text=f"Offener Punkt für Regel '{r['befund']}' bei Gerät '{obj.bezeichnung}': Unvollständige Angaben.",
+                        text=f"Offener Punkt für Regel '{r['befund']}' bei Objekt '{obj.bezeichnung}': Unvollständige Angaben.",
                         status="offen",
                         quelle="regelrelevant_leer",
                         ziel_url=f"/auftrag/{auftrag_id}/objekt/{obj.typ}/{obj.id}{f_anchor}",

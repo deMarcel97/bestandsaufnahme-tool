@@ -5,6 +5,7 @@ from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.schema_loader import schema_loader
 from app.services.slug import generate_slug_id
+from app.services.rule_engine import ConditionEvaluator
 from app.models.technik import TechnikObjekt
 from app.utils.number_parser import parse_float_german, parse_int_german
 
@@ -72,6 +73,17 @@ def _parse_liste_field(form_data, feldef: dict) -> list:
             rows.append(row)
     return rows
 
+def _ist_sichtbar(feldef: dict, daten: dict) -> bool:
+    """Prüft die 'sichtbar_wenn'-Bedingung eines Feldes gegen die bereits eingesammelten
+    Daten. Felder ohne Bedingung gelten als sichtbar. Setzt voraus, dass das steuernde
+    Feld in der 'felder'-Liste des Schemas vor dem abhängigen Feld definiert ist (wie in
+    allen bestehenden Schemas der Fall)."""
+    sichtbar_wenn = feldef.get("sichtbar_wenn")
+    if not sichtbar_wenn:
+        return True
+    satisfied, _ = ConditionEvaluator.evaluate_condition(sichtbar_wenn, daten)
+    return satisfied
+
 @router.get("/auftrag/{auftrag_id}/objekt/neu")
 def new_objekt_form(request: Request, auftrag_id: str, typ: str = "firewall", standort_id: str = ""):
     auftrag = storage.load_auftrag(auftrag_id)
@@ -118,7 +130,7 @@ async def new_objekt_submit(request: Request, auftrag_id: str, typ: str = "firew
         return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
 
     form_data = await request.form()
-    bezeichnung = form_data.get("bezeichnung", f"{typ.capitalize()} Gerät")
+    bezeichnung = form_data.get("bezeichnung", f"{typ.capitalize()} Objekt")
     standort_id = form_data.get("standort_id", "")
     betreut_durch = form_data.get("betreut_durch", "Kunde")
     dienstleister_name = form_data.get("dienstleister_name", "")
@@ -135,6 +147,13 @@ async def new_objekt_submit(request: Request, auftrag_id: str, typ: str = "firew
         for abschnitt in schema.get("abschnitte", []):
             for feldef in abschnitt.get("felder", []):
                 fname = feldef.get("name")
+                if not _ist_sichtbar(feldef, daten):
+                    # Feld ist aktuell per sichtbar_wenn ausgeblendet (z.B. Anbieter einer
+                    # nicht gewählten Software-Kategorie) — verworfener/veralteter
+                    # Formularwert wird nicht übernommen, damit keine widersprüchlichen
+                    # Textbausteine im Bericht landen.
+                    daten[fname] = None
+                    continue
                 if feldef.get("typ") == "liste":
                     daten[fname] = _parse_liste_field(form_data, feldef)
                 elif fname in form_data:
@@ -204,6 +223,11 @@ async def edit_objekt_submit(request: Request, auftrag_id: str, typ: str, objekt
         for abschnitt in schema.get("abschnitte", []):
             for feldef in abschnitt.get("felder", []):
                 fname = feldef.get("name")
+                if not _ist_sichtbar(feldef, obj.daten):
+                    # Siehe new_objekt_submit: ausgeblendete Felder (sichtbar_wenn nicht
+                    # erfüllt) verwerfen veraltete Werte statt sie zu übernehmen.
+                    obj.daten[fname] = None
+                    continue
                 if feldef.get("typ") == "liste":
                     obj.daten[fname] = _parse_liste_field(form_data, feldef)
                 elif fname in form_data:
