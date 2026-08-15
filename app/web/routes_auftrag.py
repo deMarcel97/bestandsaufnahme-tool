@@ -1,21 +1,19 @@
 import html
 from fastapi import APIRouter, Request, Form, Response
 from fastapi.responses import RedirectResponse, HTMLResponse
-from fastapi.templating import Jinja2Templates
 from pathlib import Path
-from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.schema_loader import schema_loader
 from app.services.slug import generate_slug_id
 from app.services.rule_engine import rule_engine
 from app.services.evaluator import evaluator_service
 from app.services.progress import progress_service
+from app.web.templates import templates
 from app.web.shared_context import build_sidebar_context
 from app.models.auftrag import Auftrag, Termine, Unternehmenskontext
 from app.utils.number_parser import parse_int_german, parse_float_german
 
 router = APIRouter()
-templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
 
 STATUS_OPTIONS = ["Vorbereitung", "Erfassung", "Konsolidierung", "Bewertung", "Abgabe"]
 

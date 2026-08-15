@@ -4,6 +4,16 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.1] - 2026-08-15
+
+### Added
+- **Version in der Oberfläche sichtbar (#301)**: Die laufende Version steht jetzt dezent in der Kopfzeile (`v2.7.1`), sodass sich auf einen Blick prüfen lässt, welcher Stand auf dem Server tatsächlich läuft. Neue Konstante `APP_VERSION` in `app/config.py` ist dafür die Quelle — auch für den FastAPI-Titel. Neue Tests (`tests/test_version.py`) halten `app/config.py`, `pyproject.toml`, README und CHANGELOG auf derselben Nummer.
+- **Gemeinsame Template-Instanz (#301)**: Die acht Route-Module legten jeweils ihre eigene `Jinja2Templates`-Instanz an — achtmal dieselbe Zeile, und keine Stelle, an der sich etwas für alle Templates hinterlegen lässt. Neu: `app/web/templates.py` mit einer gemeinsamen Instanz, über die die Version als Jinja-Global in jedem Template ankommt, ohne dass eine Route sie durchreichen muss.
+
+### Fixed
+- **`update.sh` überschrieb sich während der Ausführung (#301)**: Das Skript aktualisiert per `git pull` unter anderem sich selbst. Da Bash Skripte häppchenweise nachliest, konnte der Rest nach einer Größenänderung der Datei an der falschen Byte-Position weiterlaufen. Der gesamte Ablauf steckt jetzt in einer Funktion, die Bash vollständig einliest, bevor sie startet.
+- **Laute Health-Check-Ausgabe (#301)**: Die Retry-Schleife in `install.sh`/`update.sh` gab bei jedem Fehlversuch einen `curl`-Fehler aus, obwohl die ersten Sekunden beim Hochfahren normal fehlschlagen — das las sich wie ein gescheiterter Lauf. Fehler werden während der Schleife unterdrückt; scheitert der Check wirklich, erscheinen unverändert die `journalctl`-Logs.
+
 ## [2.7.0] - 2026-08-15
 
 ### Added

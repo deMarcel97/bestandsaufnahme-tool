@@ -3,7 +3,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import PlainTextResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
-from app.config import BASE_DIR, AUTH_ENABLED, SESSION_SECRET_KEY
+from app.config import BASE_DIR, AUTH_ENABLED, SESSION_SECRET_KEY, APP_VERSION
 from app.web import (
     routes_auftrag,
     routes_standort,
@@ -16,7 +16,7 @@ from app.web import (
     routes_auth
 )
 
-app = FastAPI(title="IT-Bestandsaufnahme Tool", version="2.7.0")
+app = FastAPI(title="IT-Bestandsaufnahme Tool", version=APP_VERSION)
 
 UNSAFE_METHODS = {"POST", "PUT", "DELETE", "PATCH"}
 PUBLIC_PATH_PREFIXES = ("/auth/", "/static/")

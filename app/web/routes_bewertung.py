@@ -1,13 +1,11 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
-from fastapi.templating import Jinja2Templates
-from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.evaluator import evaluator_service
+from app.web.templates import templates
 from app.web.shared_context import build_sidebar_context
 
 router = APIRouter()
-templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
 
 @router.get("/auftrag/{auftrag_id}/bewertung")
 def bewertung_dashboard(request: Request, auftrag_id: str):

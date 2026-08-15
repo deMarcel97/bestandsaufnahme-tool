@@ -65,8 +65,21 @@ ohne Flag bricht bei uncommitteten Änderungen bewusst ab, statt sie zu
    `fix/<id>-<slug>`, PR-Titel `#<id> — <Kurzbeschreibung>`, CHANGELOG-Eintrag
    mit `(#<id>)`. Beispiele: `feature/301-server-deployment`,
    `fix/295-ampelfarben-standort`.
-3. **Version bumpen + Dokumentation** bei jeder nennenswerten Änderung:
-   `pyproject.toml`, `app/main.py`, README-Kopf und `CHANGELOG.md` (SemVer).
+3. **Version bumpen + Dokumentation** bei jeder nennenswerten Änderung.
+   **Im Normalfall nur die letzte Stelle** (PATCH: 2.7.1 → 2.7.2) — es gibt
+   derzeit viele kleine Änderungen, und die mittlere Stelle soll nicht unnötig
+   hochlaufen. MINOR nur bei wirklich neuer, abgeschlossener Funktionalität,
+   MAJOR nur bei Breaking Changes.
+
+   Anzuheben sind vier Stellen — `tests/test_version.py` schlägt fehl, wenn
+   eine vergessen wird:
+
+   | Datei | Stelle |
+   |---|---|
+   | `app/config.py` | `APP_VERSION` (Quelle für Oberfläche und FastAPI-Titel) |
+   | `pyproject.toml` | `version` |
+   | `README.md` | Überschrift und „Aktuelle Version" |
+   | `CHANGELOG.md` | neuer `## [x.y.z]`-Abschnitt |
 4. **Lokal *und* GitHub.** Jede Änderung landet sowohl im lokalen
    Dev-Checkout als auch als gepushter PR — nie nur in einem von beidem.
 5. **Bei Fragen zu Feldabhängigkeiten und UX erst besprechen**, nicht direkt

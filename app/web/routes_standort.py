@@ -1,17 +1,15 @@
 from datetime import date
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse
-from fastapi.templating import Jinja2Templates
-from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.slug import generate_slug_id
 from app.services.rule_engine import rule_engine
+from app.web.templates import templates
 from app.web.shared_context import build_sidebar_context
 from app.models.standort import Standort, Internetanbindung
 from app.utils.number_parser import parse_float_german, parse_int_german
 
 router = APIRouter()
-templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
 
 def _parse_anbindungen_from_form(form_data) -> list[Internetanbindung]:
     anbindungen = []

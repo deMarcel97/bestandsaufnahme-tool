@@ -1,14 +1,12 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
-from fastapi.templating import Jinja2Templates
-from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.progress import progress_service
 from app.services.schema_loader import schema_loader
+from app.web.templates import templates
 from app.web.shared_context import build_sidebar_context
 
 router = APIRouter()
-templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
 
 def _hardware_label(typ: str) -> str:
     schema = schema_loader.get_schema(typ)

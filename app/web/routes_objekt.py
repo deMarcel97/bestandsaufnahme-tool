@@ -1,17 +1,15 @@
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse
-from fastapi.templating import Jinja2Templates
-from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.schema_loader import schema_loader
 from app.services.slug import generate_slug_id
 from app.services.rule_engine import ConditionEvaluator
+from app.web.templates import templates
 from app.web.shared_context import build_sidebar_context
 from app.models.technik import TechnikObjekt
 from app.utils.number_parser import parse_float_german, parse_int_german
 
 router = APIRouter()
-templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
 
 def _collect_objekt_referenz_candidates(auftrag_id: str, schema: dict) -> dict:
     """Baut für jedes 'objekt_referenz'-Feld im Schema die Liste wählbarer Zielobjekte
