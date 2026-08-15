@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.5] - 2026-08-15
+
+### Fixed
+- **Reihenfolge von Standorten, Objekten und Aufträgen war zufällig (#304)**: `list_standorte()`, `list_objekte()` und `list_auftraege()` in `app/services/storage.py` gaben die Einträge in der Reihenfolge zurück, in der `glob()` bzw. `iterdir()` sie vom Dateisystem bekamen. Das ist auf APFS die Hash-Reihenfolge der Verzeichniseinträge — weder alphabetisch noch nach Anlagezeitpunkt, abhängig vom Dateisystem, und sie ändert sich, sobald Einträge dazukommen oder wegfallen. In der Oberfläche sah das aus, als springe die Standortliste nach jedem Speichern. Die drei Listen sind jetzt fest sortiert: Standorte alphabetisch nach Bezeichnung (die Spalte, die der Benutzer sieht — die `id` ist nur der Slug der Bezeichnung zum Zeitpunkt der Anlage und würde nach einer Umbenennung falsch einsortieren), Objekte nach Typ und dann Bezeichnung (entspricht den ersten beiden Spalten der Objekttabelle, gleichartige Objekte stehen damit beieinander), Aufträge nach Kunde und dann Bezeichnung (die automatisch vergebenen Projektnummern `PROJEKT-2`/`PROJEKT-10` würden sich alphabetisch falsch einsortieren). Sortiert wird über einen gemeinsamen Schlüssel, der Groß-/Kleinschreibung ignoriert und Umlaute wie `ae/oe/ue` einordnet — dieselbe Transliteration, die auch die IDs erzeugt; die `id` als letztes Kriterium hält gleichnamige Einträge stabil.
+
 ## [2.7.1] - 2026-08-15
 
 ### Added
