@@ -1,8 +1,8 @@
-# IT-Bestandsaufnahme-Tool (v2.6.0)
+# IT-Bestandsaufnahme-Tool (v2.7.1)
 
 Ein spezialisiertes Web-Tool für IT-Systemhäuser zur strukturierten Erfassung, automatischen Risikobewertung und professionellen Berichtserstellung von IT-Kundeninfrastrukturen.
 
-> Aktuelle Version: **2.6.0** — Änderungshistorie siehe [CHANGELOG.md](CHANGELOG.md).
+> Aktuelle Version: **2.7.1** — Änderungshistorie siehe [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
@@ -59,28 +59,88 @@ Die Anwendung ist anschließend im Browser erreichbar unter:
 
 ---
 
-## 🌐 Produktiv-Deployment auf einem Webserver
+## 🌐 Produktiv-Deployment auf einem Server
 
-Für den Betrieb auf einem echten Webserver (statt des lokalen Single-User-
-Dev-Servers) liegt ein `Dockerfile` bei:
+### Variante A: Debian/Ubuntu-Server (empfohlen)
+
+Für den Betrieb auf einem Ubuntu-/Debian-VPS liegt ein Install-Skript bei. Es
+richtet ein Dienstkonto, ein Virtualenv, einen systemd-Service und einen
+nginx-Reverse-Proxy ein:
+
+```bash
+git clone https://github.com/deMarcel97/bestandsaufnahme-tool.git
+```
+
+```bash
+sudo SERVER_NAME=bestandsaufnahme.firma.de ALLOW_CIDRS="10.0.0.0/8 192.168.0.0/16" ./bestandsaufnahme-tool/deploy/install.sh
+```
+
+Das Skript ist **idempotent** — es kann beliebig oft laufen und überschreibt
+dabei weder Kundendaten noch eingetragene Secrets.
+
+| Variable       | Default                                | Bedeutung                                        |
+|----------------|----------------------------------------|--------------------------------------------------|
+| `SERVER_NAME`  | `_`                                    | Hostname der nginx-Site (`_` = beliebiger Host)  |
+| `ALLOW_CIDRS`  | RFC1918-Netze                          | Quell-Netze, die zugreifen dürfen                |
+| `APP_DIR`      | `/opt/bestandsaufnahme-tool`           | Code-Checkout                                    |
+| `DATA_DIR`     | `/var/lib/bestandsaufnahme-tool/data`  | Auftragsdaten (bleiben bei Updates unangetastet) |
+| `ENV_FILE`     | `/etc/bestandsaufnahme-tool/app.env`   | Konfiguration & Secrets                          |
+| `PORT`         | `8000`                                 | Port, auf dem uvicorn lokal lauscht              |
+| `BRANCH`       | `main`                                 | Auszurollender Git-Branch                        |
+| `SKIP_NGINX`   | `0`                                    | `1` = keinen Reverse Proxy einrichten            |
+
+Nach der Installation:
+
+```bash
+systemctl status bestandsaufnahme-tool
+journalctl -u bestandsaufnahme-tool -f
+```
+
+> ⚠️ **Zugriffsschutz:** Solange kein Entra-ID-Login konfiguriert ist (siehe
+> unten), ist die IP-Beschränkung in der nginx-Site die **einzige**
+> Zugriffskontrolle vor den Kundendaten. `install.sh` bricht deshalb bewusst
+> ab, wenn `ALLOW_CIDRS` leer ist. Bevor das Tool aus dem offenen Internet
+> erreichbar sein soll, muss Entra ID aktiviert **und** TLS eingerichtet sein
+> (z.B. `sudo certbot --nginx -d bestandsaufnahme.firma.de`).
+
+### Auf dem Server arbeiten & aktualisieren
+
+Der Code liegt als normaler Git-Checkout in `/opt/bestandsaufnahme-tool`,
+damit direkt auf dem Server entwickelt und getestet werden kann:
+
+```bash
+sudo /opt/bestandsaufnahme-tool/deploy/update.sh
+```
+
+Holt den aktuellen Stand von GitHub, installiert bei Bedarf geänderte
+Abhängigkeiten nach und startet den Dienst neu. Wurden Dateien direkt auf dem
+Server bearbeitet, verhindert das Skript den Überschreib-Unfall und bricht ab —
+für diesen Fall gibt es:
+
+```bash
+sudo /opt/bestandsaufnahme-tool/deploy/update.sh --restart
+```
+
+Das startet nur den Dienst neu und lässt lokale Änderungen unberührt.
+
+### Variante B: Docker
+
+Alternativ liegt ein `Dockerfile` bei:
 
 ```bash
 docker build -t bestandsaufnahme-tool .
-docker run -d \
-  -p 8000:8000 \
-  -v /pfad/zu/persistenten/daten:/srv/app/data \
-  -e ENTRA_TENANT_ID=... \
-  -e ENTRA_CLIENT_ID=... \
-  -e ENTRA_CLIENT_SECRET=... \
-  -e SESSION_SECRET_KEY=... \
-  bestandsaufnahme-tool
+```
+
+```bash
+docker run -d -p 8000:8000 -v /pfad/zu/persistenten/daten:/srv/app/data bestandsaufnahme-tool
 ```
 
 Der Container lauscht auf Port 8000 und sollte hinter einem Reverse Proxy
 (TLS-Terminierung, z.B. nginx/Caddy/Traefik) betrieben werden. Das
 `/srv/app/data`-Verzeichnis enthält alle Auftragsdaten und muss auf ein
 persistentes Volume gemountet werden, sonst gehen die Daten beim
-Container-Neustart verloren.
+Container-Neustart verloren. Die `ENTRA_*`- und `SESSION_SECRET_KEY`-Variablen
+werden wie unten beschrieben per `-e` übergeben.
 
 ### Entra ID (Azure AD) Single Sign-On
 
@@ -95,6 +155,16 @@ lokales Tool ohne Login weiter:
 | `ENTRA_CLIENT_ID`      | Client-/Application-ID der App-Registrierung                        |
 | `ENTRA_CLIENT_SECRET`  | Client Secret der App-Registrierung                                  |
 | `SESSION_SECRET_KEY`   | Fester geheimer Schlüssel zur Cookie-Signierung (sonst zufällig pro Prozessstart — Sessions überleben dann keinen Neustart/Mehrprozessbetrieb) |
+
+Bei der Server-Installation stehen diese Werte in
+`/etc/bestandsaufnahme-tool/app.env` (bereits als Kommentar vorbereitet). Nach
+dem Eintragen: `sudo systemctl restart bestandsaufnahme-tool`.
+
+Unabhängig vom Login steuert eine weitere Variable, wo die Nutzdaten liegen:
+
+| Variable                      | Beschreibung                                                                                 |
+|-------------------------------|----------------------------------------------------------------------------------------------|
+| `BESTANDSAUFNAHME_DATA_DIR`   | Verzeichnis für Auftragsdaten. Ohne die Variable wird `data/` im Projektverzeichnis genutzt (lokaler Dev-Betrieb). Im Serverbetrieb zeigt sie auf `/var/lib/bestandsaufnahme-tool/data`, damit Code-Updates die Kundendaten nicht berühren. |
 
 Voraussetzung ist eine App-Registrierung im Entra-ID-Tenant (Azure Portal →
 App registrations) mit Redirect-URI `https://<host>/auth/callback`. Sobald
@@ -133,7 +203,9 @@ PYTHONPATH=. pytest
 ├── schemas/                 # YAML-Definitionen der 10 Erfassungsobjekte
 ├── rules/                   # Regelwerke für automatisierte Risikoanalysen
 ├── data/                    # JSON-Datenhaltung (Aufträge, Standorte, Befunde)
+├── deploy/                  # Server-Deployment: install.sh, update.sh, systemd-Unit, nginx-Site
 ├── tests/                   # Automatisierte Unit- & Integrationstests
+├── requirements.txt         # Laufzeit-Abhängigkeiten (Quelle für pyproject, Docker & install.sh)
 ├── pyproject.toml           # Paket- & Abhängigkeitskonfiguration
 └── run.py                   # Server-StarterSkript
 ```

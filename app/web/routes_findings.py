@@ -2,17 +2,15 @@ import logging
 from datetime import datetime
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse
-from fastapi.templating import Jinja2Templates
-from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.slug import generate_slug_id
 from app.services.rule_engine import rule_engine
+from app.web.templates import templates
 from app.web.shared_context import build_sidebar_context
 from app.models.finding import Finding
 from app.models.massnahme import Massnahme
 
 router = APIRouter()
-templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
 
 STUFE_MAP = {"hoch": 1, "mittel": 2, "niedrig": 3, "empfehlung": 3}
 

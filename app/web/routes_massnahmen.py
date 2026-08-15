@@ -1,15 +1,13 @@
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse
-from fastapi.templating import Jinja2Templates
-from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.slug import generate_slug_id
+from app.web.templates import templates
 from app.web.shared_context import build_sidebar_context
 from app.models.massnahme import Massnahme
 from app.utils.number_parser import parse_float_german, parse_int_german
 
 router = APIRouter()
-templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
 
 @router.get("/auftrag/{auftrag_id}/massnahmen")
 def list_massnahmen_page(request: Request, auftrag_id: str):
