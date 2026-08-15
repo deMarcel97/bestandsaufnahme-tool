@@ -139,7 +139,3 @@ PYTHONPATH=. pytest
 ```
 
 ---
-
-## 📝 Lizenz & Autoren
-
-Entwickelt für IT-Systemhäuser zur professionellen Kundenauditierung.
