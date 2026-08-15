@@ -13,7 +13,8 @@ NEW_TYPES = [
     "serverraum",
     "netzwerkschrank",
     "clients",
-    "m365_security"
+    "m365_security",
+    "software"
 ]
 
 def test_all_new_schemas_loaded():
@@ -131,6 +132,12 @@ def test_rule_evaluation_new_types():
             "defender_for_office365_aktiv": "nein",
             "global_admin_anzahl_angemessen": "nein",
             "audit_logging_aktiv": "nein",
+            "dokumentation_vorhanden": "keine"
+        },
+        "software": {
+            "kategorie": "CRM",
+            "wartungsvertrag_support_vorhanden": "nein",
+            "datensicherung_vorhanden": "nein",
             "dokumentation_vorhanden": "keine"
         }
     }

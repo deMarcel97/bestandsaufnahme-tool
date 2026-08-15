@@ -439,7 +439,7 @@ a.kpi:hover { background: var(--hover); }
 .linkact .subtle { color: var(--muted); }
 .linkact a:hover, .linkact button:hover { text-decoration: underline; }
 
-/* ── Menü „+ Gerät“ ──────────────────────────────────────────────────── */
+/* ── Menü „+ Objekt“ ─────────────────────────────────────────────────── */
 .menu {
   position: absolute;
   top: calc(100% + 6px);

@@ -1,0 +1,262 @@
+schema_version: 1
+typ: software
+bezeichnung_anzeige: Software
+berichtskapitel: business_software
+abschnitte:
+  - id: was_ist_es
+    titel: Was ist es
+    felder:
+      - name: kategorie
+        typ: auswahl
+        pflicht: true
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: CRM
+            textbaustein: null
+          - wert: DMS
+            textbaustein: null
+          - wert: ERP
+            textbaustein: null
+
+      - name: anbieter_crm
+        label: Anbieter (CRM)
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: kategorie
+          operator: gleich
+          wert: CRM
+        werte:
+          - wert: Salesforce
+            textbaustein:
+              feststellung: "Als CRM-System kommt Salesforce zum Einsatz."
+              auswirkung: null
+          - wert: Microsoft_Dynamics_365
+            textbaustein:
+              feststellung: "Als CRM-System kommt Microsoft Dynamics 365 zum Einsatz."
+              auswirkung: null
+          - wert: HubSpot
+            textbaustein:
+              feststellung: "Als CRM-System kommt HubSpot zum Einsatz."
+              auswirkung: null
+          - wert: sonstige
+            textbaustein:
+              feststellung: "Als CRM-System kommt eine sonstige Lösung zum Einsatz."
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: anbieter_crm_freitext
+        label: Anbieter CRM (Sonstige)
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: anbieter_crm
+          operator: gleich
+          wert: sonstige
+
+      - name: anbieter_dms
+        label: Anbieter (DMS)
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: kategorie
+          operator: gleich
+          wert: DMS
+        # SharePoint bewusst nicht als DMS-Option aufgeführt — zählt nicht als echtes DMS.
+        werte:
+          - wert: ELO
+            textbaustein:
+              feststellung: "Als Dokumentenmanagementsystem kommt ELO zum Einsatz."
+              auswirkung: null
+          - wert: DocuWare
+            textbaustein:
+              feststellung: "Als Dokumentenmanagementsystem kommt DocuWare zum Einsatz."
+              auswirkung: null
+          - wert: d.velop
+            textbaustein:
+              feststellung: "Als Dokumentenmanagementsystem kommt d.velop zum Einsatz."
+              auswirkung: null
+          - wert: enaio
+            textbaustein:
+              feststellung: "Als Dokumentenmanagementsystem kommt enaio zum Einsatz."
+              auswirkung: null
+          - wert: DATEV_DMS
+            textbaustein:
+              feststellung: "Als Dokumentenmanagement kommt DATEV DMS zum Einsatz — eine kanzleispezifische Lösung für Steuerberater/Wirtschaftsprüfer."
+              auswirkung: null
+          - wert: sonstige
+            textbaustein:
+              feststellung: "Als Dokumentenmanagementsystem kommt eine sonstige Lösung zum Einsatz."
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: anbieter_dms_freitext
+        label: Anbieter DMS (Sonstige)
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: anbieter_dms
+          operator: gleich
+          wert: sonstige
+
+      - name: anbieter_erp
+        label: Anbieter (ERP)
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: kategorie
+          operator: gleich
+          wert: ERP
+        werte:
+          - wert: SAP_S/4HANA
+            textbaustein:
+              feststellung: "Als ERP-System kommt SAP S/4HANA zum Einsatz."
+              auswirkung: null
+          - wert: Microsoft_Dynamics_365_Business_Central
+            textbaustein:
+              feststellung: "Als ERP-System kommt Microsoft Dynamics 365 Business Central zum Einsatz."
+              auswirkung: null
+          - wert: Sage
+            textbaustein:
+              feststellung: "Als ERP-System kommt Sage zum Einsatz."
+              auswirkung: null
+          - wert: sonstige
+            textbaustein:
+              feststellung: "Als ERP-System kommt eine sonstige Lösung zum Einsatz."
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: anbieter_erp_freitext
+        label: Anbieter ERP (Sonstige)
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: anbieter_erp
+          operator: gleich
+          wert: sonstige
+
+      - name: edition_version
+        label: Edition / Version
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+
+      - name: hosting_modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: cloud
+            textbaustein:
+              feststellung: "Die Software wird als Cloud-/SaaS-Lösung betrieben."
+              auswirkung: null
+          - wert: on_premise
+            textbaustein:
+              feststellung: "Die Software wird On-Premise im eigenen Rechenzentrum betrieben."
+              auswirkung: null
+          - wert: hybrid
+            textbaustein:
+              feststellung: "Die Software wird in einer hybriden Konfiguration betrieben."
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+  - id: zustand
+    titel: In welchem Zustand ist es
+    felder:
+      - name: wartungsvertrag_support_vorhanden
+        label: Wartungs-/Supportvertrag vorhanden
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: software_wartungsvertrag_support
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: "Für die Software besteht ein aktiver Wartungs-/Supportvertrag."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Für die Software besteht kein Wartungs-/Supportvertrag."
+              auswirkung: "Bei Störungen oder Fehlern steht kein vereinbarter Herstellersupport zur Verfügung."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: datensicherung_vorhanden
+        label: Datensicherung der Software-Daten vorhanden
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: software_datensicherung
+          max_punkte: 20
+        werte:
+          - wert: ja
+            punkte: 20
+            textbaustein:
+              feststellung: "Die Daten der Software werden regelmäßig gesichert."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Für die Daten der Software besteht keine Datensicherung."
+              auswirkung: "Bei Datenverlust, Fehlbedienung oder Cyberangriff können geschäftskritische Daten (z. B. Kunden-, Vertriebs-, Dokumenten- oder Finanzdaten) unwiederbringlich verloren gehen; je nach Softwarekategorie können zusätzlich revisionssichere Aufbewahrungspflichten verletzt werden."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: dokumentation_vorhanden
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: rechtliche_anforderungen
+          kriterium: software_dokumentation
+          max_punkte: 10
+        werte:
+          - wert: vollstaendig
+            punkte: 10
+            textbaustein:
+              feststellung: "Eine vollständige Dokumentation der Software liegt vor."
+              auswirkung: null
+          - wert: teilweise
+            punkte: 5
+            textbaustein:
+              feststellung: "Die Dokumentation der Software ist nur teilweise vorhanden."
+              auswirkung: null
+          - wert: keine
+            punkte: 0
+            textbaustein:
+              feststellung: "Es liegt keine Dokumentation für die Software vor."
+              auswirkung: "Im Störungs- oder Vertretungsfall verzögert die fehlende Dokumentation die Analyse und Behebung von Fehlern."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null

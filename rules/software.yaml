@@ -1,0 +1,35 @@
+schema_version: 1
+regeln:
+  - id: software-wartungsvertrag-fehlt
+    gilt_fuer: software
+    bedingung:
+      alle:
+        - feld: wartungsvertrag_support_vorhanden
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Für die Software besteht kein Wartungs-/Supportvertrag
+    risiko: Bei Störungen oder Fehlern steht kein vereinbarter Herstellersupport zur Verfügung, wodurch sich Ausfallzeiten verlängern können.
+    empfehlung: Wartungs-/Supportvertrag beim Hersteller oder Dienstleister abschließen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Wartungs-/Supportvertrag für Business-Software abschließen
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
+
+  - id: software-datensicherung-fehlt
+    gilt_fuer: software
+    bedingung:
+      alle:
+        - feld: datensicherung_vorhanden
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Keine Datensicherung für die Software vorhanden
+    risiko: Bei Datenverlust, Fehlbedienung oder Cyberangriff können geschäftskritische Daten unwiederbringlich verloren gehen; je nach Softwarekategorie (CRM/DMS/ERP) können zusätzlich revisionssichere Aufbewahrungspflichten verletzt werden.
+    empfehlung: Regelmäßige, unabhängige Datensicherung für die Software einrichten.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Datensicherung für Business-Software einrichten
+      kosten_richtwert: 500
+      aufwand_richtwert: 4

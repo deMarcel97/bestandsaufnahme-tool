@@ -4,6 +4,16 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.4.0] - 2026-08-15
+
+### Added
+- **Neuer Baustein „Software"**: Ein einzelner, unabhängig aktivierbarer Baustein `software` (`schemas/software.yaml` + `rules/software.yaml`) deckt CRM, DMS (Dokumentenmanagement) und ERP als wählbare **Kategorie** ab, statt drei separate Bausteine im Baustein-Picker zu erzeugen. Nach Auswahl der Kategorie blendet sich per `sichtbar_wenn` nur das passende Anbieter-Dropdown ein (CRM/DMS/ERP-Anbieterliste).
+- **Anbieter-Dropdown mit Freitext-Fallback**: Neues, wiederverwendbares Muster für Software-Hersteller-Felder — ein `auswahl`-Feld mit fester Herstellerliste plus „sonstige" und `unbekannt`, gekoppelt an ein per `sichtbar_wenn` nur bei „sonstige" eingeblendetes Freitextfeld. Dasselbe Prinzip verschachtelt sich für die Kategorie-Auswahl (Kategorie → Anbieter-Dropdown → Sonstige-Freitext). Dieses Muster ist als Vorlage für künftige Software-Hersteller-Felder gedacht.
+- Kategorie DMS unterstützt zusätzlich DATEV DMS als kanzleispezifische Sonderoption (eigener Textbaustein-Hinweis auf die Zielgruppe Steuerberater/Wirtschaftsprüfer); SharePoint wurde bewusst nicht als DMS-Option aufgenommen.
+
+### Changed
+- Nutzerseitige Bezeichnung „Gerät"/„Geräte" in Templates und generierten Texten (Offene Punkte, Findings, Export-Defaults) zu „Objekt"/„Objekte" vereinheitlicht, da mit dem neuen Software-Baustein nicht mehr jedes erfasste Objekt ein physisches Gerät ist.
+
 ## [2.3.0] - 2026-08-15
 
 ### Fixed
