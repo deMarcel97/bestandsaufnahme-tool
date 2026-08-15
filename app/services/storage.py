@@ -123,6 +123,22 @@ class StorageService:
             logging.error(f"Skipping invalid Auftrag in {fpath}: {e}")
             return None
 
+    @staticmethod
+    def sortier_schluessel(text: str) -> str:
+        """Sortierschlüssel für deutschsprachige Bezeichnungen.
+
+        Ohne Aufbereitung sortiert Python nach Zeichencode: Großbuchstaben vor
+        Kleinbuchstaben ('Zentrale' vor 'aachen') und Umlaute hinter 'z'
+        ('Ärztehaus' hinter 'Zentrale'). Beides widerspricht dem, was jemand
+        beim Blick auf eine Standortliste erwartet. casefold() vereinheitlicht
+        die Groß-/Kleinschreibung (und bildet dabei 'ß' auf 'ss' ab), die
+        Umlaut-Ersetzung sortiert 'ä/ö/ü' wie 'ae/oe/ue' ein — dieselbe
+        Transliteration, die auch die IDs erzeugt (app/services/slug.py)."""
+        text = (text or "").casefold()
+        for umlaut, ersatz in (("ä", "ae"), ("ö", "oe"), ("ü", "ue")):
+            text = text.replace(umlaut, ersatz)
+        return text
+
     def list_auftraege(self) -> List[Auftrag]:
         auftraege = []
         for d in self.data_dir.iterdir():
@@ -130,6 +146,14 @@ class StorageService:
                 a = self.load_auftrag(d.name)
                 if a:
                     auftraege.append(a)
+        # Nach Kunde, dann Bezeichnung: die Übersicht ist eine Kundenliste, und
+        # die automatisch vergebenen Projektnummern ('PROJEKT-2', 'PROJEKT-10')
+        # würden sich alphabetisch in der falschen Reihenfolge einsortieren.
+        # Die id als letztes Kriterium hält die Reihenfolge auch dann stabil,
+        # wenn zwei Aufträge Kunde und Bezeichnung teilen.
+        auftraege.sort(key=lambda a: (self.sortier_schluessel(a.kunde),
+                                      self.sortier_schluessel(a.bezeichnung),
+                                      a.id))
         return auftraege
 
     def delete_auftrag(self, auftrag_id: str):
@@ -189,7 +213,7 @@ class StorageService:
         if not d.exists():
             return []
         standorte = []
-        for fpath in d.glob("*.yaml"):
+        for fpath in sorted(d.glob("*.yaml")):
             with open(fpath, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f)
             if data:
@@ -197,6 +221,13 @@ class StorageService:
                     standorte.append(Standort.model_validate(data))
                 except ValidationError as e:
                     logging.error(f"Skipping invalid Standort in {fpath}: {e}")
+        # Alphabetisch nach Bezeichnung — das ist die Spalte, die der Benutzer
+        # in der Oberfläche sieht und nach der er sucht. Die id wäre technisch
+        # naheliegender, ist aber nur der Slug der Bezeichnung zum Zeitpunkt
+        # der Anlage: nach einer Umbenennung würde ein Standort dann an seiner
+        # alten Stelle stehen bleiben. Sie dient hier nur als Tiebreak, damit
+        # zwei gleich benannte Standorte nicht wieder zufällig springen.
+        standorte.sort(key=lambda s: (self.sortier_schluessel(s.bezeichnung), s.id))
         return standorte
 
     def delete_standort(self, auftrag_id: str, standort_id: str):
@@ -259,9 +290,9 @@ class StorageService:
         else:
             target_dirs = [d for d in obj_dir.iterdir() if d.is_dir()]
 
-        for d in target_dirs:
+        for d in sorted(target_dirs):
             if d.exists():
-                for fpath in d.glob("*.yaml"):
+                for fpath in sorted(d.glob("*.yaml")):
                     with open(fpath, "r", encoding="utf-8") as f:
                         data = yaml.safe_load(f)
                     if data:
@@ -269,6 +300,13 @@ class StorageService:
                             result.append(TechnikObjekt.model_validate(data))
                         except ValidationError as e:
                             logging.error(f"Skipping invalid TechnikObjekt in {fpath}: {e}")
+        # Erst nach Typ, dann nach Bezeichnung — genau die Reihenfolge der
+        # beiden ersten Spalten der Objekttabelle je Standort. Dadurch stehen
+        # gleichartige Objekte (alle Switches, alle Access Points) beieinander,
+        # statt sich über die Tabelle zu verteilen.
+        result.sort(key=lambda o: (o.typ,
+                                   self.sortier_schluessel(o.bezeichnung),
+                                   o.id))
         return result
 
     def delete_objekt(self, auftrag_id: str, typ: str, objekt_id: str):
