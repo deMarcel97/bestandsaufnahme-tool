@@ -6,12 +6,22 @@ abschnitte:
   - id: was_ist_es
     titel: Was ist es
     felder:
-      - name: hypervisor_typ
-        label: Hypervisor / Virtualisierungslösung
-        typ: auswahl
+      - name: wird_virtualisiert
+        label: Wird virtualisiert?
+        typ: ja_nein
         pflicht: true
         regelrelevant: false
         vertraulichkeit: kundentauglich
+      - name: hypervisor_typ
+        label: Hypervisor / Virtualisierungslösung
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: wird_virtualisiert
+          operator: gleich
+          wert: ja
         werte:
           - wert: vmware_vsphere
             textbaustein:
@@ -33,10 +43,6 @@ abschnitte:
             textbaustein:
               feststellung: Als Virtualisierungsplattform kommt Nutanix AHV zum Einsatz.
               auswirkung: null
-          - wert: bare_metal
-            textbaustein:
-              feststellung: Die Server werden ohne Virtualisierungsschicht direkt auf der Hardware (Bare Metal) betrieben.
-              auswirkung: null
           - wert: sonstiges
             textbaustein:
               feststellung: Als Virtualisierungsplattform kommt ein sonstiges System zum Einsatz.
@@ -49,6 +55,10 @@ abschnitte:
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: wird_virtualisiert
+          operator: gleich
+          wert: ja
       - name: anzahl_host_server
         label: Anzahl Host-Server (Physisch)
         typ: zahl
@@ -61,12 +71,20 @@ abschnitte:
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: wird_virtualisiert
+          operator: gleich
+          wert: ja
       - name: betriebssysteme_vms
         label: Betriebssysteme der VMs
         typ: text
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: wird_virtualisiert
+          operator: gleich
+          wert: ja
       - name: ip_adressen
         label: IP-Adressen / Management-IPs
         typ: text
@@ -342,6 +360,10 @@ abschnitte:
           - wert: unbekannt
             punkte: null
             textbaustein: null
+        sichtbar_wenn:
+          feld: wird_virtualisiert
+          operator: gleich
+          wert: ja
       - name: os_eol_vms_vorhanden
         label: EOL-Betriebssysteme auf VMs vorhanden
         typ: ja_nein_unbekannt
@@ -366,6 +388,10 @@ abschnitte:
           - wert: unbekannt
             punkte: null
             textbaustein: null
+        sichtbar_wenn:
+          feld: wird_virtualisiert
+          operator: gleich
+          wert: ja
       - name: patchstand_aktuell
         label: Patchstand Server & Hypervisor aktuell
         typ: ja_nein_unbekannt
@@ -447,6 +473,10 @@ abschnitte:
           - wert: unbekannt
             punkte: null
             textbaustein: null
+        sichtbar_wenn:
+          feld: wird_virtualisiert
+          operator: gleich
+          wert: ja
       - name: redundante_netzteil_stromversorgung
         label: Redundante Netzteile verbaut
         typ: ja_nein_unbekannt
@@ -545,6 +575,10 @@ abschnitte:
               auswirkung: null
           - wert: unbekannt
             textbaustein: null
+        sichtbar_wenn:
+          feld: wird_virtualisiert
+          operator: gleich
+          wert: ja
       - name: kommentar
         label: Kommentar
         typ: mehrzeiliger_text
