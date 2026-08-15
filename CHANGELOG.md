@@ -4,6 +4,14 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.7] - 2026-08-15
+
+### Changed
+- **TODO als Entscheidungsauftrag statt Ideensammlung (#312)**: Die Erkenntnisse aus der Konkurrenzanalyse (#290) standen in `TODO.md` als reine Liste — ein Rechercheergebnis ohne Auftrag, das in dieser Form nie umgesetzt worden wäre. Ergänzt um einen ausdrücklichen TODO-Block: die Liste muss zerlegt werden, pro Idee mit einer von drei Antworten („bauen wir" / „später" / „bauen wir nicht"), und die Maßnahmenkatalog-Punkte sind zuerst zu bewerten, weil dort laut Recherche die eigentliche Marktlücke liegt.
+
+### Fixed
+- **Veraltete Angaben in `TODO.md` (#312)**: Der Kopf nannte Version 2.5.0 und „84 Tests" (tatsächlich 2.7.7 und 141) sowie „Storage als **JSON**-Dateien" — die Ablage ist YAML (`yaml.dump` in `app/services/storage.py`). Dieselbe Verwechslung stand auch in der Projektstruktur des README. Ergänzt: Hinweis auf den Serverbetrieb.
+
 ## [2.7.6] - 2026-08-15
 
 ### Changed
