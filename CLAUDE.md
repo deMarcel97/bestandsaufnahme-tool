@@ -65,7 +65,18 @@ ohne Flag bricht bei uncommitteten Änderungen bewusst ab, statt sie zu
    `fix/<id>-<slug>`, PR-Titel `#<id> — <Kurzbeschreibung>`, CHANGELOG-Eintrag
    mit `(#<id>)`. Beispiele: `feature/301-server-deployment`,
    `fix/295-ampelfarben-standort`.
-3. **Version bumpen + Dokumentation** bei jeder nennenswerten Änderung.
+3. **Den PR über GitHub mergen** — `gh pr merge <nr> --merge`. Nicht dadurch
+   schliessen, dass man die Commits über einen Integrationszweig auf `main`
+   schiebt: Superthread hängt seine Verknüpfung an die PR-Ereignisse, und ein
+   so geschlossener PR hinterlässt eine Karte ohne Link. Das lässt sich
+   **nachträglich nicht heilen** — ein späteres Bearbeiten des PR-Titels
+   erzeugt die Verknüpfung nicht mehr (getestet an #302). Belegt: #301, #305
+   und #312 sind verknüpft, #302, #303, #304 und #306 nicht.
+
+   Müssen mehrere Zweige wegen Konflikten gemeinsam aufgelöst werden, gehören
+   die Konflikte **in den jeweiligen Feature-Branch** (`git merge main`
+   hinein); danach wird jeder PR einzeln über GitHub gemergt.
+4. **Version bumpen + Dokumentation** bei jeder nennenswerten Änderung.
    **Im Normalfall nur die letzte Stelle** (PATCH: 2.7.1 → 2.7.2) — es gibt
    derzeit viele kleine Änderungen, und die mittlere Stelle soll nicht unnötig
    hochlaufen. MINOR nur bei wirklich neuer, abgeschlossener Funktionalität,
@@ -80,9 +91,9 @@ ohne Flag bricht bei uncommitteten Änderungen bewusst ab, statt sie zu
    | `pyproject.toml` | `version` |
    | `README.md` | Überschrift und „Aktuelle Version" |
    | `CHANGELOG.md` | neuer `## [x.y.z]`-Abschnitt |
-4. **Lokal *und* GitHub.** Jede Änderung landet sowohl im lokalen
+5. **Lokal *und* GitHub.** Jede Änderung landet sowohl im lokalen
    Dev-Checkout als auch als gepushter PR — nie nur in einem von beidem.
-5. **Bei Fragen zu Feldabhängigkeiten und UX erst besprechen**, nicht direkt
+6. **Bei Fragen zu Feldabhängigkeiten und UX erst besprechen**, nicht direkt
    implementieren. Klare Bugs dürfen direkt gefixt werden.
 
 ## Tests
