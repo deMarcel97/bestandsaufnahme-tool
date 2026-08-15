@@ -1,0 +1,16 @@
+data/
+tests/
+scratch/
+exports/
+Design änderung/
+.git/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+abnahme_baseline.json
+CHANGELOG.md
+HANDOFF_claude_code.md
+README.md

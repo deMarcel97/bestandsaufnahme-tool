@@ -90,7 +90,8 @@ class ProgressService:
                 text=f"{label} fehlt — noch kein Gerät erfasst",
                 status="offen",
                 quelle="struktur_fehlt",
-                ziel_url=f"/auftrag/{auftrag.id}/objekt/neu?typ={typ}"
+                ziel_url=f"/auftrag/{auftrag.id}/objekt/neu?typ={typ}",
+                objekt_typ=typ
             ))
 
         # 1. Rueckfrage & Rule-relevant empty fields from objects
@@ -111,7 +112,9 @@ class ProgressService:
                             text=f"Rückfrage erforderlich bei '{flabel}' für Gerät '{obj.bezeichnung}'",
                             status="offen",
                             quelle="rueckfrage",
-                            ziel_url=f"/auftrag/{auftrag.id}/objekt/{obj.typ}/{obj.id}#field_{fname}"
+                            ziel_url=f"/auftrag/{auftrag.id}/objekt/{obj.typ}/{obj.id}#field_{fname}",
+                            standort_id=obj.standort_id,
+                            objekt_typ=obj.typ
                         ))
                     elif feldef.get("regelrelevant", False) and (val is None or val == "" or val == "unbekannt"):
                         consolidated.append(OffenerPunktItem(
@@ -119,13 +122,19 @@ class ProgressService:
                             text=f"Regelrelevantes Feld '{flabel}' ist unvollständig/unbekannt bei Gerät '{obj.bezeichnung}'",
                             status="offen",
                             quelle="regelrelevant_leer",
-                            ziel_url=f"/auftrag/{auftrag.id}/objekt/{obj.typ}/{obj.id}#field_{fname}"
+                            ziel_url=f"/auftrag/{auftrag.id}/objekt/{obj.typ}/{obj.id}#field_{fname}",
+                            standort_id=obj.standort_id,
+                            objekt_typ=obj.typ
                         ))
 
             # Manual open points from object
             for item in obj.offene_punkte:
                 if not item.ziel_url:
                     item.ziel_url = f"/auftrag/{auftrag.id}/objekt/{obj.id}/bearbeiten"
+                if not item.standort_id:
+                    item.standort_id = obj.standort_id
+                if not item.objekt_typ:
+                    item.objekt_typ = obj.typ
                 consolidated.append(item)
 
         # 2. Open points from Rule Engine

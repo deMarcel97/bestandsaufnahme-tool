@@ -17,7 +17,14 @@
         </div>
         <h1>{{ auftrag.bezeichnung }}</h1>
         <div class="meta-line">
-          <span class="badge">{{ auftrag.status }}</span>
+          <form action="/auftrag/{{ auftrag.id }}/status" method="POST" style="display:inline;">
+            <input type="hidden" name="next" value="/auftrag/{{ auftrag.id }}">
+            <select name="status" class="form-control badge-select" onchange="this.form.submit()">
+              {% for opt in ["Vorbereitung", "Erfassung", "Konsolidierung", "Bewertung", "Abgabe"] %}
+              <option value="{{ opt }}" {% if auftrag.status == opt %}selected{% endif %}>{{ opt }}</option>
+              {% endfor %}
+            </select>
+          </form>
           <span>Vertraulichkeit {{ auftrag.vertraulichkeit_default }}</span>
           {% if auftrag.jira_url %}
           <span class="sep">·</span>
@@ -34,6 +41,13 @@
     <div class="alert alert-warning" style="margin-top:28px;">
       <strong>Warnung</strong>
       <span>Das Vorlagedatum des Entwurfs liegt nach dem Abgabedatum.</span>
+    </div>
+    {% endif %}
+
+    {% if auftrag.unternehmenskontext.empfehlung_rufbereitschaft %}
+    <div class="alert alert-info" style="margin-top:28px;">
+      <strong>Empfehlung</strong>
+      <span>Bei Geschäftszeiten 24/7 sollte geprüft werden, ob eine Rufbereitschaft hinterlegt werden sollte.</span>
     </div>
     {% endif %}
 

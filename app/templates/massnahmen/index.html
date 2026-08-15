@@ -59,14 +59,19 @@
         </thead>
         <tbody>
           {% for m in st_m %}
-          <tr>
+          <tr id="massnahme-{{ m.id }}">
             <td class="top">
               <div class="cell-title">{{ m.bezeichnung }}</div>
               {% if m.beschreibung %}<div class="cell-sub">{{ m.beschreibung }}</div>{% endif %}
             </td>
             <td class="top"><span class="badge badge-{{ m.prioritaet }}">{{ m.prioritaet }}</span></td>
-            <td class="top col-right tnum">{{ "%.2f"|format(m.investitionskosten) }} €</td>
-            <td class="top col-right tnum">{{ "%.2f"|format(m.monatliche_kosten) }} €</td>
+            <td class="top col-right tnum" colspan="2">
+              <form action="/auftrag/{{ auftrag.id }}/massnahme/{{ m.id }}/kosten" method="POST" class="kosten-inline-form">
+                <label class="cell-sub">Investition €<input type="number" step="0.01" name="investitionskosten" value="{{ '%.2f'|format(m.investitionskosten) }}" class="form-control form-control-sm"></label>
+                <label class="cell-sub">Monatlich €<input type="number" step="0.01" name="monatliche_kosten" value="{{ '%.2f'|format(m.monatliche_kosten) }}" class="form-control form-control-sm"></label>
+                <button type="submit" class="btn btn-sm">Speichern</button>
+              </form>
+            </td>
             <td class="top tnum">{{ m.zeitaufwand }} {{ m.zeitaufwand_einheit }}</td>
             <td class="top text-muted">{{ m.status }}</td>
             <td class="top col-right">

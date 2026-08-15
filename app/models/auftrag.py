@@ -48,6 +48,10 @@ class Unternehmenskontext(BaseModel):
     geplante_aenderungen: List[Aspekt] = Field(default_factory=list)
     allgemeine_hinweise: str = ""
 
+    @property
+    def empfehlung_rufbereitschaft(self) -> bool:
+        return self.geschaeftszeiten_tage == "24/7"
+
 class Termine(BaseModel):
     beauftragung: Optional[str] = None
     kickoff: Optional[str] = None

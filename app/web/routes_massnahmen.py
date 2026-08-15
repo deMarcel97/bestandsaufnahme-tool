@@ -79,6 +79,22 @@ def new_massnahme_submit(
     storage.save_massnahmen(auftrag_id, massnahmen)
     return RedirectResponse(url=f"/auftrag/{auftrag_id}/massnahmen", status_code=303)
 
+@router.post("/auftrag/{auftrag_id}/massnahme/{massnahme_id}/kosten")
+def update_massnahme_kosten(
+    auftrag_id: str,
+    massnahme_id: str,
+    investitionskosten: str = Form("0.0"),
+    monatliche_kosten: str = Form("0.0")
+):
+    massnahmen = storage.list_massnahmen(auftrag_id)
+    m = next((m for m in massnahmen if m.id == massnahme_id), None)
+    if m:
+        m.investitionskosten = parse_float_german(investitionskosten)
+        m.monatliche_kosten = parse_float_german(monatliche_kosten)
+        m.kosten_quelle = "manuell"
+        storage.save_massnahmen(auftrag_id, massnahmen)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/massnahmen#massnahme-{massnahme_id}", status_code=303)
+
 @router.post("/auftrag/{auftrag_id}/massnahme/{massnahme_id}/loeschen")
 def delete_massnahme_submit(auftrag_id: str, massnahme_id: str):
     massnahmen = storage.list_massnahmen(auftrag_id)
