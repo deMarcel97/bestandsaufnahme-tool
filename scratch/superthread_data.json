@@ -1,829 +1,930 @@
 {
   "board": {
-    "board": {
-      "color": "#BEC0C0",
-      "icon": "dashboard",
-      "id": "15",
-      "lists": [
+    "jsonrpc": "2.0",
+    "id": 32,
+    "result": {
+      "content": [
         {
-          "behavior": "backlog",
-          "color": "#faa7e0",
-          "id": "86",
-          "title": "Later"
-        },
-        {
-          "behavior": "backlog",
-          "color": "#98a2b3",
-          "id": "81",
-          "title": "Backlog"
-        },
-        {
-          "behavior": "committed",
-          "color": "#344054",
-          "id": "82",
-          "title": "To do"
-        },
-        {
-          "behavior": "started",
-          "color": "#498cf7",
-          "id": "83",
-          "title": "Doing"
-        },
-        {
-          "behavior": "completed",
-          "color": "#32d583",
-          "id": "84",
-          "title": "Done"
-        },
-        {
-          "behavior": "cancelled",
-          "color": "#f79009",
-          "id": "85",
-          "title": "Cancelled"
+          "type": "text",
+          "text": "{\"board\":{\"color\":\"#BEC0C0\",\"icon\":\"dashboard\",\"id\":\"15\",\"lists\":[{\"behavior\":\"backlog\",\"color\":\"#faa7e0\",\"id\":\"86\",\"title\":\"Later\"},{\"behavior\":\"backlog\",\"color\":\"#98a2b3\",\"id\":\"81\",\"title\":\"Backlog\"},{\"behavior\":\"committed\",\"color\":\"#344054\",\"id\":\"82\",\"title\":\"To do\"},{\"behavior\":\"started\",\"color\":\"#498cf7\",\"id\":\"83\",\"title\":\"Doing\"},{\"behavior\":\"completed\",\"color\":\"#32d583\",\"id\":\"84\",\"title\":\"Done\"},{\"behavior\":\"cancelled\",\"color\":\"#f79009\",\"id\":\"85\",\"title\":\"Cancelled\"}],\"response_type\":\"default\",\"space_id\":\"6\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/board-15-bestandsaufnahme-tool\"}}"
         }
       ],
-      "response_type": "default",
-      "space_id": "6",
-      "title": "Bestandsaufnahme-Tool",
-      "url": "https://app.superthread.com/demarcel/board-15-bestandsaufnahme-tool"
+      "structuredContent": {
+        "board": {
+          "color": "#BEC0C0",
+          "icon": "dashboard",
+          "id": "15",
+          "lists": [
+            {
+              "behavior": "backlog",
+              "color": "#faa7e0",
+              "id": "86",
+              "title": "Later"
+            },
+            {
+              "behavior": "backlog",
+              "color": "#98a2b3",
+              "id": "81",
+              "title": "Backlog"
+            },
+            {
+              "behavior": "committed",
+              "color": "#344054",
+              "id": "82",
+              "title": "To do"
+            },
+            {
+              "behavior": "started",
+              "color": "#498cf7",
+              "id": "83",
+              "title": "Doing"
+            },
+            {
+              "behavior": "completed",
+              "color": "#32d583",
+              "id": "84",
+              "title": "Done"
+            },
+            {
+              "behavior": "cancelled",
+              "color": "#f79009",
+              "id": "85",
+              "title": "Cancelled"
+            }
+          ],
+          "response_type": "default",
+          "space_id": "6",
+          "title": "Bestandsaufnahme-Tool",
+          "url": "https://app.superthread.com/demarcel/board-15-bestandsaufnahme-tool"
+        }
+      }
     }
   },
   "tags": {
-    "tags": []
+    "jsonrpc": "2.0",
+    "id": 33,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"tags\":[]}"
+        }
+      ],
+      "structuredContent": {
+        "tags": []
+      }
+    }
   },
   "tasks": {
-    "tasks": [
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>Die Anwendung auf einen Webserver inklusive Anbindungen ans Elder bzw. an Entra ID müsste man einmal testen und einmal umsetzen.</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "285",
-        "list_id": "86",
-        "list_title": "Later",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "subscribed": true,
-        "time_created": "2026-08-15T07:48:58Z",
-        "time_updated": "2026-08-15T12:52:09Z",
-        "title": "MultiUser Support",
-        "total_checklists": 0,
-        "total_comments": 1,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-285-multiuser-support"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>Bei den Aufträgen gibt es einen Status und Vorbereitung, das muss man auch einmal anpassen können, beziehungsweise da muss man können.</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "283",
-        "list_id": "81",
-        "list_title": "Backlog",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "subscribed": true,
-        "time_created": "2026-08-15T06:55:36Z",
-        "time_updated": "2026-08-15T08:44:24Z",
-        "title": "Bei den Aufträgen.",
-        "total_checklists": 0,
-        "total_comments": 1,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-283-bei-den-auftrgen"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>Standort-Übersicht von Auftrag PROJ-1/testeii zeigte wiederholt \"QA Inspector Team (Updated)\" in der Betreut-durch-Spalte — vom User nicht beauftragt und als \"komisch\" empfunden.</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "281",
-        "list_id": "81",
-        "list_title": "Backlog",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "subscribed": true,
-        "time_created": "2026-08-14T12:15:10Z",
-        "time_updated": "2026-08-15T08:44:19Z",
-        "title": "QA-Testdaten (\"QA Inspector Team\") in auf-test bereinigen",
-        "total_checklists": 0,
-        "total_comments": 3,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-281-qa-testdaten-qa-inspector-team-in-auf-test-bereinigen"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>Wenn mit Stammdaten die Urteil angepasst wird, zum Beispiel Geschäftszeiten 24.7, soll eine Empfehlung rauspurzeln, dass eine Rufbereitschaft hinterlegt werden kann oder hinterlegt werden soll. Das ist eine Empfehlung.</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "284",
-        "list_id": "81",
-        "list_title": "Backlog",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "subscribed": true,
-        "time_created": "2026-08-15T06:59:39Z",
-        "time_updated": "2026-08-15T08:44:30Z",
-        "title": "Wenn unter den Stammdaten Uhrzeit angepasst wird.",
-        "total_checklists": 0,
-        "total_comments": 1,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-284-wenn-unter-den-stammdaten-uhrzeit-angepasst-wird"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>Die offenen Punkte müssen nicht nur nach Standort, sondern auch nach Hardware unterteilt werden, dass man nicht durch eine nicht super vollständige, unübersichtliche Liste einmal durchgehen muss, sich die Sachen einmal durchzulesen, beziehungsweise wo man nochmal ansetzen muss.</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "287",
-        "list_id": "81",
-        "list_title": "Backlog",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "subscribed": true,
-        "time_created": "2026-08-15T07:50:26Z",
-        "time_updated": "2026-08-15T08:44:39Z",
-        "title": "Offene Punkte sktukurieren",
-        "total_checklists": 0,
-        "total_comments": 1,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-287-offene-punkte-sktukurieren"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>Stammdaten und Kontext müssen einmal getrennt werden, dass der Unternehmenskontext einmal separat ist, auch als Punkt aufgeführt ist.</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "286",
-        "list_id": "81",
-        "list_title": "Backlog",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "subscribed": true,
-        "time_created": "2026-08-15T07:49:40Z",
-        "time_updated": "2026-08-15T08:30:33Z",
-        "title": "Trennung Stammdaten & Kontext",
-        "total_checklists": 0,
-        "total_comments": 0,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-286-trennung-stammdaten--kontext"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p><em>Recherche vom 15.08.2026 – drei parallele Sub-Agent-Recherchen (Websuche + Herstellerdokumentation), von Marcel noch nicht gegengeprüft.</em></p><h2>Kernbefund</h2><p>Kein einziges recherchiertes Konkurrenzprodukt bietet einen fertigen, gestaffelten Maßnahmenkatalog mit Kostenschätzung – weder Docusnap (ISMS-Add-on verlinkt nur generische Standardmaßnahmen), noch RapidFire Network Detective/Compliance Manager GRC (POAM nennt \"required resources\", keine €-Beträge), noch die GRC-/Compliance-Tools (verinice, DIN SPEC 27076, ibi systems – überall bleibt die Kostenschätzung \"Beraterwissen im Kopf\"). Der geplante Maßnahmenkatalog trifft damit nachweislich eine echte Marktlücke, nicht nur bei kleinen Nischenanbietern, sondern auch beim Marktführer (Docusnap, 5000+ Kunden) und dem US-Standard-Tool für MSPs (Network Detective).</p><h2>Bestätigte Positionierung</h2><p>Alle recherchierten Tools setzen entweder automatisiertes Scanning mit Zugangsdaten (Docusnap, Network Detective, i-doit) oder eine dauerhaft laufende Installation voraus (IT Glue, Hudu – selbst Hudus Self-Hosting braucht einen laufenden Server). Keines ist für einen einmaligen Vor-Ort-Termin ohne jeden Netzwerkzugriff gebaut. Gleichzeitig ist das zugrundeliegende Muster (Baustein/Feld → Punkte → Textbaustein → Finding, schlechtester Wert statt Durchschnitt) über verinice, DIN SPEC 27076, ibi systems iris und VdS 10000 hinweg Branchenstandard – die Architektur ist erprobt, nicht riskant.</p><h2>Konkurrenzüberblick</h2><p><strong>Docusnap</strong> (docusnap.com, Bayern, 5000+ Kunden) – der direkteste deutschsprachige Wettbewerber. Automatisches, agentenloses Netzwerk-Scanning als Haupterfassung; manuelle Eingabe nur als Lückenfüller. Alle drei Output-Typen vorhanden, aber scan-datengetrieben. Organisatorische Inhalte nur im optionalen ISMS-Add-on, nicht strukturell in jedem Feld verankert. On-Premise-Linie offline-fähig (ab 465 €/Jahr), Docusnap365 Cloud mit lokalem Gateway.</p><p><strong>RapidFire Network Detective Pro / Kaseya</strong> – automatisierter Scan, primär Cloud-Portal, über 100 Report-Varianten (Executive-Infografik → Consolidated Risk Report → Management Plan → Full Detail Report). Scoring: Risk-Score + separater Issues-Score, kombiniert mit CVSS/Microsoft Secure Score. Netzplan automatisch aus Scan-Daten. Kein Kosten-Maßnahmenkatalog.</p><p><strong>IT Glue &amp; Hudu</strong> – laufende MSP-Dokumentation, kein Scoring/Findings/Bericht. Datenmodell relevant: IT Glue trennt feste Core Assets von frei definierbaren Flexible Assets (Custom Fields); Hudu nutzt globale Asset Layouts mit 14 Feldtypen (Confidential Text, List-Select, Embed, Required-Flag, \"Show in table view\"). Netzwerktopologie bei beiden nur über automatisches Discovery-Add-on, kein natives manuelles Zeichnen.</p><p><strong>verinice / BSI-Ökosystem / DIN SPEC 27076 / Markt</strong> – strukturell am nächsten dran. verinice ordnet Zielobjekte BSI-Bausteinen zu, bewertet jede Anforderung einzeln, vererbt den Schutzbedarf statt zu mitteln (= Worst-Value-Prinzip), behandelt Organisation (ORP-, CON-Bausteine) als gleichwertiges Objekt neben Technik. DIN SPEC 27076/BSI-CyberRisikoCheck ist strukturell fast eine Miniaturversion des eigenen Modells: 27 Anforderungen in 6 Themenfeldern, Punktevergabe, priorisierte Handlungsempfehlungen inkl. Förderhinweisen. Daneben: VdS 10000, ibi systems iris (Reifegrad Level 1–5), Vanta/Drata als Trendbeispiel „Framework-Mapping + Automatisierung\".</p><h2>Abgleich mit dem laufenden Board</h2><p>Der Stand ist weiter als die reine Blueprint-Phase: PR #1 hat Preis-Richtwerte, die Regel-Engine (liste/objekt_referenz) sowie Server-Hardware, Virtualisierung/Cluster, VMs und erweiterte Switch-Felder bereits umgesetzt. Drei direkte Anknüpfungspunkte zum offenen Backlog:</p><ul><li><p><internal-link data-resource-time-updated=\"1786790936\" data-icon-color=\"#32d583\" data-icon-src=\"check-circle\" name=\"Maßnahmenkatalog\" data-url=\"https://app.superthread.com/demarcel/card-289-manahmenkatalog\" data-type=\"internal-link\"></internal-link> – deckt sich mit der Kosten-/Priorisierungs-Idee unten; die Zwei-Achsen-Idee (Kosten × Dringlichkeit) lässt sich anschließen, sobald die Werte editierbar sind.</p></li><li><p><internal-link data-resource-time-updated=\"1786782633\" data-icon-color=\"#98a2b3\" data-icon-src=\"circle-dotted\" name=\"Trennung Stammdaten & Kontext\" data-url=\"https://app.superthread.com/demarcel/card-286-trennung-stammdaten--kontext\" data-type=\"internal-link\"></internal-link> – gleiche Richtung wie die Idee „Organisation &amp; Prozesse als eigener Baustein\" unten.</p></li><li><p><internal-link data-resource-time-updated=\"1786783412\" data-icon-color=\"#98a2b3\" data-icon-src=\"circle-dotted\" name=\"MultiUser Support\" data-url=\"https://app.superthread.com/demarcel/card-285-multiuser-support\" data-type=\"internal-link\"></internal-link> – weicht vom ursprünglichen Offline-Laptop-Prinzip ab. Falls das ernsthaft verfolgt wird: Docusnaps Zwei-Linien-Modell (On-Premise/offline + Docusnap365 Cloud mit lokalem Gateway) als Referenz, wie sich das sauber trennen lässt, ohne das Kernprodukt zu verwässern.</p></li></ul><p>Backup/Recovery als nächster inhaltlicher Baustein taucht im aktuellen Backlog noch nicht auf – die DIN-27076-Trennung Reaktion/Wiederherstellung unten bleibt als Bauplan relevant, sobald das ansteht.</p><h2>Konkrete Ideen für die Roadmap</h2><p><strong>Maßnahmenkatalog</strong></p><ul><li><p>Kostenschätzung + zweite Priorisierungs-Achse: DIN 27076 staffelt zusätzlich zur Kostenebene nach Dringlichkeit – Kosten × Dringlichkeit/Risiko als zweiachsiges Modell.</p></li><li><p>Optionales Metadatenfeld „Förderprogramm\" pro Maßnahme (analog BSI-CyberRisikoCheck, z. B. Mittelstand Digital) – geringer Aufwand, verkaufsstark.</p></li></ul><p><strong>Objektmodell / Datenschema</strong></p><ul><li><p>Eigenständigen Baustein „Organisation &amp; Prozesse\" als gleichwertiges Objekt neben Firewall/Server führen (analog verinice ORP-Bausteine) – löst das 2/3-Problem strukturell.</p></li><li><p>Hudus Feldtypen-Bibliothek als Vorbild für Konsistenz im Schema: Confidential-Feld, List-Select, „Pflichtfeld\"- und „Im Bericht anzeigen\"-Flag.</p></li><li><p>DIN-27076-Trennung „Reaktion\" vs. „Wiederherstellung\" als Bauplan für den nächsten Baustein Backup/Recovery.</p></li></ul><p><strong>Netzwerktopologie</strong></p><ul><li><p>Aus manuell erfassten Verbindungsdaten (Gerät X an Switch-Port Y) automatisches Diagramm-Layout erzeugen statt Freihand-Zeichnen.</p></li></ul><p><strong>Reporting / Scoring</strong></p><ul><li><p>Prüfen, ob getrennte Kennzahlen (Risk-Score vs. Issues-Score, Network-Detective-Vorbild) gegenüber dem bestehenden Scoring-Modell Mehrwert bieten.</p></li><li><p>Kurzer Executive-Abschnitt vorneweg im Fließtext-Bericht statt separatem Dokument.</p></li><li><p>Optionaler Diff-/Update-Modus für Folgebesuche beim selben Kunden (analog Network Detectives Change-Report).</p></li></ul><p><strong>Positionierung / Vertrieb</strong></p><ul><li><p>„Kein Scanner, keine Zugangsdaten, ein Termin reicht\" explizit als Abgrenzung zu Docusnap/Network Detective/i-doit kommunizieren.</p></li><li><p>Maßnahmenkatalog mit echten, gestaffelten Kosten aktiv als USP hervorheben.</p></li><li><p>Manuelle Erfassung organisatorischer Themen als Verkaufsargument gegenüber Kunden, die „auch einen Scanner\" erwarten.</p></li></ul><h2>Quellen</h2><p><strong>Docusnap:</strong> <a href=\"https://www.docusnap.com/en/features\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Features</a> · <a href=\"https://docs.docusnap.com/de/user-manual/introduction/about-docusnap/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Doku</a> · <a href=\"https://www.docusnap.com/en/add-ons1/isms-add-on\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">ISMS-Add-on</a> · <a href=\"https://www.docusnap.com/en/pricing\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Pricing</a> · <a href=\"https://docs.docusnap.com/de/user-manual/inventory/network-inventory/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Netzwerkinventarisierung</a> · <a href=\"https://docs.docusnap.com/de/user-manual/documentation/creation-of-documentation/map-files/network-map/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Netzpläne</a></p><p><strong>Network Detective / IT Glue / Hudu:</strong> <a href=\"https://www.rapidfiretools.com/products/network-assessment/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Network Detective Pro</a> · <a href=\"https://www.rapidfiretools.com/products/network-assessment/reports/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Sample Reports</a> · <a href=\"https://www.rapidfiretools.com/products/grc-software/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Compliance Manager GRC</a> · <a href=\"https://www.itglue.com/features/flexible-assets/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">IT Glue Flexible Assets</a> · <a href=\"https://www.itglue.com/networkglue/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Network Glue</a> · <a href=\"https://support.hudu.com/hc/en-us/articles/7905521347991-Asset-Layouts\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Hudu Asset Layouts</a> · <a href=\"https://support.hudu.com/hc/en-us/articles/35437359933079-About-Hudu-Radar\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Hudu Radar</a></p><p><strong>GRC/Markt:</strong> <a href=\"https://verinice.com/en/solutions/domains/bsi-it-grundschutz\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">verinice BSI IT-Grundschutz</a> · <a href=\"https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Informationen-und-Empfehlungen/KMU/CyberRisikoCheck/CyberRisikoCheck_node.html\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">BSI-CyberRisikoCheck</a> · <a href=\"https://digimojo.de/framework/din-spec-27076\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">DIN SPEC 27076 Übersicht</a> · <a href=\"https://vds.de/en/expertise/cyber-security/vds-quick-check/vds-10000-quick-check-for-information-security-for-smes\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">VdS 10000</a> · <a href=\"https://www.ibi-systems.de/de/leistungen-und-produkte/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">ibi systems iris</a> · <a href=\"https://www.hiscout.com/zedis-grundschutz-tool-bundesverwaltung/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">HiScout GRC Suite</a> · <a href=\"https://www.perseus.de/loesungen/cybersicherheits-risikobewertung/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Perseus Technologies</a></p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "290",
-        "list_id": "81",
-        "list_title": "Backlog",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "subscribed": true,
-        "tags": [
+    "jsonrpc": "2.0",
+    "id": 34,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"tasks\":[{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eDie Anwendung auf einen Webserver inklusive Anbindungen ans Elder bzw. an Entra ID müsste man einmal testen und einmal umsetzen.\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"285\",\"list_id\":\"86\",\"list_title\":\"Later\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"subscribed\":true,\"time_created\":\"2026-08-15T07:48:58Z\",\"time_updated\":\"2026-08-15T12:52:09Z\",\"title\":\"MultiUser Support\",\"total_checklists\":0,\"total_comments\":1,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-285-multiuser-support\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003e\\u003cem\\u003eRecherche vom 15.08.2026 – drei parallele Sub-Agent-Recherchen (Websuche + Herstellerdokumentation), von Marcel noch nicht gegengeprüft.\\u003c/em\\u003e\\u003c/p\\u003e\\u003ch2\\u003eKernbefund\\u003c/h2\\u003e\\u003cp\\u003eKein einziges recherchiertes Konkurrenzprodukt bietet einen fertigen, gestaffelten Maßnahmenkatalog mit Kostenschätzung – weder Docusnap (ISMS-Add-on verlinkt nur generische Standardmaßnahmen), noch RapidFire Network Detective/Compliance Manager GRC (POAM nennt \\\"required resources\\\", keine €-Beträge), noch die GRC-/Compliance-Tools (verinice, DIN SPEC 27076, ibi systems – überall bleibt die Kostenschätzung \\\"Beraterwissen im Kopf\\\"). Der geplante Maßnahmenkatalog trifft damit nachweislich eine echte Marktlücke, nicht nur bei kleinen Nischenanbietern, sondern auch beim Marktführer (Docusnap, 5000+ Kunden) und dem US-Standard-Tool für MSPs (Network Detective).\\u003c/p\\u003e\\u003ch2\\u003eBestätigte Positionierung\\u003c/h2\\u003e\\u003cp\\u003eAlle recherchierten Tools setzen entweder automatisiertes Scanning mit Zugangsdaten (Docusnap, Network Detective, i-doit) oder eine dauerhaft laufende Installation voraus (IT Glue, Hudu – selbst Hudus Self-Hosting braucht einen laufenden Server). Keines ist für einen einmaligen Vor-Ort-Termin ohne jeden Netzwerkzugriff gebaut. Gleichzeitig ist das zugrundeliegende Muster (Baustein/Feld → Punkte → Textbaustein → Finding, schlechtester Wert statt Durchschnitt) über verinice, DIN SPEC 27076, ibi systems iris und VdS 10000 hinweg Branchenstandard – die Architektur ist erprobt, nicht riskant.\\u003c/p\\u003e\\u003ch2\\u003eKonkurrenzüberblick\\u003c/h2\\u003e\\u003cp\\u003e\\u003cstrong\\u003eDocusnap\\u003c/strong\\u003e (docusnap.com, Bayern, 5000+ Kunden) – der direkteste deutschsprachige Wettbewerber. Automatisches, agentenloses Netzwerk-Scanning als Haupterfassung; manuelle Eingabe nur als Lückenfüller. Alle drei Output-Typen vorhanden, aber scan-datengetrieben. Organisatorische Inhalte nur im optionalen ISMS-Add-on, nicht strukturell in jedem Feld verankert. On-Premise-Linie offline-fähig (ab 465 €/Jahr), Docusnap365 Cloud mit lokalem Gateway.\\u003c/p\\u003e\\u003cp\\u003e\\u003cstrong\\u003eRapidFire Network Detective Pro / Kaseya\\u003c/strong\\u003e – automatisierter Scan, primär Cloud-Portal, über 100 Report-Varianten (Executive-Infografik → Consolidated Risk Report → Management Plan → Full Detail Report). Scoring: Risk-Score + separater Issues-Score, kombiniert mit CVSS/Microsoft Secure Score. Netzplan automatisch aus Scan-Daten. Kein Kosten-Maßnahmenkatalog.\\u003c/p\\u003e\\u003cp\\u003e\\u003cstrong\\u003eIT Glue \\u0026amp; Hudu\\u003c/strong\\u003e – laufende MSP-Dokumentation, kein Scoring/Findings/Bericht. Datenmodell relevant: IT Glue trennt feste Core Assets von frei definierbaren Flexible Assets (Custom Fields); Hudu nutzt globale Asset Layouts mit 14 Feldtypen (Confidential Text, List-Select, Embed, Required-Flag, \\\"Show in table view\\\"). Netzwerktopologie bei beiden nur über automatisches Discovery-Add-on, kein natives manuelles Zeichnen.\\u003c/p\\u003e\\u003cp\\u003e\\u003cstrong\\u003everinice / BSI-Ökosystem / DIN SPEC 27076 / Markt\\u003c/strong\\u003e – strukturell am nächsten dran. verinice ordnet Zielobjekte BSI-Bausteinen zu, bewertet jede Anforderung einzeln, vererbt den Schutzbedarf statt zu mitteln (= Worst-Value-Prinzip), behandelt Organisation (ORP-, CON-Bausteine) als gleichwertiges Objekt neben Technik. DIN SPEC 27076/BSI-CyberRisikoCheck ist strukturell fast eine Miniaturversion des eigenen Modells: 27 Anforderungen in 6 Themenfeldern, Punktevergabe, priorisierte Handlungsempfehlungen inkl. Förderhinweisen. Daneben: VdS 10000, ibi systems iris (Reifegrad Level 1–5), Vanta/Drata als Trendbeispiel „Framework-Mapping + Automatisierung\\\".\\u003c/p\\u003e\\u003ch2\\u003eAbgleich mit dem laufenden Board\\u003c/h2\\u003e\\u003cp\\u003eDer Stand ist weiter als die reine Blueprint-Phase: PR #1 hat Preis-Richtwerte, die Regel-Engine (liste/objekt_referenz) sowie Server-Hardware, Virtualisierung/Cluster, VMs und erweiterte Switch-Felder bereits umgesetzt. Drei direkte Anknüpfungspunkte zum offenen Backlog:\\u003c/p\\u003e\\u003cul\\u003e\\u003cli\\u003e\\u003cp\\u003e\\u003cinternal-link data-resource-time-updated=\\\"1786790936\\\" data-icon-color=\\\"#32d583\\\" data-icon-src=\\\"check-circle\\\" name=\\\"Maßnahmenkatalog\\\" data-url=\\\"https://app.superthread.com/demarcel/card-289-manahmenkatalog\\\" data-type=\\\"internal-link\\\"\\u003e\\u003c/internal-link\\u003e – deckt sich mit der Kosten-/Priorisierungs-Idee unten; die Zwei-Achsen-Idee (Kosten × Dringlichkeit) lässt sich anschließen, sobald die Werte editierbar sind.\\u003c/p\\u003e\\u003c/li\\u003e\\u003cli\\u003e\\u003cp\\u003e\\u003cinternal-link data-resource-time-updated=\\\"1786782633\\\" data-icon-color=\\\"#98a2b3\\\" data-icon-src=\\\"circle-dotted\\\" name=\\\"Trennung Stammdaten \\u0026 Kontext\\\" data-url=\\\"https://app.superthread.com/demarcel/card-286-trennung-stammdaten--kontext\\\" data-type=\\\"internal-link\\\"\\u003e\\u003c/internal-link\\u003e – gleiche Richtung wie die Idee „Organisation \\u0026amp; Prozesse als eigener Baustein\\\" unten.\\u003c/p\\u003e\\u003c/li\\u003e\\u003cli\\u003e\\u003cp\\u003e\\u003cinternal-link data-resource-time-updated=\\\"1786783412\\\" data-icon-color=\\\"#98a2b3\\\" data-icon-src=\\\"circle-dotted\\\" name=\\\"MultiUser Support\\\" data-url=\\\"https://app.superthread.com/demarcel/card-285-multiuser-support\\\" data-type=\\\"internal-link\\\"\\u003e\\u003c/internal-link\\u003e – weicht vom ursprünglichen Offline-Laptop-Prinzip ab. Falls das ernsthaft verfolgt wird: Docusnaps Zwei-Linien-Modell (On-Premise/offline + Docusnap365 Cloud mit lokalem Gateway) als Referenz, wie sich das sauber trennen lässt, ohne das Kernprodukt zu verwässern.\\u003c/p\\u003e\\u003c/li\\u003e\\u003c/ul\\u003e\\u003cp\\u003eBackup/Recovery als nächster inhaltlicher Baustein taucht im aktuellen Backlog noch nicht auf – die DIN-27076-Trennung Reaktion/Wiederherstellung unten bleibt als Bauplan relevant, sobald das ansteht.\\u003c/p\\u003e\\u003ch2\\u003eKonkrete Ideen für die Roadmap\\u003c/h2\\u003e\\u003cp\\u003e\\u003cstrong\\u003eMaßnahmenkatalog\\u003c/strong\\u003e\\u003c/p\\u003e\\u003cul\\u003e\\u003cli\\u003e\\u003cp\\u003eKostenschätzung + zweite Priorisierungs-Achse: DIN 27076 staffelt zusätzlich zur Kostenebene nach Dringlichkeit – Kosten × Dringlichkeit/Risiko als zweiachsiges Modell.\\u003c/p\\u003e\\u003c/li\\u003e\\u003cli\\u003e\\u003cp\\u003eOptionales Metadatenfeld „Förderprogramm\\\" pro Maßnahme (analog BSI-CyberRisikoCheck, z. B. Mittelstand Digital) – geringer Aufwand, verkaufsstark.\\u003c/p\\u003e\\u003c/li\\u003e\\u003c/ul\\u003e\\u003cp\\u003e\\u003cstrong\\u003eObjektmodell / Datenschema\\u003c/strong\\u003e\\u003c/p\\u003e\\u003cul\\u003e\\u003cli\\u003e\\u003cp\\u003eEigenständigen Baustein „Organisation \\u0026amp; Prozesse\\\" als gleichwertiges Objekt neben Firewall/Server führen (analog verinice ORP-Bausteine) – löst das 2/3-Problem strukturell.\\u003c/p\\u003e\\u003c/li\\u003e\\u003cli\\u003e\\u003cp\\u003eHudus Feldtypen-Bibliothek als Vorbild für Konsistenz im Schema: Confidential-Feld, List-Select, „Pflichtfeld\\\"- und „Im Bericht anzeigen\\\"-Flag.\\u003c/p\\u003e\\u003c/li\\u003e\\u003cli\\u003e\\u003cp\\u003eDIN-27076-Trennung „Reaktion\\\" vs. „Wiederherstellung\\\" als Bauplan für den nächsten Baustein Backup/Recovery.\\u003c/p\\u003e\\u003c/li\\u003e\\u003c/ul\\u003e\\u003cp\\u003e\\u003cstrong\\u003eNetzwerktopologie\\u003c/strong\\u003e\\u003c/p\\u003e\\u003cul\\u003e\\u003cli\\u003e\\u003cp\\u003eAus manuell erfassten Verbindungsdaten (Gerät X an Switch-Port Y) automatisches Diagramm-Layout erzeugen statt Freihand-Zeichnen.\\u003c/p\\u003e\\u003c/li\\u003e\\u003c/ul\\u003e\\u003cp\\u003e\\u003cstrong\\u003eReporting / Scoring\\u003c/strong\\u003e\\u003c/p\\u003e\\u003cul\\u003e\\u003cli\\u003e\\u003cp\\u003ePrüfen, ob getrennte Kennzahlen (Risk-Score vs. Issues-Score, Network-Detective-Vorbild) gegenüber dem bestehenden Scoring-Modell Mehrwert bieten.\\u003c/p\\u003e\\u003c/li\\u003e\\u003cli\\u003e\\u003cp\\u003eKurzer Executive-Abschnitt vorneweg im Fließtext-Bericht statt separatem Dokument.\\u003c/p\\u003e\\u003c/li\\u003e\\u003cli\\u003e\\u003cp\\u003eOptionaler Diff-/Update-Modus für Folgebesuche beim selben Kunden (analog Network Detectives Change-Report).\\u003c/p\\u003e\\u003c/li\\u003e\\u003c/ul\\u003e\\u003cp\\u003e\\u003cstrong\\u003ePositionierung / Vertrieb\\u003c/strong\\u003e\\u003c/p\\u003e\\u003cul\\u003e\\u003cli\\u003e\\u003cp\\u003e„Kein Scanner, keine Zugangsdaten, ein Termin reicht\\\" explizit als Abgrenzung zu Docusnap/Network Detective/i-doit kommunizieren.\\u003c/p\\u003e\\u003c/li\\u003e\\u003cli\\u003e\\u003cp\\u003eMaßnahmenkatalog mit echten, gestaffelten Kosten aktiv als USP hervorheben.\\u003c/p\\u003e\\u003c/li\\u003e\\u003cli\\u003e\\u003cp\\u003eManuelle Erfassung organisatorischer Themen als Verkaufsargument gegenüber Kunden, die „auch einen Scanner\\\" erwarten.\\u003c/p\\u003e\\u003c/li\\u003e\\u003c/ul\\u003e\\u003ch2\\u003eQuellen\\u003c/h2\\u003e\\u003cp\\u003e\\u003cstrong\\u003eDocusnap:\\u003c/strong\\u003e \\u003ca href=\\\"https://www.docusnap.com/en/features\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eFeatures\\u003c/a\\u003e · \\u003ca href=\\\"https://docs.docusnap.com/de/user-manual/introduction/about-docusnap/\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eDoku\\u003c/a\\u003e · \\u003ca href=\\\"https://www.docusnap.com/en/add-ons1/isms-add-on\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eISMS-Add-on\\u003c/a\\u003e · \\u003ca href=\\\"https://www.docusnap.com/en/pricing\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003ePricing\\u003c/a\\u003e · \\u003ca href=\\\"https://docs.docusnap.com/de/user-manual/inventory/network-inventory/\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eNetzwerkinventarisierung\\u003c/a\\u003e · \\u003ca href=\\\"https://docs.docusnap.com/de/user-manual/documentation/creation-of-documentation/map-files/network-map/\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eNetzpläne\\u003c/a\\u003e\\u003c/p\\u003e\\u003cp\\u003e\\u003cstrong\\u003eNetwork Detective / IT Glue / Hudu:\\u003c/strong\\u003e \\u003ca href=\\\"https://www.rapidfiretools.com/products/network-assessment/\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eNetwork Detective Pro\\u003c/a\\u003e · \\u003ca href=\\\"https://www.rapidfiretools.com/products/network-assessment/reports/\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eSample Reports\\u003c/a\\u003e · \\u003ca href=\\\"https://www.rapidfiretools.com/products/grc-software/\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eCompliance Manager GRC\\u003c/a\\u003e · \\u003ca href=\\\"https://www.itglue.com/features/flexible-assets/\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eIT Glue Flexible Assets\\u003c/a\\u003e · \\u003ca href=\\\"https://www.itglue.com/networkglue/\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eNetwork Glue\\u003c/a\\u003e · \\u003ca href=\\\"https://support.hudu.com/hc/en-us/articles/7905521347991-Asset-Layouts\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eHudu Asset Layouts\\u003c/a\\u003e · \\u003ca href=\\\"https://support.hudu.com/hc/en-us/articles/35437359933079-About-Hudu-Radar\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eHudu Radar\\u003c/a\\u003e\\u003c/p\\u003e\\u003cp\\u003e\\u003cstrong\\u003eGRC/Markt:\\u003c/strong\\u003e \\u003ca href=\\\"https://verinice.com/en/solutions/domains/bsi-it-grundschutz\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003everinice BSI IT-Grundschutz\\u003c/a\\u003e · \\u003ca href=\\\"https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Informationen-und-Empfehlungen/KMU/CyberRisikoCheck/CyberRisikoCheck_node.html\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eBSI-CyberRisikoCheck\\u003c/a\\u003e · \\u003ca href=\\\"https://digimojo.de/framework/din-spec-27076\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eDIN SPEC 27076 Übersicht\\u003c/a\\u003e · \\u003ca href=\\\"https://vds.de/en/expertise/cyber-security/vds-quick-check/vds-10000-quick-check-for-information-security-for-smes\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eVdS 10000\\u003c/a\\u003e · \\u003ca href=\\\"https://www.ibi-systems.de/de/leistungen-und-produkte/\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eibi systems iris\\u003c/a\\u003e · \\u003ca href=\\\"https://www.hiscout.com/zedis-grundschutz-tool-bundesverwaltung/\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003eHiScout GRC Suite\\u003c/a\\u003e · \\u003ca href=\\\"https://www.perseus.de/loesungen/cybersicherheits-risikobewertung/\\\" rel=\\\"noopener noreferrer nofollow\\\" target=\\\"_blank\\\"\\u003ePerseus Technologies\\u003c/a\\u003e\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"290\",\"list_id\":\"81\",\"list_title\":\"Backlog\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"subscribed\":true,\"tags\":[{\"color\":\"#12b76a\",\"id\":\"5\",\"name\":\"Feature\",\"slug\":\"feature\",\"space_id\":\"6\",\"workspace_id\":\"tQp2b2rZ\"}],\"time_created\":\"2026-08-15T09:11:00Z\",\"time_updated\":\"2026-08-15T12:19:53Z\",\"title\":\"Konkurrenzanalyse \\u0026amp; Ideen: Bestandsaufnahme-Tool\",\"total_checklists\":0,\"total_comments\":0,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-290-konkurrenzanalyse-amp-ideen-bestandsaufnahme-tool\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eWenn ein Finding bestätigt wurde, das zu einem Maßnahmenkatalog hinzugefügt werden muss und es schon existiert im Maßnahmenkatalog, muss das bei den Findings bitte entweder durchgestrichen werden oder es darf nicht mehr eine Liste auftauchen.\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"288\",\"list_id\":\"82\",\"list_title\":\"To do\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"committed\",\"subscribed\":true,\"time_created\":\"2026-08-15T07:51:03Z\",\"time_updated\":\"2026-08-15T16:06:37Z\",\"title\":\"Findings\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-288-findings\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003ebei der Spalte NOCH NICHT ERFASST → Muss interagiert sein das man da einfach draufklicken kann damit ich direkt hinspringen kann\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"275\",\"list_id\":\"83\",\"list_title\":\"Doing\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"start_date\":\"2026-08-14T17:47:26Z\",\"status\":\"started\",\"subscribed\":true,\"tags\":[{\"color\":\"#12b76a\",\"id\":\"5\",\"name\":\"Feature\",\"slug\":\"feature\",\"space_id\":\"6\",\"workspace_id\":\"tQp2b2rZ\"}],\"time_created\":\"2026-08-14T12:10:54Z\",\"time_updated\":\"2026-08-15T16:15:35Z\",\"title\":\"Leiste NOCH NICHT ERFASST\",\"total_checklists\":0,\"total_comments\":5,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-275-leiste-noch-nicht-erfasst\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003ePreis-Richtwerte (kosten_richtwert/aufwand_richtwert) waren bei allen 99 Maßnahmen-Regeln null, dadurch fiel kosten_quelle immer auf \\u0026quot;offen\\u0026quot; zurück. Zusätzlich fehlten laut Handoff-Dokument die Themenblöcke Server-Hardware, Virtualisierung/Cluster, VMs sowie erweiterte Switch-Felder komplett.\\u003c/p\\u003e\\n\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"276\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-14T12:14:53Z\",\"time_created\":\"2026-08-14T12:14:53Z\",\"time_updated\":\"2026-08-14T18:06:18Z\",\"title\":\"PR #1: Preis-Richtwerte + liste/objekt_referenz-Engine + Server-Cluster/VM/Switch-Erweiterung\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-276-pr-1-preis-richtwerte--listeobjektreferenz-engine--server-clustervmswitch-erweiterung\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eKlick auf \\u0026quot;Mehrere Geräte\\u0026quot; in der Standort-Übersicht zeigte keine Reaktion — der Dialog zum Batch-Anlegen mehrerer Objekte öffnete sich nicht.\\u003c/p\\u003e\\n\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"277\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-14T12:18:27Z\",\"time_created\":\"2026-08-14T12:14:57Z\",\"time_updated\":\"2026-08-14T18:06:53Z\",\"title\":\"\\\"Mehrere Geräte\\\"-Knopf reparieren (fehlender dialog.js-Include + Modal-Markup-Mismatch)\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-277-mehrere-gerte-knopf-reparieren-fehlender-dialogjs-include--modal-markup-mismatch\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eNeue Standorte übernahmen nicht die Vertraulichkeitsstufe des Auftrags-Defaults — blieben auf \\u0026quot;kundentauglich\\u0026quot;, selbst wenn der Auftrag auf \\u0026quot;intern\\u0026quot; stand.\\u003c/p\\u003e\\n\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"278\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-14T12:18:30Z\",\"time_created\":\"2026-08-14T12:15:00Z\",\"time_updated\":\"2026-08-14T18:06:53Z\",\"title\":\"Vertraulichkeitsstufe-Vererbung bei neuem Standort fixen\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-278-vertraulichkeitsstufe-vererbung-bei-neuem-standort-fixen\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eAnschlussart-Dropdown (DSL/Kabel/Glasfaser_FTTH/...) bei Internetanbindungen im Standort-Formular hatte keine leere Vorauswahl, sondern startete immer stillschweigend bei \\u0026quot;DSL\\u0026quot;.\\u003c/p\\u003e\\n\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"279\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-14T12:18:33Z\",\"time_created\":\"2026-08-14T12:15:03Z\",\"time_updated\":\"2026-08-14T18:06:53Z\",\"title\":\"\\\"Bitte auswählen\\\"-Platzhalter bei Internetanschluss-Art ergänzen\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-279-bitte-auswhlen-platzhalter-bei-internetanschluss-art-ergnzen\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eKeine verlässliche, gepflegte Versionsnummer im Projekt — trotz laufender Änderungen war nicht erkennbar, welche Version aktuell läuft.\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"280\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-14T12:18:36Z\",\"time_created\":\"2026-08-14T12:15:07Z\",\"time_updated\":\"2026-08-15T06:59:52Z\",\"title\":\"Versionierungsschema + README aufsetzen\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-280-versionierungsschema--readme-aufsetzen\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eIm Maßnahmenkatalog müssten bitte die Investitionskosten und die monatlichen Kosten bitte komplett entfernt werden. Beziehungsweise wenn man das macht, muss man bitte hingehen und das einmal auch editierbar machen. Aktuell ist das ein fester Wert, der hier hinterlegt wurde.\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"289\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-15T10:48:56Z\",\"time_created\":\"2026-08-15T07:51:37Z\",\"time_updated\":\"2026-08-15T10:48:56Z\",\"title\":\"Maßnahmenkatalog\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-289-manahmenkatalog\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003e\\u003cstrong\\u003eWas ist kaputt:\\u003c/strong\\u003e Der dokumentierte Setup-Befehl \\u003ccode\\u003epip install -e \\u0026quot;.[dev]\\u0026quot;\\u003c/code\\u003e schlägt auf einem frischen Checkout von \\u003ccode\\u003emain\\u003c/code\\u003e sofort fehl, noch bevor überhaupt eine einzige Dependency installiert wird.\\u003c/p\\u003e\\n\\u003cp\\u003e\\u003cstrong\\u003eWo:\\u003c/strong\\u003e \\u003ccode\\u003epyproject.toml\\u003c/code\\u003e — es fehlt eine \\u003ccode\\u003e[tool.setuptools]\\u003c/code\\u003e-Packaging-Konfiguration. setuptools' automatische Flat-Layout-Erkennung interpretiert jedes Root-Verzeichnis ohne \\u003ccode\\u003e__init__.py\\u003c/code\\u003e als eigenständiges Top-Level-Package: \\u003ccode\\u003eapp\\u003c/code\\u003e, \\u003ccode\\u003erules\\u003c/code\\u003e, \\u003ccode\\u003eexports\\u003c/code\\u003e, \\u003ccode\\u003eschemas\\u003c/code\\u003e, \\u003ccode\\u003escratch\\u003c/code\\u003e, \\u003ccode\\u003ebewertung\\u003c/code\\u003e.\\u003c/p\\u003e\\n\\u003cp\\u003e\\u003cstrong\\u003eWie reproduzierbar (100 %, heute verifiziert):\\u003c/strong\\u003e\\u003c/p\\u003e\\n\\u003cpre\\u003e\\u003ccode\\u003egit clone https://github.com/deMarcel97/bestandsaufnahme-tool.git\\ncd bestandsaufnahme-tool\\npython3 -m venv .venv \\u0026amp;\\u0026amp; . .venv/bin/activate\\npip install -e \\u0026quot;.[dev]\\u0026quot;\\u003c/code\\u003e\\u003c/pre\\u003e\\n\\u003cp\\u003e→ \\u003ccode\\u003eerror: Multiple top-level packages discovered in a flat-layout: ['app', 'rules', 'exports', 'schemas', 'scratch', 'bewertung']\\u003c/code\\u003e — der Build bricht komplett ab, auch fastapi/uvicorn/etc. werden dadurch gar nicht erst installiert.\\u003c/p\\u003e\\n\\u003cp\\u003e\\u003cstrong\\u003eAuswirkung:\\u003c/strong\\u003e Die im Projekt selbst dokumentierte Standard-Installationsroutine funktioniert auf keinem sauberen Checkout (neue Dev-Umgebung, CI, oder — wie heute — der automatisierte tägliche Check dieses Tools). Muss jedes Mal manuell umgangen werden (Dependencies einzeln ohne \\u003ccode\\u003e-e .\\u003c/code\\u003e installieren, \\u003ccode\\u003ePYTHONPATH=.\\u003c/code\\u003e für Tests/App setzen).\\u003c/p\\u003e\\n\\u003cp\\u003e\\u003cstrong\\u003eVorschlag zur Behebung:\\u003c/strong\\u003e In \\u003ccode\\u003epyproject.toml\\u003c/code\\u003e ergänzen:\\u003c/p\\u003e\\n\\u003cpre\\u003e\\u003ccode\\u003e[tool.setuptools]\\npackages = [\\u0026quot;app\\u0026quot;]\\u003c/code\\u003e\\u003c/pre\\u003e\\n\\u003cp\\u003e(\\u003ccode\\u003erules/\\u003c/code\\u003e, \\u003ccode\\u003eschemas/\\u003c/code\\u003e, \\u003ccode\\u003ebewertung/\\u003c/code\\u003e sind YAML-Datenverzeichnisse, keine Python-Packages — sie werden zur Laufzeit über Pfade aus \\u003ccode\\u003eapp/config.py\\u003c/code\\u003e gelesen, nicht importiert, müssen also nicht mitinstalliert werden; \\u003ccode\\u003eexports/\\u003c/code\\u003e und \\u003ccode\\u003escratch/\\u003c/code\\u003e sind Output- bzw. Dev-Scratch-Verzeichnisse.) Lokal mit genau dieser Änderung getestet — damit läuft \\u003ccode\\u003epip install -e \\u0026quot;.[dev]\\u0026quot;\\u003c/code\\u003e sauber durch und alle 82 Tests + der komplette Browser-Funktionstest liefen danach problemlos.\\u003c/p\\u003e\\n\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"293\",\"list_id\":\"84\",\"list_title\":\"Done\",\"priority\":3,\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"start_date\":\"2026-08-15T11:00:13Z\",\"status\":\"completed\",\"subscribed\":true,\"tags\":[{\"color\":\"#f79009\",\"id\":\"4\",\"name\":\"Bug\",\"slug\":\"bug\",\"space_id\":\"6\",\"workspace_id\":\"tQp2b2rZ\"}],\"time_completed\":\"2026-08-15T11:03:50Z\",\"time_created\":\"2026-08-15T10:50:03Z\",\"time_updated\":\"2026-08-15T11:03:50Z\",\"title\":\"Setup kaputt: \\\"pip install -e .[dev]\\\" schlägt auf frischem Checkout fehl (setuptools flat-layout)\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-293-setup-kaputt-pip-install-e-dev-schlgt-auf-frischem-checkout-fehl-setuptools-flat-layout\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003e\\u003cstrong\\u003eWas ist kaputt:\\u003c/strong\\u003e \\u003ccode\\u003eapp/services/chart_generator.py\\u003c/code\\u003e importiert \\u003ccode\\u003efrom PIL import Image, ImageDraw, ImageFont\\u003c/code\\u003e (für das Executive-Summary-Chart im Wordbericht). \\u003ccode\\u003ePillow\\u003c/code\\u003e steht aber nirgends in den Dependencies von \\u003ccode\\u003epyproject.toml\\u003c/code\\u003e. Auf jeder Installation, die sich strikt an \\u003ccode\\u003epyproject.toml\\u003c/code\\u003e hält, ist \\u003ccode\\u003ePIL\\u003c/code\\u003e daher nicht vorhanden.\\u003c/p\\u003e\\u003cp\\u003e\\u003cstrong\\u003eWo:\\u003c/strong\\u003e \\u003ccode\\u003epyproject.toml\\u003c/code\\u003e (\\u003ccode\\u003e[project].dependencies\\u003c/code\\u003e, fehlender Eintrag); Import in \\u003ccode\\u003eapp/services/chart_generator.py:2\\u003c/code\\u003e; lazy-importiert (und damit erst zur Laufzeit crashend) aus \\u003ccode\\u003eapp/services/exporter.py:152\\u003c/code\\u003e in \\u003ccode\\u003eExporterService.export_analysebericht_docx()\\u003c/code\\u003e.\\u003c/p\\u003e\\u003cp\\u003e\\u003cstrong\\u003eWie reproduzierbar (100%, heute per Code-Review + direktem Funktionsaufruf verifiziert):\\u003c/strong\\u003e Frisches venv, nur die in \\u003ccode\\u003epyproject.toml\\u003c/code\\u003e gelisteten Pakete installiert (kein Pillow), dann:\\u003c/p\\u003e\\u003cpre\\u003e\\u003ccode\\u003ePYTHONPATH=. python3 -c \\\"\\nfrom app.services.exporter import exporter_service\\nfrom app.models.auftrag import Auftrag\\na = Auftrag(id='x', bezeichnung='t', kunde='k')\\nexporter_service.export_analysebericht_docx(a, [], [], [], 'kundentauglich')\\n\\\"\\u003c/code\\u003e\\u003c/pre\\u003e\\u003cp\\u003e→ \\u003ccode\\u003eModuleNotFoundError: No module named 'PIL'\\u003c/code\\u003e, Traceback über \\u003ccode\\u003eexporter.py:152\\u003c/code\\u003e → \\u003ccode\\u003echart_generator.py:2\\u003c/code\\u003e.\\u003c/p\\u003e\\u003cp\\u003eIm Browser/UI äquivalent: Auftrag öffnen → Export → Datei \\\"analysebericht.docx\\\" herunterladen → FastAPI liefert \\u003cstrong\\u003e500 Internal Server Error\\u003c/strong\\u003e. Der Import liegt außerhalb des try/except-Blocks in \\u003ccode\\u003eexporter.py\\u003c/code\\u003e, der eigentlich nur Fehler beim \\u003cem\\u003eRendern\\u003c/em\\u003e des Charts abfangen soll — der Import selbst crasht schon vorher ungefangen.\\u003c/p\\u003e\\u003cp\\u003e\\u003cstrong\\u003eAuswirkung:\\u003c/strong\\u003e Der komplette .docx-Export — laut Projektbeschreibung eine Kernfunktion (\\\"Berichtserstellung (.docx-Export via python-docx)\\\") — ist auf jeder frischen Installation funktionsunfähig. Vermutlich bisher nicht aufgefallen, weil auf den bisherigen Dev-Rechnern Pillow bereits anderweitig im Environment vorhanden war (im Repo liegen bereits fertige \\u003ccode\\u003eexports/*.docx\\u003c/code\\u003e). Nach lokaler Installation von Pillow lief der komplette Export (alle Formate, alle drei Vertraulichkeitsstufen) im heutigen Check fehlerfrei durch — es ist also ausschließlich die fehlende Dependency-Deklaration, keine tiefere Logikschwäche.\\u003c/p\\u003e\\u003cp\\u003e\\u003cstrong\\u003eVorschlag zur Behebung:\\u003c/strong\\u003e \\u003ccode\\u003ePillow\\u003c/code\\u003e (z. B. \\u003ccode\\u003ePillow\\u0026gt;=10.0.0\\u003c/code\\u003e) in \\u003ccode\\u003epyproject.toml\\u003c/code\\u003e unter \\u003ccode\\u003e[project].dependencies\\u003c/code\\u003e ergänzen. Zusätzlich wäre ein Test sinnvoll, der \\u003ccode\\u003eexport_analysebericht_docx()\\u003c/code\\u003e tatsächlich aufruft — aktuell deckt kein Test in \\u003ccode\\u003etests/test_exporter.py\\u003c/code\\u003e oder \\u003ccode\\u003etests/test_report_builder.py\\u003c/code\\u003e den DOCX-Pfad ab, nur der Markdown-Report wird getestet. Damit wäre der Fehler künftig schon in \\u003ccode\\u003epytest\\u003c/code\\u003e sichtbar statt erst beim Klick im Browser.\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"292\",\"list_id\":\"84\",\"list_title\":\"Done\",\"priority\":4,\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"start_date\":\"2026-08-15T11:00:13Z\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-15T11:03:50Z\",\"time_created\":\"2026-08-15T10:49:54Z\",\"time_updated\":\"2026-08-15T11:03:50Z\",\"title\":\"DOCX-Export crasht immer: Pillow (PIL) fehlt als Dependency in pyproject.toml\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-292-docx-export-crasht-immer-pillow-pil-fehlt-als-dependency-in-pyprojecttoml\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003e\\u003cstrong\\u003eWas ist kaputt:\\u003c/strong\\u003e Zwei kleine Inkonsistenzen zwischen \\u003ccode\\u003eREADME.md\\u003c/code\\u003e und \\u003ccode\\u003epyproject.toml\\u003c/code\\u003e im main-Branch (Stand heute, 2026-08-15):\\u003c/p\\u003e\\n\\u003col\\u003e\\n\\u003cli\\u003e\\u003cp\\u003eREADME-Überschrift nennt \\u003ccode\\u003ev2.2.0\\u003c/code\\u003e (\\u003ccode\\u003e# IT-Bestandsaufnahme-Tool (v2.2.0)\\u003c/code\\u003e), der Fließtext direkt darunter aber \\u003ccode\\u003e\\u0026gt; Aktuelle Version: **2.1.0**\\u003c/code\\u003e. \\u003ccode\\u003epyproject.toml\\u003c/code\\u003e (\\u003ccode\\u003eversion = \\u0026#34;2.2.0\\u0026#34;\\u003c/code\\u003e) und \\u003ccode\\u003eCHANGELOG.md\\u003c/code\\u003e (neuester Eintrag \\u003ccode\\u003e[2.2.0] - 2026-08-14\\u003c/code\\u003e) bestätigen 2.2.0 als aktuell — die Fließtext-Zeile im README ist veraltet (wahrscheinlich beim letzten Versionsbump vergessen).\\u003c/p\\u003e\\u003c/li\\u003e\\n\\u003cli\\u003e\\u003cp\\u003eREADME nennt als Stack-Anforderung „Python 3.14+\\u0026#34;, \\u003ccode\\u003epyproject.toml\\u003c/code\\u003e deklariert aber gar kein \\u003ccode\\u003erequires-python\\u003c/code\\u003e. Entweder fehlt die Absicherung in \\u003ccode\\u003epyproject.toml\\u003c/code\\u003e, oder die 3.14+-Angabe im README ist zu hoch gegriffen/ein Tippfehler (FastAPI 0.110 / Pydantic 2.6 benötigen das nicht, und ein taggeaktueller Python 3.14 dürfte kaum die getestete Mindestversion sein).\\u003c/p\\u003e\\u003c/li\\u003e\\n\\u003c/ol\\u003e\\n\\u003cp\\u003e\\u003cstrong\\u003eWo:\\u003c/strong\\u003e \\u003ccode\\u003eREADME.md\\u003c/code\\u003e (Kopfbereich, \\u0026quot;Übersicht\\u0026quot; + \\u0026quot;Technologiestack\\u0026quot;), \\u003ccode\\u003epyproject.toml\\u003c/code\\u003e (\\u003ccode\\u003e[project]\\u003c/code\\u003e-Sektion).\\u003c/p\\u003e\\n\\u003cp\\u003e\\u003cstrong\\u003eReproduzierbar:\\u003c/strong\\u003e Direkt beim Lesen der Dateien im main-Branch sichtbar, kein Programmlauf nötig. Beide Dateien wurden heute per GitHub-Web-Ansicht geprüft.\\u003c/p\\u003e\\n\\u003cp\\u003e\\u003cstrong\\u003eVorschlag:\\u003c/strong\\u003e README-Versionszeile auf 2.2.0 aktualisieren (idealerweise Version künftig nur an einer Stelle pflegen bzw. aus pyproject.toml ziehen, um erneutes Auseinanderlaufen zu vermeiden); \\u003ccode\\u003erequires-python\\u003c/code\\u003e in \\u003ccode\\u003epyproject.toml\\u003c/code\\u003e passend zur tatsächlich getesteten Mindestversion ergänzen.\\u003c/p\\u003e\\n\\u003cp\\u003e\\u003cstrong\\u003eHinweis zum heutigen Check:\\u003c/strong\\u003e Gefunden per Doku-/Config-Review. Der eigentliche Applikationscode (\\u003ccode\\u003eapp/\\u003c/code\\u003e, \\u003ccode\\u003eschemas/\\u003c/code\\u003e, \\u003ccode\\u003erules/\\u003c/code\\u003e) sowie \\u003ccode\\u003epytest\\u003c/code\\u003e und der Browser-Funktionstest konnten in diesem Lauf \\u003cstrong\\u003enicht\\u003c/strong\\u003e geprüft werden — die Cowork-Sandbox hatte heute keinen Netzwerkzugriff auf GitHub/PyPI (\\u003ccode\\u003egit clone\\u003c/code\\u003e, \\u003ccode\\u003epip install\\u003c/code\\u003e schlugen mit \\u0026quot;blocked-by-allowlist\\u0026quot; fehl). Details dazu im Chat-Report des heutigen Laufs.\\u003c/p\\u003e\\n\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"291\",\"list_id\":\"84\",\"list_title\":\"Done\",\"priority\":1,\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"start_date\":\"2026-08-15T11:00:13Z\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-15T11:03:51Z\",\"time_created\":\"2026-08-15T10:10:25Z\",\"time_updated\":\"2026-08-15T11:03:51Z\",\"title\":\"Doku-/Packaging-Inkonsistenzen: Versionsnummer \\u0026 Python-Anforderung\",\"total_checklists\":0,\"total_comments\":3,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-291-doku-packaging-inkonsistenzen-versionsnummer--python-anforderung\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003e\\u003cstrong\\u003eWas ist kaputt:\\u003c/strong\\u003e \\u003ccode\\u003eEvaluatorService.evaluate_auftrag()\\u003c/code\\u003e setzt \\u003ccode\\u003eschlechtester_standort_bezeichnung\\u003c/code\\u003e auf denselben Wert wie \\u003ccode\\u003eschlechtester_standort_id\\u003c/code\\u003e (die interne Slug-ID, z. B. \\u003ccode\\u003esto-hauptsitz-muenchen\\u003c/code\\u003e) statt auf den tatsächlichen Klartext-Namen (\\u003ccode\\u003eStandort.bezeichnung\\u003c/code\\u003e, z. B. \\u0026quot;Hauptsitz München\\u0026quot;). Grund: \\u003ccode\\u003eevaluate_auftrag()\\u003c/code\\u003e bekommt nur die \\u003ccode\\u003eobjekte\\u003c/code\\u003e-Liste übergeben, nicht die \\u003ccode\\u003estandorte\\u003c/code\\u003e-Liste — der echte Name lässt sich an der Stelle also gar nicht auflösen.\\u003c/p\\u003e\\n\\u003cp\\u003e\\u003cstrong\\u003eWo:\\u003c/strong\\u003e \\u003ccode\\u003eapp/services/evaluator.py\\u003c/code\\u003e, \\u003ccode\\u003eevaluate_auftrag()\\u003c/code\\u003e, Abschnitt \\u0026quot;Calculate location scores \\u0026amp; locate worst location\\u0026quot; (\\u003ccode\\u003eschlechtester_bez = worst_sto_id\\u003c/code\\u003e). Feld definiert in \\u003ccode\\u003eapp/models/bewertung.py\\u003c/code\\u003e (\\u003ccode\\u003eGesamtBewertung.schlechtester_standort_bezeichnung\\u003c/code\\u003e).\\u003c/p\\u003e\\n\\u003cp\\u003e\\u003cstrong\\u003eWie reproduzierbar (heute verifiziert):\\u003c/strong\\u003e\\u003c/p\\u003e\\n\\u003cpre\\u003e\\u003ccode class=\\\"language-python\\\"\\u003efrom app.services.evaluator import evaluator_service\\nfrom app.models.technik import TechnikObjekt\\nobjs = [TechnikObjekt(schema_version=1, id='fw-a', typ='firewall', bezeichnung='FW A',\\n                       auftrag_id='x', standort_id='sto-hauptsitz-muenchen',\\n                       daten={'hardware_alter': 'ueber_5_jahre'})]\\nb = evaluator_service.evaluate_auftrag(['firewall'], objs)\\nprint(b.schlechtester_standort_id, b.schlechtester_standort_bezeichnung)\\u003c/code\\u003e\\u003c/pre\\u003e\\n\\u003cp\\u003e→ beide Felder sind identisch (\\u003ccode\\u003esto-hauptsitz-muenchen\\u003c/code\\u003e), obwohl der Standort z. B. \\u0026quot;Hauptsitz München\\u0026quot; heißt.\\u003c/p\\u003e\\n\\u003cp\\u003e\\u003cstrong\\u003eAuswirkung:\\u003c/strong\\u003e Aktuell kein sichtbarer Schaden — \\u003ccode\\u003eschlechtester_standort_id\\u003c/code\\u003e/\\u003ccode\\u003eschlechtester_standort_bezeichnung\\u003c/code\\u003e werden in keinem Template unter \\u003ccode\\u003eapp/templates/\\u003c/code\\u003e und auch nicht in \\u003ccode\\u003eapp/services/report_builder.py\\u003c/code\\u003e gerendert; das Feld wird berechnet, aber nirgends angezeigt (toter Code, per Grep über den ganzen Codebase heute bestätigt). Sobald jemand eine \\u0026quot;schlechtester Standort\\u0026quot;-Anzeige im Bewertungs-Dashboard oder Bericht ergänzt — naheliegend, das Feld scheint genau dafür angelegt worden zu sein — würde sie die rohe ID statt eines lesbaren Namens zeigen. Daher niedrige Priorität, aber als Falle für später dokumentiert.\\u003c/p\\u003e\\n\\u003cp\\u003e\\u003cstrong\\u003eVorschlag zur Behebung:\\u003c/strong\\u003e Entweder \\u003ccode\\u003estandorte: List[Standort]\\u003c/code\\u003e zusätzlich an \\u003ccode\\u003eevaluate_auftrag()\\u003c/code\\u003e übergeben und darüber die echte \\u003ccode\\u003ebezeichnung\\u003c/code\\u003e nachschlagen, oder das Feld bewusst als reine ID führen und erst am Verwendungsort (Route/Template, wo die \\u003ccode\\u003estandorte\\u003c/code\\u003e-Liste ohnehin schon geladen ist) auf \\u003ccode\\u003ebezeichnung\\u003c/code\\u003e mappen.\\u003c/p\\u003e\\n\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"294\",\"list_id\":\"84\",\"list_title\":\"Done\",\"priority\":1,\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"start_date\":\"2026-08-15T11:00:13Z\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-15T11:03:51Z\",\"time_created\":\"2026-08-15T10:50:13Z\",\"time_updated\":\"2026-08-15T11:03:51Z\",\"title\":\"Bewertung: \\\"schlechtester Standort\\\" liefert Standort-ID statt Klartext-Bezeichnung\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-294-bewertung-schlechtester-standort-liefert-standort-id-statt-klartext-bezeichnung\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eNeuer Themenblock \\\"Business-Software\\\" (übergeordnet, analog zu Server/Firewall) mit drei Sub-Bausteinen:\\u003c/p\\u003e\\u003cp\\u003e\\u003cstrong\\u003eCRM\\u003c/strong\\u003e: Salesforce, Microsoft Dynamics 365, HubSpot, Sonstige (Freitext) \\u003cstrong\\u003eDMS\\u003c/strong\\u003e: ELO, DocuWare, d.velop, enaio, DATEV DMS (Kanzlei-spezifisch, mit Vermerk), Sonstige (Freitext) — SharePoint bewusst ausgeschlossen, zählt nicht als echtes DMS \\u003cstrong\\u003eERP\\u003c/strong\\u003e: SAP S/4HANA, Microsoft Dynamics 365 Business Central, Sage, Sonstige (Freitext)\\u003c/p\\u003e\\u003cp\\u003eGenerelles UI-Prinzip: feste Auswahl gängigster Anbieter + immer \\\"Sonstige\\\"-Option mit Freitextfeld (Dropdown+Freitext-Fallback), damit auch unbekannte/seltene Software erfasst werden kann. Gilt künftig als Vorbild für alle Software-Felder im Tool.\\u003c/p\\u003e\\u003cp\\u003eNicht Teil dieser Karte (Merkposten für später):\\u003c/p\\u003e\\u003cul\\u003e\\u003cli\\u003e\\u003cp\\u003eGenerelles Objektmodell (Server/Storage als Basis-Objekte vor Themenblöcken)\\u003c/p\\u003e\\u003c/li\\u003e\\u003cli\\u003e\\u003cp\\u003eBackup \\u0026amp; Recovery als nächster Baustein nach Firewall\\u003c/p\\u003e\\u003c/li\\u003e\\u003cli\\u003e\\u003cp\\u003eWeitere Business-Software-Kategorien über CRM/DMS/ERP hinaus\\u003c/p\\u003e\\u003c/li\\u003e\\u003c/ul\\u003e\\u003cp\\u003eUmsetzung als drei neue Bausteine (schemas/crm.yaml, dms.yaml, erp.yaml + passende rules/*.yaml), analog zur bestehenden Schema-Architektur.\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"300\",\"list_id\":\"84\",\"list_title\":\"Done\",\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"tags\":[{\"color\":\"#12b76a\",\"id\":\"5\",\"name\":\"Feature\",\"slug\":\"feature\",\"space_id\":\"6\",\"workspace_id\":\"tQp2b2rZ\"}],\"time_completed\":\"2026-08-15T16:09:51Z\",\"time_created\":\"2026-08-15T15:10:16Z\",\"time_updated\":\"2026-08-15T16:09:51Z\",\"title\":\"Themenblock Business-Software (CRM/DMS/ERP)\",\"total_checklists\":0,\"total_comments\":3,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-300-themenblock-business-software-crmdmserp\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eStandort-Übersicht von Auftrag PROJ-1/testeii zeigte wiederholt \\\"QA Inspector Team (Updated)\\\" in der Betreut-durch-Spalte — vom User nicht beauftragt und als \\\"komisch\\\" empfunden.\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"281\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-15T18:01:51Z\",\"time_created\":\"2026-08-14T12:15:10Z\",\"time_updated\":\"2026-08-15T18:01:51Z\",\"title\":\"QA-Testdaten (\\\"QA Inspector Team\\\") in auf-test bereinigen\",\"total_checklists\":0,\"total_comments\":5,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-281-qa-testdaten-qa-inspector-team-in-auf-test-bereinigen\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eBei den Aufträgen gibt es einen Status und Vorbereitung, das muss man auch einmal anpassen können, beziehungsweise da muss man können.\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"283\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-15T18:01:52Z\",\"time_created\":\"2026-08-15T06:55:36Z\",\"time_updated\":\"2026-08-15T18:01:52Z\",\"title\":\"Bei den Aufträgen.\",\"total_checklists\":0,\"total_comments\":3,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-283-bei-den-auftrgen\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eWenn mit Stammdaten die Urteil angepasst wird, zum Beispiel Geschäftszeiten 24.7, soll eine Empfehlung rauspurzeln, dass eine Rufbereitschaft hinterlegt werden kann oder hinterlegt werden soll. Das ist eine Empfehlung.\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"284\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-15T18:01:54Z\",\"time_created\":\"2026-08-15T06:59:39Z\",\"time_updated\":\"2026-08-15T18:01:54Z\",\"title\":\"Wenn unter den Stammdaten Uhrzeit angepasst wird.\",\"total_checklists\":0,\"total_comments\":3,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-284-wenn-unter-den-stammdaten-uhrzeit-angepasst-wird\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eStammdaten und Kontext müssen einmal getrennt werden, dass der Unternehmenskontext einmal separat ist, auch als Punkt aufgeführt ist.\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"286\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-15T18:01:55Z\",\"time_created\":\"2026-08-15T07:49:40Z\",\"time_updated\":\"2026-08-15T18:01:55Z\",\"title\":\"Trennung Stammdaten \\u0026 Kontext\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-286-trennung-stammdaten--kontext\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eDie offenen Punkte müssen nicht nur nach Standort, sondern auch nach Hardware unterteilt werden, dass man nicht durch eine nicht super vollständige, unübersichtliche Liste einmal durchgehen muss, sich die Sachen einmal durchzulesen, beziehungsweise wo man nochmal ansetzen muss.\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"287\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-15T18:01:56Z\",\"time_created\":\"2026-08-15T07:50:26Z\",\"time_updated\":\"2026-08-15T18:01:56Z\",\"title\":\"Offene Punkte sktukurieren\",\"total_checklists\":0,\"total_comments\":4,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-287-offene-punkte-sktukurieren\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003ein der Standortübersicht ist der Status muss vollständig = grün werden\\u003c/p\\u003e\\u003cp\\u003eVollständig = grün\\u003c/p\\u003e\\u003cp\\u003eteilweise = gelb oder orange\\u003c/p\\u003e\\u003cp\\u003eunbekannt = grau\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"295\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-15T18:01:58Z\",\"time_created\":\"2026-08-15T12:18:44Z\",\"time_updated\":\"2026-08-15T18:01:58Z\",\"title\":\"Status anpassungen\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-295-status-anpassungen\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"296\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-15T18:01:59Z\",\"time_created\":\"2026-08-15T12:42:13Z\",\"time_updated\":\"2026-08-15T18:01:59Z\",\"title\":\"Server\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":1,\"url\":\"https://app.superthread.com/demarcel/card-296-server\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eHier soll bitte es einmal so gemacht werden wenn hier ein Server ausgewählt wird und dann eine Virtualiesrungslösung angeklickt wird das erst dann die ganzen was Virtualliesrung betrifft angepasst wird.\\u003c/p\\u003e\\u003cp\\u003eDie Frage mit Wird virtualieier?t in der Geräte erfassung mit ja angeklickt wird dann wird erst die ganzen fragen bezüglich Hypervisor gestellt.\\u003cbr\\u003eVorher wird es so behandelt das es ein Bare-Matell host ist.\\u003c/p\\u003e\\u003cp\\u003e\\u003c/p\\u003e\\u003cp\\u003edie Frage mit Wird virtualisiert muss auch ganz nach oben und ist auch ein Pflicht feld.\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"297\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-15T18:02:00Z\",\"time_created\":\"2026-08-15T12:44:01Z\",\"time_updated\":\"2026-08-15T18:02:00Z\",\"title\":\"Server \\u0026 Virtualisierung Feld\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":2,\"url\":\"https://app.superthread.com/demarcel/card-297-server--virtualisierung-feld\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003eIn den Feld fehlt mir die Anbindung und ein feld das man mehrere Festplatten aufeinmal hinzufügen kann.\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"298\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-15T18:02:01Z\",\"time_created\":\"2026-08-15T12:48:26Z\",\"time_updated\":\"2026-08-15T18:02:01Z\",\"title\":\"Feld Festplatten Slots\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-298-feld-festplatten-slots\"},{\"archived_board\":false,\"archived_list\":false,\"board_id\":\"15\",\"board_title\":\"Bestandsaufnahme-Tool\",\"content\":\"\\u003cp\\u003edas Feld Kommentar muss ganz nach unten\\u003c/p\\u003e\",\"creator\":{\"user_id\":\"uEdKW2Q9\"},\"id\":\"299\",\"list_id\":\"84\",\"list_title\":\"Done\",\"project\":{\"id\":\"282\",\"response_type\":\"min\",\"title\":\"Bestandsaufnahme-Tool\",\"url\":\"https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool\"},\"response_type\":\"default\",\"space_id\":\"6\",\"status\":\"completed\",\"subscribed\":true,\"time_completed\":\"2026-08-15T18:02:03Z\",\"time_created\":\"2026-08-15T12:49:22Z\",\"time_updated\":\"2026-08-15T18:02:03Z\",\"title\":\"Feld Kommentar\",\"total_checklists\":0,\"total_comments\":2,\"total_files\":0,\"total_task_children\":0,\"url\":\"https://app.superthread.com/demarcel/card-299-feld-kommentar\"}]}"
+        }
+      ],
+      "structuredContent": {
+        "tasks": [
           {
-            "color": "#12b76a",
-            "id": "5",
-            "name": "Feature",
-            "slug": "feature",
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Die Anwendung auf einen Webserver inklusive Anbindungen ans Elder bzw. an Entra ID müsste man einmal testen und einmal umsetzen.</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "285",
+            "list_id": "86",
+            "list_title": "Later",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
             "space_id": "6",
-            "workspace_id": "tQp2b2rZ"
-          }
-        ],
-        "time_created": "2026-08-15T09:11:00Z",
-        "time_updated": "2026-08-15T12:19:53Z",
-        "title": "Konkurrenzanalyse &amp; Ideen: Bestandsaufnahme-Tool",
-        "total_checklists": 0,
-        "total_comments": 0,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-290-konkurrenzanalyse-amp-ideen-bestandsaufnahme-tool"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>in der Standortübersicht ist der Status muss vollständig = grün werden</p><p>Vollständig = grün</p><p>teilweise = gelb oder orange</p><p>unbekannt = grau</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "295",
-        "list_id": "81",
-        "list_title": "Backlog",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "subscribed": true,
-        "time_created": "2026-08-15T12:18:44Z",
-        "time_updated": "2026-08-15T12:18:44Z",
-        "title": "Status anpassungen",
-        "total_checklists": 0,
-        "total_comments": 0,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-295-status-anpassungen"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "296",
-        "list_id": "81",
-        "list_title": "Backlog",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "subscribed": true,
-        "time_created": "2026-08-15T12:42:13Z",
-        "time_updated": "2026-08-15T12:42:13Z",
-        "title": "Server",
-        "total_checklists": 0,
-        "total_comments": 0,
-        "total_files": 0,
-        "total_task_children": 1,
-        "url": "https://app.superthread.com/demarcel/card-296-server"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>Hier soll bitte es einmal so gemacht werden wenn hier ein Server ausgewählt wird und dann eine Virtualiesrungslösung angeklickt wird das erst dann die ganzen was Virtualliesrung betrifft angepasst wird.</p><p>Die Frage mit Wird virtualieier?t in der Geräte erfassung mit ja angeklickt wird dann wird erst die ganzen fragen bezüglich Hypervisor gestellt.<br>Vorher wird es so behandelt das es ein Bare-Matell host ist.</p><p></p><p>die Frage mit Wird virtualisiert muss auch ganz nach oben und ist auch ein Pflicht feld.</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "297",
-        "list_id": "81",
-        "list_title": "Backlog",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "subscribed": true,
-        "time_created": "2026-08-15T12:44:01Z",
-        "time_updated": "2026-08-15T12:46:46Z",
-        "title": "Server & Virtualisierung Feld",
-        "total_checklists": 0,
-        "total_comments": 0,
-        "total_files": 0,
-        "total_task_children": 2,
-        "url": "https://app.superthread.com/demarcel/card-297-server--virtualisierung-feld"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>In den Feld fehlt mir die Anbindung und ein feld das man mehrere Festplatten aufeinmal hinzufügen kann.</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "298",
-        "list_id": "81",
-        "list_title": "Backlog",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "subscribed": true,
-        "time_created": "2026-08-15T12:48:26Z",
-        "time_updated": "2026-08-15T12:48:26Z",
-        "title": "Feld Festplatten Slots",
-        "total_checklists": 0,
-        "total_comments": 0,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-298-feld-festplatten-slots"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>das Feld Kommentar muss ganz nach unten</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "299",
-        "list_id": "81",
-        "list_title": "Backlog",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "subscribed": true,
-        "time_created": "2026-08-15T12:49:22Z",
-        "time_updated": "2026-08-15T12:49:22Z",
-        "title": "Feld Kommentar",
-        "total_checklists": 0,
-        "total_comments": 0,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-299-feld-kommentar"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>bei der Spalte NOCH NICHT ERFASST → Muss interagiert sein das man da einfach draufklicken kann damit ich direkt hinspringen kann</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "275",
-        "list_id": "83",
-        "list_title": "Doing",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "start_date": "2026-08-14T17:47:26Z",
-        "status": "started",
-        "subscribed": true,
-        "time_created": "2026-08-14T12:10:54Z",
-        "time_updated": "2026-08-14T18:06:16Z",
-        "title": "Feature",
-        "total_checklists": 0,
-        "total_comments": 2,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-275-feature"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>Preis-Richtwerte (kosten_richtwert/aufwand_richtwert) waren bei allen 99 Maßnahmen-Regeln null, dadurch fiel kosten_quelle immer auf &quot;offen&quot; zurück. Zusätzlich fehlten laut Handoff-Dokument die Themenblöcke Server-Hardware, Virtualisierung/Cluster, VMs sowie erweiterte Switch-Felder komplett.</p>\n",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "276",
-        "list_id": "84",
-        "list_title": "Done",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "status": "completed",
-        "subscribed": true,
-        "time_completed": "2026-08-14T12:14:53Z",
-        "time_created": "2026-08-14T12:14:53Z",
-        "time_updated": "2026-08-14T18:06:18Z",
-        "title": "PR #1: Preis-Richtwerte + liste/objekt_referenz-Engine + Server-Cluster/VM/Switch-Erweiterung",
-        "total_checklists": 0,
-        "total_comments": 2,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-276-pr-1-preis-richtwerte--listeobjektreferenz-engine--server-clustervmswitch-erweiterung"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>Klick auf &quot;Mehrere Geräte&quot; in der Standort-Übersicht zeigte keine Reaktion — der Dialog zum Batch-Anlegen mehrerer Objekte öffnete sich nicht.</p>\n",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "277",
-        "list_id": "84",
-        "list_title": "Done",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "status": "completed",
-        "subscribed": true,
-        "time_completed": "2026-08-14T12:18:27Z",
-        "time_created": "2026-08-14T12:14:57Z",
-        "time_updated": "2026-08-14T18:06:53Z",
-        "title": "\"Mehrere Geräte\"-Knopf reparieren (fehlender dialog.js-Include + Modal-Markup-Mismatch)",
-        "total_checklists": 0,
-        "total_comments": 2,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-277-mehrere-gerte-knopf-reparieren-fehlender-dialogjs-include--modal-markup-mismatch"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>Neue Standorte übernahmen nicht die Vertraulichkeitsstufe des Auftrags-Defaults — blieben auf &quot;kundentauglich&quot;, selbst wenn der Auftrag auf &quot;intern&quot; stand.</p>\n",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "278",
-        "list_id": "84",
-        "list_title": "Done",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "status": "completed",
-        "subscribed": true,
-        "time_completed": "2026-08-14T12:18:30Z",
-        "time_created": "2026-08-14T12:15:00Z",
-        "time_updated": "2026-08-14T18:06:53Z",
-        "title": "Vertraulichkeitsstufe-Vererbung bei neuem Standort fixen",
-        "total_checklists": 0,
-        "total_comments": 2,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-278-vertraulichkeitsstufe-vererbung-bei-neuem-standort-fixen"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>Anschlussart-Dropdown (DSL/Kabel/Glasfaser_FTTH/...) bei Internetanbindungen im Standort-Formular hatte keine leere Vorauswahl, sondern startete immer stillschweigend bei &quot;DSL&quot;.</p>\n",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "279",
-        "list_id": "84",
-        "list_title": "Done",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "status": "completed",
-        "subscribed": true,
-        "time_completed": "2026-08-14T12:18:33Z",
-        "time_created": "2026-08-14T12:15:03Z",
-        "time_updated": "2026-08-14T18:06:53Z",
-        "title": "\"Bitte auswählen\"-Platzhalter bei Internetanschluss-Art ergänzen",
-        "total_checklists": 0,
-        "total_comments": 2,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-279-bitte-auswhlen-platzhalter-bei-internetanschluss-art-ergnzen"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>Keine verlässliche, gepflegte Versionsnummer im Projekt — trotz laufender Änderungen war nicht erkennbar, welche Version aktuell läuft.</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "280",
-        "list_id": "84",
-        "list_title": "Done",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "status": "completed",
-        "subscribed": true,
-        "time_completed": "2026-08-14T12:18:36Z",
-        "time_created": "2026-08-14T12:15:07Z",
-        "time_updated": "2026-08-15T06:59:52Z",
-        "title": "Versionierungsschema + README aufsetzen",
-        "total_checklists": 0,
-        "total_comments": 2,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-280-versionierungsschema--readme-aufsetzen"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>Im Maßnahmenkatalog müssten bitte die Investitionskosten und die monatlichen Kosten bitte komplett entfernt werden. Beziehungsweise wenn man das macht, muss man bitte hingehen und das einmal auch editierbar machen. Aktuell ist das ein fester Wert, der hier hinterlegt wurde.</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "289",
-        "list_id": "84",
-        "list_title": "Done",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "status": "completed",
-        "subscribed": true,
-        "time_completed": "2026-08-15T10:48:56Z",
-        "time_created": "2026-08-15T07:51:37Z",
-        "time_updated": "2026-08-15T10:48:56Z",
-        "title": "Maßnahmenkatalog",
-        "total_checklists": 0,
-        "total_comments": 2,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-289-manahmenkatalog"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p>Wenn ein Finding bestätigt wurde, das zu einem Maßnahmenkatalog hinzugefügt werden muss und es schon existiert im Maßnahmenkatalog, muss das bei den Findings bitte entweder durchgestrichen werden oder es darf nicht mehr eine Liste auftauchen.</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "288",
-        "list_id": "84",
-        "list_title": "Done",
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "status": "completed",
-        "subscribed": true,
-        "time_completed": "2026-08-15T10:49:01Z",
-        "time_created": "2026-08-15T07:51:03Z",
-        "time_updated": "2026-08-15T10:49:01Z",
-        "title": "Findings",
-        "total_checklists": 0,
-        "total_comments": 2,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-288-findings"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p><strong>Was ist kaputt:</strong> Der dokumentierte Setup-Befehl <code>pip install -e &quot;.[dev]&quot;</code> schlägt auf einem frischen Checkout von <code>main</code> sofort fehl, noch bevor überhaupt eine einzige Dependency installiert wird.</p>\n<p><strong>Wo:</strong> <code>pyproject.toml</code> — es fehlt eine <code>[tool.setuptools]</code>-Packaging-Konfiguration. setuptools' automatische Flat-Layout-Erkennung interpretiert jedes Root-Verzeichnis ohne <code>__init__.py</code> als eigenständiges Top-Level-Package: <code>app</code>, <code>rules</code>, <code>exports</code>, <code>schemas</code>, <code>scratch</code>, <code>bewertung</code>.</p>\n<p><strong>Wie reproduzierbar (100 %, heute verifiziert):</strong></p>\n<pre><code>git clone https://github.com/deMarcel97/bestandsaufnahme-tool.git\ncd bestandsaufnahme-tool\npython3 -m venv .venv &amp;&amp; . .venv/bin/activate\npip install -e &quot;.[dev]&quot;</code></pre>\n<p>→ <code>error: Multiple top-level packages discovered in a flat-layout: ['app', 'rules', 'exports', 'schemas', 'scratch', 'bewertung']</code> — der Build bricht komplett ab, auch fastapi/uvicorn/etc. werden dadurch gar nicht erst installiert.</p>\n<p><strong>Auswirkung:</strong> Die im Projekt selbst dokumentierte Standard-Installationsroutine funktioniert auf keinem sauberen Checkout (neue Dev-Umgebung, CI, oder — wie heute — der automatisierte tägliche Check dieses Tools). Muss jedes Mal manuell umgangen werden (Dependencies einzeln ohne <code>-e .</code> installieren, <code>PYTHONPATH=.</code> für Tests/App setzen).</p>\n<p><strong>Vorschlag zur Behebung:</strong> In <code>pyproject.toml</code> ergänzen:</p>\n<pre><code>[tool.setuptools]\npackages = [&quot;app&quot;]</code></pre>\n<p>(<code>rules/</code>, <code>schemas/</code>, <code>bewertung/</code> sind YAML-Datenverzeichnisse, keine Python-Packages — sie werden zur Laufzeit über Pfade aus <code>app/config.py</code> gelesen, nicht importiert, müssen also nicht mitinstalliert werden; <code>exports/</code> und <code>scratch/</code> sind Output- bzw. Dev-Scratch-Verzeichnisse.) Lokal mit genau dieser Änderung getestet — damit läuft <code>pip install -e &quot;.[dev]&quot;</code> sauber durch und alle 82 Tests + der komplette Browser-Funktionstest liefen danach problemlos.</p>\n",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "293",
-        "list_id": "84",
-        "list_title": "Done",
-        "priority": 3,
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "start_date": "2026-08-15T11:00:13Z",
-        "status": "completed",
-        "subscribed": true,
-        "tags": [
+            "subscribed": true,
+            "time_created": "2026-08-15T07:48:58Z",
+            "time_updated": "2026-08-15T12:52:09Z",
+            "title": "MultiUser Support",
+            "total_checklists": 0,
+            "total_comments": 1,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-285-multiuser-support"
+          },
           {
-            "color": "#f79009",
-            "id": "4",
-            "name": "Bug",
-            "slug": "bug",
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p><em>Recherche vom 15.08.2026 – drei parallele Sub-Agent-Recherchen (Websuche + Herstellerdokumentation), von Marcel noch nicht gegengeprüft.</em></p><h2>Kernbefund</h2><p>Kein einziges recherchiertes Konkurrenzprodukt bietet einen fertigen, gestaffelten Maßnahmenkatalog mit Kostenschätzung – weder Docusnap (ISMS-Add-on verlinkt nur generische Standardmaßnahmen), noch RapidFire Network Detective/Compliance Manager GRC (POAM nennt \"required resources\", keine €-Beträge), noch die GRC-/Compliance-Tools (verinice, DIN SPEC 27076, ibi systems – überall bleibt die Kostenschätzung \"Beraterwissen im Kopf\"). Der geplante Maßnahmenkatalog trifft damit nachweislich eine echte Marktlücke, nicht nur bei kleinen Nischenanbietern, sondern auch beim Marktführer (Docusnap, 5000+ Kunden) und dem US-Standard-Tool für MSPs (Network Detective).</p><h2>Bestätigte Positionierung</h2><p>Alle recherchierten Tools setzen entweder automatisiertes Scanning mit Zugangsdaten (Docusnap, Network Detective, i-doit) oder eine dauerhaft laufende Installation voraus (IT Glue, Hudu – selbst Hudus Self-Hosting braucht einen laufenden Server). Keines ist für einen einmaligen Vor-Ort-Termin ohne jeden Netzwerkzugriff gebaut. Gleichzeitig ist das zugrundeliegende Muster (Baustein/Feld → Punkte → Textbaustein → Finding, schlechtester Wert statt Durchschnitt) über verinice, DIN SPEC 27076, ibi systems iris und VdS 10000 hinweg Branchenstandard – die Architektur ist erprobt, nicht riskant.</p><h2>Konkurrenzüberblick</h2><p><strong>Docusnap</strong> (docusnap.com, Bayern, 5000+ Kunden) – der direkteste deutschsprachige Wettbewerber. Automatisches, agentenloses Netzwerk-Scanning als Haupterfassung; manuelle Eingabe nur als Lückenfüller. Alle drei Output-Typen vorhanden, aber scan-datengetrieben. Organisatorische Inhalte nur im optionalen ISMS-Add-on, nicht strukturell in jedem Feld verankert. On-Premise-Linie offline-fähig (ab 465 €/Jahr), Docusnap365 Cloud mit lokalem Gateway.</p><p><strong>RapidFire Network Detective Pro / Kaseya</strong> – automatisierter Scan, primär Cloud-Portal, über 100 Report-Varianten (Executive-Infografik → Consolidated Risk Report → Management Plan → Full Detail Report). Scoring: Risk-Score + separater Issues-Score, kombiniert mit CVSS/Microsoft Secure Score. Netzplan automatisch aus Scan-Daten. Kein Kosten-Maßnahmenkatalog.</p><p><strong>IT Glue &amp; Hudu</strong> – laufende MSP-Dokumentation, kein Scoring/Findings/Bericht. Datenmodell relevant: IT Glue trennt feste Core Assets von frei definierbaren Flexible Assets (Custom Fields); Hudu nutzt globale Asset Layouts mit 14 Feldtypen (Confidential Text, List-Select, Embed, Required-Flag, \"Show in table view\"). Netzwerktopologie bei beiden nur über automatisches Discovery-Add-on, kein natives manuelles Zeichnen.</p><p><strong>verinice / BSI-Ökosystem / DIN SPEC 27076 / Markt</strong> – strukturell am nächsten dran. verinice ordnet Zielobjekte BSI-Bausteinen zu, bewertet jede Anforderung einzeln, vererbt den Schutzbedarf statt zu mitteln (= Worst-Value-Prinzip), behandelt Organisation (ORP-, CON-Bausteine) als gleichwertiges Objekt neben Technik. DIN SPEC 27076/BSI-CyberRisikoCheck ist strukturell fast eine Miniaturversion des eigenen Modells: 27 Anforderungen in 6 Themenfeldern, Punktevergabe, priorisierte Handlungsempfehlungen inkl. Förderhinweisen. Daneben: VdS 10000, ibi systems iris (Reifegrad Level 1–5), Vanta/Drata als Trendbeispiel „Framework-Mapping + Automatisierung\".</p><h2>Abgleich mit dem laufenden Board</h2><p>Der Stand ist weiter als die reine Blueprint-Phase: PR #1 hat Preis-Richtwerte, die Regel-Engine (liste/objekt_referenz) sowie Server-Hardware, Virtualisierung/Cluster, VMs und erweiterte Switch-Felder bereits umgesetzt. Drei direkte Anknüpfungspunkte zum offenen Backlog:</p><ul><li><p><internal-link data-resource-time-updated=\"1786790936\" data-icon-color=\"#32d583\" data-icon-src=\"check-circle\" name=\"Maßnahmenkatalog\" data-url=\"https://app.superthread.com/demarcel/card-289-manahmenkatalog\" data-type=\"internal-link\"></internal-link> – deckt sich mit der Kosten-/Priorisierungs-Idee unten; die Zwei-Achsen-Idee (Kosten × Dringlichkeit) lässt sich anschließen, sobald die Werte editierbar sind.</p></li><li><p><internal-link data-resource-time-updated=\"1786782633\" data-icon-color=\"#98a2b3\" data-icon-src=\"circle-dotted\" name=\"Trennung Stammdaten & Kontext\" data-url=\"https://app.superthread.com/demarcel/card-286-trennung-stammdaten--kontext\" data-type=\"internal-link\"></internal-link> – gleiche Richtung wie die Idee „Organisation &amp; Prozesse als eigener Baustein\" unten.</p></li><li><p><internal-link data-resource-time-updated=\"1786783412\" data-icon-color=\"#98a2b3\" data-icon-src=\"circle-dotted\" name=\"MultiUser Support\" data-url=\"https://app.superthread.com/demarcel/card-285-multiuser-support\" data-type=\"internal-link\"></internal-link> – weicht vom ursprünglichen Offline-Laptop-Prinzip ab. Falls das ernsthaft verfolgt wird: Docusnaps Zwei-Linien-Modell (On-Premise/offline + Docusnap365 Cloud mit lokalem Gateway) als Referenz, wie sich das sauber trennen lässt, ohne das Kernprodukt zu verwässern.</p></li></ul><p>Backup/Recovery als nächster inhaltlicher Baustein taucht im aktuellen Backlog noch nicht auf – die DIN-27076-Trennung Reaktion/Wiederherstellung unten bleibt als Bauplan relevant, sobald das ansteht.</p><h2>Konkrete Ideen für die Roadmap</h2><p><strong>Maßnahmenkatalog</strong></p><ul><li><p>Kostenschätzung + zweite Priorisierungs-Achse: DIN 27076 staffelt zusätzlich zur Kostenebene nach Dringlichkeit – Kosten × Dringlichkeit/Risiko als zweiachsiges Modell.</p></li><li><p>Optionales Metadatenfeld „Förderprogramm\" pro Maßnahme (analog BSI-CyberRisikoCheck, z. B. Mittelstand Digital) – geringer Aufwand, verkaufsstark.</p></li></ul><p><strong>Objektmodell / Datenschema</strong></p><ul><li><p>Eigenständigen Baustein „Organisation &amp; Prozesse\" als gleichwertiges Objekt neben Firewall/Server führen (analog verinice ORP-Bausteine) – löst das 2/3-Problem strukturell.</p></li><li><p>Hudus Feldtypen-Bibliothek als Vorbild für Konsistenz im Schema: Confidential-Feld, List-Select, „Pflichtfeld\"- und „Im Bericht anzeigen\"-Flag.</p></li><li><p>DIN-27076-Trennung „Reaktion\" vs. „Wiederherstellung\" als Bauplan für den nächsten Baustein Backup/Recovery.</p></li></ul><p><strong>Netzwerktopologie</strong></p><ul><li><p>Aus manuell erfassten Verbindungsdaten (Gerät X an Switch-Port Y) automatisches Diagramm-Layout erzeugen statt Freihand-Zeichnen.</p></li></ul><p><strong>Reporting / Scoring</strong></p><ul><li><p>Prüfen, ob getrennte Kennzahlen (Risk-Score vs. Issues-Score, Network-Detective-Vorbild) gegenüber dem bestehenden Scoring-Modell Mehrwert bieten.</p></li><li><p>Kurzer Executive-Abschnitt vorneweg im Fließtext-Bericht statt separatem Dokument.</p></li><li><p>Optionaler Diff-/Update-Modus für Folgebesuche beim selben Kunden (analog Network Detectives Change-Report).</p></li></ul><p><strong>Positionierung / Vertrieb</strong></p><ul><li><p>„Kein Scanner, keine Zugangsdaten, ein Termin reicht\" explizit als Abgrenzung zu Docusnap/Network Detective/i-doit kommunizieren.</p></li><li><p>Maßnahmenkatalog mit echten, gestaffelten Kosten aktiv als USP hervorheben.</p></li><li><p>Manuelle Erfassung organisatorischer Themen als Verkaufsargument gegenüber Kunden, die „auch einen Scanner\" erwarten.</p></li></ul><h2>Quellen</h2><p><strong>Docusnap:</strong> <a href=\"https://www.docusnap.com/en/features\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Features</a> · <a href=\"https://docs.docusnap.com/de/user-manual/introduction/about-docusnap/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Doku</a> · <a href=\"https://www.docusnap.com/en/add-ons1/isms-add-on\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">ISMS-Add-on</a> · <a href=\"https://www.docusnap.com/en/pricing\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Pricing</a> · <a href=\"https://docs.docusnap.com/de/user-manual/inventory/network-inventory/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Netzwerkinventarisierung</a> · <a href=\"https://docs.docusnap.com/de/user-manual/documentation/creation-of-documentation/map-files/network-map/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Netzpläne</a></p><p><strong>Network Detective / IT Glue / Hudu:</strong> <a href=\"https://www.rapidfiretools.com/products/network-assessment/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Network Detective Pro</a> · <a href=\"https://www.rapidfiretools.com/products/network-assessment/reports/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Sample Reports</a> · <a href=\"https://www.rapidfiretools.com/products/grc-software/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Compliance Manager GRC</a> · <a href=\"https://www.itglue.com/features/flexible-assets/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">IT Glue Flexible Assets</a> · <a href=\"https://www.itglue.com/networkglue/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Network Glue</a> · <a href=\"https://support.hudu.com/hc/en-us/articles/7905521347991-Asset-Layouts\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Hudu Asset Layouts</a> · <a href=\"https://support.hudu.com/hc/en-us/articles/35437359933079-About-Hudu-Radar\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Hudu Radar</a></p><p><strong>GRC/Markt:</strong> <a href=\"https://verinice.com/en/solutions/domains/bsi-it-grundschutz\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">verinice BSI IT-Grundschutz</a> · <a href=\"https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Informationen-und-Empfehlungen/KMU/CyberRisikoCheck/CyberRisikoCheck_node.html\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">BSI-CyberRisikoCheck</a> · <a href=\"https://digimojo.de/framework/din-spec-27076\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">DIN SPEC 27076 Übersicht</a> · <a href=\"https://vds.de/en/expertise/cyber-security/vds-quick-check/vds-10000-quick-check-for-information-security-for-smes\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">VdS 10000</a> · <a href=\"https://www.ibi-systems.de/de/leistungen-und-produkte/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">ibi systems iris</a> · <a href=\"https://www.hiscout.com/zedis-grundschutz-tool-bundesverwaltung/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">HiScout GRC Suite</a> · <a href=\"https://www.perseus.de/loesungen/cybersicherheits-risikobewertung/\" rel=\"noopener noreferrer nofollow\" target=\"_blank\">Perseus Technologies</a></p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "290",
+            "list_id": "81",
+            "list_title": "Backlog",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
             "space_id": "6",
-            "workspace_id": "tQp2b2rZ"
+            "subscribed": true,
+            "tags": [
+              {
+                "color": "#12b76a",
+                "id": "5",
+                "name": "Feature",
+                "slug": "feature",
+                "space_id": "6",
+                "workspace_id": "tQp2b2rZ"
+              }
+            ],
+            "time_created": "2026-08-15T09:11:00Z",
+            "time_updated": "2026-08-15T12:19:53Z",
+            "title": "Konkurrenzanalyse &amp; Ideen: Bestandsaufnahme-Tool",
+            "total_checklists": 0,
+            "total_comments": 0,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-290-konkurrenzanalyse-amp-ideen-bestandsaufnahme-tool"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Wenn ein Finding bestätigt wurde, das zu einem Maßnahmenkatalog hinzugefügt werden muss und es schon existiert im Maßnahmenkatalog, muss das bei den Findings bitte entweder durchgestrichen werden oder es darf nicht mehr eine Liste auftauchen.</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "288",
+            "list_id": "82",
+            "list_title": "To do",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "committed",
+            "subscribed": true,
+            "time_created": "2026-08-15T07:51:03Z",
+            "time_updated": "2026-08-15T16:06:37Z",
+            "title": "Findings",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-288-findings"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>bei der Spalte NOCH NICHT ERFASST → Muss interagiert sein das man da einfach draufklicken kann damit ich direkt hinspringen kann</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "275",
+            "list_id": "83",
+            "list_title": "Doing",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "start_date": "2026-08-14T17:47:26Z",
+            "status": "started",
+            "subscribed": true,
+            "tags": [
+              {
+                "color": "#12b76a",
+                "id": "5",
+                "name": "Feature",
+                "slug": "feature",
+                "space_id": "6",
+                "workspace_id": "tQp2b2rZ"
+              }
+            ],
+            "time_created": "2026-08-14T12:10:54Z",
+            "time_updated": "2026-08-15T16:15:35Z",
+            "title": "Leiste NOCH NICHT ERFASST",
+            "total_checklists": 0,
+            "total_comments": 5,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-275-leiste-noch-nicht-erfasst"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Preis-Richtwerte (kosten_richtwert/aufwand_richtwert) waren bei allen 99 Maßnahmen-Regeln null, dadurch fiel kosten_quelle immer auf &quot;offen&quot; zurück. Zusätzlich fehlten laut Handoff-Dokument die Themenblöcke Server-Hardware, Virtualisierung/Cluster, VMs sowie erweiterte Switch-Felder komplett.</p>\n",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "276",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-14T12:14:53Z",
+            "time_created": "2026-08-14T12:14:53Z",
+            "time_updated": "2026-08-14T18:06:18Z",
+            "title": "PR #1: Preis-Richtwerte + liste/objekt_referenz-Engine + Server-Cluster/VM/Switch-Erweiterung",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-276-pr-1-preis-richtwerte--listeobjektreferenz-engine--server-clustervmswitch-erweiterung"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Klick auf &quot;Mehrere Geräte&quot; in der Standort-Übersicht zeigte keine Reaktion — der Dialog zum Batch-Anlegen mehrerer Objekte öffnete sich nicht.</p>\n",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "277",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-14T12:18:27Z",
+            "time_created": "2026-08-14T12:14:57Z",
+            "time_updated": "2026-08-14T18:06:53Z",
+            "title": "\"Mehrere Geräte\"-Knopf reparieren (fehlender dialog.js-Include + Modal-Markup-Mismatch)",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-277-mehrere-gerte-knopf-reparieren-fehlender-dialogjs-include--modal-markup-mismatch"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Neue Standorte übernahmen nicht die Vertraulichkeitsstufe des Auftrags-Defaults — blieben auf &quot;kundentauglich&quot;, selbst wenn der Auftrag auf &quot;intern&quot; stand.</p>\n",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "278",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-14T12:18:30Z",
+            "time_created": "2026-08-14T12:15:00Z",
+            "time_updated": "2026-08-14T18:06:53Z",
+            "title": "Vertraulichkeitsstufe-Vererbung bei neuem Standort fixen",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-278-vertraulichkeitsstufe-vererbung-bei-neuem-standort-fixen"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Anschlussart-Dropdown (DSL/Kabel/Glasfaser_FTTH/...) bei Internetanbindungen im Standort-Formular hatte keine leere Vorauswahl, sondern startete immer stillschweigend bei &quot;DSL&quot;.</p>\n",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "279",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-14T12:18:33Z",
+            "time_created": "2026-08-14T12:15:03Z",
+            "time_updated": "2026-08-14T18:06:53Z",
+            "title": "\"Bitte auswählen\"-Platzhalter bei Internetanschluss-Art ergänzen",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-279-bitte-auswhlen-platzhalter-bei-internetanschluss-art-ergnzen"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Keine verlässliche, gepflegte Versionsnummer im Projekt — trotz laufender Änderungen war nicht erkennbar, welche Version aktuell läuft.</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "280",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-14T12:18:36Z",
+            "time_created": "2026-08-14T12:15:07Z",
+            "time_updated": "2026-08-15T06:59:52Z",
+            "title": "Versionierungsschema + README aufsetzen",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-280-versionierungsschema--readme-aufsetzen"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Im Maßnahmenkatalog müssten bitte die Investitionskosten und die monatlichen Kosten bitte komplett entfernt werden. Beziehungsweise wenn man das macht, muss man bitte hingehen und das einmal auch editierbar machen. Aktuell ist das ein fester Wert, der hier hinterlegt wurde.</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "289",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-15T10:48:56Z",
+            "time_created": "2026-08-15T07:51:37Z",
+            "time_updated": "2026-08-15T10:48:56Z",
+            "title": "Maßnahmenkatalog",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-289-manahmenkatalog"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p><strong>Was ist kaputt:</strong> Der dokumentierte Setup-Befehl <code>pip install -e &quot;.[dev]&quot;</code> schlägt auf einem frischen Checkout von <code>main</code> sofort fehl, noch bevor überhaupt eine einzige Dependency installiert wird.</p>\n<p><strong>Wo:</strong> <code>pyproject.toml</code> — es fehlt eine <code>[tool.setuptools]</code>-Packaging-Konfiguration. setuptools' automatische Flat-Layout-Erkennung interpretiert jedes Root-Verzeichnis ohne <code>__init__.py</code> als eigenständiges Top-Level-Package: <code>app</code>, <code>rules</code>, <code>exports</code>, <code>schemas</code>, <code>scratch</code>, <code>bewertung</code>.</p>\n<p><strong>Wie reproduzierbar (100 %, heute verifiziert):</strong></p>\n<pre><code>git clone https://github.com/deMarcel97/bestandsaufnahme-tool.git\ncd bestandsaufnahme-tool\npython3 -m venv .venv &amp;&amp; . .venv/bin/activate\npip install -e &quot;.[dev]&quot;</code></pre>\n<p>→ <code>error: Multiple top-level packages discovered in a flat-layout: ['app', 'rules', 'exports', 'schemas', 'scratch', 'bewertung']</code> — der Build bricht komplett ab, auch fastapi/uvicorn/etc. werden dadurch gar nicht erst installiert.</p>\n<p><strong>Auswirkung:</strong> Die im Projekt selbst dokumentierte Standard-Installationsroutine funktioniert auf keinem sauberen Checkout (neue Dev-Umgebung, CI, oder — wie heute — der automatisierte tägliche Check dieses Tools). Muss jedes Mal manuell umgangen werden (Dependencies einzeln ohne <code>-e .</code> installieren, <code>PYTHONPATH=.</code> für Tests/App setzen).</p>\n<p><strong>Vorschlag zur Behebung:</strong> In <code>pyproject.toml</code> ergänzen:</p>\n<pre><code>[tool.setuptools]\npackages = [&quot;app&quot;]</code></pre>\n<p>(<code>rules/</code>, <code>schemas/</code>, <code>bewertung/</code> sind YAML-Datenverzeichnisse, keine Python-Packages — sie werden zur Laufzeit über Pfade aus <code>app/config.py</code> gelesen, nicht importiert, müssen also nicht mitinstalliert werden; <code>exports/</code> und <code>scratch/</code> sind Output- bzw. Dev-Scratch-Verzeichnisse.) Lokal mit genau dieser Änderung getestet — damit läuft <code>pip install -e &quot;.[dev]&quot;</code> sauber durch und alle 82 Tests + der komplette Browser-Funktionstest liefen danach problemlos.</p>\n",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "293",
+            "list_id": "84",
+            "list_title": "Done",
+            "priority": 3,
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "start_date": "2026-08-15T11:00:13Z",
+            "status": "completed",
+            "subscribed": true,
+            "tags": [
+              {
+                "color": "#f79009",
+                "id": "4",
+                "name": "Bug",
+                "slug": "bug",
+                "space_id": "6",
+                "workspace_id": "tQp2b2rZ"
+              }
+            ],
+            "time_completed": "2026-08-15T11:03:50Z",
+            "time_created": "2026-08-15T10:50:03Z",
+            "time_updated": "2026-08-15T11:03:50Z",
+            "title": "Setup kaputt: \"pip install -e .[dev]\" schlägt auf frischem Checkout fehl (setuptools flat-layout)",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-293-setup-kaputt-pip-install-e-dev-schlgt-auf-frischem-checkout-fehl-setuptools-flat-layout"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p><strong>Was ist kaputt:</strong> <code>app/services/chart_generator.py</code> importiert <code>from PIL import Image, ImageDraw, ImageFont</code> (für das Executive-Summary-Chart im Wordbericht). <code>Pillow</code> steht aber nirgends in den Dependencies von <code>pyproject.toml</code>. Auf jeder Installation, die sich strikt an <code>pyproject.toml</code> hält, ist <code>PIL</code> daher nicht vorhanden.</p><p><strong>Wo:</strong> <code>pyproject.toml</code> (<code>[project].dependencies</code>, fehlender Eintrag); Import in <code>app/services/chart_generator.py:2</code>; lazy-importiert (und damit erst zur Laufzeit crashend) aus <code>app/services/exporter.py:152</code> in <code>ExporterService.export_analysebericht_docx()</code>.</p><p><strong>Wie reproduzierbar (100%, heute per Code-Review + direktem Funktionsaufruf verifiziert):</strong> Frisches venv, nur die in <code>pyproject.toml</code> gelisteten Pakete installiert (kein Pillow), dann:</p><pre><code>PYTHONPATH=. python3 -c \"\nfrom app.services.exporter import exporter_service\nfrom app.models.auftrag import Auftrag\na = Auftrag(id='x', bezeichnung='t', kunde='k')\nexporter_service.export_analysebericht_docx(a, [], [], [], 'kundentauglich')\n\"</code></pre><p>→ <code>ModuleNotFoundError: No module named 'PIL'</code>, Traceback über <code>exporter.py:152</code> → <code>chart_generator.py:2</code>.</p><p>Im Browser/UI äquivalent: Auftrag öffnen → Export → Datei \"analysebericht.docx\" herunterladen → FastAPI liefert <strong>500 Internal Server Error</strong>. Der Import liegt außerhalb des try/except-Blocks in <code>exporter.py</code>, der eigentlich nur Fehler beim <em>Rendern</em> des Charts abfangen soll — der Import selbst crasht schon vorher ungefangen.</p><p><strong>Auswirkung:</strong> Der komplette .docx-Export — laut Projektbeschreibung eine Kernfunktion (\"Berichtserstellung (.docx-Export via python-docx)\") — ist auf jeder frischen Installation funktionsunfähig. Vermutlich bisher nicht aufgefallen, weil auf den bisherigen Dev-Rechnern Pillow bereits anderweitig im Environment vorhanden war (im Repo liegen bereits fertige <code>exports/*.docx</code>). Nach lokaler Installation von Pillow lief der komplette Export (alle Formate, alle drei Vertraulichkeitsstufen) im heutigen Check fehlerfrei durch — es ist also ausschließlich die fehlende Dependency-Deklaration, keine tiefere Logikschwäche.</p><p><strong>Vorschlag zur Behebung:</strong> <code>Pillow</code> (z. B. <code>Pillow&gt;=10.0.0</code>) in <code>pyproject.toml</code> unter <code>[project].dependencies</code> ergänzen. Zusätzlich wäre ein Test sinnvoll, der <code>export_analysebericht_docx()</code> tatsächlich aufruft — aktuell deckt kein Test in <code>tests/test_exporter.py</code> oder <code>tests/test_report_builder.py</code> den DOCX-Pfad ab, nur der Markdown-Report wird getestet. Damit wäre der Fehler künftig schon in <code>pytest</code> sichtbar statt erst beim Klick im Browser.</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "292",
+            "list_id": "84",
+            "list_title": "Done",
+            "priority": 4,
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "start_date": "2026-08-15T11:00:13Z",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-15T11:03:50Z",
+            "time_created": "2026-08-15T10:49:54Z",
+            "time_updated": "2026-08-15T11:03:50Z",
+            "title": "DOCX-Export crasht immer: Pillow (PIL) fehlt als Dependency in pyproject.toml",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-292-docx-export-crasht-immer-pillow-pil-fehlt-als-dependency-in-pyprojecttoml"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p><strong>Was ist kaputt:</strong> Zwei kleine Inkonsistenzen zwischen <code>README.md</code> und <code>pyproject.toml</code> im main-Branch (Stand heute, 2026-08-15):</p>\n<ol>\n<li><p>README-Überschrift nennt <code>v2.2.0</code> (<code># IT-Bestandsaufnahme-Tool (v2.2.0)</code>), der Fließtext direkt darunter aber <code>&gt; Aktuelle Version: **2.1.0**</code>. <code>pyproject.toml</code> (<code>version = &#34;2.2.0&#34;</code>) und <code>CHANGELOG.md</code> (neuester Eintrag <code>[2.2.0] - 2026-08-14</code>) bestätigen 2.2.0 als aktuell — die Fließtext-Zeile im README ist veraltet (wahrscheinlich beim letzten Versionsbump vergessen).</p></li>\n<li><p>README nennt als Stack-Anforderung „Python 3.14+&#34;, <code>pyproject.toml</code> deklariert aber gar kein <code>requires-python</code>. Entweder fehlt die Absicherung in <code>pyproject.toml</code>, oder die 3.14+-Angabe im README ist zu hoch gegriffen/ein Tippfehler (FastAPI 0.110 / Pydantic 2.6 benötigen das nicht, und ein taggeaktueller Python 3.14 dürfte kaum die getestete Mindestversion sein).</p></li>\n</ol>\n<p><strong>Wo:</strong> <code>README.md</code> (Kopfbereich, &quot;Übersicht&quot; + &quot;Technologiestack&quot;), <code>pyproject.toml</code> (<code>[project]</code>-Sektion).</p>\n<p><strong>Reproduzierbar:</strong> Direkt beim Lesen der Dateien im main-Branch sichtbar, kein Programmlauf nötig. Beide Dateien wurden heute per GitHub-Web-Ansicht geprüft.</p>\n<p><strong>Vorschlag:</strong> README-Versionszeile auf 2.2.0 aktualisieren (idealerweise Version künftig nur an einer Stelle pflegen bzw. aus pyproject.toml ziehen, um erneutes Auseinanderlaufen zu vermeiden); <code>requires-python</code> in <code>pyproject.toml</code> passend zur tatsächlich getesteten Mindestversion ergänzen.</p>\n<p><strong>Hinweis zum heutigen Check:</strong> Gefunden per Doku-/Config-Review. Der eigentliche Applikationscode (<code>app/</code>, <code>schemas/</code>, <code>rules/</code>) sowie <code>pytest</code> und der Browser-Funktionstest konnten in diesem Lauf <strong>nicht</strong> geprüft werden — die Cowork-Sandbox hatte heute keinen Netzwerkzugriff auf GitHub/PyPI (<code>git clone</code>, <code>pip install</code> schlugen mit &quot;blocked-by-allowlist&quot; fehl). Details dazu im Chat-Report des heutigen Laufs.</p>\n",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "291",
+            "list_id": "84",
+            "list_title": "Done",
+            "priority": 1,
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "start_date": "2026-08-15T11:00:13Z",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-15T11:03:51Z",
+            "time_created": "2026-08-15T10:10:25Z",
+            "time_updated": "2026-08-15T11:03:51Z",
+            "title": "Doku-/Packaging-Inkonsistenzen: Versionsnummer & Python-Anforderung",
+            "total_checklists": 0,
+            "total_comments": 3,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-291-doku-packaging-inkonsistenzen-versionsnummer--python-anforderung"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p><strong>Was ist kaputt:</strong> <code>EvaluatorService.evaluate_auftrag()</code> setzt <code>schlechtester_standort_bezeichnung</code> auf denselben Wert wie <code>schlechtester_standort_id</code> (die interne Slug-ID, z. B. <code>sto-hauptsitz-muenchen</code>) statt auf den tatsächlichen Klartext-Namen (<code>Standort.bezeichnung</code>, z. B. &quot;Hauptsitz München&quot;). Grund: <code>evaluate_auftrag()</code> bekommt nur die <code>objekte</code>-Liste übergeben, nicht die <code>standorte</code>-Liste — der echte Name lässt sich an der Stelle also gar nicht auflösen.</p>\n<p><strong>Wo:</strong> <code>app/services/evaluator.py</code>, <code>evaluate_auftrag()</code>, Abschnitt &quot;Calculate location scores &amp; locate worst location&quot; (<code>schlechtester_bez = worst_sto_id</code>). Feld definiert in <code>app/models/bewertung.py</code> (<code>GesamtBewertung.schlechtester_standort_bezeichnung</code>).</p>\n<p><strong>Wie reproduzierbar (heute verifiziert):</strong></p>\n<pre><code class=\"language-python\">from app.services.evaluator import evaluator_service\nfrom app.models.technik import TechnikObjekt\nobjs = [TechnikObjekt(schema_version=1, id='fw-a', typ='firewall', bezeichnung='FW A',\n                       auftrag_id='x', standort_id='sto-hauptsitz-muenchen',\n                       daten={'hardware_alter': 'ueber_5_jahre'})]\nb = evaluator_service.evaluate_auftrag(['firewall'], objs)\nprint(b.schlechtester_standort_id, b.schlechtester_standort_bezeichnung)</code></pre>\n<p>→ beide Felder sind identisch (<code>sto-hauptsitz-muenchen</code>), obwohl der Standort z. B. &quot;Hauptsitz München&quot; heißt.</p>\n<p><strong>Auswirkung:</strong> Aktuell kein sichtbarer Schaden — <code>schlechtester_standort_id</code>/<code>schlechtester_standort_bezeichnung</code> werden in keinem Template unter <code>app/templates/</code> und auch nicht in <code>app/services/report_builder.py</code> gerendert; das Feld wird berechnet, aber nirgends angezeigt (toter Code, per Grep über den ganzen Codebase heute bestätigt). Sobald jemand eine &quot;schlechtester Standort&quot;-Anzeige im Bewertungs-Dashboard oder Bericht ergänzt — naheliegend, das Feld scheint genau dafür angelegt worden zu sein — würde sie die rohe ID statt eines lesbaren Namens zeigen. Daher niedrige Priorität, aber als Falle für später dokumentiert.</p>\n<p><strong>Vorschlag zur Behebung:</strong> Entweder <code>standorte: List[Standort]</code> zusätzlich an <code>evaluate_auftrag()</code> übergeben und darüber die echte <code>bezeichnung</code> nachschlagen, oder das Feld bewusst als reine ID führen und erst am Verwendungsort (Route/Template, wo die <code>standorte</code>-Liste ohnehin schon geladen ist) auf <code>bezeichnung</code> mappen.</p>\n",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "294",
+            "list_id": "84",
+            "list_title": "Done",
+            "priority": 1,
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "start_date": "2026-08-15T11:00:13Z",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-15T11:03:51Z",
+            "time_created": "2026-08-15T10:50:13Z",
+            "time_updated": "2026-08-15T11:03:51Z",
+            "title": "Bewertung: \"schlechtester Standort\" liefert Standort-ID statt Klartext-Bezeichnung",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-294-bewertung-schlechtester-standort-liefert-standort-id-statt-klartext-bezeichnung"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Neuer Themenblock \"Business-Software\" (übergeordnet, analog zu Server/Firewall) mit drei Sub-Bausteinen:</p><p><strong>CRM</strong>: Salesforce, Microsoft Dynamics 365, HubSpot, Sonstige (Freitext) <strong>DMS</strong>: ELO, DocuWare, d.velop, enaio, DATEV DMS (Kanzlei-spezifisch, mit Vermerk), Sonstige (Freitext) — SharePoint bewusst ausgeschlossen, zählt nicht als echtes DMS <strong>ERP</strong>: SAP S/4HANA, Microsoft Dynamics 365 Business Central, Sage, Sonstige (Freitext)</p><p>Generelles UI-Prinzip: feste Auswahl gängigster Anbieter + immer \"Sonstige\"-Option mit Freitextfeld (Dropdown+Freitext-Fallback), damit auch unbekannte/seltene Software erfasst werden kann. Gilt künftig als Vorbild für alle Software-Felder im Tool.</p><p>Nicht Teil dieser Karte (Merkposten für später):</p><ul><li><p>Generelles Objektmodell (Server/Storage als Basis-Objekte vor Themenblöcken)</p></li><li><p>Backup &amp; Recovery als nächster Baustein nach Firewall</p></li><li><p>Weitere Business-Software-Kategorien über CRM/DMS/ERP hinaus</p></li></ul><p>Umsetzung als drei neue Bausteine (schemas/crm.yaml, dms.yaml, erp.yaml + passende rules/*.yaml), analog zur bestehenden Schema-Architektur.</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "300",
+            "list_id": "84",
+            "list_title": "Done",
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "tags": [
+              {
+                "color": "#12b76a",
+                "id": "5",
+                "name": "Feature",
+                "slug": "feature",
+                "space_id": "6",
+                "workspace_id": "tQp2b2rZ"
+              }
+            ],
+            "time_completed": "2026-08-15T16:09:51Z",
+            "time_created": "2026-08-15T15:10:16Z",
+            "time_updated": "2026-08-15T16:09:51Z",
+            "title": "Themenblock Business-Software (CRM/DMS/ERP)",
+            "total_checklists": 0,
+            "total_comments": 3,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-300-themenblock-business-software-crmdmserp"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Standort-Übersicht von Auftrag PROJ-1/testeii zeigte wiederholt \"QA Inspector Team (Updated)\" in der Betreut-durch-Spalte — vom User nicht beauftragt und als \"komisch\" empfunden.</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "281",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-15T18:01:51Z",
+            "time_created": "2026-08-14T12:15:10Z",
+            "time_updated": "2026-08-15T18:01:51Z",
+            "title": "QA-Testdaten (\"QA Inspector Team\") in auf-test bereinigen",
+            "total_checklists": 0,
+            "total_comments": 5,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-281-qa-testdaten-qa-inspector-team-in-auf-test-bereinigen"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Bei den Aufträgen gibt es einen Status und Vorbereitung, das muss man auch einmal anpassen können, beziehungsweise da muss man können.</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "283",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-15T18:01:52Z",
+            "time_created": "2026-08-15T06:55:36Z",
+            "time_updated": "2026-08-15T18:01:52Z",
+            "title": "Bei den Aufträgen.",
+            "total_checklists": 0,
+            "total_comments": 3,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-283-bei-den-auftrgen"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Wenn mit Stammdaten die Urteil angepasst wird, zum Beispiel Geschäftszeiten 24.7, soll eine Empfehlung rauspurzeln, dass eine Rufbereitschaft hinterlegt werden kann oder hinterlegt werden soll. Das ist eine Empfehlung.</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "284",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-15T18:01:54Z",
+            "time_created": "2026-08-15T06:59:39Z",
+            "time_updated": "2026-08-15T18:01:54Z",
+            "title": "Wenn unter den Stammdaten Uhrzeit angepasst wird.",
+            "total_checklists": 0,
+            "total_comments": 3,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-284-wenn-unter-den-stammdaten-uhrzeit-angepasst-wird"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Stammdaten und Kontext müssen einmal getrennt werden, dass der Unternehmenskontext einmal separat ist, auch als Punkt aufgeführt ist.</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "286",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-15T18:01:55Z",
+            "time_created": "2026-08-15T07:49:40Z",
+            "time_updated": "2026-08-15T18:01:55Z",
+            "title": "Trennung Stammdaten & Kontext",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-286-trennung-stammdaten--kontext"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Die offenen Punkte müssen nicht nur nach Standort, sondern auch nach Hardware unterteilt werden, dass man nicht durch eine nicht super vollständige, unübersichtliche Liste einmal durchgehen muss, sich die Sachen einmal durchzulesen, beziehungsweise wo man nochmal ansetzen muss.</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "287",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-15T18:01:56Z",
+            "time_created": "2026-08-15T07:50:26Z",
+            "time_updated": "2026-08-15T18:01:56Z",
+            "title": "Offene Punkte sktukurieren",
+            "total_checklists": 0,
+            "total_comments": 4,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-287-offene-punkte-sktukurieren"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>in der Standortübersicht ist der Status muss vollständig = grün werden</p><p>Vollständig = grün</p><p>teilweise = gelb oder orange</p><p>unbekannt = grau</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "295",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-15T18:01:58Z",
+            "time_created": "2026-08-15T12:18:44Z",
+            "time_updated": "2026-08-15T18:01:58Z",
+            "title": "Status anpassungen",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-295-status-anpassungen"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "296",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-15T18:01:59Z",
+            "time_created": "2026-08-15T12:42:13Z",
+            "time_updated": "2026-08-15T18:01:59Z",
+            "title": "Server",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 1,
+            "url": "https://app.superthread.com/demarcel/card-296-server"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>Hier soll bitte es einmal so gemacht werden wenn hier ein Server ausgewählt wird und dann eine Virtualiesrungslösung angeklickt wird das erst dann die ganzen was Virtualliesrung betrifft angepasst wird.</p><p>Die Frage mit Wird virtualieier?t in der Geräte erfassung mit ja angeklickt wird dann wird erst die ganzen fragen bezüglich Hypervisor gestellt.<br>Vorher wird es so behandelt das es ein Bare-Matell host ist.</p><p></p><p>die Frage mit Wird virtualisiert muss auch ganz nach oben und ist auch ein Pflicht feld.</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "297",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-15T18:02:00Z",
+            "time_created": "2026-08-15T12:44:01Z",
+            "time_updated": "2026-08-15T18:02:00Z",
+            "title": "Server & Virtualisierung Feld",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 2,
+            "url": "https://app.superthread.com/demarcel/card-297-server--virtualisierung-feld"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>In den Feld fehlt mir die Anbindung und ein feld das man mehrere Festplatten aufeinmal hinzufügen kann.</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "298",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-15T18:02:01Z",
+            "time_created": "2026-08-15T12:48:26Z",
+            "time_updated": "2026-08-15T18:02:01Z",
+            "title": "Feld Festplatten Slots",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-298-feld-festplatten-slots"
+          },
+          {
+            "archived_board": false,
+            "archived_list": false,
+            "board_id": "15",
+            "board_title": "Bestandsaufnahme-Tool",
+            "content": "<p>das Feld Kommentar muss ganz nach unten</p>",
+            "creator": {
+              "user_id": "uEdKW2Q9"
+            },
+            "id": "299",
+            "list_id": "84",
+            "list_title": "Done",
+            "project": {
+              "id": "282",
+              "response_type": "min",
+              "title": "Bestandsaufnahme-Tool",
+              "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
+            },
+            "response_type": "default",
+            "space_id": "6",
+            "status": "completed",
+            "subscribed": true,
+            "time_completed": "2026-08-15T18:02:03Z",
+            "time_created": "2026-08-15T12:49:22Z",
+            "time_updated": "2026-08-15T18:02:03Z",
+            "title": "Feld Kommentar",
+            "total_checklists": 0,
+            "total_comments": 2,
+            "total_files": 0,
+            "total_task_children": 0,
+            "url": "https://app.superthread.com/demarcel/card-299-feld-kommentar"
           }
-        ],
-        "time_completed": "2026-08-15T11:03:50Z",
-        "time_created": "2026-08-15T10:50:03Z",
-        "time_updated": "2026-08-15T11:03:50Z",
-        "title": "Setup kaputt: \"pip install -e .[dev]\" schlägt auf frischem Checkout fehl (setuptools flat-layout)",
-        "total_checklists": 0,
-        "total_comments": 2,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-293-setup-kaputt-pip-install-e-dev-schlgt-auf-frischem-checkout-fehl-setuptools-flat-layout"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p><strong>Was ist kaputt:</strong> <code>app/services/chart_generator.py</code> importiert <code>from PIL import Image, ImageDraw, ImageFont</code> (für das Executive-Summary-Chart im Wordbericht). <code>Pillow</code> steht aber nirgends in den Dependencies von <code>pyproject.toml</code>. Auf jeder Installation, die sich strikt an <code>pyproject.toml</code> hält, ist <code>PIL</code> daher nicht vorhanden.</p><p><strong>Wo:</strong> <code>pyproject.toml</code> (<code>[project].dependencies</code>, fehlender Eintrag); Import in <code>app/services/chart_generator.py:2</code>; lazy-importiert (und damit erst zur Laufzeit crashend) aus <code>app/services/exporter.py:152</code> in <code>ExporterService.export_analysebericht_docx()</code>.</p><p><strong>Wie reproduzierbar (100%, heute per Code-Review + direktem Funktionsaufruf verifiziert):</strong> Frisches venv, nur die in <code>pyproject.toml</code> gelisteten Pakete installiert (kein Pillow), dann:</p><pre><code>PYTHONPATH=. python3 -c \"\nfrom app.services.exporter import exporter_service\nfrom app.models.auftrag import Auftrag\na = Auftrag(id='x', bezeichnung='t', kunde='k')\nexporter_service.export_analysebericht_docx(a, [], [], [], 'kundentauglich')\n\"</code></pre><p>→ <code>ModuleNotFoundError: No module named 'PIL'</code>, Traceback über <code>exporter.py:152</code> → <code>chart_generator.py:2</code>.</p><p>Im Browser/UI äquivalent: Auftrag öffnen → Export → Datei \"analysebericht.docx\" herunterladen → FastAPI liefert <strong>500 Internal Server Error</strong>. Der Import liegt außerhalb des try/except-Blocks in <code>exporter.py</code>, der eigentlich nur Fehler beim <em>Rendern</em> des Charts abfangen soll — der Import selbst crasht schon vorher ungefangen.</p><p><strong>Auswirkung:</strong> Der komplette .docx-Export — laut Projektbeschreibung eine Kernfunktion (\"Berichtserstellung (.docx-Export via python-docx)\") — ist auf jeder frischen Installation funktionsunfähig. Vermutlich bisher nicht aufgefallen, weil auf den bisherigen Dev-Rechnern Pillow bereits anderweitig im Environment vorhanden war (im Repo liegen bereits fertige <code>exports/*.docx</code>). Nach lokaler Installation von Pillow lief der komplette Export (alle Formate, alle drei Vertraulichkeitsstufen) im heutigen Check fehlerfrei durch — es ist also ausschließlich die fehlende Dependency-Deklaration, keine tiefere Logikschwäche.</p><p><strong>Vorschlag zur Behebung:</strong> <code>Pillow</code> (z. B. <code>Pillow&gt;=10.0.0</code>) in <code>pyproject.toml</code> unter <code>[project].dependencies</code> ergänzen. Zusätzlich wäre ein Test sinnvoll, der <code>export_analysebericht_docx()</code> tatsächlich aufruft — aktuell deckt kein Test in <code>tests/test_exporter.py</code> oder <code>tests/test_report_builder.py</code> den DOCX-Pfad ab, nur der Markdown-Report wird getestet. Damit wäre der Fehler künftig schon in <code>pytest</code> sichtbar statt erst beim Klick im Browser.</p>",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "292",
-        "list_id": "84",
-        "list_title": "Done",
-        "priority": 4,
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "start_date": "2026-08-15T11:00:13Z",
-        "status": "completed",
-        "subscribed": true,
-        "time_completed": "2026-08-15T11:03:50Z",
-        "time_created": "2026-08-15T10:49:54Z",
-        "time_updated": "2026-08-15T11:03:50Z",
-        "title": "DOCX-Export crasht immer: Pillow (PIL) fehlt als Dependency in pyproject.toml",
-        "total_checklists": 0,
-        "total_comments": 2,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-292-docx-export-crasht-immer-pillow-pil-fehlt-als-dependency-in-pyprojecttoml"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p><strong>Was ist kaputt:</strong> Zwei kleine Inkonsistenzen zwischen <code>README.md</code> und <code>pyproject.toml</code> im main-Branch (Stand heute, 2026-08-15):</p>\n<ol>\n<li><p>README-Überschrift nennt <code>v2.2.0</code> (<code># IT-Bestandsaufnahme-Tool (v2.2.0)</code>), der Fließtext direkt darunter aber <code>&gt; Aktuelle Version: **2.1.0**</code>. <code>pyproject.toml</code> (<code>version = &#34;2.2.0&#34;</code>) und <code>CHANGELOG.md</code> (neuester Eintrag <code>[2.2.0] - 2026-08-14</code>) bestätigen 2.2.0 als aktuell — die Fließtext-Zeile im README ist veraltet (wahrscheinlich beim letzten Versionsbump vergessen).</p></li>\n<li><p>README nennt als Stack-Anforderung „Python 3.14+&#34;, <code>pyproject.toml</code> deklariert aber gar kein <code>requires-python</code>. Entweder fehlt die Absicherung in <code>pyproject.toml</code>, oder die 3.14+-Angabe im README ist zu hoch gegriffen/ein Tippfehler (FastAPI 0.110 / Pydantic 2.6 benötigen das nicht, und ein taggeaktueller Python 3.14 dürfte kaum die getestete Mindestversion sein).</p></li>\n</ol>\n<p><strong>Wo:</strong> <code>README.md</code> (Kopfbereich, &quot;Übersicht&quot; + &quot;Technologiestack&quot;), <code>pyproject.toml</code> (<code>[project]</code>-Sektion).</p>\n<p><strong>Reproduzierbar:</strong> Direkt beim Lesen der Dateien im main-Branch sichtbar, kein Programmlauf nötig. Beide Dateien wurden heute per GitHub-Web-Ansicht geprüft.</p>\n<p><strong>Vorschlag:</strong> README-Versionszeile auf 2.2.0 aktualisieren (idealerweise Version künftig nur an einer Stelle pflegen bzw. aus pyproject.toml ziehen, um erneutes Auseinanderlaufen zu vermeiden); <code>requires-python</code> in <code>pyproject.toml</code> passend zur tatsächlich getesteten Mindestversion ergänzen.</p>\n<p><strong>Hinweis zum heutigen Check:</strong> Gefunden per Doku-/Config-Review. Der eigentliche Applikationscode (<code>app/</code>, <code>schemas/</code>, <code>rules/</code>) sowie <code>pytest</code> und der Browser-Funktionstest konnten in diesem Lauf <strong>nicht</strong> geprüft werden — die Cowork-Sandbox hatte heute keinen Netzwerkzugriff auf GitHub/PyPI (<code>git clone</code>, <code>pip install</code> schlugen mit &quot;blocked-by-allowlist&quot; fehl). Details dazu im Chat-Report des heutigen Laufs.</p>\n",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "291",
-        "list_id": "84",
-        "list_title": "Done",
-        "priority": 1,
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "start_date": "2026-08-15T11:00:13Z",
-        "status": "completed",
-        "subscribed": true,
-        "time_completed": "2026-08-15T11:03:51Z",
-        "time_created": "2026-08-15T10:10:25Z",
-        "time_updated": "2026-08-15T11:03:51Z",
-        "title": "Doku-/Packaging-Inkonsistenzen: Versionsnummer & Python-Anforderung",
-        "total_checklists": 0,
-        "total_comments": 3,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-291-doku-packaging-inkonsistenzen-versionsnummer--python-anforderung"
-      },
-      {
-        "archived_board": false,
-        "archived_list": false,
-        "board_id": "15",
-        "board_title": "Bestandsaufnahme-Tool",
-        "content": "<p><strong>Was ist kaputt:</strong> <code>EvaluatorService.evaluate_auftrag()</code> setzt <code>schlechtester_standort_bezeichnung</code> auf denselben Wert wie <code>schlechtester_standort_id</code> (die interne Slug-ID, z. B. <code>sto-hauptsitz-muenchen</code>) statt auf den tatsächlichen Klartext-Namen (<code>Standort.bezeichnung</code>, z. B. &quot;Hauptsitz München&quot;). Grund: <code>evaluate_auftrag()</code> bekommt nur die <code>objekte</code>-Liste übergeben, nicht die <code>standorte</code>-Liste — der echte Name lässt sich an der Stelle also gar nicht auflösen.</p>\n<p><strong>Wo:</strong> <code>app/services/evaluator.py</code>, <code>evaluate_auftrag()</code>, Abschnitt &quot;Calculate location scores &amp; locate worst location&quot; (<code>schlechtester_bez = worst_sto_id</code>). Feld definiert in <code>app/models/bewertung.py</code> (<code>GesamtBewertung.schlechtester_standort_bezeichnung</code>).</p>\n<p><strong>Wie reproduzierbar (heute verifiziert):</strong></p>\n<pre><code class=\"language-python\">from app.services.evaluator import evaluator_service\nfrom app.models.technik import TechnikObjekt\nobjs = [TechnikObjekt(schema_version=1, id='fw-a', typ='firewall', bezeichnung='FW A',\n                       auftrag_id='x', standort_id='sto-hauptsitz-muenchen',\n                       daten={'hardware_alter': 'ueber_5_jahre'})]\nb = evaluator_service.evaluate_auftrag(['firewall'], objs)\nprint(b.schlechtester_standort_id, b.schlechtester_standort_bezeichnung)</code></pre>\n<p>→ beide Felder sind identisch (<code>sto-hauptsitz-muenchen</code>), obwohl der Standort z. B. &quot;Hauptsitz München&quot; heißt.</p>\n<p><strong>Auswirkung:</strong> Aktuell kein sichtbarer Schaden — <code>schlechtester_standort_id</code>/<code>schlechtester_standort_bezeichnung</code> werden in keinem Template unter <code>app/templates/</code> und auch nicht in <code>app/services/report_builder.py</code> gerendert; das Feld wird berechnet, aber nirgends angezeigt (toter Code, per Grep über den ganzen Codebase heute bestätigt). Sobald jemand eine &quot;schlechtester Standort&quot;-Anzeige im Bewertungs-Dashboard oder Bericht ergänzt — naheliegend, das Feld scheint genau dafür angelegt worden zu sein — würde sie die rohe ID statt eines lesbaren Namens zeigen. Daher niedrige Priorität, aber als Falle für später dokumentiert.</p>\n<p><strong>Vorschlag zur Behebung:</strong> Entweder <code>standorte: List[Standort]</code> zusätzlich an <code>evaluate_auftrag()</code> übergeben und darüber die echte <code>bezeichnung</code> nachschlagen, oder das Feld bewusst als reine ID führen und erst am Verwendungsort (Route/Template, wo die <code>standorte</code>-Liste ohnehin schon geladen ist) auf <code>bezeichnung</code> mappen.</p>\n",
-        "creator": {
-          "user_id": "uEdKW2Q9"
-        },
-        "id": "294",
-        "list_id": "84",
-        "list_title": "Done",
-        "priority": 1,
-        "project": {
-          "id": "282",
-          "response_type": "min",
-          "title": "Bestandsaufnahme-Tool",
-          "url": "https://app.superthread.com/demarcel/project-282-bestandsaufnahme-tool"
-        },
-        "response_type": "default",
-        "space_id": "6",
-        "start_date": "2026-08-15T11:00:13Z",
-        "status": "completed",
-        "subscribed": true,
-        "time_completed": "2026-08-15T11:03:51Z",
-        "time_created": "2026-08-15T10:50:13Z",
-        "time_updated": "2026-08-15T11:03:51Z",
-        "title": "Bewertung: \"schlechtester Standort\" liefert Standort-ID statt Klartext-Bezeichnung",
-        "total_checklists": 0,
-        "total_comments": 2,
-        "total_files": 0,
-        "total_task_children": 0,
-        "url": "https://app.superthread.com/demarcel/card-294-bewertung-schlechtester-standort-liefert-standort-id-statt-klartext-bezeichnung"
+        ]
       }
-    ]
+    }
   }
 }
