@@ -63,8 +63,9 @@ log "Dienst neu starten"
 systemctl restart "$APP_NAME"
 
 log "Health-Check"
+# Siehe install.sh: die ersten Versuche schlagen beim Hochfahren normal fehl.
 for _ in $(seq 1 15); do
-    if curl -fsS -o /dev/null "http://127.0.0.1:${PORT}/auftrag"; then
+    if curl -fs -o /dev/null "http://127.0.0.1:${PORT}/auftrag" 2>/dev/null; then
         log "Läuft: $(git -C "$APP_DIR" log -1 --format='%h %s')"
         exit 0
     fi

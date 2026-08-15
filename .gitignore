@@ -9,3 +9,7 @@ build/
 dist/
 .DS_Store
 
+# Lokale Server-/Umgebungsdaten. Das Repo ist öffentlich — interne
+# Netzadressen und Zugangsdaten bleiben deshalb ausserhalb von Git.
+*.local.env
+

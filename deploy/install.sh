@@ -190,8 +190,11 @@ fi
 
 # ── 9. Health-Check ──────────────────────────────────────────────────────
 log "Health-Check"
+# curl-Fehler werden hier bewusst verschluckt: der Dienst braucht ein paar
+# Sekunden zum Hochfahren, die ersten Versuche schlagen also normal fehl.
+# Bei echtem Scheitern zeigt der Block darunter die journalctl-Ausgabe.
 for _ in $(seq 1 15); do
-    if curl -fsS -o /dev/null "http://127.0.0.1:${PORT}/auftrag"; then
+    if curl -fs -o /dev/null "http://127.0.0.1:${PORT}/auftrag" 2>/dev/null; then
         HEALTHY=1
         break
     fi
