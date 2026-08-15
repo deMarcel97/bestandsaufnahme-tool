@@ -108,7 +108,7 @@ def detail_auftrag(request: Request, auftrag_id: str):
     standorte = storage.list_standorte(auftrag_id)
     objekte = storage.list_objekte(auftrag_id)
     progress_data = progress_service.calculate_progress(auftrag.aktive_bausteine, objekte)
-    bewertung = evaluator_service.evaluate_auftrag(auftrag.aktive_bausteine, objekte)
+    bewertung = evaluator_service.evaluate_auftrag(auftrag.aktive_bausteine, objekte, standorte)
     findings = storage.list_findings(auftrag_id)
     offene_punkte = progress_service.collect_offene_punkte(auftrag, standorte, objekte, [])
     active_findings = findings

@@ -14,8 +14,9 @@ def bewertung_dashboard(request: Request, auftrag_id: str):
     if not auftrag:
         return RedirectResponse(url="/auftrag", status_code=303)
 
+    standorte = storage.list_standorte(auftrag_id)
     objekte = storage.list_objekte(auftrag_id)
-    bewertung = evaluator_service.evaluate_auftrag(auftrag.aktive_bausteine, objekte)
+    bewertung = evaluator_service.evaluate_auftrag(auftrag.aktive_bausteine, objekte, standorte)
 
     return templates.TemplateResponse(
         request=request,

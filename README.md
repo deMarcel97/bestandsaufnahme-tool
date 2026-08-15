@@ -1,8 +1,8 @@
-# IT-Bestandsaufnahme-Tool (v2.2.0)
+# IT-Bestandsaufnahme-Tool (v2.3.0)
 
 Ein spezialisiertes Web-Tool für IT-Systemhäuser zur strukturierten Erfassung, automatischen Risikobewertung und professionellen Berichtserstellung von IT-Kundeninfrastrukturen.
 
-> Aktuelle Version: **2.1.0** — Änderungshistorie siehe [CHANGELOG.md](CHANGELOG.md).
+> Aktuelle Version: **2.3.0** — Änderungshistorie siehe [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
@@ -18,7 +18,7 @@ Ein spezialisiertes Web-Tool für IT-Systemhäuser zur strukturierten Erfassung,
 
 ## 🛠️ Technologiestack
 
-- **Backend**: Python 3.14+ mit [FastAPI](https://fastapi.tiangolo.com/) & [Uvicorn](https://www.uvicorn.org/)
+- **Backend**: Python 3.10+ mit [FastAPI](https://fastapi.tiangolo.com/) & [Uvicorn](https://www.uvicorn.org/)
 - **Frontend**: Responsive HTML5 mit Jinja2-Templates & Vanilla CSS
 - **Validierung & Schemas**: [Pydantic v2](https://docs.pydantic.dev/) & [PyYAML](https://pyyaml.org/)
 - **Dokumentengenerierung**: `python-docx`

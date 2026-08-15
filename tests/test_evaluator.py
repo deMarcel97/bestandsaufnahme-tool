@@ -137,6 +137,7 @@ def test_stufe2_objekt_status_zero_false_empty_list():
     assert evaluator.calculate_objekt_status(fw_empty_list) == "unbekannt"
 
 def test_stufe2_worst_standort_tracking():
+    from app.models.standort import Standort
     evaluator = EvaluatorService()
 
     good_fw = TechnikObjekt(
@@ -148,7 +149,17 @@ def test_stufe2_worst_standort_tracking():
         daten={"hardware_alter": "ueber_5_jahre", "security_abo_vorhanden": "nein"}
     )
 
+    # Without standorte list: fallback to ID
     res = evaluator.evaluate_auftrag(["firewall"], [good_fw, bad_fw])
     assert res.schlechtester_standort_id == "s2"
+    assert res.schlechtester_standort_bezeichnung == "s2"
     assert res.schlechtester_standort_prozent is not None
+
+    # With standorte list: resolves to actual name
+    sto1 = Standort(id="s1", auftrag_id="a1", bezeichnung="Hauptsitz")
+    sto2 = Standort(id="s2", auftrag_id="a1", bezeichnung="Filiale Hamburg")
+    res_with_sto = evaluator.evaluate_auftrag(["firewall"], [good_fw, bad_fw], [sto1, sto2])
+    assert res_with_sto.schlechtester_standort_id == "s2"
+    assert res_with_sto.schlechtester_standort_bezeichnung == "Filiale Hamburg"
+
 
