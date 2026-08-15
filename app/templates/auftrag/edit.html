@@ -97,7 +97,7 @@
           </div>
           <div class="form-group">
             <label>IT-Abteilung vorhanden?</label>
-            <select name="it_abteilung_vorhanden" class="form-control">
+            <select name="it_abteilung_vorhanden" id="it_abteilung_vorhanden" class="form-control" onchange="toggleEmpfehlungen()">
               <option value="ja" {% if auftrag.unternehmenskontext.it_abteilung_vorhanden == 'ja' %}selected{% endif %}>Ja</option>
               <option value="nein" {% if auftrag.unternehmenskontext.it_abteilung_vorhanden == 'nein' %}selected{% endif %}>Nein</option>
             </select>
@@ -118,7 +118,7 @@
           </div>
           <div class="form-group">
             <label>Geschäftszeiten Tage</label>
-            <select name="geschaeftszeiten_tage" id="geschaeftszeiten_tage" class="form-control" onchange="toggleGeschaeftszeitenUhrzeit()">
+            <select name="geschaeftszeiten_tage" id="geschaeftszeiten_tage" class="form-control" onchange="toggleEmpfehlungen()">
               <option value="Montag bis Freitag" {% if auftrag.unternehmenskontext.geschaeftszeiten_tage == 'Montag bis Freitag' %}selected{% endif %}>Montag bis Freitag</option>
               <option value="Montag bis Samstag" {% if auftrag.unternehmenskontext.geschaeftszeiten_tage == 'Montag bis Samstag' %}selected{% endif %}>Montag bis Samstag</option>
               <option value="Montag bis Sonntag" {% if auftrag.unternehmenskontext.geschaeftszeiten_tage == 'Montag bis Sonntag' %}selected{% endif %}>Montag bis Sonntag</option>
@@ -136,6 +136,10 @@
             <input type="time" name="geschaeftszeiten_bis" value="{{ auftrag.unternehmenskontext.geschaeftszeiten_bis }}" class="form-control">
           </div>
           <div class="form-group"></div>
+        </div>
+        <div class="alert alert-info" id="it_dienstleister_hinweis" style="display:{{ 'flex' if auftrag.unternehmenskontext.empfehlung_it_dienstleister else 'none' }}; margin-bottom: 10px;">
+          <strong>Empfehlung</strong>
+          <span>Da keine interne IT-Abteilung vorhanden ist, sollte ein externer IT-Dienstleister (Managed Services) einbezogen werden.</span>
         </div>
         <div class="alert alert-info" id="rufbereitschaft_hinweis" style="display:{{ 'flex' if auftrag.unternehmenskontext.empfehlung_rufbereitschaft else 'none' }};">
           <strong>Empfehlung</strong>
@@ -180,15 +184,25 @@
 </div>
 
 <script>
-function toggleGeschaeftszeitenUhrzeit() {
+function toggleEmpfehlungen() {
   var tageSelect = document.getElementById("geschaeftszeiten_tage");
   var zeitRow = document.getElementById("geschaeftszeiten_zeit_row");
-  var hinweis = document.getElementById("rufbereitschaft_hinweis");
-  if (!tageSelect || !zeitRow) return;
-  var ist247 = tageSelect.value === "24/7";
-  zeitRow.style.display = ist247 ? "none" : "grid";
-  if (hinweis) hinweis.style.display = ist247 ? "flex" : "none";
+  var rufHinweis = document.getElementById("rufbereitschaft_hinweis");
+  
+  if (tageSelect && zeitRow) {
+    var ist247 = tageSelect.value === "24/7";
+    zeitRow.style.display = ist247 ? "none" : "grid";
+    if (rufHinweis) rufHinweis.style.display = ist247 ? "flex" : "none";
+  }
+
+  var itSelect = document.getElementById("it_abteilung_vorhanden");
+  var itHinweis = document.getElementById("it_dienstleister_hinweis");
+  
+  if (itSelect && itHinweis) {
+    var keineIt = itSelect.value === "nein";
+    itHinweis.style.display = keineIt ? "flex" : "none";
+  }
 }
-document.addEventListener("DOMContentLoaded", toggleGeschaeftszeitenUhrzeit);
+document.addEventListener("DOMContentLoaded", toggleEmpfehlungen);
 </script>
 {% endblock %}

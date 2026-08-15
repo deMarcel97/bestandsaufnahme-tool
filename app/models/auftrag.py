@@ -52,6 +52,10 @@ class Unternehmenskontext(BaseModel):
     def empfehlung_rufbereitschaft(self) -> bool:
         return self.geschaeftszeiten_tage == "24/7"
 
+    @property
+    def empfehlung_it_dienstleister(self) -> bool:
+        return self.it_abteilung_vorhanden == "nein"
+
 class Termine(BaseModel):
     beauftragung: Optional[str] = None
     kickoff: Optional[str] = None
