@@ -10,9 +10,10 @@ IT-Systemhaus-Tool zur einmaligen Vor-Ort-Bestandsaufnahme von Kunden-IT-Infrast
 
 - Pfad: `/Users/marcel/001_Vibe_Code/001_bestandsaufnahme_tool` (Hauptcheckout — **hier läuft der Dev-Server**, siehe Leitplanke 5)
 - GitHub: `https://github.com/deMarcel97/bestandsaufnahme-tool`, Branch `main`
-- Stack: FastAPI + Jinja2 + Pydantic v2 + PyYAML, Storage als JSON-Dateien unter `data/` (kein DB-Server)
-- Aktuelle Version: 2.5.0 (siehe `CHANGELOG.md` für volle Historie)
-- Tests: `venv/bin/pytest` (Stand jetzt: 84 Tests, alle grün)
+- Stack: FastAPI + Jinja2 + Pydantic v2 + PyYAML, Storage als YAML-Dateien unter `data/` (kein DB-Server)
+- Läuft zusätzlich als Dienst auf einem internen Server — Zugang und Arbeitsweise siehe `CLAUDE.md` und `deploy/`
+- Aktuelle Version: 2.7.7 (siehe `CHANGELOG.md` für volle Historie)
+- Tests: `PYTHONPATH=. venv/bin/pytest` (Stand jetzt: 141 Tests, alle grün)
 
 ### Architektur-Kurzreferenz (wichtig, bevor man Neues plant)
 
@@ -54,7 +55,11 @@ Diese Punkte sind bewusst nur als Merkposten notiert, nicht als fertige Spezifik
 4. **Weitere Business-Software-Kategorien** über CRM/DMS/ERP hinaus (z. B. HR-Software, E-Commerce/Shop-Systeme) — aktuell nicht abgedeckt, das `software`-Schema mit Kategorie-Selector ist aber genau für diese Erweiterung gebaut.
 5. **Referenzpreis-Katalog für Maßnahmen.** `kosten_richtwert`/`aufwand_richtwert` sind pro Regel in `rules/*.yaml` gepflegt (seit v2.1.0), aber `kosten_quelle` bleibt bis zur manuellen Bestätigung `"offen"`. Prüfen, ob das für den Verkaufsprozess ausreicht oder ob ein editierbarer globaler Preiskatalog nötig ist. Laut Konkurrenzanalyse (#290, siehe unten) ist ein fertiger, gestaffelter Maßnahmenkatalog mit Kostenschätzung eine echte Marktlücke — kein Konkurrenzprodukt bietet das.
 6. **Cross-Objekt VLAN-Status.** Wenn Switch/Firewall den VLAN-Status auf Netzwerkebene erfassen, könnte das Access-Point-Feld `gast_wlan_isoliert` redundant werden. Eigene Design-Diskussion nötig, wie objektübergreifende Konsistenz sauber modelliert wird, ohne Doppelerfassung zu erzeugen.
-7. **Erkenntnisse aus der Konkurrenzanalyse (Karte #290, Recherche vom 15.08.2026, von Marcel noch nicht gegengeprüft)** — konkrete Ideen für die Roadmap:
+7. **Erkenntnisse aus der Konkurrenzanalyse (Karte #290, Recherche vom 15.08.2026, von Marcel noch nicht gegengeprüft)** — konkrete Ideen für die Roadmap.
+
+   > **TODO (Karte #312):** Diese Liste ist ein Rechercheergebnis, kein Auftrag — solange sie als ein Block dasteht, wird nichts davon umgesetzt. Sie muss mit Marcel durchgegangen und **zerlegt** werden: pro Idee entweder „bauen wir" (eigene Karte mit klarem Umfang), „später" (Backlog, mit Begründung) oder „bauen wir nicht" (begründet verworfen, damit die Frage nicht in einem halben Jahr erneut auftaucht). Zuerst zu bewerten sind die Maßnahmenkatalog-Punkte: der Kernbefund von #290 ist, dass **kein** recherchiertes Konkurrenzprodukt einen gestaffelten Maßnahmenkatalog mit Kostenschätzung bietet — dort liegt der Unterschied zum Markt, nicht bei Netzplänen oder zusätzlichen Kennzahlen. Beim Durchgehen sind zwei Punkte aus #290 zu streichen, die inzwischen erledigt sind: die Trennung Stammdaten/Kontext (#286 → umgesetzt in #303) und der Hinweis, Multiuser weiche vom Offline-Laptop-Prinzip ab (durch das Server-Deployment #301 beantwortet).
+
+   Die Ideen im Einzelnen:
    - Kosten × Dringlichkeit als zweiachsiges Priorisierungsmodell im Maßnahmenkatalog (analog DIN SPEC 27076).
    - Optionales Metadatenfeld „Förderprogramm" pro Maßnahme (z. B. Mittelstand Digital) — geringer Aufwand, verkaufsstark.
    - Aus erfassten Verbindungsdaten (Gerät X an Switch-Port Y) automatisches Netzwerktopologie-Diagramm statt Freihand-Zeichnen.

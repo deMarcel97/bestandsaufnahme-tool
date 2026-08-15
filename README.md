@@ -1,8 +1,8 @@
-# IT-Bestandsaufnahme-Tool (v2.7.6)
+# IT-Bestandsaufnahme-Tool (v2.7.7)
 
 Ein spezialisiertes Web-Tool für IT-Systemhäuser zur strukturierten Erfassung, automatischen Risikobewertung und professionellen Berichtserstellung von IT-Kundeninfrastrukturen.
 
-> Aktuelle Version: **2.7.6** — Änderungshistorie siehe [CHANGELOG.md](CHANGELOG.md).
+> Aktuelle Version: **2.7.7** — Änderungshistorie siehe [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
@@ -203,7 +203,7 @@ PYTHONPATH=. pytest
 │   └── static/              # CSS Stylesheets & JS Utilities
 ├── schemas/                 # YAML-Definitionen der 10 Erfassungsobjekte
 ├── rules/                   # Regelwerke für automatisierte Risikoanalysen
-├── data/                    # JSON-Datenhaltung (Aufträge, Standorte, Befunde)
+├── data/                    # YAML-Datenhaltung (Aufträge, Standorte, Befunde)
 ├── deploy/                  # Server-Deployment: install.sh, update.sh, systemd-Unit, nginx-Site
 ├── tests/                   # Automatisierte Unit- & Integrationstests
 ├── requirements.txt         # Laufzeit-Abhängigkeiten (Quelle für pyproject, Docker & install.sh)
