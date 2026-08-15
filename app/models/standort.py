@@ -37,7 +37,7 @@ class Standort(BaseModel):
     anzahl_user: int = 0
     funktion: str = ""
     ansprechpartner_vor_ort: str = ""
-    vertraulichkeit: str = "kundentauglich"  # intern, kundentauglich, anonymisiert
+    vertraulichkeit: str = "intern"  # intern, kundentauglich, anonymisiert
     begehung_am: Optional[str] = None
     redaktionskonzept_backup_leitung: str = "automatische_umschaltung"
     trassenfuehrung_getrennt: str = "ja"

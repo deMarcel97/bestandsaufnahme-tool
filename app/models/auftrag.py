@@ -84,7 +84,7 @@ class Auftrag(BaseModel):
     kunde: str = ""
     auftraggeber: str = ""
     bezeichnung: str = ""
-    grundlage: str = "Sonstiges"  # Ausschreibung, Angebot, Rahmenvertrag, Sonstiges
+    grundlage: str = "Sonstiges"  # Ausschreibung, Angebot, Analyse, Rahmenvertrag, Sonstiges (Auswahl: GRUNDLAGE_OPTIONS in app/web/routes_auftrag.py)
     zweck: List[str] = Field(default_factory=list)  # Infrastrukturanalyse, Migrationsvorbereitung, Notfalldokumentation, Betriebsuebernahme, Optimierung
     aufwand_geplant: float = 0.0
     aufwand_ist: float = 0.0
@@ -95,7 +95,7 @@ class Auftrag(BaseModel):
     dokumentenanforderung: List[Dokumentenanforderung] = Field(default_factory=list)
     rahmenbedingungen: Rahmenbedingungen = Field(default_factory=Rahmenbedingungen)
     status: str = "Vorbereitung"  # Vorbereitung, Erfassung, Konsolidierung, Bewertung, Abgabe
-    vertraulichkeit_default: str = "kundentauglich"  # intern, kundentauglich, anonymisiert
+    vertraulichkeit_default: str = "intern"  # intern, kundentauglich, anonymisiert
     vorgaenger_auftrag: Optional[str] = None
     ergebnisartefakte: List[Ergebnisartefakt] = Field(default_factory=list)
     unternehmenskontext: Unternehmenskontext = Field(default_factory=Unternehmenskontext)

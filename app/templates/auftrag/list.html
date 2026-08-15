@@ -117,17 +117,16 @@
           <div class="form-group">
             <label>Grundlage</label>
             <select name="grundlage" class="form-control">
-              <option value="Ausschreibung">Ausschreibung</option>
-              <option value="Angebot">Angebot</option>
-              <option value="Rahmenvertrag">Rahmenvertrag</option>
-              <option value="Sonstiges" selected>Sonstiges</option>
+              {% for opt in grundlage_options %}
+              <option value="{{ opt }}" {% if opt == 'Sonstiges' %}selected{% endif %}>{{ opt }}</option>
+              {% endfor %}
             </select>
           </div>
           <div class="form-group">
             <label>Default Vertraulichkeit</label>
             <select name="vertraulichkeit_default" class="form-control">
-              <option value="intern">intern</option>
-              <option value="kundentauglich" selected>kundentauglich</option>
+              <option value="intern" selected>intern</option>
+              <option value="kundentauglich">kundentauglich</option>
               <option value="anonymisiert">anonymisiert</option>
             </select>
           </div>

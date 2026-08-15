@@ -17,6 +17,12 @@ router = APIRouter()
 
 STATUS_OPTIONS = ["Vorbereitung", "Erfassung", "Konsolidierung", "Bewertung", "Abgabe"]
 
+# Die Auswahl "Grundlage" stand vorher doppelt in den Templates (Anlege-Dialog
+# in list.html und Einstellungen in edit.html) — eine neue Option musste an
+# beiden Stellen nachgetragen werden. Sie kommt jetzt nur noch von hier und
+# wird ueber den Template-Kontext durchgereicht.
+GRUNDLAGE_OPTIONS = ["Ausschreibung", "Angebot", "Analyse", "Rahmenvertrag", "Sonstiges"]
+
 def get_bausteine_labels() -> dict:
     labels = {}
     for typ in schema_loader.get_all_types():
@@ -40,6 +46,7 @@ def list_auftraege(request: Request):
             "auftraege": auftraege,
             "verfuegbare_typen": verfuegbare_typen,
             "bausteine_labels": bausteine_labels,
+            "grundlage_options": GRUNDLAGE_OPTIONS,
             "active_nav": "auftrag"
         }
     )
@@ -51,7 +58,7 @@ def create_auftrag(
     kunde: str = Form(...),
     bezeichnung: str = Form(...),
     grundlage: str = Form("Sonstiges"),
-    vertraulichkeit_default: str = Form("kundentauglich"),
+    vertraulichkeit_default: str = Form("intern"),
     aktive_bausteine: list[str] = Form(default=["firewall"])
 ):
     all_auftraege = storage.list_auftraege()
@@ -155,6 +162,7 @@ def edit_auftrag_form(request: Request, auftrag_id: str):
             "auftrag": auftrag,
             "verfuegbare_typen": verfuegbare_typen,
             "bausteine_labels": bausteine_labels,
+            "grundlage_options": GRUNDLAGE_OPTIONS,
             "active_tab": "einstellungen",
             "active_nav": "auftrag",
             **sidebar_context
@@ -171,7 +179,7 @@ def edit_auftrag_submit(
     bezeichnung: str = Form(...),
     grundlage: str = Form("Sonstiges"),
     status: str = Form("Vorbereitung"),
-    vertraulichkeit_default: str = Form("kundentauglich"),
+    vertraulichkeit_default: str = Form("intern"),
     aktive_bausteine: list[str] = Form(default=[]),
     kerngeschaeft: str = Form(""),
     anzahl_standorte_kunde: str = Form("1"),
