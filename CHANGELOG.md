@@ -9,6 +9,11 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionieru
 ### Fixed
 - **„Noch nicht erfasst"-Leiste (#275)**: Die Fortschrittsanzeige „Aktive Bausteine" und die klickbare „Noch nicht erfasst"-Chipliste in der Auftrags-Navigation erschienen bisher nur auf der Übersichtsseite eines Auftrags, weil die übrigen Routen (Stammdaten & Kontext, Offene Punkte, Findings, Maßnahmenkatalog, Bewertung, Exporte) den dafür nötigen Kontext nicht an `_sidebar.html` übergaben. Neuer gemeinsamer Helper `app/web/shared_context.py::build_sidebar_context()` liefert diesen Kontext jetzt auf allen sieben Unterseiten. Zusätzlich binden die Formulare „Neues/Objekt bearbeiten" und „Standort anlegen/bearbeiten" (`technik/form.html`, `standort/form.html`), die die Sidebar bisher gar nicht einbanden, sie jetzt ebenfalls ein — man kann so mitten in der Erfassung direkt zu einem anderen fehlenden Baustein springen, ohne erst zur Übersicht zurückzugehen.
 
+## [2.5.1] - 2026-08-15
+
+### Fixed
+- **QA-Testdaten bereinigt (#281)**: QA-Testdaten ('QA Inspector Team') aus Test-Auftrag bereinigt, damit sie in der Übersicht nicht mehr auftauchen.
+
 ## [2.4.0] - 2026-08-15
 
 ### Added
