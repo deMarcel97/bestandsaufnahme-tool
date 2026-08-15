@@ -4,9 +4,14 @@ from fastapi.templating import Jinja2Templates
 from app.config import BASE_DIR
 from app.services.storage import storage
 from app.services.progress import progress_service
+from app.services.schema_loader import schema_loader
 
 router = APIRouter()
 templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
+
+def _hardware_label(typ: str) -> str:
+    schema = schema_loader.get_schema(typ)
+    return schema.get("bezeichnung_anzeige", typ.capitalize()) if schema else typ.capitalize()
 
 @router.get("/auftrag/{auftrag_id}/offene_punkte")
 def offene_punkte_page(request: Request, auftrag_id: str):
@@ -18,32 +23,40 @@ def offene_punkte_page(request: Request, auftrag_id: str):
     objekte = storage.list_objekte(auftrag_id)
     offene_punkte = progress_service.collect_offene_punkte(auftrag, standorte, objekte, [])
 
-    # Group open points hierarchically: standort -> geraet/komponente -> items
+    standort_by_id = {s.id: s.bezeichnung for s in standorte}
+
+    # Group open points hierarchically: standort -> hardware/komponente -> items
     grouped: dict = {}
     for s in standorte:
         grouped[s.bezeichnung] = {}
     grouped["Allgemein / Unternehmenskontext"] = {}
 
     for op in offene_punkte:
-        matched_sto = None
-        for s in standorte:
-            if s.bezeichnung in op.text or s.id in op.ziel_url:
-                matched_sto = s.bezeichnung
-                break
+        matched_sto = standort_by_id.get(op.standort_id)
+        if not matched_sto:
+            for s in standorte:
+                if s.bezeichnung in op.text or s.id in op.ziel_url:
+                    matched_sto = s.bezeichnung
+                    break
         if not matched_sto:
             matched_sto = "Allgemein / Unternehmenskontext"
 
-        # Determine device / component label
-        comp_label = "Standort-Stammdaten & Anbindung"
-        if op.quelle == "struktur_fehlt":
+        # Determine hardware/component label
+        if op.objekt_typ:
+            comp_label = _hardware_label(op.objekt_typ)
+        elif op.quelle == "struktur_fehlt":
             comp_label = "Fehlende Erfassung"
+        elif op.quelle == "dokument":
+            comp_label = "Dokumentenanforderungen"
         elif "Gerät '" in op.text:
             try:
                 comp_label = op.text.split("Gerät '")[1].split("'")[0]
             except IndexError:
-                pass
+                comp_label = "Standort-Stammdaten & Anbindung"
         elif "Firewall" in op.text or "firewall" in op.ziel_url:
             comp_label = "Firewall-System"
+        else:
+            comp_label = "Standort-Stammdaten & Anbindung"
 
         if comp_label not in grouped[matched_sto]:
             grouped[matched_sto][comp_label] = []

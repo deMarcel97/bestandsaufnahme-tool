@@ -137,6 +137,10 @@
           </div>
           <div class="form-group"></div>
         </div>
+        <div class="alert alert-info" id="rufbereitschaft_hinweis" style="display:{{ 'flex' if auftrag.unternehmenskontext.empfehlung_rufbereitschaft else 'none' }};">
+          <strong>Empfehlung</strong>
+          <span>Bei Geschäftszeiten 24/7 sollte geprüft werden, ob eine Rufbereitschaft hinterlegt werden sollte.</span>
+        </div>
         <div class="form-group">
           <label>Allgemeine Hinweise</label>
           <textarea name="allgemeine_hinweise" class="form-control">{{ auftrag.unternehmenskontext.allgemeine_hinweise }}</textarea>
@@ -179,8 +183,11 @@
 function toggleGeschaeftszeitenUhrzeit() {
   var tageSelect = document.getElementById("geschaeftszeiten_tage");
   var zeitRow = document.getElementById("geschaeftszeiten_zeit_row");
+  var hinweis = document.getElementById("rufbereitschaft_hinweis");
   if (!tageSelect || !zeitRow) return;
-  zeitRow.style.display = tageSelect.value === "24/7" ? "none" : "grid";
+  var ist247 = tageSelect.value === "24/7";
+  zeitRow.style.display = ist247 ? "none" : "grid";
+  if (hinweis) hinweis.style.display = ist247 ? "flex" : "none";
 }
 document.addEventListener("DOMContentLoaded", toggleGeschaeftszeitenUhrzeit);
 </script>

@@ -7,6 +7,8 @@ class OffenerPunktItem(BaseModel):
     status: str = "offen"  # offen, erledigt
     quelle: str = "manuell"  # manuell, rueckfrage, regelrelevant_leer, dokument
     ziel_url: str = ""
+    standort_id: str = ""
+    objekt_typ: str = ""
 
 class TechnikObjekt(BaseModel):
     schema_version: int = 1

@@ -198,7 +198,8 @@ class RuleEngine:
                         text=f"Offener Punkt für Regel '{r['befund']}' an Standort '{sto.bezeichnung}': Unvollständige Angaben.",
                         status="offen",
                         quelle="regelrelevant_leer",
-                        ziel_url=f"/auftrag/{auftrag_id}/standort/{sto.id}/bearbeiten"
+                        ziel_url=f"/auftrag/{auftrag_id}/standort/{sto.id}/bearbeiten",
+                        standort_id=sto.id
                     ))
 
                 self._apply_rule_result(fid, r, satisfied, miss, auftrag_id, sto.id, None, findings_map, now_str)
@@ -218,7 +219,9 @@ class RuleEngine:
                         text=f"Offener Punkt für Regel '{r['befund']}' bei Gerät '{obj.bezeichnung}': Unvollständige Angaben.",
                         status="offen",
                         quelle="regelrelevant_leer",
-                        ziel_url=f"/auftrag/{auftrag_id}/objekt/{obj.typ}/{obj.id}{f_anchor}"
+                        ziel_url=f"/auftrag/{auftrag_id}/objekt/{obj.typ}/{obj.id}{f_anchor}",
+                        standort_id=obj.standort_id,
+                        objekt_typ=obj.typ
                     ))
 
                 self._apply_rule_result(fid, r, satisfied, miss, auftrag_id, obj.standort_id, obj.id, findings_map, now_str)

@@ -49,7 +49,7 @@
       </thead>
       <tbody>
         {% for f in findings %}
-        <tr>
+        <tr{% if f.status == "uebernommen" %} class="is-uebernommen"{% endif %}>
           <td class="top"><span class="badge badge-{{ f.schweregrad }}">{{ f.schweregrad }}</span></td>
           <td class="top">
             <div class="cell-title">{{ f.befund }}</div>
@@ -68,7 +68,9 @@
             </form>
           </td>
           <td class="top col-right">
-            {% if f.status == "bestaetigt" %}
+            {% if f.status == "uebernommen" %}
+            <a href="/auftrag/{{ auftrag.id }}/massnahmen{% if f.massnahme_id %}#massnahme-{{ f.massnahme_id }}{% endif %}" class="btn btn-sm">Im Maßnahmenkatalog</a>
+            {% elif f.status == "bestaetigt" %}
             <form action="/auftrag/{{ auftrag.id }}/finding/{{ f.id }}/massnahme_erzeugen" method="POST">
               <button type="submit" class="btn btn-sm btn-primary">Als Maßnahme übernehmen</button>
             </form>

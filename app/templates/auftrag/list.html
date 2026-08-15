@@ -43,7 +43,16 @@
         <td class="cell-typ">{{ a.projekt_nummer }}</td>
         <td>{{ a.kunde }}</td>
         <td class="cell-name"><a href="/auftrag/{{ a.id }}">{{ a.bezeichnung }}</a></td>
-        <td><span class="badge">{{ a.status }}</span></td>
+        <td>
+          <form action="/auftrag/{{ a.id }}/status" method="POST">
+            <input type="hidden" name="next" value="/auftrag">
+            <select name="status" class="form-control badge-select" onchange="this.form.submit()">
+              {% for opt in ["Vorbereitung", "Erfassung", "Konsolidierung", "Bewertung", "Abgabe"] %}
+              <option value="{{ opt }}" {% if a.status == opt %}selected{% endif %}>{{ opt }}</option>
+              {% endfor %}
+            </select>
+          </form>
+        </td>
         <td class="text-muted">{{ a.vertraulichkeit_default }}</td>
         <td class="col-right">
           <span class="linkact">

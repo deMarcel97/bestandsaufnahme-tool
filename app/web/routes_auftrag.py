@@ -16,6 +16,8 @@ from app.utils.number_parser import parse_int_german, parse_float_german
 router = APIRouter()
 templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
 
+STATUS_OPTIONS = ["Vorbereitung", "Erfassung", "Konsolidierung", "Bewertung", "Abgabe"]
+
 def get_bausteine_labels() -> dict:
     labels = {}
     for typ in schema_loader.get_all_types():
@@ -87,6 +89,15 @@ def create_auftrag(
     )
     storage.save_auftrag(auftrag)
     return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+
+@router.post("/auftrag/{auftrag_id}/status")
+def update_auftrag_status(auftrag_id: str, status: str = Form(...), next: str = Form(default="")):
+    auftrag = storage.load_auftrag(auftrag_id)
+    if auftrag and status in STATUS_OPTIONS:
+        auftrag.status = status
+        storage.save_auftrag(auftrag)
+    redirect_url = next if next in ("/auftrag", f"/auftrag/{auftrag_id}") else f"/auftrag/{auftrag_id}"
+    return RedirectResponse(url=redirect_url, status_code=303)
 
 @router.get("/auftrag/{auftrag_id}")
 def detail_auftrag(request: Request, auftrag_id: str):

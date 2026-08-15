@@ -169,6 +169,13 @@ for typ, label in building_blocks_to_test:
     print(f"[{'PASS' if edit_post_ok else 'FAIL'}] POST Edit Object '{created_obj.id}' -> HTTP {resp_edit_post.status_code}")
     assert edit_post_ok, f"POST edit failed for object {created_obj.id}"
 
+    # F. CLEAN UP - remove the QA test object so it doesn't pollute auf-test data
+    storage.delete_objekt("auf-test", typ, created_obj.id)
+    remaining = storage.list_objekte("auf-test", typ=typ)
+    cleanup_ok = not any(o.id == created_obj.id for o in remaining)
+    print(f"[{'PASS' if cleanup_ok else 'FAIL'}] Cleanup QA test object {created_obj.id}")
+    assert cleanup_ok, f"Failed to clean up QA test object {created_obj.id}"
+
 print("\n=========================================================")
 print(" ALL QA TESTS PASSED SUCCESSFULLY!")
 print("=========================================================")
