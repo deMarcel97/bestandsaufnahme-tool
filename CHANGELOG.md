@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.8] - 2026-08-15
+
+### Fixed
+- **Karten ohne GitHub-Verknüpfung (#313)**: Vier Karten (#302, #303, #304, #306) blieben in Superthread ohne Link zu ihrem Pull Request, obwohl Branch-Name und PR-Titel die Karten-ID korrekt trugen. Ursache war nicht das Namensformat, sondern der Merge-Weg: die vier PRs wurden über einen gemeinsamen Integrationszweig geschlossen, weil sich alle Karten an Version und CHANGELOG überschnitten. Superthread hängt seine Verknüpfung an die PR-Ereignisse — ein so geschlossener PR erzeugt sie nicht, und nachträglich lässt sich das nicht heilen (Neusetzen des PR-Titels an #302 getestet, ohne Wirkung). `CLAUDE.md` hält jetzt als Regel fest, PRs immer über `gh pr merge` zu schliessen und Konflikte im jeweiligen Feature-Branch aufzulösen statt auf einem Integrationszweig. Für die vier betroffenen Karten wurde der Link als Kommentar nachgetragen.
+
 ## [2.7.7] - 2026-08-15
 
 ### Changed
