@@ -1,0 +1,52 @@
+[Unit]
+Description=IT-Bestandsaufnahme-Tool (FastAPI/uvicorn)
+Documentation=https://github.com/deMarcel97/bestandsaufnahme-tool
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+User=__APP_USER__
+Group=__APP_USER__
+WorkingDirectory=__APP_DIR__
+
+# Das Projekt hat ein Flat-Layout ohne __init__.py-Pakete, daher wird das
+# Arbeitsverzeichnis explizit auf den Importpfad gelegt (wie lokal via
+# `PYTHONPATH=. pytest`).
+Environment=PYTHONPATH=__APP_DIR__
+Environment=PYTHONUNBUFFERED=1
+
+# Enthält BESTANDSAUFNAHME_DATA_DIR und optional die ENTRA_*-Variablen.
+# Führendes "-": der Dienst startet auch, wenn die Datei (noch) fehlt.
+EnvironmentFile=-__ENV_FILE__
+
+# Bindet bewusst nur an localhost — nach aussen geht es ausschliesslich über
+# den nginx-Reverse-Proxy, der die Zugriffsbeschränkung durchsetzt.
+ExecStart=__APP_DIR__/venv/bin/uvicorn app.main:app \
+    --host 127.0.0.1 \
+    --port __PORT__ \
+    --proxy-headers \
+    --forwarded-allow-ips=127.0.0.1
+
+Restart=on-failure
+RestartSec=5
+
+# ── Hardening ────────────────────────────────────────────────────────────
+# ProtectSystem=strict macht das gesamte Dateisystem read-only; nur das
+# Datenverzeichnis wird explizit wieder beschreibbar gemacht. Ein Fehler in
+# der Anwendung kann damit weder den eigenen Code noch das System verändern.
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictSUIDSGID=yes
+LockPersonality=yes
+ReadWritePaths=__DATA_DIR__
+
+[Install]
+WantedBy=multi-user.target

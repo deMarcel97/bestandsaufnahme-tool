@@ -16,7 +16,7 @@ from app.web import (
     routes_auth
 )
 
-app = FastAPI(title="IT-Bestandsaufnahme Tool", version="2.1.0")
+app = FastAPI(title="IT-Bestandsaufnahme Tool", version="2.7.0")
 
 UNSAFE_METHODS = {"POST", "PUT", "DELETE", "PATCH"}
 PUBLIC_PATH_PREFIXES = ("/auth/", "/static/")

@@ -4,28 +4,21 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bestandsaufnahme-tool"
-version = "2.5.0"
+version = "2.7.0"
 description = "Tool für IT-Bestandsaufnahmen beim Kunden"
 authors = [{ name = "IT Systemhaus" }]
 requires-python = ">=3.10"
-dependencies = [
-    "fastapi>=0.110.0",
-    "uvicorn[standard]>=0.28.0",
-    "jinja2>=3.1.3",
-    "pydantic>=2.6.3",
-    "pyyaml>=6.0.1",
-    "python-multipart>=0.0.9",
-    "python-docx>=1.1.0",
-    "pillow>=10.0.0",
-    "authlib>=1.3.0",
-    "itsdangerous>=2.1.2",
-    "httpx>=0.27.0"
-]
+# Die Laufzeit-Abhängigkeiten stehen in requirements.txt, damit Dockerfile
+# und deploy/install.sh dieselbe Liste nutzen können, statt sie zu duplizieren.
+dynamic = ["dependencies"]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0.0"
 ]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
 
 [tool.setuptools]
 packages = ["app"]

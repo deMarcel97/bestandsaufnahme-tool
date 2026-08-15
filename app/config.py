@@ -3,7 +3,19 @@ import secrets
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR / "data"
+
+# Nutzdaten (Aufträge, Standorte, Objekte, Findings) liegen lokal im
+# Projektverzeichnis. Im Serverbetrieb muss das Datenverzeichnis dagegen
+# ausserhalb des Code-Checkouts liegen (z.B. /var/lib/bestandsaufnahme-tool/data),
+# damit ein Code-Update die Kundendaten nicht anfasst und der systemd-Service
+# mit ProtectSystem=strict nur genau dieses eine Verzeichnis schreiben darf.
+# Bewusst mit Prefix statt schlicht DATA_DIR: ein generischer Name könnte in
+# einer Shell bereits für etwas anderes gesetzt sein, und die Anwendung würde
+# Kundendaten dann unbemerkt woanders hinschreiben.
+DATA_DIR = Path(os.environ.get("BESTANDSAUFNAHME_DATA_DIR") or (BASE_DIR / "data")).resolve()
+
+# Schemas, Regelwerke und Bewertungslogik sind Teil des Codes und werden
+# zusammen mit ihm ausgeliefert — daher bewusst nicht konfigurierbar.
 SCHEMAS_DIR = BASE_DIR / "schemas"
 RULES_DIR = BASE_DIR / "rules"
 BEWERTUNG_DIR = BASE_DIR / "bewertung"

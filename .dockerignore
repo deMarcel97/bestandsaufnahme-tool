@@ -1,6 +1,7 @@
 data/
 tests/
 scratch/
+deploy/
 exports/
 Design änderung/
 .git/

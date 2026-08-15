@@ -4,6 +4,20 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.0] - 2026-08-15
+
+### Added
+- **Server-Deployment für Debian/Ubuntu (#301)**: Neues Verzeichnis `deploy/` mit idempotentem Install-Skript (`install.sh`), Update-Skript (`update.sh`), systemd-Unit und nginx-Site. Das Tool läuft damit als Dienst hinter einem Reverse Proxy statt nur als lokaler Single-User-Dev-Server. Die systemd-Unit ist gehärtet (`ProtectSystem=strict`, `NoNewPrivileges`, `ReadWritePaths` nur auf das Datenverzeichnis); uvicorn bindet ausschliesslich an `127.0.0.1`, nach aussen geht es nur über nginx.
+- **Datenverzeichnis konfigurierbar (#301)**: `BESTANDSAUFNAHME_DATA_DIR` legt fest, wo Auftragsdaten liegen (`app/config.py`). Im Serverbetrieb zeigt die Variable auf `/var/lib/bestandsaufnahme-tool/data`, sodass Code-Updates die Kundendaten nicht berühren. Ohne die Variable bleibt das bisherige Verhalten (`data/` im Projektverzeichnis) unverändert.
+- **Zugriffsbeschränkung ohne Login (#301)**: Da Entra-ID-SSO vorerst deaktiviert bleibt, beschränkt die nginx-Site den Zugriff auf konfigurierbare Quell-Netze (`ALLOW_CIDRS`, Default RFC1918). `install.sh` bricht bewusst ab, wenn diese Liste leer ist — das Tool soll nicht unbeabsichtigt ohne jede Zugriffskontrolle im Netz stehen.
+- **Host/Port/Reload über Environment (#301)**: `run.py` liest `HOST`, `PORT` und `RELOAD` aus der Umgebung, um auf dem Server parallel zum Dienst eine Testinstanz auf einem anderen Port starten zu können. Defaults entsprechen dem bisherigen lokalen Betrieb.
+
+### Fixed
+- **Fehlendes `pillow` im Container (#301)**: Das `Dockerfile` installierte die Abhängigkeiten als handgepflegte Liste, in der `pillow` fehlte — die Diagrammerzeugung im `.docx`-Export wäre im Container fehlgeschlagen. Die Liste liegt jetzt einmalig in `requirements.txt`; `pyproject.toml` liest sie über `[tool.setuptools.dynamic]` ein, `Dockerfile` und `deploy/install.sh` installieren direkt daraus.
+
+### Removed
+- **Superthread-Hilfsskript entfernt (#301)**: `scratch/superthread-mcp.js` gelöscht — die Anbindung läuft direkt über den MCP-Server.
+
 ## [2.6.0] - 2026-08-15
 
 ### Added
