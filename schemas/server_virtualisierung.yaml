@@ -126,6 +126,18 @@ abschnitte:
     pflicht: false
     regelrelevant: false
     vertraulichkeit: intern
+  - name: standort_rack
+    label: Standort / Rack (inkl. Höheneinheit)
+    typ: text
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: intern
+  - name: baujahr
+    label: Baujahr / Anschaffungsjahr
+    typ: zahl
+    pflicht: false
+    regelrelevant: false
+    vertraulichkeit: kundentauglich
   - name: garantie_status
     label: Garantie-Status
     typ: auswahl
@@ -203,6 +215,7 @@ abschnitte:
       - wert: sata
       - wert: sas
       - wert: nvme
+      - wert: m2
     - name: kapazitaet_gb
       typ: zahl
       label: Kapazität (GB)
