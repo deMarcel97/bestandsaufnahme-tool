@@ -140,7 +140,15 @@ def detail_auftrag(request: Request, auftrag_id: str):
     )
 
 @router.get("/auftrag/{auftrag_id}/einstellungen")
-def edit_auftrag_form(request: Request, auftrag_id: str):
+def edit_auftrag_redirect(auftrag_id: str):
+    """Der frühere Sammel-Menüpunkt „Stammdaten & Kontext" ist in die zwei
+    Menüpunkte „Stammdaten" und „Unternehmenskontext" aufgeteilt. Die alte
+    Adresse bleibt als Weiterleitung bestehen, damit Lesezeichen und in
+    Auftragsdaten gespeicherte Ziel-Links weiter funktionieren."""
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/stammdaten", status_code=303)
+
+@router.get("/auftrag/{auftrag_id}/stammdaten")
+def stammdaten_form(request: Request, auftrag_id: str):
     auftrag = storage.load_auftrag(auftrag_id)
     if not auftrag:
         return RedirectResponse(url="/auftrag", status_code=303)
@@ -150,19 +158,19 @@ def edit_auftrag_form(request: Request, auftrag_id: str):
     sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
         request=request,
-        name="auftrag/edit.html",
+        name="auftrag/stammdaten.html",
         context={
             "auftrag": auftrag,
             "verfuegbare_typen": verfuegbare_typen,
             "bausteine_labels": bausteine_labels,
-            "active_tab": "einstellungen",
+            "active_tab": "stammdaten",
             "active_nav": "auftrag",
             **sidebar_context
         }
     )
 
-@router.post("/auftrag/{auftrag_id}/einstellungen")
-def edit_auftrag_submit(
+@router.post("/auftrag/{auftrag_id}/stammdaten")
+def stammdaten_submit(
     auftrag_id: str,
     projekt_nummer: str = Form(""),
     jira_url: str = Form(""),
@@ -173,21 +181,14 @@ def edit_auftrag_submit(
     status: str = Form("Vorbereitung"),
     vertraulichkeit_default: str = Form("kundentauglich"),
     aktive_bausteine: list[str] = Form(default=[]),
-    kerngeschaeft: str = Form(""),
-    anzahl_standorte_kunde: str = Form("1"),
-    it_abteilung_vorhanden: str = Form("nein"),
-    anzahl_mitarbeiter_gesamt: str = Form(""),
-    anzahl_it_mitarbeiter: str = Form(""),
-    anzahl_it_nutzer: str = Form(""),
-    geschaeftszeiten_tage: str = Form("Montag bis Freitag"),
-    geschaeftszeiten_von: str = Form("08:00"),
-    geschaeftszeiten_bis: str = Form("17:00"),
-    allgemeine_hinweise: str = Form(""),
     beauftragung: str = Form(""),
     kickoff: str = Form(""),
     entwurf_vorlage: str = Form(""),
     abgabe: str = Form("")
 ):
+    """Speichert ausschliesslich die Felder der Stammdaten-Seite. Der
+    Unternehmenskontext wird bewusst nicht angefasst — er hat eine eigene
+    Seite mit eigenem Formular, und ein Speichern hier darf ihn nicht leeren."""
     auftrag = storage.load_auftrag(auftrag_id)
     if not auftrag:
         return RedirectResponse(url="/auftrag", status_code=303)
@@ -208,7 +209,54 @@ def edit_auftrag_submit(
     auftrag.vertraulichkeit_default = vertraulichkeit_default
     auftrag.aktive_bausteine = aktive_bausteine
 
-    # Context
+    # Dates
+    auftrag.termine.beauftragung = beauftragung if beauftragung else None
+    auftrag.termine.kickoff = kickoff if kickoff else None
+    auftrag.termine.entwurf_vorlage = entwurf_vorlage if entwurf_vorlage else None
+    auftrag.termine.abgabe = abgabe if abgabe else None
+
+    storage.save_auftrag(auftrag)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+
+@router.get("/auftrag/{auftrag_id}/unternehmenskontext")
+def unternehmenskontext_form(request: Request, auftrag_id: str):
+    auftrag = storage.load_auftrag(auftrag_id)
+    if not auftrag:
+        return RedirectResponse(url="/auftrag", status_code=303)
+
+    sidebar_context = build_sidebar_context(auftrag)
+    return templates.TemplateResponse(
+        request=request,
+        name="auftrag/unternehmenskontext.html",
+        context={
+            "auftrag": auftrag,
+            "active_tab": "unternehmenskontext",
+            "active_nav": "auftrag",
+            **sidebar_context
+        }
+    )
+
+@router.post("/auftrag/{auftrag_id}/unternehmenskontext")
+def unternehmenskontext_submit(
+    auftrag_id: str,
+    kerngeschaeft: str = Form(""),
+    anzahl_standorte_kunde: str = Form("1"),
+    it_abteilung_vorhanden: str = Form("nein"),
+    anzahl_mitarbeiter_gesamt: str = Form(""),
+    anzahl_it_mitarbeiter: str = Form(""),
+    anzahl_it_nutzer: str = Form(""),
+    geschaeftszeiten_tage: str = Form("Montag bis Freitag"),
+    geschaeftszeiten_von: str = Form("08:00"),
+    geschaeftszeiten_bis: str = Form("17:00"),
+    allgemeine_hinweise: str = Form("")
+):
+    """Speichert ausschliesslich den Unternehmenskontext. Stammdaten,
+    Auftragssteuerung und Termine bleiben unangetastet — sie gehören zur
+    Stammdaten-Seite."""
+    auftrag = storage.load_auftrag(auftrag_id)
+    if not auftrag:
+        return RedirectResponse(url="/auftrag", status_code=303)
+
     auftrag.unternehmenskontext.kerngeschaeft = kerngeschaeft
     target_count = parse_int_german(anzahl_standorte_kunde, 1)
     auftrag.unternehmenskontext.anzahl_standorte_kunde = target_count
@@ -220,12 +268,6 @@ def edit_auftrag_submit(
     auftrag.unternehmenskontext.geschaeftszeiten_von = geschaeftszeiten_von
     auftrag.unternehmenskontext.geschaeftszeiten_bis = geschaeftszeiten_bis
     auftrag.unternehmenskontext.allgemeine_hinweise = allgemeine_hinweise
-
-    # Dates
-    auftrag.termine.beauftragung = beauftragung if beauftragung else None
-    auftrag.termine.kickoff = kickoff if kickoff else None
-    auftrag.termine.entwurf_vorlage = entwurf_vorlage if entwurf_vorlage else None
-    auftrag.termine.abgabe = abgabe if abgabe else None
 
     storage.save_auftrag(auftrag)
 

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Stammdaten &amp; Kontext - {{ auftrag.bezeichnung }}{% endblock %}
+{% block title %}Unternehmenskontext - {{ auftrag.bezeichnung }}{% endblock %}
 
 {% block content %}
 <div class="layout-sidebar">
@@ -12,81 +12,12 @@
         <div class="crumbs eyebrow">
           <span>{{ auftrag.projekt_nummer }}</span><span class="sep">/</span><span>{{ auftrag.kunde }}</span>
         </div>
-        <h1>Stammdaten &amp; Kontext</h1>
+        <h1>Unternehmenskontext</h1>
         <div class="meta-line"><span>{{ auftrag.bezeichnung }}</span></div>
       </div>
     </div>
 
-    <form action="/auftrag/{{ auftrag.id }}/einstellungen" method="POST">
-
-      <fieldset class="fieldset">
-        <div class="fieldset-head">
-          <h2>Stammdaten</h2>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Projektnummer</label>
-            <input type="text" name="projekt_nummer" value="{{ auftrag.projekt_nummer }}" class="form-control">
-          </div>
-          <div class="form-group">
-            <label>Jira Link</label>
-            <input type="url" name="jira_url" value="{{ auftrag.jira_url if auftrag.jira_url else '' }}" class="form-control">
-          </div>
-          <div class="form-group">
-            <label>Kunde</label>
-            <input type="text" name="kunde" value="{{ auftrag.kunde }}" class="form-control">
-          </div>
-          <div class="form-group">
-            <label>Auftraggeber</label>
-            <input type="text" name="auftraggeber" value="{{ auftrag.auftraggeber }}" class="form-control">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Bezeichnung</label>
-          <input type="text" name="bezeichnung" value="{{ auftrag.bezeichnung }}" class="form-control">
-        </div>
-      </fieldset>
-
-      <fieldset class="fieldset">
-        <div class="fieldset-head">
-          <h2>Auftragssteuerung</h2>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Grundlage</label>
-            <select name="grundlage" class="form-control">
-              {% for opt in ["Ausschreibung", "Angebot", "Rahmenvertrag", "Sonstiges"] %}
-              <option value="{{ opt }}" {% if auftrag.grundlage == opt %}selected{% endif %}>{{ opt }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Status</label>
-            <select name="status" class="form-control">
-              {% for opt in ["Vorbereitung", "Erfassung", "Konsolidierung", "Bewertung", "Abgabe"] %}
-              <option value="{{ opt }}" {% if auftrag.status == opt %}selected{% endif %}>{{ opt }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Vertraulichkeit Default</label>
-            <select name="vertraulichkeit_default" class="form-control">
-              {% for opt in ["intern", "kundentauglich", "anonymisiert"] %}
-              <option value="{{ opt }}" {% if auftrag.vertraulichkeit_default == opt %}selected{% endif %}>{{ opt }}</option>
-              {% endfor %}
-            </select>
-          </div>
-        </div>
-
-        <div class="subsection">
-          <span class="eyebrow">Aktive Bausteine (Scope-Steuerung)</span>
-          <div class="checkbox-grid">
-            {% for typ in verfuegbare_typen %}
-            <label><input type="checkbox" name="aktive_bausteine" value="{{ typ }}" {% if typ in auftrag.aktive_bausteine %}checked{% endif %}> {{ bausteine_labels.get(typ, typ.capitalize()) }}</label>
-            {% endfor %}
-          </div>
-        </div>
-      </fieldset>
+    <form action="/auftrag/{{ auftrag.id }}/unternehmenskontext" method="POST">
 
       <fieldset class="fieldset">
         <div class="fieldset-head">
@@ -157,32 +88,9 @@
         </div>
       </fieldset>
 
-      <fieldset class="fieldset">
-        <div class="fieldset-head">
-          <h2>Termine &amp; Rahmenbedingungen</h2>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Beauftragung</label>
-            <input type="date" name="beauftragung" value="{{ auftrag.termine.beauftragung or '' }}" class="form-control" lang="de">
-          </div>
-          <div class="form-group">
-            <label>Kickoff</label>
-            <input type="date" name="kickoff" value="{{ auftrag.termine.kickoff or '' }}" class="form-control" lang="de">
-          </div>
-          <div class="form-group">
-            <label>Entwurf Vorlage</label>
-            <input type="date" name="entwurf_vorlage" value="{{ auftrag.termine.entwurf_vorlage or '' }}" class="form-control" lang="de">
-          </div>
-          <div class="form-group">
-            <label>Abgabe</label>
-            <input type="date" name="abgabe" value="{{ auftrag.termine.abgabe or '' }}" class="form-control" lang="de">
-          </div>
-        </div>
-      </fieldset>
-
       <div class="form-bar">
         <button type="submit" class="btn btn-primary">Änderungen speichern</button>
+        <a href="/auftrag/{{ auftrag.id }}/stammdaten" class="btn">Zu den Stammdaten</a>
         <a href="/auftrag/{{ auftrag.id }}" class="btn">Zurück zum Auftrag</a>
       </div>
     </form>
@@ -194,7 +102,7 @@ function toggleEmpfehlungen() {
   var tageSelect = document.getElementById("geschaeftszeiten_tage");
   var zeitRow = document.getElementById("geschaeftszeiten_zeit_row");
   var rufHinweis = document.getElementById("rufbereitschaft_hinweis");
-  
+
   if (tageSelect && zeitRow) {
     var ist247 = tageSelect.value === "24/7";
     zeitRow.style.display = ist247 ? "none" : "grid";
@@ -203,7 +111,7 @@ function toggleEmpfehlungen() {
 
   var itSelect = document.getElementById("it_abteilung_vorhanden");
   var itHinweis = document.getElementById("it_dienstleister_hinweis");
-  
+
   if (itSelect && itHinweis) {
     var keineIt = itSelect.value === "nein";
     itHinweis.style.display = keineIt ? "flex" : "none";

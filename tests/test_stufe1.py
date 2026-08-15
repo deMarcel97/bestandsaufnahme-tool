@@ -258,7 +258,7 @@ def test_1_12_uncheck_all_modules():
     client.post("/auftrag/neu", data={"bezeichnung": "Test 1.12", "kunde": "K1", "projekt_nummer": "P1-12"})
     auftrag_id = "auf-test-1-12"
 
-    res = client.post(f"/auftrag/{auftrag_id}/einstellungen", data={
+    res = client.post(f"/auftrag/{auftrag_id}/stammdaten", data={
         "kunde": "Kunde Neu",
         "bezeichnung": "Test 1.12",
         "aktive_bausteine": []

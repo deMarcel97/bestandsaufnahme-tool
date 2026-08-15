@@ -156,6 +156,153 @@ def test_objekt_typ_traversal_rejected():
     assert res.status_code == 303
     assert storage.list_objekte(auftrag_id) == []
 
+def _stammdaten_formular(bezeichnung: str, projekt_nummer: str) -> dict:
+    return {
+        "projekt_nummer": projekt_nummer,
+        "jira_url": "https://jira.example.org/BAT-1",
+        "kunde": "Trenn-Kunde",
+        "auftraggeber": "Frau Muster",
+        "bezeichnung": bezeichnung,
+        "grundlage": "Rahmenvertrag",
+        "status": "Erfassung",
+        "vertraulichkeit_default": "intern",
+        "aktive_bausteine": ["firewall", "switch"],
+        "beauftragung": "2026-01-05",
+        "kickoff": "2026-01-12",
+        "entwurf_vorlage": "2026-02-01",
+        "abgabe": "2026-03-01",
+    }
+
+KONTEXT_FORMULAR = {
+    "kerngeschaeft": "Maschinenbau",
+    "anzahl_standorte_kunde": "1",
+    "it_abteilung_vorhanden": "ja",
+    "anzahl_mitarbeiter_gesamt": "250",
+    "anzahl_it_mitarbeiter": "4",
+    "anzahl_it_nutzer": "230",
+    "geschaeftszeiten_tage": "Montag bis Samstag",
+    "geschaeftszeiten_von": "06:00",
+    "geschaeftszeiten_bis": "20:00",
+    "allgemeine_hinweise": "Zutritt nur mit Voranmeldung",
+}
+
+def _pruefe_stammdaten(auftrag, formular: dict):
+    """Vergleicht gegen die tatsächlich abgeschickten Werte statt gegen einen
+    vorher genommenen Schnappschuss: ein Handler, der Felder immer auf ihren
+    Default zurücksetzt, fällt sonst nicht auf."""
+    assert auftrag.projekt_nummer == formular["projekt_nummer"]
+    assert auftrag.jira_url == formular["jira_url"]
+    assert auftrag.kunde == formular["kunde"]
+    assert auftrag.auftraggeber == formular["auftraggeber"]
+    assert auftrag.bezeichnung == formular["bezeichnung"]
+    assert auftrag.grundlage == formular["grundlage"]
+    assert auftrag.status == formular["status"]
+    assert auftrag.vertraulichkeit_default == formular["vertraulichkeit_default"]
+    assert auftrag.aktive_bausteine == formular["aktive_bausteine"]
+    assert auftrag.termine.beauftragung == formular["beauftragung"]
+    assert auftrag.termine.kickoff == formular["kickoff"]
+    assert auftrag.termine.entwurf_vorlage == formular["entwurf_vorlage"]
+    assert auftrag.termine.abgabe == formular["abgabe"]
+
+def _pruefe_kontext(auftrag, formular: dict):
+    kontext = auftrag.unternehmenskontext
+    assert kontext.kerngeschaeft == formular["kerngeschaeft"]
+    assert kontext.anzahl_standorte_kunde == int(formular["anzahl_standorte_kunde"])
+    assert kontext.it_abteilung_vorhanden == formular["it_abteilung_vorhanden"]
+    assert kontext.anzahl_mitarbeiter_gesamt == int(formular["anzahl_mitarbeiter_gesamt"])
+    assert kontext.anzahl_it_mitarbeiter == int(formular["anzahl_it_mitarbeiter"])
+    assert kontext.anzahl_it_nutzer == int(formular["anzahl_it_nutzer"])
+    assert kontext.geschaeftszeiten_tage == formular["geschaeftszeiten_tage"]
+    assert kontext.geschaeftszeiten_von == formular["geschaeftszeiten_von"]
+    assert kontext.geschaeftszeiten_bis == formular["geschaeftszeiten_bis"]
+    assert kontext.allgemeine_hinweise == formular["allgemeine_hinweise"]
+
+def _auftrag_mit_stammdaten_und_kontext(bezeichnung: str, projekt_nummer: str) -> str:
+    """Legt einen Auftrag an und füllt beide Seiten (Stammdaten und
+    Unternehmenskontext) einmal vollständig aus."""
+    from app.services.storage import storage
+
+    client.post("/auftrag/neu", data={
+        "projekt_nummer": projekt_nummer,
+        "kunde": "Trenn-Kunde",
+        "bezeichnung": bezeichnung,
+    }, follow_redirects=False)
+    auftrag_id = next(a.id for a in storage.list_auftraege() if a.projekt_nummer == projekt_nummer)
+
+    client.post(f"/auftrag/{auftrag_id}/stammdaten",
+                data=_stammdaten_formular(bezeichnung, projekt_nummer), follow_redirects=False)
+    client.post(f"/auftrag/{auftrag_id}/unternehmenskontext",
+                data=KONTEXT_FORMULAR, follow_redirects=False)
+
+    return auftrag_id
+
+def test_stammdaten_speichern_laesst_unternehmenskontext_unveraendert():
+    """Beide Seiten sind eigene Formulare. Wer nur die Stammdaten speichert,
+    schickt keine Kontextfelder mit — der Kontext darf davon nicht geleert oder
+    auf Defaults zurückgesetzt werden."""
+    from app.services.storage import storage
+
+    auftrag_id = _auftrag_mit_stammdaten_und_kontext("Trennung Stammdaten", "PROJ-TRENN-1")
+
+    res = client.post(f"/auftrag/{auftrag_id}/stammdaten", data={
+        "projekt_nummer": "PROJ-TRENN-1",
+        "kunde": "Trenn-Kunde neu",
+        "bezeichnung": "Trennung Stammdaten",
+        "grundlage": "Angebot",
+        "status": "Bewertung",
+        "vertraulichkeit_default": "kundentauglich",
+        "aktive_bausteine": ["firewall"],
+    }, follow_redirects=False)
+    assert res.status_code == 303
+
+    auftrag = storage.load_auftrag(auftrag_id)
+    assert auftrag.kunde == "Trenn-Kunde neu"
+    assert auftrag.status == "Bewertung"
+    _pruefe_kontext(auftrag, KONTEXT_FORMULAR)
+
+def test_unternehmenskontext_speichern_laesst_stammdaten_unveraendert():
+    """Gegenprobe: Der Kontext darf Stammdaten, Auftragssteuerung und Termine
+    nicht überschreiben."""
+    from app.services.storage import storage
+
+    bezeichnung, projekt_nummer = "Trennung Kontext", "PROJ-TRENN-2"
+    auftrag_id = _auftrag_mit_stammdaten_und_kontext(bezeichnung, projekt_nummer)
+
+    res = client.post(f"/auftrag/{auftrag_id}/unternehmenskontext", data={
+        "kerngeschaeft": "Maschinenbau und Service",
+        "anzahl_standorte_kunde": "1",
+        "it_abteilung_vorhanden": "nein",
+        "geschaeftszeiten_tage": "24/7",
+        "allgemeine_hinweise": "Neue Hinweise",
+    }, follow_redirects=False)
+    assert res.status_code == 303
+
+    auftrag = storage.load_auftrag(auftrag_id)
+    assert auftrag.unternehmenskontext.kerngeschaeft == "Maschinenbau und Service"
+    assert auftrag.unternehmenskontext.geschaeftszeiten_tage == "24/7"
+    assert auftrag.unternehmenskontext.allgemeine_hinweise == "Neue Hinweise"
+    _pruefe_stammdaten(auftrag, _stammdaten_formular(bezeichnung, projekt_nummer))
+
+def test_alte_einstellungen_url_leitet_auf_stammdaten_weiter():
+    auftrag_id = _auftrag_mit_stammdaten_und_kontext("Trennung Redirect", "PROJ-TRENN-3")
+
+    res = client.get(f"/auftrag/{auftrag_id}/einstellungen", follow_redirects=False)
+    assert res.status_code == 303
+    assert res.headers["location"] == f"/auftrag/{auftrag_id}/stammdaten"
+
+def test_beide_seiten_zeigen_sidebar_mit_fortschritt():
+    """build_sidebar_context() muss auf beiden Seiten eingebunden sein, sonst
+    fehlt die Baustein-Fortschrittsanzeige."""
+    auftrag_id = _auftrag_mit_stammdaten_und_kontext("Trennung Sidebar", "PROJ-TRENN-4")
+
+    for pfad, ueberschrift in (("stammdaten", "Stammdaten"), ("unternehmenskontext", "Unternehmenskontext")):
+        res = client.get(f"/auftrag/{auftrag_id}/{pfad}")
+        assert res.status_code == 200
+        assert f"<h1>{ueberschrift}</h1>" in res.text
+        assert "baustein-list" in res.text
+        assert f'href="/auftrag/{auftrag_id}/stammdaten"' in res.text
+        assert f'href="/auftrag/{auftrag_id}/unternehmenskontext"' in res.text
+
 def test_batch_create_objekte():
     from app.services.storage import storage
     client.post("/auftrag/neu", data={

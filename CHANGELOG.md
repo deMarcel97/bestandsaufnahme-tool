@@ -4,6 +4,13 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.3] - 2026-08-15
+
+### Changed
+- **„Stammdaten & Kontext" ist jetzt zwei Menüpunkte (#303)**: Die bisherige Sammelseite vereinte vier Abschnitte auf einer Seite. Neu trennt die Sidebar zwischen **Stammdaten** (`/auftrag/<id>/stammdaten`: Stammdaten, Auftragssteuerung, Termine — alles, was den Auftrag steuert) und **Unternehmenskontext** (`/auftrag/<id>/unternehmenskontext`: alles, was den Kunden beschreibt). Beide Seiten binden `build_sidebar_context()` ein, die Fortschrittsanzeige bleibt also überall sichtbar.
+- **Getrenntes Speichern ohne Datenverlust (#303)**: Jede der beiden Seiten hat einen eigenen POST-Handler, der ausschliesslich seine eigenen Felder entgegennimmt und setzt. Der frühere Sammel-Handler schrieb alle Felder aus einem Formular — getrennte Seiten hätten damit beim Speichern jeweils die Felder der anderen Seite auf ihre Defaults zurückgesetzt. Zwei Tests in `tests/test_integration_routes.py` belegen beide Richtungen und prüfen dabei gegen die tatsächlich abgeschickten Werte statt gegen einen Schnappschuss, damit ein Zurücksetzen auf Defaults nicht unbemerkt bleibt.
+- **Alte Adresse bleibt gültig (#303)**: `GET /auftrag/<id>/einstellungen` leitet auf die Stammdaten-Seite weiter, sodass Lesezeichen und die in offenen Punkten hinterlegten Ziel-Links weiter funktionieren. Der zugehörige Sammel-POST entfällt ersatzlos.
+
 ## [2.7.1] - 2026-08-15
 
 ### Added
