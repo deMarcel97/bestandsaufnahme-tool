@@ -12,6 +12,7 @@ class OffenerPunktItem(BaseModel):
 
 class TechnikObjekt(BaseModel):
     schema_version: int = 1
+    version: int = 1  # Konflikterkennung, siehe Auftrag.version
     id: str
     typ: str
     bezeichnung: str = ""

@@ -4,6 +4,18 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.4] - 2026-08-15
+
+### Fixed
+- **Schreibvorgänge konnten Daten zerstören (#305)**: Alle fünf Schreibstellen in `app/services/storage.py` nutzten `open(fpath, "w")` + `yaml.dump`. `open(..., "w")` leert die Zieldatei sofort — bevor der neue Inhalt geschrieben ist. Brach der Prozess in diesem Fenster ab (Dienst-Neustart, OOM, Stromausfall), blieb eine leere oder abgeschnittene YAML-Datei zurück und der Auftrag war nicht veraltet, sondern kaputt. Neu schreibt `write_yaml_atomic()` vollständig in eine Nachbardatei, erzwingt `fsync()` und benennt erst dann per `os.replace()` um (auf POSIX atomar) — es existiert damit immer entweder der alte oder der neue Stand. Das Risiko bestand unabhängig von Mehrbenutzerbetrieb und traf auch die Einzelnutzung.
+
+### Added
+- **Konflikterkennung beim Speichern (#305)**: `Auftrag`, `Standort` und `TechnikObjekt` führen einen `version`-Zähler. Weicht er beim Speichern vom Stand auf der Platte ab, hat jemand anderes zwischenzeitlich gespeichert — statt die fremden Änderungen stillschweigend zu überschreiben (bisher galt „wer zuletzt speichert, gewinnt", ohne jede Meldung), wird ein `KonfliktFehler` ausgelöst. Ein zentraler Exception-Handler in `app/main.py` beantwortet ihn mit HTTP 409 und einer verständlichen Seite. Bestandsdaten ohne `version`-Feld bleiben ladbar und starten bei 1.
+
+  **Abgrenzung:** Die Formulare führen die Version noch nicht als verstecktes Feld mit. Da die POST-Handler den Datensatz frisch laden, greift die Prüfung deshalb bislang auf Ebene der Speicher-Schnittstelle, noch nicht über die Dauer eines geöffneten Formulars hinweg. Das Nachziehen der Formulare ist der nächste Schritt und braucht Dateien, die derzeit parallel umgebaut werden.
+
+  `findings.yaml` und `massnahmen.yaml` werden als ganze Liste geschrieben und bekommen vorerst nur das atomare Schreiben, keine Versionsprüfung.
+
 ## [2.7.1] - 2026-08-15
 
 ### Added
