@@ -494,9 +494,9 @@ tbody tr:hover { background: var(--hover); }
 /* Statuspunkt */
 .status { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
 .status::before { content: ""; width: 7px; height: 7px; display: inline-block; background: var(--muted); }
-.status-vollstaendig::before { background: var(--ink); }
+.status-vollstaendig::before { background: var(--ok); }
 .status-teilweise::before { background: var(--warn); }
-.status-unbekannt::before { background: var(--line); }
+.status-unbekannt::before { background: var(--muted); }
 
 /* ── Badges / Tags ───────────────────────────────────────────────────── */
 .badge {
