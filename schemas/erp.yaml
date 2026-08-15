@@ -1,0 +1,153 @@
+schema_version: 1
+typ: erp
+bezeichnung_anzeige: ERP
+berichtskapitel: business_software
+abschnitte:
+  - id: was_ist_es
+    titel: Was ist es
+    felder:
+      - name: anbieter
+        typ: auswahl
+        pflicht: true
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: SAP_S/4HANA
+            textbaustein:
+              feststellung: "Als ERP-System kommt SAP S/4HANA zum Einsatz."
+              auswirkung: null
+          - wert: Microsoft_Dynamics_365_Business_Central
+            textbaustein:
+              feststellung: "Als ERP-System kommt Microsoft Dynamics 365 Business Central zum Einsatz."
+              auswirkung: null
+          - wert: Sage
+            textbaustein:
+              feststellung: "Als ERP-System kommt Sage zum Einsatz."
+              auswirkung: null
+          - wert: sonstige
+            textbaustein:
+              feststellung: "Als ERP-System kommt eine sonstige Lösung zum Einsatz."
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: anbieter_freitext
+        label: Anbieter (Sonstige)
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: anbieter
+          operator: gleich
+          wert: sonstige
+
+      - name: edition_version
+        label: Edition / Version
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+
+      - name: hosting_modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: cloud
+            textbaustein:
+              feststellung: "Das ERP-System wird als Cloud-/SaaS-Lösung betrieben."
+              auswirkung: null
+          - wert: on_premise
+            textbaustein:
+              feststellung: "Das ERP-System wird On-Premise im eigenen Rechenzentrum betrieben."
+              auswirkung: null
+          - wert: hybrid
+            textbaustein:
+              feststellung: "Das ERP-System wird in einer hybriden Konfiguration betrieben."
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+  - id: zustand
+    titel: In welchem Zustand ist es
+    felder:
+      - name: wartungsvertrag_support_vorhanden
+        label: Wartungs-/Supportvertrag vorhanden
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: erp_wartungsvertrag_support
+          max_punkte: 10
+        werte:
+          - wert: ja
+            punkte: 10
+            textbaustein:
+              feststellung: "Für das ERP-System besteht ein aktiver Wartungs-/Supportvertrag."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Für das ERP-System besteht kein Wartungs-/Supportvertrag."
+              auswirkung: "Bei Störungen oder Fehlern steht kein vereinbarter Herstellersupport zur Verfügung."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: datensicherung_vorhanden
+        label: Datensicherung der ERP-Daten vorhanden
+        typ: ja_nein_unbekannt
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: erp_datensicherung
+          max_punkte: 20
+        werte:
+          - wert: ja
+            punkte: 20
+            textbaustein:
+              feststellung: "Die Daten des ERP-Systems werden regelmäßig gesichert."
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: "Für die Daten des ERP-Systems besteht keine Datensicherung."
+              auswirkung: "Bei Datenverlust, Fehlbedienung oder Cyberangriff können geschäftskritische Finanz-, Waren- und Produktionsdaten unwiederbringlich verloren gehen."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: dokumentation_vorhanden
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: rechtliche_anforderungen
+          kriterium: erp_dokumentation
+          max_punkte: 10
+        werte:
+          - wert: vollstaendig
+            punkte: 10
+            textbaustein:
+              feststellung: "Eine vollständige Dokumentation des ERP-Systems liegt vor."
+              auswirkung: null
+          - wert: teilweise
+            punkte: 5
+            textbaustein:
+              feststellung: "Die Dokumentation des ERP-Systems ist nur teilweise vorhanden."
+              auswirkung: null
+          - wert: keine
+            punkte: 0
+            textbaustein:
+              feststellung: "Es liegt keine Dokumentation für das ERP-System vor."
+              auswirkung: "Im Störungs- oder Vertretungsfall verzögert die fehlende Dokumentation die Analyse und Behebung von Fehlern."
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null

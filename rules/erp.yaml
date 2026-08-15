@@ -1,0 +1,35 @@
+schema_version: 1
+regeln:
+  - id: erp-wartungsvertrag-fehlt
+    gilt_fuer: erp
+    bedingung:
+      alle:
+        - feld: wartungsvertrag_support_vorhanden
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Für das ERP-System besteht kein Wartungs-/Supportvertrag
+    risiko: Bei Störungen oder Fehlern steht kein vereinbarter Herstellersupport zur Verfügung, wodurch sich Ausfallzeiten verlängern können.
+    empfehlung: Wartungs-/Supportvertrag beim Hersteller oder Dienstleister abschließen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Wartungs-/Supportvertrag für ERP-System abschließen
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
+
+  - id: erp-datensicherung-fehlt
+    gilt_fuer: erp
+    bedingung:
+      alle:
+        - feld: datensicherung_vorhanden
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Keine Datensicherung für das ERP-System vorhanden
+    risiko: Bei Datenverlust, Fehlbedienung oder Cyberangriff können geschäftskritische Finanz-, Waren- und Produktionsdaten unwiederbringlich verloren gehen.
+    empfehlung: Regelmäßige, unabhängige Datensicherung für das ERP-System einrichten.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Datensicherung für ERP-System einrichten
+      kosten_richtwert: 500
+      aufwand_richtwert: 4

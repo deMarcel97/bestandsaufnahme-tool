@@ -1,0 +1,35 @@
+schema_version: 1
+regeln:
+  - id: crm-wartungsvertrag-fehlt
+    gilt_fuer: crm
+    bedingung:
+      alle:
+        - feld: wartungsvertrag_support_vorhanden
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: Für das CRM-System besteht kein Wartungs-/Supportvertrag
+    risiko: Bei Störungen oder Fehlern steht kein vereinbarter Herstellersupport zur Verfügung, wodurch sich Ausfallzeiten verlängern können.
+    empfehlung: Wartungs-/Supportvertrag beim Hersteller oder Dienstleister abschließen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Wartungs-/Supportvertrag für CRM-System abschließen
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
+
+  - id: crm-datensicherung-fehlt
+    gilt_fuer: crm
+    bedingung:
+      alle:
+        - feld: datensicherung_vorhanden
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Keine Datensicherung für das CRM-System vorhanden
+    risiko: Bei Datenverlust, Fehlbedienung oder Cyberangriff können Kunden- und Vertriebsdaten unwiederbringlich verloren gehen.
+    empfehlung: Regelmäßige, unabhängige Datensicherung für das CRM-System einrichten.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Datensicherung für CRM-System einrichten
+      kosten_richtwert: 500
+      aufwand_richtwert: 4
