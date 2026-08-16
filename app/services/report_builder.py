@@ -9,6 +9,7 @@ from app.models.bewertung import GesamtBewertung
 from app.services.schema_loader import schema_loader
 from app.services.evaluator import evaluator_service
 from app.services.rule_engine import rule_engine
+from app.services.topology_generator import generate_network_topology_mermaid
 
 # Storage module attribute for backward compatibility with external test runners
 storage = None
@@ -186,6 +187,14 @@ class ReportBuilder:
                 lines.append(f"**Internetanbindungen ({len(sto.anbindungen)}):** {', '.join(anb_texts)}")
 
             sto_objekte = [o for o in objekte if o.standort_id == sto.id]
+
+            # Netzwerktopologie-Abschnitt mit Mermaid-Diagramm
+            topo_mermaid = generate_network_topology_mermaid(sto, sto_objekte)
+            lines.append("\n#### Netzwerktopologie")
+            lines.append("```mermaid")
+            lines.append(topo_mermaid)
+            lines.append("```\n")
+
             if not sto_objekte:
                 lines.append("Für diesen Standort wurden noch keine Technik-Objekte erfasst.\n")
                 continue

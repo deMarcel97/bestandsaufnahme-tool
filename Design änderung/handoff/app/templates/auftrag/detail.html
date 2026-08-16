@@ -90,6 +90,21 @@
       <a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn btn-outline">Zur Erfassung</a>
     </div>
 
+    <div class="section-head" style="margin-top:36px;">
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <h2>Netzwerktopologie</h2>
+        <span class="count">Automatischer Netzplan</span>
+      </div>
+      <a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn btn-outline">In Erfassung öffnen</a>
+    </div>
+
+    <div id="uebersicht-topologie-container" style="margin-top:16px;">
+      <button type="button" class="btn btn-dark" hx-get="/auftrag/{{ auftrag.id }}/topologie-preview" hx-target="#uebersicht-topologie-container" hx-swap="innerHTML">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+        Netzplan visualisieren
+      </button>
+    </div>
+
   </main>
 </div>
 {% endblock %}

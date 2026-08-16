@@ -4,6 +4,15 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.24] - 2026-08-16
+
+### Added
+- **Netzwerktopologie: Automatischer Netzplan aus Verbindungsdaten (#324)**:
+  - **Topologie-Generator (`app/services/topology_generator.py`)**: Funktion `generate_network_topology_mermaid` generiert strukturierte, farbcodierte Mermaid-Flowcharts mit vollständiger Hierarchie: WAN/Internet (Anbindungen & Bandbreiten) -> Perimeter (Firewalls, HA-Cluster) -> Core-Switching (Trunk, LAG, Stacking) -> Access-Switching (Edge, PoE) -> Server & Storage (Hypervisoren, SAN/NAS, iSCSI, FC) -> Virtuelle Maschinen (VMs mit OS, Specs, Rollen) -> WLAN Access Points (Wi-Fi Standards, PoE+, Gast-WLAN) -> Endgeräte & Clients.
+  - **Analysebericht & DOCX-Export**: Integration in Kapitel 4 („Technische Infrastruktur und Fachkapitel") mit eigenem Unterabschnitt „Netzwerktopologie" pro Standort. Im Word-Export (.docx) als formatierter Mermaid-Diagrammblock integriert.
+  - **Interaktive Web-UI Darstellung (`erfassung.html` & `uebersicht.html` / `detail.html`)**: Automatische Einbettung via Mermaid.js mit Zoom In (+), Zoom Out (-), 1:1 Reset, Maus-Pan (Drag & Drop), Mausrad-Zoom und Vollbild-Modus. Schnelle Vorschau per Knopfdruck auf der Übersichtsseite.
+  - **Umfassende Testabdeckung**: Dedizierte Unittests in `tests/test_topology_generator.py`.
+
 ## [2.7.23] - 2026-08-16
 
 ### Changed

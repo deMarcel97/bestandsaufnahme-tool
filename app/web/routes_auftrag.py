@@ -7,6 +7,7 @@ from app.services.schema_loader import schema_loader
 from app.services.slug import generate_slug_id
 from app.services.rule_engine import rule_engine
 from app.services.evaluator import evaluator_service
+from app.services.topology_generator import generate_network_topology_mermaid
 from app.web.templates import templates
 from app.web.shared_context import build_sidebar_context, aktuelle_version
 from app.models.auftrag import Auftrag, Aspekt
@@ -165,6 +166,11 @@ def erfassung_auftrag(request: Request, auftrag_id: str):
     ]
     cloud_objekte = [o for o in objekte if not o.standort_id]
 
+    topologien = {}
+    for sto in standorte:
+        sto_objs = [o for o in objekte if o.standort_id == sto.id]
+        topologien[sto.id] = generate_network_topology_mermaid(sto, sto_objs)
+
     return templates.TemplateResponse(
         request=request,
         name="auftrag/erfassung.html",
@@ -172,6 +178,7 @@ def erfassung_auftrag(request: Request, auftrag_id: str):
             "auftrag": auftrag,
             "standorte": standorte,
             "objekte": objekte,
+            "topologien": topologien,
             "cloud_objekte": cloud_objekte,
             "cloud_bausteine": cloud_bausteine,
             "standort_bausteine": standort_bausteine,
@@ -181,6 +188,29 @@ def erfassung_auftrag(request: Request, auftrag_id: str):
             **sidebar_context
         }
     )
+
+@router.get("/auftrag/{auftrag_id}/topologie-preview")
+def topologie_preview(request: Request, auftrag_id: str):
+    auftrag = storage.load_auftrag(auftrag_id)
+    if not auftrag:
+        return HTMLResponse("<p class='text-muted'>Auftrag nicht gefunden.</p>")
+    standorte = storage.list_standorte(auftrag_id)
+    objekte = storage.list_objekte(auftrag_id)
+    topologien = {}
+    for sto in standorte:
+        sto_objs = [o for o in objekte if o.standort_id == sto.id]
+        topologien[sto.id] = generate_network_topology_mermaid(sto, sto_objs)
+
+    return templates.TemplateResponse(
+        request=request,
+        name="auftrag/_topologie_preview.html",
+        context={
+            "auftrag": auftrag,
+            "standorte": standorte,
+            "topologien": topologien,
+        }
+    )
+
 
 @router.get("/auftrag/{auftrag_id}/einstellungen")
 def edit_auftrag_redirect(auftrag_id: str):
