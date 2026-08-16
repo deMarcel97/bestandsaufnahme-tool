@@ -92,6 +92,65 @@
         </div>
       </fieldset>
 
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>Geschäftskritische Systeme &amp; geplante Änderungen</h2>
+        </div>
+        <p class="hint">Fliesst unverändert in den Analysebericht ein — je Zeile Titel und Kurzbeschreibung.</p>
+
+        <div class="subsection" style="border-top:none; padding-top:0; margin-top:0;">
+          <span class="eyebrow">Geschäftskritische Systeme</span>
+          <div id="system_container">
+            {% for aspekt in auftrag.unternehmenskontext.geschaeftskritische_systeme %}
+            <div class="repeat-block" id="system_block_{{ loop.index0 }}">
+              <div class="repeat-head">
+                <h4>System {{ loop.index }}</h4>
+                <button type="button" class="btn btn-sm btn-danger" onclick="entferneAspektZeile('system_block_{{ loop.index0 }}')">Entfernen</button>
+              </div>
+              <div class="form-group">
+                <label>Titel</label>
+                <input type="text" name="system_titel_{{ loop.index0 }}" value="{{ aspekt.titel }}" class="form-control" placeholder="z. B. ERP-System">
+              </div>
+              <div class="form-group">
+                <label>Text</label>
+                <textarea name="system_text_{{ loop.index0 }}" class="form-control">{{ aspekt.text }}</textarea>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <button type="button" class="btn btn-outline" onclick="addAspektZeile('system', 'Geschäftskritisches System')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Weiteres System
+          </button>
+        </div>
+
+        <div class="subsection">
+          <span class="eyebrow">Geplante Änderungen</span>
+          <div id="aenderung_container">
+            {% for aspekt in auftrag.unternehmenskontext.geplante_aenderungen %}
+            <div class="repeat-block" id="aenderung_block_{{ loop.index0 }}">
+              <div class="repeat-head">
+                <h4>Änderung {{ loop.index }}</h4>
+                <button type="button" class="btn btn-sm btn-danger" onclick="entferneAspektZeile('aenderung_block_{{ loop.index0 }}')">Entfernen</button>
+              </div>
+              <div class="form-group">
+                <label>Titel</label>
+                <input type="text" name="aenderung_titel_{{ loop.index0 }}" value="{{ aspekt.titel }}" class="form-control" placeholder="z. B. Serverumzug Q3">
+              </div>
+              <div class="form-group">
+                <label>Text</label>
+                <textarea name="aenderung_text_{{ loop.index0 }}" class="form-control">{{ aspekt.text }}</textarea>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <button type="button" class="btn btn-outline" onclick="addAspektZeile('aenderung', 'Geplante Änderung')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Weitere Änderung
+          </button>
+        </div>
+      </fieldset>
+
       <div class="form-bar">
         <button type="submit" class="btn btn-primary">Änderungen speichern</button>
         <a href="/auftrag/{{ auftrag.id }}/stammdaten" class="btn">Zu den Stammdaten</a>
@@ -122,5 +181,42 @@ function toggleEmpfehlungen() {
   }
 }
 document.addEventListener("DOMContentLoaded", toggleEmpfehlungen);
+
+// Geschäftskritische Systeme und geplante Änderungen sind beliebig lange
+// Listen aus Titel+Text (Karte #316). Der Praefix ("system"/"aenderung")
+// steuert sowohl den Container als auch die Feldnamen, die
+// parse_unterobjekte() auf dem Server erwartet.
+var aspektZaehler = {
+  system: document.querySelectorAll('#system_container .repeat-block').length,
+  aenderung: document.querySelectorAll('#aenderung_container .repeat-block').length
+};
+
+function addAspektZeile(praefix, ueberschrift) {
+  var container = document.getElementById(praefix + '_container');
+  var idx = aspektZaehler[praefix]++;
+  var block = document.createElement('div');
+  block.className = 'repeat-block';
+  block.id = praefix + '_block_' + idx;
+  block.innerHTML = `
+    <div class="repeat-head">
+      <h4>${ueberschrift}</h4>
+      <button type="button" class="btn btn-sm btn-danger" onclick="entferneAspektZeile('${praefix}_block_${idx}')">Entfernen</button>
+    </div>
+    <div class="form-group">
+      <label>Titel</label>
+      <input type="text" name="${praefix}_titel_${idx}" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Text</label>
+      <textarea name="${praefix}_text_${idx}" class="form-control"></textarea>
+    </div>
+  `;
+  container.appendChild(block);
+}
+
+function entferneAspektZeile(blockId) {
+  var block = document.getElementById(blockId);
+  if (block) block.remove();
+}
 </script>
 {% endblock %}
