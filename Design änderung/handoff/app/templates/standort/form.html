@@ -3,7 +3,10 @@
 {% block title %}Standort bearbeiten - {{ auftrag.bezeichnung }}{% endblock %}
 
 {% block content %}
-<div class="workspace">
+<div class="layout-sidebar">
+  {% include "_sidebar.html" %}
+
+  <main class="workspace">
 
   <div class="page-head">
     <div>
@@ -13,10 +16,17 @@
       <h1>{% if standort %}{{ standort.bezeichnung }}{% else %}Neuer Standort{% endif %}</h1>
       <div class="meta-line"><span>{% if standort %}Standort bearbeiten{% else %}Standort anlegen{% endif %}</span></div>
     </div>
-    <a href="/auftrag/{{ auftrag.id }}" class="btn" style="margin-top:30px; flex:none;">Zurück zum Auftrag</a>
+    <a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn" style="flex:none;">Zurück zur Erfassung</a>
   </div>
 
+  {% include "_konflikt_banner.html" %}
+
   <form action="{% if standort %}/auftrag/{{ auftrag.id }}/standort/{{ standort.id }}/bearbeiten{% else %}/auftrag/{{ auftrag.id }}/standort/neu{% endif %}" method="POST">
+    {% if standort %}
+    {# Stand, den dieses Formular beim Laden gesehen hat — siehe Karte #308.
+       Beim Neuanlegen gibt es noch nichts, womit sich vergleichen liesse. #}
+    <input type="hidden" name="version" value="{{ standort.version }}">
+    {% endif %}
 
     <fieldset class="fieldset">
       <div class="fieldset-head"><h2>Standortdaten</h2></div>
@@ -32,7 +42,7 @@
         </div>
         <div class="form-group">
           <label>Begehung am</label>
-          <input type="date" name="begehung_am" value="{{ standort.begehung_am if standort else '' }}" class="form-control">
+          <input type="date" name="begehung_am" value="{{ standort.begehung_am if standort else heutiges_datum }}" class="form-control">
         </div>
       </div>
 
@@ -60,39 +70,12 @@
           <label>Ansprechpartner vor Ort</label>
           <input type="text" name="ansprechpartner_vor_ort" value="{{ standort.ansprechpartner_vor_ort if standort else '' }}" class="form-control" placeholder="Max Mustermann (IT-Leitung)">
         </div>
-      </div>
-    </fieldset>
-
-    <fieldset class="fieldset">
-      <div class="fieldset-head"><h2>Netzwerktechnik &amp; Trassenführung</h2></div>
-
-      <div class="form-row">
         <div class="form-group">
-          <label>Redundanzkonzept für Backup-Leitung</label>
-          <select name="redaktionskonzept_backup_leitung" class="form-control">
-            <option value="automatische_umschaltung" {% if not standort or standort.redaktionskonzept_backup_leitung == 'automatische_umschaltung' %}selected{% endif %}>Automatische Umschaltung (Failover / VRRP / SD-WAN)</option>
-            <option value="manuelle_umschaltung" {% if standort and standort.redaktionskonzept_backup_leitung == 'manuelle_umschaltung' %}selected{% endif %}>Manuelle Umschaltung (Umstecken / Re-IP)</option>
-            <option value="keine_backup_leitung" {% if standort and standort.redaktionskonzept_backup_leitung == 'keine_backup_leitung' %}selected{% endif %}>Kein Redundanzkonzept</option>
-            <option value="unbekannt" {% if standort and standort.redaktionskonzept_backup_leitung == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Getrennte Trassenführung der Zuleitungen</label>
-          <select name="trassenfuehrung_getrennt" class="form-control">
-            <option value="ja" {% if not standort or standort.trassenfuehrung_getrennt == 'ja' %}selected{% endif %}>Ja (medien- / trassenredundant)</option>
-            <option value="nein" {% if standort and standort.trassenfuehrung_getrennt == 'nein' %}selected{% endif %}>Nein (gemeinsame Hauseinführung)</option>
-            <option value="nicht_relevant" {% if standort and standort.trassenfuehrung_getrennt == 'nicht_relevant' %}selected{% endif %}>Nicht relevant</option>
-            <option value="unbekannt" {% if standort and standort.trassenfuehrung_getrennt == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>USV-Absicherung der Netzwerktechnik</label>
-          <select name="usv_fuer_netzwerktechnik" class="form-control">
-            <option value="ja" {% if not standort or standort.usv_fuer_netzwerktechnik == 'ja' %}selected{% endif %}>Ja (Router, Modems &amp; Switches gepuffert)</option>
-            <option value="nein" {% if standort and standort.usv_fuer_netzwerktechnik == 'nein' %}selected{% endif %}>Nein (keine USV für Übergabekomponenten)</option>
-            <option value="unbekannt" {% if standort and standort.usv_fuer_netzwerktechnik == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+          <label>Vertraulichkeitsstufe</label>
+          <select name="vertraulichkeit" class="form-control">
+            {% for opt in vertraulichkeit_options %}
+            <option value="{{ opt }}" {% if (standort and standort.vertraulichkeit == opt) or (not standort and auftrag.vertraulichkeit_default == opt) %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
           </select>
         </div>
       </div>
@@ -122,7 +105,7 @@
           <div class="form-row">
             <div class="form-group">
               <label>Anbieter</label>
-              <input type="text" name="anbieter_{{ idx }}" list="anbieter_list_{{ idx }}" value="{{ anb.anbieter if anb else '' }}" class="form-control" placeholder="Bitte wählen oder tippen">
+              <input type="text" name="anbieter_{{ idx }}" list="anbieter_list_{{ idx }}" value="{{ anb.anbieter if anb else '' }}" class="form-control" placeholder="Bitte wählen oder tippen" oninput="updateRedundanzRelevanz()">
               <datalist id="anbieter_list_{{ idx }}">
                 <option value="Telekom"></option>
                 <option value="Vodafone"></option>
@@ -138,8 +121,9 @@
             </div>
             <div class="form-group">
               <label>Anschlussart</label>
-              <select name="art_{{ idx }}" id="art_{{ idx }}" class="form-control" onchange="updatePresets({{ idx }})">
-                {% for opt in ["DSL", "Kabel", "Glasfaser_FTTH", "Standleitung", "Richtfunk", "LTE_5G", "Starlink", "Sonstiges"] %}
+              <select name="art_{{ idx }}" id="art_{{ idx }}" class="form-control" onchange="updatePresets({{ idx }}); updateRedundanzRelevanz();">
+                <option value="" {% if not anb or not anb.art %}selected{% endif %}>bitte auswählen</option>
+                {% for opt in ["DSL", "Kabel", "Glasfaser_FTTH", "Standleitung", "Ethernet", "Richtfunk", "LTE_5G", "Starlink", "Sonstiges"] %}
                 <option value="{{ opt }}" {% if anb and anb.art == opt %}selected{% endif %}>{{ opt }}</option>
                 {% endfor %}
               </select>
@@ -155,20 +139,21 @@
           <div class="form-row">
             <div class="form-group">
               <label>Down (Mbit/s)</label>
-              <input type="number" step="any" id="down_{{ idx }}" name="bandbreite_down_mbit_{{ idx }}" value="{{ anb.bandbreite_down_mbit if anb and anb.bandbreite_down_mbit else '' }}" class="form-control">
+              <input type="number" step="any" id="down_{{ idx }}" name="bandbreite_down_mbit_{{ idx }}" value="{{ anb.bandbreite_down_mbit if anb and anb.bandbreite_down_mbit else '' }}" class="form-control" oninput="updateRedundanzRelevanz(); updateSymmetrischMismatchHint({{ idx }});">
             </div>
             <div class="form-group">
               <label>Up (Mbit/s)</label>
-              <input type="number" step="any" id="up_{{ idx }}" name="bandbreite_up_mbit_{{ idx }}" value="{{ anb.bandbreite_up_mbit if anb and anb.bandbreite_up_mbit else '' }}" class="form-control">
+              <input type="number" step="any" id="up_{{ idx }}" name="bandbreite_up_mbit_{{ idx }}" value="{{ anb.bandbreite_up_mbit if anb and anb.bandbreite_up_mbit else '' }}" class="form-control" oninput="updateRedundanzRelevanz(); updateSymmetrischMismatchHint({{ idx }});">
             </div>
-            <div class="form-group">
+            <div class="form-group" id="symmetrisch_group_{{ idx }}">
               <label>Symmetrisch?</label>
-              <select name="symmetrisch_{{ idx }}" class="form-control">
+              <select name="symmetrisch_{{ idx }}" class="form-control" onchange="updateSymmetrischMismatchHint({{ idx }})">
                 <option value="nein" {% if not anb or anb.symmetrisch == 'nein' %}selected{% endif %}>nein</option>
                 <option value="ja" {% if anb and anb.symmetrisch == 'ja' %}selected{% endif %}>ja</option>
               </select>
             </div>
           </div>
+          <p class="hint" id="symmetrisch_mismatch_hint_{{ idx }}" style="display:none; color:var(--warn); font-weight:600;">Bei "Symmetrisch: ja" sollten Down- und Up-Bandbreite identisch sein — aktuell weichen die Werte ab.</p>
 
           <div class="form-row">
             <div class="form-group">
@@ -180,7 +165,7 @@
             </div>
             <div class="form-group">
               <label>Ist Backup-Leitung?</label>
-              <select name="ist_backup_leitung_{{ idx }}" class="form-control">
+              <select name="ist_backup_leitung_{{ idx }}" class="form-control" onchange="updateRedundanzRelevanz()">
                 <option value="nein" {% if not anb or anb.ist_backup_leitung == 'nein' %}selected{% endif %}>nein</option>
                 <option value="ja" {% if anb and anb.ist_backup_leitung == 'ja' %}selected{% endif %}>ja</option>
               </select>
@@ -193,8 +178,8 @@
 
           <div class="form-row">
             <div class="form-group">
-              <label>SLA / Entstörzeit</label>
-              <input type="text" name="sla_entstoerzeit_{{ idx }}" value="{{ anb.sla_entstoerzeit if anb else '' }}" class="form-control" placeholder="z. B. 4h rund um die Uhr">
+              <label>SLA / Entstörzeit (Stunden)</label>
+              <input type="number" step="any" name="sla_entstoerzeit_{{ idx }}" value="{{ anb.sla_entstoerzeit if anb and anb.sla_entstoerzeit else '' }}" class="form-control" placeholder="z. B. 4">
             </div>
           </div>
 
@@ -228,11 +213,57 @@
       </button>
     </fieldset>
 
+    <fieldset class="fieldset">
+      <div class="fieldset-head"><h2>Netzwerktechnik &amp; Trassenführung</h2></div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Redundanzkonzept für Backup-Leitung</label>
+          <select name="redaktionskonzept_backup_leitung" id="redundanz_select" class="form-control">
+            <option value="automatische_umschaltung" {% if not standort or standort.redaktionskonzept_backup_leitung == 'automatische_umschaltung' %}selected{% endif %}>Automatische Umschaltung (Failover / VRRP / SD-WAN)</option>
+            <option value="manuelle_umschaltung" {% if standort and standort.redaktionskonzept_backup_leitung == 'manuelle_umschaltung' %}selected{% endif %}>Manuelle Umschaltung (Umstecken / Re-IP)</option>
+            <option value="keine_backup_leitung" {% if standort and standort.redaktionskonzept_backup_leitung == 'keine_backup_leitung' %}selected{% endif %}>Kein Redundanzkonzept</option>
+            <option value="unbekannt" {% if standort and standort.redaktionskonzept_backup_leitung == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Getrennte Trassenführung der Zuleitungen</label>
+          <select name="trassenfuehrung_getrennt" id="trasse_select" class="form-control">
+            <option value="ja" {% if not standort or standort.trassenfuehrung_getrennt == 'ja' %}selected{% endif %}>Ja (medien- / trassenredundant)</option>
+            <option value="nein" {% if standort and standort.trassenfuehrung_getrennt == 'nein' %}selected{% endif %}>Nein (gemeinsame Hauseinführung)</option>
+            <option value="nicht_relevant" {% if standort and standort.trassenfuehrung_getrennt == 'nicht_relevant' %}selected{% endif %}>Nicht relevant</option>
+            <option value="unbekannt" {% if standort and standort.trassenfuehrung_getrennt == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>USV-Absicherung der Netzwerktechnik</label>
+          <select name="usv_fuer_netzwerktechnik" class="form-control" required>
+            <option value="" {% if not standort or not standort.usv_fuer_netzwerktechnik %}selected{% endif %}>bitte wählen</option>
+            <option value="ja" {% if standort and standort.usv_fuer_netzwerktechnik == 'ja' %}selected{% endif %}>Ja (Router, Modems &amp; Switches gepuffert)</option>
+            <option value="nein" {% if standort and standort.usv_fuer_netzwerktechnik == 'nein' %}selected{% endif %}>Nein (keine USV für Übergabekomponenten)</option>
+            <option value="unbekannt" {% if standort and standort.usv_fuer_netzwerktechnik == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+          </select>
+        </div>
+      </div>
+      <p class="hint" id="redundanz_hint" style="display:none;">Nur eine Internetanbindung erfasst — Redundanzkonzept &amp; Trassenführung automatisch auf "nicht relevant" gesetzt. Sobald eine zweite Leitung mit echten Daten erfasst wird, werden die Felder wieder aktiv.</p>
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <div class="fieldset-head"><h2>Notizen</h2></div>
+      <div class="form-group">
+        <label>Bemerkungen</label>
+        <textarea name="notiz" class="form-control">{{ standort.notiz if standort else '' }}</textarea>
+      </div>
+    </fieldset>
+
     <div class="form-bar">
       <button type="submit" class="btn btn-primary">Standort speichern</button>
-      <a href="/auftrag/{{ auftrag.id }}" class="btn">Abbrechen</a>
+      <a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn">Abbrechen</a>
     </div>
   </form>
+  </main>
 </div>
 
 <script>
@@ -259,10 +290,33 @@ const speedPresets = {
 
 let anbindungCounter = document.querySelectorAll('.anbindung-block').length;
 
+const symmetrischRelevanteArten = ["Standleitung", "Ethernet"];
+
+function updateSymmetrischVisibility(idx) {
+  const artSelect = document.getElementById(`art_${idx}`);
+  const group = document.getElementById(`symmetrisch_group_${idx}`);
+  if (!artSelect || !group) return;
+  group.style.display = symmetrischRelevanteArten.includes(artSelect.value) ? "" : "none";
+}
+
+function updateSymmetrischMismatchHint(idx) {
+  const symSelect = document.querySelector(`select[name="symmetrisch_${idx}"]`);
+  const down = document.getElementById(`down_${idx}`);
+  const up = document.getElementById(`up_${idx}`);
+  const hint = document.getElementById(`symmetrisch_mismatch_hint_${idx}`);
+  if (!symSelect || !down || !up || !hint) return;
+  const downVal = parseFloat(down.value);
+  const upVal = parseFloat(up.value);
+  const mismatch = symSelect.value === "ja" && !isNaN(downVal) && !isNaN(upVal) && downVal !== upVal;
+  hint.style.display = mismatch ? "block" : "none";
+}
+
 function updatePresets(idx) {
   const artSelect = document.getElementById(`art_${idx}`);
   if (!artSelect) return;
   const art = artSelect.value;
+  updateSymmetrischVisibility(idx);
+  updateSymmetrischMismatchHint(idx);
   const select = document.getElementById(`speed_preset_${idx}`);
   if (!select) return;
 
@@ -277,7 +331,7 @@ function updatePresets(idx) {
   select.innerHTML = '<option value="">manuell / custom</option>';
   if (speedPresets[art]) {
     speedPresets[art].forEach(p => {
-      const selected = (String(p.down) === String(currentDown) && String(p.up) === String(currentUp)) ? 'selected' : '';
+      const selected = (parseFloat(p.down) === parseFloat(currentDown) && parseFloat(p.up) === parseFloat(currentUp)) ? 'selected' : '';
       select.innerHTML += `<option value="${p.down}_${p.up}" ${selected}>${p.label} (${p.down}/${p.up} Mbit/s)</option>`;
     });
   }
@@ -299,6 +353,52 @@ function toggleFesteIP(idx) {
   if (details) details.style.display = valElement.value === 'ja' ? 'block' : 'none';
 }
 
+function hasRealAnbindung(idx) {
+  const anbieter = document.querySelector(`input[name="anbieter_${idx}"]`);
+  if (anbieter && anbieter.value.trim()) return true;
+  const down = document.getElementById(`down_${idx}`);
+  if (down && parseFloat(down.value) > 0) return true;
+  const up = document.getElementById(`up_${idx}`);
+  if (up && parseFloat(up.value) > 0) return true;
+  const art = document.getElementById(`art_${idx}`);
+  if (art && art.value && art.value !== "DSL") return true;
+  const backup = document.querySelector(`select[name="ist_backup_leitung_${idx}"]`);
+  if (backup && backup.value === "ja") return true;
+  return false;
+}
+
+function updateRedundanzRelevanz() {
+  const redundanzSelect = document.getElementById('redundanz_select');
+  const trasseSelect = document.getElementById('trasse_select');
+  const hint = document.getElementById('redundanz_hint');
+  if (!redundanzSelect || !trasseSelect) return;
+
+  let hatZweiteLeitung = false;
+  document.querySelectorAll('.anbindung-block').forEach(block => {
+    const idx = block.id.replace('anbindung_block_', '');
+    if (idx !== '0' && hasRealAnbindung(idx)) hatZweiteLeitung = true;
+  });
+
+  [redundanzSelect, trasseSelect].forEach(sel => {
+    if (hatZweiteLeitung) {
+      sel.style.opacity = '';
+      sel.style.pointerEvents = '';
+      sel.removeAttribute('tabindex');
+      if (sel.dataset.prevValue !== undefined) {
+        sel.value = sel.dataset.prevValue;
+        delete sel.dataset.prevValue;
+      }
+    } else {
+      if (sel.dataset.prevValue === undefined) sel.dataset.prevValue = sel.value;
+      sel.style.opacity = '0.55';
+      sel.style.pointerEvents = 'none';
+      sel.setAttribute('tabindex', '-1');
+      sel.value = sel === redundanzSelect ? 'keine_backup_leitung' : 'nicht_relevant';
+    }
+  });
+  if (hint) hint.style.display = hatZweiteLeitung ? 'none' : 'block';
+}
+
 function addAnbindungBlock() {
   const container = document.getElementById('anbindungen_container');
   const idx = anbindungCounter++;
@@ -312,7 +412,7 @@ function addAnbindungBlock() {
       <div class="form-row">
         <div class="form-group">
           <label>Anbieter</label>
-          <input type="text" name="anbieter_${idx}" list="anbieter_list_${idx}" class="form-control" placeholder="Bitte wählen oder tippen">
+          <input type="text" name="anbieter_${idx}" list="anbieter_list_${idx}" class="form-control" placeholder="Bitte wählen oder tippen" oninput="updateRedundanzRelevanz()">
           <datalist id="anbieter_list_${idx}">
             <option value="Telekom"></option>
             <option value="Vodafone"></option>
@@ -325,11 +425,13 @@ function addAnbindungBlock() {
         </div>
         <div class="form-group">
           <label>Anschlussart</label>
-          <select name="art_${idx}" id="art_${idx}" class="form-control" onchange="updatePresets(${idx})">
+          <select name="art_${idx}" id="art_${idx}" class="form-control" onchange="updatePresets(${idx}); updateRedundanzRelevanz();">
+            <option value="" selected>bitte auswählen</option>
             <option value="DSL">DSL</option>
             <option value="Kabel">Kabel</option>
             <option value="Glasfaser_FTTH">Glasfaser_FTTH</option>
             <option value="Standleitung">Standleitung</option>
+            <option value="Ethernet">Ethernet</option>
             <option value="Richtfunk">Richtfunk</option>
             <option value="LTE_5G">LTE_5G</option>
             <option value="Starlink">Starlink</option>
@@ -347,20 +449,21 @@ function addAnbindungBlock() {
       <div class="form-row">
         <div class="form-group">
           <label>Down (Mbit/s)</label>
-          <input type="number" step="any" id="down_${idx}" name="bandbreite_down_mbit_${idx}" class="form-control">
+          <input type="number" step="any" id="down_${idx}" name="bandbreite_down_mbit_${idx}" class="form-control" oninput="updateRedundanzRelevanz(); updateSymmetrischMismatchHint(${idx});">
         </div>
         <div class="form-group">
           <label>Up (Mbit/s)</label>
-          <input type="number" step="any" id="up_${idx}" name="bandbreite_up_mbit_${idx}" class="form-control">
+          <input type="number" step="any" id="up_${idx}" name="bandbreite_up_mbit_${idx}" class="form-control" oninput="updateRedundanzRelevanz(); updateSymmetrischMismatchHint(${idx});">
         </div>
-        <div class="form-group">
+        <div class="form-group" id="symmetrisch_group_${idx}">
           <label>Symmetrisch?</label>
-          <select name="symmetrisch_${idx}" class="form-control">
+          <select name="symmetrisch_${idx}" class="form-control" onchange="updateSymmetrischMismatchHint(${idx})">
             <option value="nein">nein</option>
             <option value="ja">ja</option>
           </select>
         </div>
       </div>
+      <p class="hint" id="symmetrisch_mismatch_hint_${idx}" style="display:none; color:var(--warn); font-weight:600;">Bei "Symmetrisch: ja" sollten Down- und Up-Bandbreite identisch sein — aktuell weichen die Werte ab.</p>
 
       <div class="form-row">
         <div class="form-group">
@@ -372,7 +475,7 @@ function addAnbindungBlock() {
         </div>
         <div class="form-group">
           <label>Ist Backup-Leitung?</label>
-          <select name="ist_backup_leitung_${idx}" class="form-control">
+          <select name="ist_backup_leitung_${idx}" class="form-control" onchange="updateRedundanzRelevanz()">
             <option value="nein">nein</option>
             <option value="ja" selected>ja</option>
           </select>
@@ -385,8 +488,8 @@ function addAnbindungBlock() {
 
       <div class="form-row">
         <div class="form-group">
-          <label>SLA / Entstörzeit</label>
-          <input type="text" name="sla_entstoerzeit_${idx}" class="form-control" placeholder="z. B. 4h rund um die Uhr">
+          <label>SLA / Entstörzeit (Stunden)</label>
+          <input type="number" step="any" name="sla_entstoerzeit_${idx}" class="form-control" placeholder="z. B. 4">
         </div>
       </div>
 
@@ -414,11 +517,13 @@ function addAnbindungBlock() {
   `;
   container.insertAdjacentHTML('beforeend', blockHtml);
   updatePresets(idx);
+  updateRedundanzRelevanz();
 }
 
 function removeAnbindungBlock(idx) {
   const elem = document.getElementById(`anbindung_block_${idx}`);
   if (elem) elem.remove();
+  updateRedundanzRelevanz();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -426,6 +531,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updatePresets(idx);
     toggleFesteIP(idx);
   });
+  updateRedundanzRelevanz();
 
   if (window.location.hash) {
     const targetElem = document.getElementById(window.location.hash.substring(1));

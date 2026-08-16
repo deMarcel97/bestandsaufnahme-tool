@@ -1,15 +1,22 @@
-# Oberflächen-Update — Einbau
+# Oberflächen-Update — Referenz & Handoff
 
-Das Paket bildet eure Ordnerstruktur ab. Über das Projekt entpacken, dann liegt alles an Ort und Stelle. Routen, Modelle, Services und Kontextvariablen bleiben unverändert — es sind nur Templates, CSS und ein kleines JS.
+> **Hinweis (#311):** Dieses Verzeichnis enthält die Design-Referenz und UI-Vorlagen. Es wird mit dem aktuellen Stand aus `app/templates/` und `app/static/` synchron gehalten.
 
 ```
-app/static/css/style.css        ersetzt
-app/static/js/dialog.js         neu
-app/templates/base.html         ersetzt
-app/templates/_sidebar.html     neu (Auftrags-Navigation als Partial)
+app/static/css/style.css
+app/static/js/dialog.js
+app/templates/base.html
+app/templates/_sidebar.html
+app/templates/_konflikt_banner.html
 app/templates/auftrag/list.html
 app/templates/auftrag/detail.html
-app/templates/auftrag/edit.html
+app/templates/auftrag/erfassung.html
+app/templates/auftrag/stammdaten.html
+app/templates/auftrag/unternehmenskontext.html
+app/templates/auftrag/beteiligte.html
+app/templates/auftrag/vertraege.html
+app/templates/auftrag/unterlagen.html
+app/templates/auftrag/projektrahmen.html
 app/templates/standort/form.html
 app/templates/technik/form.html
 app/templates/findings/index.html

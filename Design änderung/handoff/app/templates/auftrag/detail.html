@@ -17,15 +17,29 @@
         </div>
         <h1>{{ auftrag.bezeichnung }}</h1>
         <div class="meta-line">
-          <span class="badge">{{ auftrag.status }}</span>
-          <span>Vertraulichkeit {{ auftrag.vertraulichkeit_default }}</span>
+          <form action="/auftrag/{{ auftrag.id }}/status" method="POST" style="display:inline;">
+            <input type="hidden" name="next" value="/auftrag/{{ auftrag.id }}">
+            <select name="status" class="form-control badge-select" onchange="this.form.submit()">
+              {% for opt in ["Vorbereitung", "Erfassung", "Konsolidierung", "Bewertung", "Abgabe"] %}
+              <option value="{{ opt }}" {% if auftrag.status == opt %}selected{% endif %}>{{ opt }}</option>
+              {% endfor %}
+            </select>
+          </form>
+          <form action="/auftrag/{{ auftrag.id }}/vertraulichkeit" method="POST" style="display:inline;">
+            <input type="hidden" name="next" value="/auftrag/{{ auftrag.id }}">
+            <select name="vertraulichkeit_default" class="form-control badge-select" onchange="this.form.submit()">
+              {% for opt in vertraulichkeit_options %}
+              <option value="{{ opt }}" {% if auftrag.vertraulichkeit_default == opt %}selected{% endif %}>{{ opt }}</option>
+              {% endfor %}
+            </select>
+          </form>
           {% if auftrag.jira_url %}
           <span class="sep">·</span>
           <a href="{{ auftrag.jira_url }}" target="_blank" rel="noopener">Jira {{ auftrag.projekt_nummer }}</a>
           {% endif %}
         </div>
       </div>
-      <form action="/auftrag/{{ auftrag.id }}/bewerten" method="POST" style="margin-top:30px; flex:none;">
+      <form action="/auftrag/{{ auftrag.id }}/bewerten" method="POST" style="flex:none;">
         <button type="submit" class="btn btn-primary btn-lg">Neu bewerten</button>
       </form>
     </div>
@@ -34,6 +48,13 @@
     <div class="alert alert-warning" style="margin-top:28px;">
       <strong>Warnung</strong>
       <span>Das Vorlagedatum des Entwurfs liegt nach dem Abgabedatum.</span>
+    </div>
+    {% endif %}
+
+    {% if auftrag.unternehmenskontext.empfehlung_rufbereitschaft %}
+    <div class="alert alert-info" style="margin-top:28px;">
+      <strong>Empfehlung</strong>
+      <span>Bei Geschäftszeiten 24/7 sollte geprüft werden, ob eine Rufbereitschaft hinterlegt werden sollte.</span>
     </div>
     {% endif %}
 
@@ -64,121 +85,11 @@
 
     <div class="section-head">
       <div style="display:flex; align-items:baseline; gap:12px;">
-        <h2>Standorte</h2>
-        <span class="count">{{ standorte|length }} Standort{% if standorte|length != 1 %}e{% endif %} · {{ objekte|length }} Gerät{% if objekte|length != 1 %}e{% endif %}</span>
+        <h2>Erfassung fortsetzen</h2>
       </div>
-      <a href="/auftrag/{{ auftrag.id }}/standort/neu" class="btn btn-outline">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-        Standort
-      </a>
+      <a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn btn-outline">Zur Erfassung</a>
     </div>
-
-    {% for sto in standorte %}
-    {% set sto_objekte = objekte | selectattr('standort_id', 'equalto', sto.id) | list %}
-    <section class="standort">
-      <div class="standort-head">
-        <div style="min-width:0;">
-          <h3>{{ sto.bezeichnung }}</h3>
-          <div class="standort-meta">
-            {% if sto.strasse or sto.ort %}
-            <span>{{ sto.strasse }}{% if sto.strasse and (sto.plz or sto.ort) %}, {% endif %}{{ sto.plz }} {{ sto.ort }}</span>
-            <span class="sep">·</span>
-            {% endif %}
-            <span>{{ sto.anzahl_user }} User</span>
-            <span class="sep">·</span>
-            <span>{{ sto.anbindungen|length }} Anbindung{% if sto.anbindungen|length != 1 %}en{% endif %}</span>
-            <span class="sep">·</span>
-            <span>{{ sto.ansprechpartner_vor_ort or 'Kein Ansprechpartner' }}</span>
-          </div>
-        </div>
-
-        <div class="standort-actions">
-          <a href="/auftrag/{{ auftrag.id }}/standort/{{ sto.id }}/bearbeiten" class="btn">Bearbeiten</a>
-          <button type="button" class="btn btn-dark" data-menu-toggle="menu-{{ sto.id }}">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-            Gerät
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-          </button>
-          <div class="menu" id="menu-{{ sto.id }}">
-            <span class="eyebrow">Baustein wählen</span>
-            {% for typ in auftrag.aktive_bausteine %}
-            <a href="/auftrag/{{ auftrag.id }}/objekt/neu?typ={{ typ }}&amp;standort_id={{ sto.id }}">{{ bausteine_labels.get(typ, typ.capitalize()) }}</a>
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-
-      {% if sto_objekte %}
-      <table style="margin-top:18px;">
-        <thead>
-          <tr>
-            <th>Typ</th>
-            <th>Bezeichnung</th>
-            <th>Betreut durch</th>
-            <th>Status</th>
-            <th>Vertraulichkeit</th>
-            <th class="col-right">Aktionen</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for o in sto_objekte %}
-          <tr>
-            <td class="cell-typ">{{ o.typ.replace('_', ' ') }}</td>
-            <td class="cell-name"><a href="/auftrag/{{ auftrag.id }}/objekt/{{ o.typ }}/{{ o.id }}">{{ o.bezeichnung }}</a></td>
-            <td>{{ o.betreut_durch }}</td>
-            <td><span class="status status-{{ o.erfassungsstatus }}">{{ o.erfassungsstatus }}</span></td>
-            <td class="text-muted">{{ o.vertraulichkeit }}</td>
-            <td class="col-right">
-              <span class="linkact">
-                <a href="/auftrag/{{ auftrag.id }}/objekt/{{ o.typ }}/{{ o.id }}">Bearbeiten</a>
-                <form action="/auftrag/{{ auftrag.id }}/objekt/{{ o.typ }}/{{ o.id }}/duplizieren" method="POST" style="display:inline;">
-                  <button type="submit" class="subtle">Duplizieren</button>
-                </form>
-                <form action="/auftrag/{{ auftrag.id }}/objekt/{{ o.typ }}/{{ o.id }}/loeschen" method="POST" style="display:inline;" onsubmit="return confirm('Gerät wirklich löschen?');">
-                  <button type="submit" class="subtle">Löschen</button>
-                </form>
-              </span>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-      <div class="empty-state">
-        <strong>Noch keine Geräte erfasst</strong>
-        <span>Lege das erste Gerät für diesen Standort über „+ Gerät“ an.</span>
-      </div>
-      {% endif %}
-    </section>
-    {% else %}
-    <div class="empty-state" style="margin-top:24px;">
-      <strong>Noch keine Standorte angelegt</strong>
-      <span>Beginne mit „+ Standort“, um die Erfassung zu starten.</span>
-    </div>
-    {% endfor %}
 
   </main>
 </div>
-
-<script>
-document.addEventListener("click", function (e) {
-  var trigger = e.target.closest("[data-menu-toggle]");
-  var openMenu = trigger ? document.getElementById(trigger.dataset.menuToggle) : null;
-
-  document.querySelectorAll(".menu.open").forEach(function (m) {
-    if (m !== openMenu) m.classList.remove("open");
-  });
-
-  if (trigger) {
-    e.preventDefault();
-    if (openMenu) openMenu.classList.toggle("open");
-  }
-});
-
-document.addEventListener("keydown", function (e) {
-  if (e.key === "Escape") {
-    document.querySelectorAll(".menu.open").forEach(function (m) { m.classList.remove("open"); });
-  }
-});
-</script>
 {% endblock %}

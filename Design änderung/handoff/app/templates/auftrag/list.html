@@ -13,7 +13,7 @@
         <span>{{ auftraege|length }} Auftrag{% if auftraege|length != 1 %}sakte{% endif %} im Bestand</span>
       </div>
     </div>
-    <button type="button" class="btn btn-primary btn-lg" style="margin-top:30px; flex:none;" data-dialog-open="neu-auftrag-modal">
+    <button type="button" class="btn btn-primary btn-lg" style="flex:none;" data-dialog-open="neu-auftrag-modal">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
       Neuer Auftrag
     </button>
@@ -43,9 +43,26 @@
         <td class="cell-typ">{{ a.projekt_nummer }}</td>
         <td>{{ a.kunde }}</td>
         <td class="cell-name"><a href="/auftrag/{{ a.id }}">{{ a.bezeichnung }}</a></td>
-        <td><span class="badge">{{ a.status }}</span></td>
-        <td class="text-muted">{{ a.vertraulichkeit_default }}</td>
-        <td class="col-right">
+        <td>
+          <form action="/auftrag/{{ a.id }}/status" method="POST">
+            <input type="hidden" name="next" value="/auftrag">
+            <select name="status" class="form-control badge-select" onchange="this.form.submit()">
+              {% for opt in ["Vorbereitung", "Erfassung", "Konsolidierung", "Bewertung", "Abgabe"] %}
+              <option value="{{ opt }}" {% if a.status == opt %}selected{% endif %}>{{ opt }}</option>
+              {% endfor %}
+            </select>
+          </form>
+        </td>
+        <td>
+          <form action="/auftrag/{{ a.id }}/vertraulichkeit" method="POST">
+            <input type="hidden" name="next" value="/auftrag">
+            <select name="vertraulichkeit_default" class="form-control badge-select" onchange="this.form.submit()">
+              {% for opt in vertraulichkeit_options %}
+              <option value="{{ opt }}" {% if a.vertraulichkeit_default == opt %}selected{% endif %}>{{ opt }}</option>
+              {% endfor %}
+            </select>
+          </form>
+        </td>        <td class="col-right">
           <span class="linkact">
             <a href="/auftrag/{{ a.id }}">Öffnen</a>
             <form action="/auftrag/{{ a.id }}/delete" method="POST" style="display:inline;" onsubmit="return confirm('Auftrag wirklich löschen?');">
@@ -100,18 +117,17 @@
           <div class="form-group">
             <label>Grundlage</label>
             <select name="grundlage" class="form-control">
-              <option value="Ausschreibung">Ausschreibung</option>
-              <option value="Angebot">Angebot</option>
-              <option value="Rahmenvertrag">Rahmenvertrag</option>
-              <option value="Sonstiges" selected>Sonstiges</option>
+              {% for opt in grundlage_options %}
+              <option value="{{ opt }}" {% if opt == 'Sonstiges' %}selected{% endif %}>{{ opt }}</option>
+              {% endfor %}
             </select>
           </div>
           <div class="form-group">
             <label>Default Vertraulichkeit</label>
             <select name="vertraulichkeit_default" class="form-control">
-              <option value="intern">intern</option>
-              <option value="kundentauglich" selected>kundentauglich</option>
-              <option value="anonymisiert">anonymisiert</option>
+              {% for opt in vertraulichkeit_options %}
+              <option value="{{ opt }}" {% if opt == "intern" %}selected{% endif %}>{{ opt }}</option>
+              {% endfor %}
             </select>
           </div>
         </div>

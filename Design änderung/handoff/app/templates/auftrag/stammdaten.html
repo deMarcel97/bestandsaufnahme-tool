@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Stammdaten &amp; Kontext - {{ auftrag.bezeichnung }}{% endblock %}
+{% block title %}Stammdaten - {{ auftrag.bezeichnung }}{% endblock %}
 
 {% block content %}
 <div class="layout-sidebar">
@@ -12,16 +12,20 @@
         <div class="crumbs eyebrow">
           <span>{{ auftrag.projekt_nummer }}</span><span class="sep">/</span><span>{{ auftrag.kunde }}</span>
         </div>
-        <h1>Stammdaten &amp; Kontext</h1>
+        <h1>Stammdaten</h1>
         <div class="meta-line"><span>{{ auftrag.bezeichnung }}</span></div>
       </div>
     </div>
 
-    <form action="/auftrag/{{ auftrag.id }}/einstellungen" method="POST">
+    {% include "_konflikt_banner.html" %}
+
+    <form action="/auftrag/{{ auftrag.id }}/stammdaten" method="POST">
+      {# Stand, den dieses Formular beim Laden gesehen hat — siehe Karte #308. #}
+      <input type="hidden" name="version" value="{{ auftrag.version }}">
 
       <fieldset class="fieldset">
         <div class="fieldset-head">
-          <h2>Stammdaten &amp; Steuerung</h2>
+          <h2>Stammdaten</h2>
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -45,11 +49,17 @@
           <label>Bezeichnung</label>
           <input type="text" name="bezeichnung" value="{{ auftrag.bezeichnung }}" class="form-control">
         </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>Auftragssteuerung</h2>
+        </div>
         <div class="form-row">
           <div class="form-group">
             <label>Grundlage</label>
             <select name="grundlage" class="form-control">
-              {% for opt in ["Ausschreibung", "Angebot", "Rahmenvertrag", "Sonstiges"] %}
+              {% for opt in grundlage_options %}
               <option value="{{ opt }}" {% if auftrag.grundlage == opt %}selected{% endif %}>{{ opt }}</option>
               {% endfor %}
             </select>
@@ -65,7 +75,7 @@
           <div class="form-group">
             <label>Vertraulichkeit Default</label>
             <select name="vertraulichkeit_default" class="form-control">
-              {% for opt in ["intern", "kundentauglich", "anonymisiert"] %}
+              {% for opt in vertraulichkeit_options %}
               <option value="{{ opt }}" {% if auftrag.vertraulichkeit_default == opt %}selected{% endif %}>{{ opt }}</option>
               {% endfor %}
             </select>
@@ -80,66 +90,30 @@
             {% endfor %}
           </div>
         </div>
-      </fieldset>
 
-      <fieldset class="fieldset">
-        <div class="fieldset-head">
-          <h2>Unternehmenskontext</h2>
+        <div class="subsection">
+          <span class="eyebrow">Zweck der Erfassung</span>
+          <div class="checkbox-grid">
+            {% for opt in zweck_options %}
+            <label><input type="checkbox" name="zweck" value="{{ opt }}" {% if opt in auftrag.zweck %}checked{% endif %}> {{ opt }}</label>
+            {% endfor %}
+          </div>
         </div>
+
         <div class="form-group">
-          <label>Kerngeschäft</label>
-          <textarea name="kerngeschaeft" class="form-control">{{ auftrag.unternehmenskontext.kerngeschaeft }}</textarea>
+          <label>Abgrenzung</label>
+          <textarea name="abgrenzung" class="form-control">{{ auftrag.abgrenzung }}</textarea>
         </div>
+
         <div class="form-row">
           <div class="form-group">
-            <label>Standorte des Kunden</label>
-            <input type="number" name="anzahl_standorte_kunde" value="{{ auftrag.unternehmenskontext.anzahl_standorte_kunde }}" class="form-control" min="1">
+            <label>Aufwand geplant (Stunden)</label>
+            <input type="number" step="0.5" name="aufwand_geplant" value="{{ auftrag.aufwand_geplant }}" class="form-control">
           </div>
           <div class="form-group">
-            <label>IT-Abteilung vorhanden?</label>
-            <select name="it_abteilung_vorhanden" class="form-control">
-              <option value="ja" {% if auftrag.unternehmenskontext.it_abteilung_vorhanden == 'ja' %}selected{% endif %}>Ja</option>
-              <option value="nein" {% if auftrag.unternehmenskontext.it_abteilung_vorhanden == 'nein' %}selected{% endif %}>Nein</option>
-            </select>
+            <label>Aufwand Ist (Stunden)</label>
+            <input type="number" step="0.5" name="aufwand_ist" value="{{ auftrag.aufwand_ist }}" class="form-control">
           </div>
-          <div class="form-group">
-            <label>Mitarbeiter Gesamt</label>
-            <input type="number" name="anzahl_mitarbeiter_gesamt" value="{{ auftrag.unternehmenskontext.anzahl_mitarbeiter_gesamt or '' }}" class="form-control">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>IT-Mitarbeiter</label>
-            <input type="number" name="anzahl_it_mitarbeiter" value="{{ auftrag.unternehmenskontext.anzahl_it_mitarbeiter or '' }}" class="form-control">
-          </div>
-          <div class="form-group">
-            <label>IT-Nutzer</label>
-            <input type="number" name="anzahl_it_nutzer" value="{{ auftrag.unternehmenskontext.anzahl_it_nutzer or '' }}" class="form-control">
-          </div>
-          <div class="form-group">
-            <label>Geschäftszeiten Tage</label>
-            <select name="geschaeftszeiten_tage" id="geschaeftszeiten_tage" class="form-control" onchange="toggleGeschaeftszeitenUhrzeit()">
-              <option value="Montag bis Freitag" {% if auftrag.unternehmenskontext.geschaeftszeiten_tage == 'Montag bis Freitag' %}selected{% endif %}>Montag bis Freitag</option>
-              <option value="Montag bis Samstag" {% if auftrag.unternehmenskontext.geschaeftszeiten_tage == 'Montag bis Samstag' %}selected{% endif %}>Montag bis Samstag</option>
-              <option value="Montag bis Sonntag" {% if auftrag.unternehmenskontext.geschaeftszeiten_tage == 'Montag bis Sonntag' %}selected{% endif %}>Montag bis Sonntag</option>
-              <option value="24/7" {% if auftrag.unternehmenskontext.geschaeftszeiten_tage == '24/7' %}selected{% endif %}>24/7</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row" id="geschaeftszeiten_zeit_row">
-          <div class="form-group">
-            <label>Geschäftszeiten Von</label>
-            <input type="time" name="geschaeftszeiten_von" value="{{ auftrag.unternehmenskontext.geschaeftszeiten_von }}" class="form-control">
-          </div>
-          <div class="form-group">
-            <label>Geschäftszeiten Bis</label>
-            <input type="time" name="geschaeftszeiten_bis" value="{{ auftrag.unternehmenskontext.geschaeftszeiten_bis }}" class="form-control">
-          </div>
-          <div class="form-group"></div>
-        </div>
-        <div class="form-group">
-          <label>Allgemeine Hinweise</label>
-          <textarea name="allgemeine_hinweise" class="form-control">{{ auftrag.unternehmenskontext.allgemeine_hinweise }}</textarea>
         </div>
       </fieldset>
 
@@ -169,19 +143,10 @@
 
       <div class="form-bar">
         <button type="submit" class="btn btn-primary">Änderungen speichern</button>
+        <a href="/auftrag/{{ auftrag.id }}/unternehmenskontext" class="btn">Zum Unternehmenskontext</a>
         <a href="/auftrag/{{ auftrag.id }}" class="btn">Zurück zum Auftrag</a>
       </div>
     </form>
   </main>
 </div>
-
-<script>
-function toggleGeschaeftszeitenUhrzeit() {
-  var tageSelect = document.getElementById("geschaeftszeiten_tage");
-  var zeitRow = document.getElementById("geschaeftszeiten_zeit_row");
-  if (!tageSelect || !zeitRow) return;
-  zeitRow.style.display = tageSelect.value === "24/7" ? "none" : "grid";
-}
-document.addEventListener("DOMContentLoaded", toggleGeschaeftszeitenUhrzeit);
-</script>
 {% endblock %}

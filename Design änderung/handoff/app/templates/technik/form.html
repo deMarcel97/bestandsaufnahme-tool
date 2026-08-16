@@ -3,7 +3,10 @@
 {% block title %}{{ schema.bezeichnung_anzeige }} - {{ auftrag.bezeichnung }}{% endblock %}
 
 {% block content %}
-<div class="workspace">
+<div class="layout-sidebar">
+  {% include "_sidebar.html" %}
+
+  <main class="workspace">
 
   <div class="page-head">
     <div>
@@ -11,12 +14,19 @@
         <span>{{ auftrag.projekt_nummer }}</span><span class="sep">/</span><span>{{ schema.bezeichnung_anzeige }}</span>
       </div>
       <h1>{% if obj %}{{ obj.bezeichnung }}{% else %}Neue {{ schema.bezeichnung_anzeige }}{% endif %}</h1>
-      <div class="meta-line"><span>{% if obj %}Gerät bearbeiten{% else %}Gerät erfassen{% endif %}</span></div>
+      <div class="meta-line"><span>{% if obj %}Objekt bearbeiten{% else %}Objekt erfassen{% endif %}</span></div>
     </div>
-    <a href="/auftrag/{{ auftrag.id }}" class="btn" style="margin-top:30px; flex:none;">Zurück zum Auftrag</a>
+    <a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn" style="flex:none;">Zurück zur Erfassung</a>
   </div>
 
+  {% include "_konflikt_banner.html" %}
+
   <form action="{% if obj %}/auftrag/{{ auftrag.id }}/objekt/{{ schema.typ }}/{{ obj.id }}{% else %}/auftrag/{{ auftrag.id }}/objekt/neu?typ={{ schema.typ }}{% endif %}" method="POST">
+    {% if obj %}
+    {# Stand, den dieses Formular beim Laden gesehen hat — siehe Karte #308.
+       Beim Neuanlegen gibt es noch nichts, womit sich vergleichen liesse. #}
+    <input type="hidden" name="version" value="{{ obj.version }}">
+    {% endif %}
 
     <fieldset class="fieldset">
       <div class="fieldset-head"><h2>Zuordnung</h2></div>
@@ -40,8 +50,8 @@
         <div class="form-group">
           <label>Betreut durch</label>
           <select name="betreut_durch" class="form-control">
-            <option value="wir" {% if not obj or obj.betreut_durch == 'wir' %}selected{% endif %}>wir (Systemhaus)</option>
-            <option value="Kunde" {% if obj and obj.betreut_durch == 'Kunde' %}selected{% endif %}>Kunde (Eigenbetrieb)</option>
+            <option value="wir" {% if obj and obj.betreut_durch == 'wir' %}selected{% endif %}>wir (Systemhaus)</option>
+            <option value="Kunde" {% if not obj or obj.betreut_durch == 'Kunde' %}selected{% endif %}>Kunde (Eigenbetrieb)</option>
             <option value="Dritter" {% if obj and obj.betreut_durch == 'Dritter' %}selected{% endif %}>Dritter Dienstleister</option>
           </select>
         </div>
@@ -52,24 +62,25 @@
         <div class="form-group">
           <label>Vertraulichkeitsstufe</label>
           <select name="vertraulichkeit" class="form-control">
-            {% for opt in ["intern", "kundentauglich", "anonymisiert"] %}
+            {% for opt in vertraulichkeit_options %}
             <option value="{{ opt }}" {% if (obj and obj.vertraulichkeit == opt) or (not obj and auftrag.vertraulichkeit_default == opt) %}selected{% endif %}>{{ opt }}</option>
             {% endfor %}
           </select>
         </div>
         <div class="form-group">
           <label>Erfassungsstatus</label>
-          <select name="erfassungsstatus" class="form-control">
+          <select name="erfassungsstatus" id="input_erfassungsstatus" class="form-control" style="pointer-events:none; opacity:0.75;" tabindex="-1">
             <option value="vollstaendig" {% if obj and obj.erfassungsstatus == 'vollstaendig' %}selected{% endif %}>vollständig</option>
             <option value="teilweise" {% if obj and obj.erfassungsstatus == 'teilweise' %}selected{% endif %}>teilweise</option>
             <option value="unbekannt" {% if not obj or obj.erfassungsstatus == 'unbekannt' %}selected{% endif %}>unbekannt</option>
           </select>
+          <span class="cell-sub">wird automatisch anhand der ausgefüllten Felder ermittelt</span>
         </div>
       </div>
     </fieldset>
 
     {% for abschnitt in schema.abschnitte %}
-    <fieldset class="fieldset">
+    <fieldset class="fieldset" {% if abschnitt.sichtbar_wenn %}data-sw-feld="{{ abschnitt.sichtbar_wenn.feld }}" data-sw-operator="{{ abschnitt.sichtbar_wenn.operator }}" data-sw-wert="{{ abschnitt.sichtbar_wenn.wert }}"{% endif %}>
       <div class="fieldset-head">
         <h2>{{ abschnitt.titel }}</h2>
         <span class="eyebrow">{{ abschnitt.felder|length }} Felder</span>
@@ -78,7 +89,7 @@
       <div class="form-row">
         {% for field in abschnitt.felder %}
         {% set current_val = obj.daten.get(field.name) if obj and obj.daten else None %}
-        <div class="form-group" id="field_{{ field.name }}">
+        <div class="form-group" id="field_{{ field.name }}" {% if field.sichtbar_wenn %}data-sw-feld="{{ field.sichtbar_wenn.feld }}" data-sw-operator="{{ field.sichtbar_wenn.operator }}" data-sw-wert="{{ field.sichtbar_wenn.wert }}"{% endif %}>
           <label>
             {{ field.label if field.label else field.name.replace('_', ' ').capitalize() }}
             {% if field.pflicht %}<span class="req">*</span>{% endif %}
@@ -131,6 +142,72 @@
             {% endfor %}
             <option value="rueckfrage" {% if current_val == 'rueckfrage' %}selected{% endif %}>Rückfrage erforderlich</option>
           </select>
+
+          {% elif field.typ == 'objekt_referenz' %}
+          <select name="{{ field.name }}" id="input_{{ field.name }}" class="form-control">
+            <option value="" {% if current_val is none or current_val == '' %}selected{% endif %}>bitte wählen</option>
+            {% for opt in (objekt_referenz_candidates.get(field.name, []) if objekt_referenz_candidates else []) %}
+            <option value="{{ opt.id }}" {% if current_val == opt.id %}selected{% endif %}>{{ opt.label }}</option>
+            {% endfor %}
+          </select>
+
+          {% elif field.typ == 'liste' %}
+          {% set rows = current_val if current_val else [] %}
+          <div class="repeat-block" data-liste-feld="{{ field.name }}">
+            <div class="repeat-rows" id="repeatrows_{{ field.name }}">
+              {% for row in rows %}
+              <div class="repeat-row" data-idx="{{ loop.index0 }}">
+                <div class="form-row">
+                  {% for sf in field.felder %}
+                  <div class="repeat-subfield">
+                    <label>{{ sf.label if sf.label else sf.name.replace('_', ' ').capitalize() }}</label>
+                    {% set sub_val = row.get(sf.name) %}
+                    {% if sf.typ == 'auswahl' %}
+                    <select name="{{ field.name }}_{{ loop.index0 }}_{{ sf.name }}" class="form-control">
+                      <option value="">bitte wählen</option>
+                      {% for w in sf.werte %}
+                      <option value="{{ w.wert }}" {% if sub_val == w.wert %}selected{% endif %}>{{ w.wert.replace('_', ' ') }}</option>
+                      {% endfor %}
+                    </select>
+                    {% elif sf.typ == 'zahl' %}
+                    <input type="number" name="{{ field.name }}_{{ loop.index0 }}_{{ sf.name }}" value="{{ sub_val if sub_val is not none else '' }}" class="form-control">
+                    {% else %}
+                    <input type="text" name="{{ field.name }}_{{ loop.index0 }}_{{ sf.name }}" value="{{ sub_val if sub_val else '' }}" class="form-control">
+                    {% endif %}
+                  </div>
+                  {% endfor %}
+                </div>
+                <button type="button" class="btn btn-sm btn-danger repeat-remove">Entfernen</button>
+              </div>
+              {% endfor %}
+            </div>
+            <button type="button" class="btn btn-outline repeat-add" data-add-for="{{ field.name }}">+ Zeile hinzufügen</button>
+
+            <template id="repeattpl_{{ field.name }}">
+              <div class="repeat-row" data-idx="%%IDX%%">
+                <div class="form-row">
+                  {% for sf in field.felder %}
+                  <div class="repeat-subfield">
+                    <label>{{ sf.label if sf.label else sf.name.replace('_', ' ').capitalize() }}</label>
+                    {% if sf.typ == 'auswahl' %}
+                    <select name="{{ field.name }}_%%IDX%%_{{ sf.name }}" class="form-control">
+                      <option value="">bitte wählen</option>
+                      {% for w in sf.werte %}
+                      <option value="{{ w.wert }}">{{ w.wert.replace('_', ' ') }}</option>
+                      {% endfor %}
+                    </select>
+                    {% elif sf.typ == 'zahl' %}
+                    <input type="number" name="{{ field.name }}_%%IDX%%_{{ sf.name }}" class="form-control">
+                    {% else %}
+                    <input type="text" name="{{ field.name }}_%%IDX%%_{{ sf.name }}" class="form-control">
+                    {% endif %}
+                  </div>
+                  {% endfor %}
+                </div>
+                <button type="button" class="btn btn-sm btn-danger repeat-remove">Entfernen</button>
+              </div>
+            </template>
+          </div>
           {% endif %}
         </div>
         {% endfor %}
@@ -148,9 +225,10 @@
 
     <div class="form-bar">
       <button type="submit" class="btn btn-primary">Objekt speichern</button>
-      {% if obj %}<a href="/auftrag/{{ auftrag.id }}" class="btn">Abbrechen</a>{% endif %}
+      {% if obj %}<a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn">Abbrechen</a>{% endif %}
     </div>
   </form>
+  </main>
 </div>
 
 <script>
@@ -162,6 +240,94 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     sourceElem.addEventListener("change", update);
     update();
+  }
+
+  function evaluateSwCondition(el) {
+    const feld = el.dataset.swFeld;
+    if (!feld) return true;
+    const operator = el.dataset.swOperator || "gleich";
+    const wert = el.dataset.swWert;
+    const sourceEl = document.querySelector(`[name="${feld}"]`);
+    if (!sourceEl) return true;
+
+    // Verkettete Bedingungen (z.B. Kategorie -> Anbieter -> Anbieter-Freitext): Ist das
+    // Quellfeld selbst über eine eigene sichtbar_wenn-Bedingung ausgeblendet, gilt diese
+    // Bedingung ebenfalls als nicht erfüllt — unabhängig vom (evtl. veralteten) Feldwert.
+    const sourceGroup = sourceEl.closest("[data-sw-feld]");
+    if (sourceGroup && sourceGroup !== el && sourceGroup.style.display === "none") {
+      return false;
+    }
+
+    const val = sourceEl.value;
+    switch (operator) {
+      case "gleich": return String(val).toLowerCase() === String(wert).toLowerCase();
+      case "ungleich": return String(val).toLowerCase() !== String(wert).toLowerCase();
+      case "groesser": return parseFloat(val) > parseFloat(wert);
+      case "kleiner": return parseFloat(val) < parseFloat(wert);
+      default: return true;
+    }
+  }
+
+  function updateErfassungsstatus() {
+    const statusSelect = document.getElementById("input_erfassungsstatus");
+    if (!statusSelect) return;
+    let total = 0;
+    let filled = 0;
+    document.querySelectorAll('[id^="field_"]').forEach(group => {
+      // offsetParent statt style.display: erkennt auch Ausblenden über ein
+      // übergeordnetes Element (z.B. ein per sichtbar_wenn verstecktes Fieldset/Abschnitt).
+      if (group.offsetParent === null) return;
+      const field = group.querySelector("input, select, textarea");
+      if (!field) return;
+      total++;
+      const val = field.value;
+      if (val && val !== "unbekannt" && val !== "rueckfrage") filled++;
+    });
+    if (total === 0 || filled === 0) {
+      statusSelect.value = "unbekannt";
+    } else if (filled >= total) {
+      statusSelect.value = "vollstaendig";
+    } else {
+      statusSelect.value = "teilweise";
+    }
+  }
+
+  function updateConditionalVisibility() {
+    document.querySelectorAll("[data-sw-feld]").forEach(el => {
+      el.style.display = evaluateSwCondition(el) ? "" : "none";
+    });
+    updateErfassungsstatus();
+  }
+  document.querySelectorAll("[data-liste-feld]").forEach(block => {
+    const fname = block.dataset.listeFeld;
+    const rowsContainer = block.querySelector("#repeatrows_" + fname);
+    const tpl = block.querySelector("#repeattpl_" + fname);
+    if (!rowsContainer || !tpl) return;
+    let nextIdx = rowsContainer.querySelectorAll(".repeat-row").length;
+
+    const addBtn = block.querySelector(".repeat-add");
+    if (addBtn) {
+      addBtn.addEventListener("click", () => {
+        const html = tpl.innerHTML.replaceAll("%%IDX%%", String(nextIdx));
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = html.trim();
+        rowsContainer.appendChild(wrapper.firstElementChild);
+        nextIdx++;
+      });
+    }
+
+    block.addEventListener("click", (e) => {
+      if (e.target.classList.contains("repeat-remove")) {
+        e.target.closest(".repeat-row").remove();
+      }
+    });
+  });
+
+  updateConditionalVisibility();
+  const objektForm = document.querySelector("form");
+  if (objektForm) {
+    objektForm.addEventListener("input", updateConditionalVisibility);
+    objektForm.addEventListener("change", updateConditionalVisibility);
   }
 
   const betreutSelect = document.querySelector("select[name='betreut_durch']");
