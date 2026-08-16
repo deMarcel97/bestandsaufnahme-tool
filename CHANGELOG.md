@@ -4,6 +4,14 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.10] - 2026-08-16
+
+### Fixed
+- **Standorte lassen sich löschen (#307)**: `storage.delete_standort()` existierte seit jeher, wurde aber von keiner Route aufgerufen — Standorte liessen sich schlicht nicht entfernen, während Aufträge und Technik-Objekte längst löschbar waren. Besonders unangenehm, weil der Unternehmenskontext über `anzahl_standorte_kunde` Standorte automatisch anlegt: wer sich dort vertippte, wurde sie nicht wieder los. Neue Route `POST /auftrag/{id}/standort/{id}/loeschen` und eine Schaltfläche in der Erfassungsansicht.
+
+### Added
+- **Schutz vor unbeabsichtigtem Datenverlust beim Standort-Löschen (#307)**: Hängen noch Technik-Objekte am Standort, wird das Löschen mit HTTP 409 abgelehnt und die blockierenden Objekte werden namentlich mit Link aufgeführt. Bewusst kein Kaskadenlöschen und kein automatisches Umhängen — was mit den erfassten Objekten geschehen soll, weiss nur der Bearbeiter. Zum Verschieben genügt die bereits vorhandene Standort-Auswahl im Objektformular. In der Erfassungsansicht ist die Schaltfläche in diesem Fall deaktiviert und nennt im Tooltip die Anzahl der Objekte, statt den Klick erst ins Leere laufen zu lassen.
+
 ## [2.7.9] - 2026-08-16
 
 ### Fixed
