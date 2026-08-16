@@ -68,7 +68,7 @@
           </button>
           <div class="menu" id="menu-{{ sto.id }}">
             <span class="eyebrow">Baustein wählen</span>
-            {% for typ in auftrag.aktive_bausteine %}
+            {% for typ in standort_bausteine %}
             <a href="/auftrag/{{ auftrag.id }}/objekt/neu?typ={{ typ }}&amp;standort_id={{ sto.id }}">{{ bausteine_labels.get(typ, typ.capitalize()) }}</a>
             {% endfor %}
           </div>
@@ -101,7 +101,7 @@
                 <div class="form-group">
                   <label for="typ-{{ sto.id }}">Baustein-Typ</label>
                   <select name="typ" id="typ-{{ sto.id }}" class="form-control" required>
-                    {% for typ in auftrag.aktive_bausteine %}
+                    {% for typ in standort_bausteine %}
                     <option value="{{ typ }}" {% if typ == 'netzwerkschrank' %}selected{% endif %}>{{ bausteine_labels.get(typ, typ.capitalize()) }}</option>
                     {% endfor %}
                   </select>
@@ -168,6 +168,86 @@
       <span>Beginne mit „+ Standort“, um die Erfassung zu starten.</span>
     </div>
     {% endfor %}
+
+    <div class="section-head" style="margin-top:36px;">
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <h2>Standortübergreifend / Cloud-Dienste</h2>
+        <span class="count">{{ cloud_objekte|length }} Objekt{% if cloud_objekte|length != 1 %}e{% endif %}</span>
+      </div>
+    </div>
+
+    <section class="standort">
+      <div class="standort-head">
+        <div style="min-width:0;">
+          <h3>Cloud-Dienste &amp; Zentrale Systeme</h3>
+          <div class="standort-meta">
+            <span>Microsoft 365, SaaS und zentrale Plattformen ohne physischen Standortbezug</span>
+            <span class="sep">·</span>
+            <span>{{ cloud_objekte|length }} Objekt{% if cloud_objekte|length != 1 %}e{% endif %}</span>
+          </div>
+        </div>
+
+        <div class="standort-actions">
+          {% if cloud_bausteine %}
+          <button type="button" class="btn btn-dark" data-menu-toggle="menu-cloud">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            + Objekt
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="menu" id="menu-cloud">
+            <span class="eyebrow">Cloud-Baustein wählen</span>
+            {% for typ in cloud_bausteine %}
+            <a href="/auftrag/{{ auftrag.id }}/objekt/neu?typ={{ typ }}">{{ bausteine_labels.get(typ, typ.capitalize()) }}</a>
+            {% endfor %}
+          </div>
+          {% else %}
+          <a href="/auftrag/{{ auftrag.id }}/stammdaten" class="btn btn-outline" title="Cloud-Bausteine in den Stammdaten aktivieren">+ Cloud-Baustein aktivieren</a>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if cloud_objekte %}
+      <table style="margin-top:18px;">
+        <thead>
+          <tr>
+            <th>Typ</th>
+            <th>Bezeichnung</th>
+            <th>Betreut durch</th>
+            <th>Status</th>
+            <th>Vertraulichkeit</th>
+            <th class="col-right">Aktionen</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in cloud_objekte %}
+          <tr>
+            <td class="cell-typ">{{ o.typ.replace('_', ' ') }}</td>
+            <td class="cell-name"><a href="/auftrag/{{ auftrag.id }}/objekt/{{ o.typ }}/{{ o.id }}">{{ o.bezeichnung }}</a></td>
+            <td>{{ o.betreut_durch }}</td>
+            <td><span class="status status-{{ o.erfassungsstatus }}">{{ o.erfassungsstatus }}</span></td>
+            <td class="text-muted">{{ o.vertraulichkeit }}</td>
+            <td class="col-right">
+              <span class="linkact">
+                <a href="/auftrag/{{ auftrag.id }}/objekt/{{ o.typ }}/{{ o.id }}">Bearbeiten</a>
+                <form action="/auftrag/{{ auftrag.id }}/objekt/{{ o.typ }}/{{ o.id }}/duplizieren" method="POST" style="display:inline;">
+                  <button type="submit" class="subtle">Duplizieren</button>
+                </form>
+                <form action="/auftrag/{{ auftrag.id }}/objekt/{{ o.typ }}/{{ o.id }}/loeschen" method="POST" style="display:inline;" onsubmit="return confirm('Objekt wirklich löschen?');">
+                  <button type="submit" class="subtle">Löschen</button>
+                </form>
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">
+        <strong>Noch keine Cloud-Dienste erfasst</strong>
+        <span>Lege Microsoft 365 oder andere Cloud-Dienste über „+ Objekt“ an.</span>
+      </div>
+      {% endif %}
+    </section>
 
   </main>
 </div>

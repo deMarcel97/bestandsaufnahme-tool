@@ -95,14 +95,21 @@ def new_objekt_form(request: Request, auftrag_id: str, typ: str = "firewall", st
         return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
 
     standorte = storage.list_standorte(auftrag_id)
-    selected_sto = next((s for s in standorte if s.id == standort_id), None)
-    if not selected_sto and standorte:
-        selected_sto = standorte[0]
-        standort_id = selected_sto.id
+    standortbezug = schema.get("standortbezug", True)
+    if standortbezug is False:
+        selected_standort_id = ""
+        schema_label = schema.get("bezeichnung_anzeige", typ.capitalize()).split("/")[0].strip()
+        default_bezeichnung = f"{schema_label}"
+    else:
+        selected_sto = next((s for s in standorte if s.id == standort_id), None)
+        if not selected_sto and standorte:
+            selected_sto = standorte[0]
+            standort_id = selected_sto.id
 
-    sto_label = selected_sto.bezeichnung if selected_sto else "Hauptstandort"
-    schema_label = schema.get("bezeichnung_anzeige", typ.capitalize()).split("/")[0].strip()
-    default_bezeichnung = f"{schema_label} {sto_label}"
+        sto_label = selected_sto.bezeichnung if selected_sto else "Hauptstandort"
+        schema_label = schema.get("bezeichnung_anzeige", typ.capitalize()).split("/")[0].strip()
+        default_bezeichnung = f"{schema_label} {sto_label}"
+        selected_standort_id = standort_id
 
     sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
@@ -112,7 +119,7 @@ def new_objekt_form(request: Request, auftrag_id: str, typ: str = "firewall", st
             "auftrag": auftrag,
             "schema": schema,
             "standorte": standorte,
-            "selected_standort_id": standort_id,
+            "selected_standort_id": selected_standort_id,
             "default_bezeichnung": default_bezeichnung,
             "objekt_referenz_candidates": _collect_objekt_referenz_candidates(auftrag_id, schema),
             "obj": None,
@@ -135,6 +142,8 @@ async def new_objekt_submit(request: Request, auftrag_id: str, typ: str = "firew
     form_data = await request.form()
     bezeichnung = form_data.get("bezeichnung", f"{typ.capitalize()} Objekt")
     standort_id = form_data.get("standort_id", "")
+    if standort_id == "" or (schema and schema.get("standortbezug") is False):
+        standort_id = None
     betreut_durch = form_data.get("betreut_durch", "Kunde")
     dienstleister_name = form_data.get("dienstleister_name", "")
     notiz = form_data.get("notiz", "")
@@ -206,7 +215,7 @@ def edit_objekt_form(request: Request, auftrag_id: str, typ: str, objekt_id: str
             "auftrag": auftrag,
             "schema": schema,
             "standorte": standorte,
-            "selected_standort_id": obj.standort_id,
+            "selected_standort_id": obj.standort_id or "",
             "objekt_referenz_candidates": _collect_objekt_referenz_candidates(auftrag_id, schema),
             "obj": obj,
             "active_tab": "erfassung",
@@ -221,9 +230,14 @@ async def edit_objekt_submit(request: Request, auftrag_id: str, typ: str, objekt
     if not obj:
         return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
 
+    schema = schema_loader.get_schema(typ)
     form_data = await request.form()
     obj.bezeichnung = form_data.get("bezeichnung", obj.bezeichnung)
-    obj.standort_id = form_data.get("standort_id", obj.standort_id)
+    standort_id = form_data.get("standort_id", obj.standort_id or "")
+    if standort_id == "" or (schema and schema.get("standortbezug") is False):
+        obj.standort_id = None
+    else:
+        obj.standort_id = standort_id
     obj.betreut_durch = form_data.get("betreut_durch", obj.betreut_durch)
     obj.dienstleister_name = form_data.get("dienstleister_name", obj.dienstleister_name)
     obj.notiz = form_data.get("notiz", obj.notiz)
@@ -234,7 +248,6 @@ async def edit_objekt_submit(request: Request, auftrag_id: str, typ: str, objekt
     )
     obj.erfassungsstatus = form_data.get("erfassungsstatus", obj.erfassungsstatus)
 
-    schema = schema_loader.get_schema(typ)
     if schema:
         for abschnitt in schema.get("abschnitte", []):
             for feldef in abschnitt.get("felder", []):
@@ -292,7 +305,7 @@ def _konflikt_formular(request: Request, auftrag_id: str, typ: str, objekt_id: s
             "auftrag": auftrag,
             "schema": schema,
             "standorte": storage.list_standorte(auftrag_id),
-            "selected_standort_id": obj.standort_id,
+            "selected_standort_id": obj.standort_id or "",
             "objekt_referenz_candidates": _collect_objekt_referenz_candidates(auftrag_id, schema),
             "obj": obj,
             "konflikt": True,

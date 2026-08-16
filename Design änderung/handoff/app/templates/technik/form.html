@@ -37,12 +37,17 @@
           <input type="text" name="bezeichnung" id="input_bezeichnung" value="{{ obj.bezeichnung if obj else default_bezeichnung }}" class="form-control" required>
         </div>
         <div class="form-group">
-          <label>Standort <span class="req">*</span></label>
+          <label>Standort{% if schema.standortbezug is not false and schema.get('standortbezug') is not false %} <span class="req">*</span>{% endif %}</label>
+          {% if schema.standortbezug is false or schema.get('standortbezug') is false %}
+          <input type="text" class="form-control" value="Standortübergreifend (Cloud)" disabled>
+          <input type="hidden" name="standort_id" value="">
+          {% else %}
           <select name="standort_id" class="form-control" required>
             {% for s in standorte %}
             <option value="{{ s.id }}" {% if (obj and obj.standort_id == s.id) or (selected_standort_id == s.id) %}selected{% endif %}>{{ s.bezeichnung }} ({{ s.ort }})</option>
             {% endfor %}
           </select>
+          {% endif %}
         </div>
       </div>
 

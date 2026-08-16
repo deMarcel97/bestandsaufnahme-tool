@@ -4,6 +4,13 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.20] - 2026-08-16
+
+### Changed
+- **Cloud-Bausteine ohne Standortzuweisung (#315)**: Bausteine mit `standortbezug: false` (wie Microsoft 365 & Security) können jetzt ohne Zuweisung zu einem physischen Standort erfasst und verwaltet werden.
+- **Formulare & Modellierung (#315)**: `TechnikObjekt.standort_id` ist optional (`Optional[str] = None`). Bei Schemas mit `standortbezug: false` zeigt das Formular ein deaktiviertes Feld „Standortübergreifend (Cloud)" und sendet leere `standort_id`.
+- **Erfassungsübersicht & Bericht (#315)**: Eigener Abschnitt „Standortübergreifend / Cloud-Dienste" auf der Erfassungsseite (`/auftrag/{id}/erfassung`) sowie im generierten Analysebericht unter Kapitel 3 („Standortübergreifende Infrastruktur & Cloud-Dienste") und Kapitel 4.
+
 ## [2.7.19] - 2026-08-16
 
 ### Changed

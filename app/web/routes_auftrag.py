@@ -155,6 +155,16 @@ def erfassung_auftrag(request: Request, auftrag_id: str):
     objekte = storage.list_objekte(auftrag_id)
     sidebar_context = build_sidebar_context(auftrag, standorte, objekte)
 
+    cloud_bausteine = [
+        typ for typ in auftrag.aktive_bausteine
+        if schema_loader.get_schema(typ) and schema_loader.get_schema(typ).get("standortbezug") is False
+    ]
+    standort_bausteine = [
+        typ for typ in auftrag.aktive_bausteine
+        if not (schema_loader.get_schema(typ) and schema_loader.get_schema(typ).get("standortbezug") is False)
+    ]
+    cloud_objekte = [o for o in objekte if not o.standort_id]
+
     return templates.TemplateResponse(
         request=request,
         name="auftrag/erfassung.html",
@@ -162,6 +172,9 @@ def erfassung_auftrag(request: Request, auftrag_id: str):
             "auftrag": auftrag,
             "standorte": standorte,
             "objekte": objekte,
+            "cloud_objekte": cloud_objekte,
+            "cloud_bausteine": cloud_bausteine,
+            "standort_bausteine": standort_bausteine,
             "bausteine_labels": get_bausteine_labels(),
             "active_tab": "erfassung",
             "active_nav": "auftrag",
