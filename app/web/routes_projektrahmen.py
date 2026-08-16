@@ -14,7 +14,7 @@ from fastapi.responses import RedirectResponse
 
 from app.services.storage import storage, KonfliktFehler
 from app.web.templates import templates
-from app.web.shared_context import build_sidebar_context
+from app.web.shared_context import build_sidebar_context, aktuelle_version
 from app.web.formular_listen import parse_unterobjekte
 from app.models.auftrag import Ergebnisartefakt, Aspekt
 from app.utils.number_parser import parse_int_german
@@ -85,7 +85,7 @@ async def projektrahmen_submit(request: Request, auftrag_id: str):
     try:
         storage.save_auftrag(auftrag)
     except KonfliktFehler:
-        auftrag.version = _aktuelle_version(auftrag_id, auftrag.version)
+        auftrag.version = aktuelle_version(auftrag_id, auftrag.version)
         return templates.TemplateResponse(
             request=request,
             name="auftrag/projektrahmen.html",
@@ -96,11 +96,3 @@ async def projektrahmen_submit(request: Request, auftrag_id: str):
     return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
 
 
-def _aktuelle_version(auftrag_id: str, fallback: int) -> int:
-    """Der Stand, der nach einem Konflikt auf der Platte liegt.
-
-    Das Formular geht damit zurück an den Benutzer, damit ein zweites Speichern
-    die fremde Änderung bewusst überschreiben kann, statt in derselben Meldung
-    hängenzubleiben."""
-    aktuell = storage.load_auftrag(auftrag_id)
-    return aktuell.version if aktuell else fallback

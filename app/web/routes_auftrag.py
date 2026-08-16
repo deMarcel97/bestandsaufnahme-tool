@@ -8,7 +8,7 @@ from app.services.slug import generate_slug_id
 from app.services.rule_engine import rule_engine
 from app.services.evaluator import evaluator_service
 from app.web.templates import templates
-from app.web.shared_context import build_sidebar_context
+from app.web.shared_context import build_sidebar_context, aktuelle_version
 from app.models.auftrag import Auftrag, Aspekt
 from app.utils.number_parser import parse_float_german, parse_int_german
 from app.web.formular_listen import parse_unterobjekte
@@ -275,7 +275,7 @@ def stammdaten_submit(
     try:
         storage.save_auftrag(auftrag)
     except KonfliktFehler:
-        auftrag.version = _aktuelle_version(auftrag_id, auftrag.version)
+        auftrag.version = aktuelle_version(auftrag_id, auftrag.version)
         sidebar_context = build_sidebar_context(auftrag)
         return templates.TemplateResponse(
             request=request,
@@ -296,14 +296,6 @@ def stammdaten_submit(
 
     return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
 
-def _aktuelle_version(auftrag_id: str, fallback: int) -> int:
-    """Der Stand, der nach einem Konflikt auf der Platte liegt.
-
-    Das Formular geht damit zurück an den Benutzer, damit ein zweites Speichern
-    die fremde Änderung bewusst überschreiben kann, statt in derselben Meldung
-    hängenzubleiben."""
-    aktuell = storage.load_auftrag(auftrag_id)
-    return aktuell.version if aktuell else fallback
 
 @router.get("/auftrag/{auftrag_id}/unternehmenskontext")
 def unternehmenskontext_form(request: Request, auftrag_id: str):
@@ -375,7 +367,7 @@ async def unternehmenskontext_submit(
     try:
         storage.save_auftrag(auftrag)
     except KonfliktFehler:
-        auftrag.version = _aktuelle_version(auftrag_id, auftrag.version)
+        auftrag.version = aktuelle_version(auftrag_id, auftrag.version)
         sidebar_context = build_sidebar_context(auftrag)
         return templates.TemplateResponse(
             request=request,
