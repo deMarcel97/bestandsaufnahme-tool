@@ -25,12 +25,14 @@ def beteiligte_form(request: Request, auftrag_id: str):
     if not auftrag:
         return RedirectResponse(url="/auftrag", status_code=303)
 
-    sidebar_context = build_sidebar_context(auftrag)
+    objekte = storage.list_objekte(auftrag_id)
+    sidebar_context = build_sidebar_context(auftrag, objekte=objekte)
     return templates.TemplateResponse(
         request=request,
         name="auftrag/beteiligte.html",
         context={
             "auftrag": auftrag,
+            "objekte": objekte,
             "active_tab": "beteiligte",
             "active_nav": "auftrag",
             **sidebar_context
@@ -56,13 +58,15 @@ async def beteiligte_submit(request: Request, auftrag_id: str):
         storage.save_auftrag(auftrag)
     except KonfliktFehler:
         auftrag.version = aktuelle_version(auftrag_id, auftrag.version)
-        sidebar_context = build_sidebar_context(auftrag)
+        objekte = storage.list_objekte(auftrag_id)
+        sidebar_context = build_sidebar_context(auftrag, objekte=objekte)
         return templates.TemplateResponse(
             request=request,
             name="auftrag/beteiligte.html",
             status_code=409,
             context={
                 "auftrag": auftrag,
+                "objekte": objekte,
                 "konflikt": True,
                 "active_tab": "beteiligte",
                 "active_nav": "auftrag",
