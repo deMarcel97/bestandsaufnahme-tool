@@ -1,0 +1,322 @@
+schema_version: 1
+typ: backup
+bezeichnung_anzeige: Backup & Recovery
+berichtskapitel: infrastruktur
+standortbezug: true
+abschnitte:
+  - id: backup_software_und_umfang
+    titel: Backup-Software und Sicherungsumfang
+    felder:
+      - name: backup_software
+        label: Eingesetzte Backup-Software
+        typ: auswahl
+        pflicht: true
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: veeam
+            textbaustein:
+              feststellung: Als zentrale Datensicherungslösung kommt Veeam Backup & Replication zum Einsatz.
+              auswirkung: null
+          - wert: synology_active_backup
+            textbaustein:
+              feststellung: Als Datensicherungslösung kommt Synology Active Backup for Business zum Einsatz.
+              auswirkung: null
+          - wert: datto_bcdr
+            textbaustein:
+              feststellung: Als Datensicherungs- und Disaster-Recovery-Lösung kommt Datto BCDR zum Einsatz.
+              auswirkung: null
+          - wert: acronis_cyber_protect
+            textbaustein:
+              feststellung: Als Datensicherungslösung kommt Acronis Cyber Protect zum Einsatz.
+              auswirkung: null
+          - wert: proxmox_backup_server
+            textbaustein:
+              feststellung: Für Proxmox-Umgebungen kommt der Proxmox Backup Server (PBS) mit Deduplizierung zum Einsatz.
+              auswirkung: null
+          - wert: commvault
+            textbaustein:
+              feststellung: Als unternehmensweite Datensicherungslösung kommt Commvault zum Einsatz.
+              auswirkung: null
+          - wert: m365_backup_drittanbieter
+            textbaustein:
+              feststellung: Für M365 Cloud-Daten kommt ein spezialisiertes Drittanbieter-Backup zum Einsatz.
+              auswirkung: null
+          - wert: sonstige
+            textbaustein:
+              feststellung: Als Datensicherungslösung kommt eine sonstige Backup-Software zum Einsatz.
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: sicherungsumfang
+        label: Sicherungsumfang
+        typ: mehrfachauswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: vollstaendige_vms
+            label: Vollständige VMs (Image-Backup)
+            textbaustein:
+              feststellung: Das Backup umfasst vollständige Image-Sicherungen aller virtuellen Maschinen.
+              auswirkung: null
+          - wert: fileserver
+            label: Fileserver / Dateifreigaben
+            textbaustein:
+              feststellung: Fileserver und unstrukturierte Dateifreigaben sind in die Sicherung eingebunden.
+              auswirkung: null
+          - wert: datenbanken_sql_exchange
+            label: Datenbanken (SQL / Exchange / Anwendungsdaten)
+            textbaustein:
+              feststellung: Datenbanken (SQL, Exchange) werden mit Anwendungskonsistenz gesichert.
+              auswirkung: null
+          - wert: m365_cloud_daten
+            label: M365 Cloud-Daten (Exchange Online, OneDrive, SharePoint, Teams)
+            textbaustein:
+              feststellung: Microsoft 365 Cloud-Daten sind im Sicherungsumfang enthalten.
+              auswirkung: null
+          - wert: clients
+            label: Endgeräte / Clients
+            textbaustein:
+              feststellung: Wichtige Endgeräte und Arbeitsplätze werden regelmäßig gesichert.
+              auswirkung: null
+
+  - id: speicherziele_und_immutability
+    titel: Speicherziele und Immutability
+    felder:
+      - name: primaeres_ziel
+        label: Primäres Backup-Ziel
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: lokales_nas
+            textbaustein:
+              feststellung: Als primäres Backup-Ziel dient ein lokales NAS-System.
+              auswirkung: null
+          - wert: dedizierter_backup_server
+            textbaustein:
+              feststellung: Als primäres Backup-Ziel dient ein dedizierter Backup-Server.
+              auswirkung: null
+          - wert: backup_appliance
+            textbaustein:
+              feststellung: Als primäres Backup-Ziel kommt eine integrierte Backup-Appliance zum Einsatz.
+              auswirkung: null
+          - wert: band_tape
+            textbaustein:
+              feststellung: Als primäres Backup-Ziel werden Bandlaufwerke (Tape / LTO) verwendet.
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: sekundaeres_ziel_offsite
+        label: Sekundäres Ziel / Offsite-Backup
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: backup_offsite_ziel
+          max_punkte: 20
+        werte:
+          - wert: s3_object_storage
+            punkte: 20
+            textbaustein:
+              feststellung: Die Offsite-Sicherung erfolgt in einen S3 Object Storage (Wasabi, AWS, Azure, IONOS, Hetzner).
+              auswirkung: null
+          - wert: zweiter_standort_rz
+            punkte: 20
+            textbaustein:
+              feststellung: Die Offsite-Sicherung erfolgt auf ein redundantes System an einem zweiten Unternehmensstandort / RZ.
+              auswirkung: null
+          - wert: band_tape_ausgelagert
+            punkte: 15
+            textbaustein:
+              feststellung: Sicherungsbänder werden räumlich getrennt ausgelagert (Safe / externer Standort).
+              auswirkung: null
+          - wert: rdx_wechselmedien
+            punkte: 10
+            textbaustein:
+              feststellung: Die externe Sicherung erfolgt über rotierende RDX- oder USB-Wechselmedien.
+              auswirkung: null
+          - wert: kein_offsite
+            punkte: 0
+            textbaustein:
+              feststellung: Es existiert kein Offsite-Backup an einem getrennten Standort.
+              auswirkung: Bei Feuer, Diebstahl oder Wasserschaden am Hauptstandort droht der Totalverlust aller Daten.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: unveraenderbarkeit_immutability
+        label: Unveränderbarkeit (Immutability / Ransomware-Schutz)
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: backup_immutability
+          max_punkte: 20
+        werte:
+          - wert: vollstaendig_aktiv
+            punkte: 20
+            textbaustein:
+              feststellung: Datensicherungen sind durch Immutability (WORM / S3 Object Lock / Linux Hardened Repo) vor Ransomware-Löschung geschützt.
+              auswirkung: null
+          - wert: teilweise
+            punkte: 10
+            textbaustein:
+              feststellung: Immutability ist nur für einen Teil der Sicherungsarchive eingerichtet.
+              auswirkung: null
+          - wert: nicht_vorhanden
+            punkte: 0
+            textbaustein:
+              feststellung: Es existiert kein unveränderbarer Speicherbereich (Immutability).
+              auswirkung: Ransomware kann im Angriffsfall die Online-Sicherungen manipulieren oder löschen.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+  - id: rpo_rto_und_tests
+    titel: RPO, RTO, Wiederherstellungstests und Monitoring
+    felder:
+      - name: rpo_haeufigkeit
+        label: Datensicherungsintervall / RPO
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: backup_rpo
+          max_punkte: 15
+        werte:
+          - wert: stundengenau_oder_oefter
+            punkte: 15
+            textbaustein:
+              feststellung: Datensicherungen erfolgen stündlich oder in noch kürzeren Intervallen (RPO <= 1h).
+              auswirkung: null
+          - wert: alle_4_bis_12_stunden
+            punkte: 12
+            textbaustein:
+              feststellung: Datensicherungen erfolgen alle 4 bis 12 Stunden.
+              auswirkung: null
+          - wert: taeglich
+            punkte: 10
+            textbaustein:
+              feststellung: Datensicherungen erfolgen einmal täglich (RPO = 24h).
+              auswirkung: null
+          - wert: woechentlich_oder_seltener
+            punkte: 0
+            textbaustein:
+              feststellung: Datensicherungen erfolgen nur wöchentlich oder seltener.
+              auswirkung: Im Ernstfall gehen Daten von bis zu einer Woche unwiederbringlich verloren.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: rto_wiederanlaufzeit
+        label: Angestrebte Wiederanlaufzeit (RTO)
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: backup_rto
+          max_punkte: 10
+        werte:
+          - wert: unter_4_stunden
+            punkte: 10
+            textbaustein:
+              feststellung: Die angestrebte Wiederanlaufzeit liegt bei unter 4 Stunden (Instant Recovery fähig).
+              auswirkung: null
+          - wert: innerhalb_24_stunden
+            punkte: 8
+            textbaustein:
+              feststellung: Die Wiederanlaufzeit liegt bei innerhalb von 24 Stunden.
+              auswirkung: null
+          - wert: mehrere_tage
+            punkte: 0
+            textbaustein:
+              feststellung: Die Wiederherstellung kritischer Systeme benötigt mehrere Tage.
+              auswirkung: Lange Betriebsunterbrechungen mit hohen Ausfallkosten.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: wiederherstellungstest_status
+        label: Wiederherstellungstests (Restore-Tests)
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: backup_restore_tests
+          max_punkte: 20
+        werte:
+          - wert: regelmaessig_quartal_monat
+            punkte: 20
+            textbaustein:
+              feststellung: Wiederherstellungstests werden regelmäßig (monatlich/quartalsweise) durchgeführt und dokumentiert.
+              auswirkung: null
+          - wert: einmal_jaehrlich
+            punkte: 10
+            textbaustein:
+              feststellung: Wiederherstellungstests werden einmal jährlich durchgeführt.
+              auswirkung: null
+          - wert: vor_ueber_einem_jahr
+            punkte: 5
+            textbaustein:
+              feststellung: Der letzte Wiederherstellungstest liegt über ein Jahr zurück.
+              auswirkung: null
+          - wert: noch_nie_getestet
+            punkte: 0
+            textbaustein:
+              feststellung: Es wurden bisher noch keine Wiederherstellungstests durchgeführt.
+              auswirkung: Ungewissheit über die tatsächliche Funktion und Dauer eines Restore-Vorgangs im Notfall.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: monitoring_alerting
+        label: Monitoring und Alarmierung
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: backup_monitoring
+          max_punkte: 15
+        werte:
+          - wert: automatisiertes_ticket_monitoring
+            punkte: 15
+            textbaustein:
+              feststellung: Fehlgeschlagene Sicherungsjobs erzeugen automatisch Tickets im IT-Service-Management.
+              auswirkung: null
+          - wert: taegliche_mail_kontrolle
+            punkte: 10
+            textbaustein:
+              feststellung: Die Backup-Ergebnisse werden über tägliche E-Mail-Berichte manuell kontrolliert.
+              auswirkung: null
+          - wert: keine_ueberwachung
+            punkte: 0
+            textbaustein:
+              feststellung: Es erfolgt keine regelmäßige Überwachung oder Fehleralarmierung der Sicherungsjobs.
+              auswirkung: Unbemerkt fehlschlagende Sicherungen können wochenlang unentdeckt bleiben.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: kommentar
+        label: Kommentar
+        typ: mehrzeiliger_text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: intern

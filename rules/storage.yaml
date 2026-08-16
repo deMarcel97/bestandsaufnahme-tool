@@ -1,0 +1,103 @@
+schema_version: 1
+regeln:
+  - id: sto-fuellgrad-kritisch
+    gilt_fuer: storage
+    bedingung:
+      alle:
+        - feld: fuellgrad_prozent
+          operator: gleich
+          wert: ueber_85
+    schweregrad: kritisch
+    befund: Speicherauslastung liegt über 85 %
+    risiko: Volllaufende Volumes oder Datastores können zu sofortigem Stillstand von virtuellen Maschinen und Datenbanken führen.
+    empfehlung: Zeitnah Speicherbereinigung durchführen oder zusätzliche Speicherkapazität beschaffen.
+    referenz: "BSI IT-Grundschutz SYS.1.1"
+    massnahme_vorschlag:
+      bezeichnung: Erweiterung der Speicherkapazität / Storage-Bereinigung
+      kosten_richtwert: 1500
+      aufwand_richtwert: 4
+
+  - id: sto-single-controller
+    gilt_fuer: storage
+    bedingung:
+      alle:
+        - feld: controller_redundanz
+          operator: gleich
+          wert: single_controller
+    schweregrad: hoch
+    befund: Keine redundante Controller-Architektur (Single Controller)
+    risiko: Ein Ausfall des einzelnen Controllers führt zum Ausfall des gesamten Speichersystems und aller angebundenen Systeme.
+    empfehlung: Migration auf ein redundantes Speichersystem mit Dual-Active/Active- oder Dual-Active/Passive-Controllern planen.
+    referenz: "BSI IT-Grundschutz SYS.1.1"
+    massnahme_vorschlag:
+      bezeichnung: Umstellung auf redundantes Storage-System mit Dual-Controller
+      kosten_richtwert: 6000
+      aufwand_richtwert: 12
+
+  - id: sto-wartungsvertrag-eol
+    gilt_fuer: storage
+    bedingung:
+      alle:
+        - feld: wartungsvertrag_status
+          operator: gleich
+          wert: abgelaufen_eol
+    schweregrad: hoch
+    befund: Wartungsvertrag für Storage abgelaufen / Hardware End-of-Life (EOL)
+    risiko: Bei Hardwaredefekten an Controllern, Netzteilen oder Backplanes sind herstellerseitige Ersatzteile und Support nicht mehr verfügbar.
+    empfehlung: Wartungsvertrag verlängern oder Austausch des Speichersystems gegen eine unterstützte Plattform vornehmen.
+    referenz: "BSI IT-Grundschutz ORP.4"
+    massnahme_vorschlag:
+      bezeichnung: Erneuerung bzw. Austausch des EOL-Speichersystems
+      kosten_richtwert: 5000
+      aufwand_richtwert: 8
+
+  - id: sto-wartungsvertrag-kein
+    gilt_fuer: storage
+    bedingung:
+      alle:
+        - feld: wartungsvertrag_status
+          operator: gleich
+          wert: kein_vertrag
+    schweregrad: mittel
+    befund: Kein Wartungsvertrag für zentrales Speichersystem vorhanden
+    risiko: Im Schadensfall gibt es keine garantierten Wiederherstellungs- und Reaktionszeiten für Ersatzteile.
+    empfehlung: Hersteller-Supportvertrag mit mindestens Next Business Day (NBD) oder 24/7 Service Level vereinbaren.
+    referenz: "BSI IT-Grundschutz ORP.4"
+    massnahme_vorschlag:
+      bezeichnung: Abschluss eines Hersteller-Wartungsvertrags für Storage-Systeme
+      kosten_richtwert: 1200
+      aufwand_richtwert: 2
+
+  - id: sto-software-raid
+    gilt_fuer: storage
+    bedingung:
+      alle:
+        - feld: technologie_local
+          operator: gleich
+          wert: software_raid
+    schweregrad: mittel
+    befund: Lokaler Speicher basiert auf Software-RAID / Dynamic Disks
+    risiko: Software-RAID ohne BBU/Flash-Cache birgt Risiken von Dateninkonsistenzen bei plötzlichem Stromausfall oder Host-Absturz.
+    empfehlung: Umstellung auf ZFS mit redundanten vdevs oder zertifizierte Hardware-RAID-Controller mit CacheVault/BBU.
+    referenz: "BSI IT-Grundschutz SYS.1.1"
+    massnahme_vorschlag:
+      bezeichnung: Migration auf ZFS oder Controller-gestütztes Hardware-RAID
+      kosten_richtwert: 800
+      aufwand_richtwert: 4
+
+  - id: sto-hdd-only
+    gilt_fuer: storage
+    bedingung:
+      alle:
+        - feld: medientyp
+          operator: gleich
+          wert: hdd_only
+    schweregrad: niedrig
+    befund: Speichersystem basiert rein auf mechanischen Festplatten (HDD-only)
+    risiko: Geringe I/O-Leistung führt zu Engpässen und Antwortzeitverzögerungen bei parallelen Zugriffen.
+    empfehlung: Umstellung auf SSD-basierte Speichersysteme (All-Flash) oder Hybrid-Caching prüfen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Modernisierung auf All-Flash- oder Hybrid-SSD-Speicher
+      kosten_richtwert: 2500
+      aufwand_richtwert: 6

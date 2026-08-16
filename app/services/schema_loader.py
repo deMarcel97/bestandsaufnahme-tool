@@ -47,7 +47,7 @@ class SchemaLoader:
             )
 
         # Check select values
-        if ftype == "auswahl" and "werte" in feldef:
+        if ftype in ("auswahl", "mehrfachauswahl") and "werte" in feldef:
             for w in feldef["werte"]:
                 if not isinstance(w, dict) or "wert" not in w:
                     raise SchemaValidationError(

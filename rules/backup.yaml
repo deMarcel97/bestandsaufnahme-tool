@@ -1,0 +1,137 @@
+schema_version: 1
+regeln:
+  - id: bak-kein-offsite
+    gilt_fuer: backup
+    bedingung:
+      alle:
+        - feld: sekundaeres_ziel_offsite
+          operator: gleich
+          wert: kein_offsite
+    schweregrad: kritisch
+    befund: Kein Offsite-Backup vorhanden (Verstoß gegen 3-2-1-Regel)
+    risiko: Bei lokalen Katastrophen (Feuer, Wasserschaden, Einbruch/Diebstahl) am Hauptstandort droht der Totalverlust aller Unternehmensdaten.
+    empfehlung: Automatisiertes Offsite-Backup in ein Rechenzentrum oder in einen S3-kompatiblen Cloud-Speicher einrichten.
+    referenz: "BSI IT-Grundschutz CON.3 / 3-2-1-Regel"
+    massnahme_vorschlag:
+      bezeichnung: Einrichtung einer verschlüsselten Offsite-Datensicherung (Cloud / S3)
+      kosten_richtwert: 1500
+      aufwand_richtwert: 6
+
+  - id: bak-kein-immutability
+    gilt_fuer: backup
+    bedingung:
+      alle:
+        - feld: unveraenderbarkeit_immutability
+          operator: gleich
+          wert: nicht_vorhanden
+    schweregrad: hoch
+    befund: Kein unveränderbares Backup (Immutability) eingerichtet
+    risiko: Moderne Ransomware sucht gezielt nach Backup-Systemen und löscht oder verschlüsselt diese vor dem Hauptangriff.
+    empfehlung: Unveränderbare Speicherziele (S3 Object Lock / WORM / Linux Hardened Repository) einrichten.
+    referenz: "BSI IT-Grundschutz CON.3"
+    massnahme_vorschlag:
+      bezeichnung: Implementierung von unveränderbaren Backup-Speichern (Immutable Storage)
+      kosten_richtwert: 1200
+      aufwand_richtwert: 5
+
+  - id: bak-immutability-teilweise
+    gilt_fuer: backup
+    bedingung:
+      alle:
+        - feld: unveraenderbarkeit_immutability
+          operator: gleich
+          wert: teilweise
+    schweregrad: mittel
+    befund: Immutability (Unveränderbarkeit) nur teilweise umgesetzt
+    risiko: Nicht geschützte Sicherungsbestände bleiben anfällig für Löschungen durch Cyber-Angreifer.
+    empfehlung: Immutability-Schutz auf alle relevanten Backup-Jobs und Restore-Punkte ausweiten.
+    referenz: "BSI IT-Grundschutz CON.3"
+    massnahme_vorschlag:
+      bezeichnung: Ausweitung des Immutability-Schutzes auf alle Sicherungsdaten
+      kosten_richtwert: 500
+      aufwand_richtwert: 3
+
+  - id: bak-restore-nie-getestet
+    gilt_fuer: backup
+    bedingung:
+      alle:
+        - feld: wiederherstellungstest_status
+          operator: gleich
+          wert: noch_nie_getestet
+    schweregrad: kritisch
+    befund: Wiederherstellungstests wurden noch nie durchgeführt
+    risiko: Im Notfall schlägt die Wiederherstellung wegen unbemerkter Konfigurationsfehler oder defekter Sicherungen fehl.
+    empfehlung: Sofortige Durchführung eines vollständigen Test-Restores und Etablierung eines regelmäßigen Testzyklus.
+    referenz: "BSI IT-Grundschutz CON.3 / DSGVO Art. 32"
+    massnahme_vorschlag:
+      bezeichnung: Durchführung eines umfassenden Disaster-Recovery- und Restore-Tests
+      kosten_richtwert: 0
+      aufwand_richtwert: 4
+
+  - id: bak-restore-veraltet
+    gilt_fuer: backup
+    bedingung:
+      alle:
+        - feld: wiederherstellungstest_status
+          operator: gleich
+          wert: vor_ueber_einem_jahr
+    schweregrad: hoch
+    befund: Letzter Wiederherstellungstest liegt über ein Jahr zurück
+    risiko: Durch zwischenzeitliche Systemänderungen und Softwareupdates ist die Wiederherstellbarkeit ungetestet.
+    empfehlung: Mindestens halbjährliche oder quartalsweise Wiederherstellungstests einplanen und protokollieren.
+    referenz: "BSI IT-Grundschutz CON.3"
+    massnahme_vorschlag:
+      bezeichnung: Etablierung turnusmäßiger Wiederherstellungstests
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
+
+  - id: bak-keine-ueberwachung
+    gilt_fuer: backup
+    bedingung:
+      alle:
+        - feld: monitoring_alerting
+          operator: gleich
+          wert: keine_ueberwachung
+    schweregrad: hoch
+    befund: Keine Überwachung oder Benachrichtigung bei Backup-Fehlern
+    risiko: Fehlerhafte oder abgebrochene Sicherungsjobs bleiben unbemerkt.
+    empfehlung: Zentrales Monitoring und automatisierte Alarmierung (Ticket/E-Mail) für alle Sicherungsjobs einrichten.
+    referenz: "BSI IT-Grundschutz OPS.1.1.5"
+    massnahme_vorschlag:
+      bezeichnung: Einrichtung einer automatisierten Backup-Überwachung mit Alerting
+      kosten_richtwert: 0
+      aufwand_richtwert: 3
+
+  - id: bak-rpo-unzureichend
+    gilt_fuer: backup
+    bedingung:
+      alle:
+        - feld: rpo_haeufigkeit
+          operator: gleich
+          wert: woechentlich_oder_seltener
+    schweregrad: hoch
+    befund: Datensicherungsintervall ist wöchentlich oder seltener (RPO unzureichend)
+    risiko: Bei einem Datenverlust gehen bis zu 7 Tage an Arbeitsergebnissen unwiederbringlich verloren.
+    empfehlung: Sicherungsintervalle auf mindestens tägliche oder stündliche Sicherungen umstellen.
+    referenz: "BSI IT-Grundschutz CON.3"
+    massnahme_vorschlag:
+      bezeichnung: Erhöhung der Backup-Frequenz auf tägliche Sicherungsintervalle
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
+
+  - id: bak-rto-kritisch
+    gilt_fuer: backup
+    bedingung:
+      alle:
+        - feld: rto_wiederanlaufzeit
+          operator: gleich
+          wert: mehrere_tage
+    schweregrad: mittel
+    befund: Wiederanlaufzeit (RTO) von mehreren Tagen
+    risiko: Ausgedehnte Betriebsunterbrechungen führen zu gravierenden finanziellen und organisatorischen Schäden.
+    empfehlung: Optimierung des Wiederherstellungsprozesses (z.B. Instant VM Recovery, Standby-Hardware).
+    referenz: "BSI IT-Grundschutz CON.3"
+    massnahme_vorschlag:
+      bezeichnung: Optimierung der Wiederanlaufprozesse zur RTO-Reduktion
+      kosten_richtwert: 1000
+      aufwand_richtwert: 4

@@ -1,14 +1,14 @@
-# IT-Bestandsaufnahme-Tool (v2.7.21)
+# IT-Bestandsaufnahme-Tool (v2.7.22)
 
 Ein spezialisiertes Web-Tool für IT-Systemhäuser zur strukturierten Erfassung, automatischen Risikobewertung und professionellen Berichtserstellung von IT-Kundeninfrastrukturen.
 
-> Aktuelle Version: **2.7.21** — Änderungshistorie siehe [CHANGELOG.md](CHANGELOG.md).
+> Aktuelle Version: **2.7.22** — Änderungshistorie siehe [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
 ## 🚀 Übersicht & Hauptfunktionen
 
-- **Strukturierte Erfassung**: Formularbasierte Bestandsaufnahme für **11 IT-Infrastruktur-Kategorien** (Firewall, USV, Serverraum, Netzwerkschrank, Switch, Access Points, M365 Security, Clients, Backup/Storage, Server & Virtualisierung, Software (Kategorie CRM, DMS oder ERP wählbar)).
+- **Strukturierte Erfassung**: Formularbasierte Bestandsaufnahme für **IT-Infrastruktur- und Organisations-Kategorien** (Firewall, USV, Serverraum, Netzwerkschrank, Switch, Access Points, Storage, Backup & Recovery, Organisation & Prozesse, M365 Security, Clients, Server & Virtualisierung, Software).
 - **Automatische Risiko-Analyse (Rule Engine)**: Überprüft Erfassungsdaten gegen konfigurierbare Regelwerke in `rules/*.yaml` und deckt Schwachstellen, Risiken und Abweichungen automatisch auf.
 - **Bewertungssystem**: Berechnet Ampel-Scores und Gesamteinschätzungen zur IT-Sicherheit und Operational Readiness pro Standort und Kunde.
 - **Berichtsexport (.docx)**: Erzeugt mit `python-docx` strukturierte Kundenberichte inklusive Handlungsempfehlungen.

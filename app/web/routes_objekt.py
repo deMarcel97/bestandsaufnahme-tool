@@ -174,6 +174,8 @@ async def new_objekt_submit(request: Request, auftrag_id: str, typ: str = "firew
                     continue
                 if feldef.get("typ") == "liste":
                     daten[fname] = _parse_liste_field(form_data, feldef)
+                elif feldef.get("typ") == "mehrfachauswahl":
+                    daten[fname] = form_data.getlist(fname)
                 elif fname in form_data:
                     val = form_data.get(fname)
                     if feldef.get("typ") == "zahl" and val is not None and str(val).strip() != "":
@@ -259,6 +261,8 @@ async def edit_objekt_submit(request: Request, auftrag_id: str, typ: str, objekt
                     continue
                 if feldef.get("typ") == "liste":
                     obj.daten[fname] = _parse_liste_field(form_data, feldef)
+                elif feldef.get("typ") == "mehrfachauswahl":
+                    obj.daten[fname] = form_data.getlist(fname)
                 elif fname in form_data:
                     val = form_data.get(fname)
                     if feldef.get("typ") == "zahl" and val is not None and str(val).strip() != "":
