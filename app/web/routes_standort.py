@@ -1,6 +1,7 @@
+import html
 from datetime import date
 from fastapi import APIRouter, Request, Form
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, HTMLResponse
 from app.services.storage import storage, KonfliktFehler
 from app.services.slug import generate_slug_id
 from app.services.rule_engine import rule_engine
@@ -228,4 +229,60 @@ def _konflikt_formular(request: Request, auftrag_id: str, standort_id: str, stan
             "active_nav": "auftrag",
             **sidebar_context
         }
+    )
+
+@router.post("/auftrag/{auftrag_id}/standort/{standort_id}/loeschen")
+def delete_standort_action(auftrag_id: str, standort_id: str):
+    """Löscht einen Standort, sofern keine Technik-Objekte mehr daran hängen.
+
+    Bewusst kein Kaskadenlöschen und kein automatisches Umhängen: was mit den
+    erfassten Objekten geschehen soll, weiss nur der Bearbeiter. Sie lassen
+    sich über das Objektformular auf einen anderen Standort umstellen oder
+    einzeln löschen — beides gibt es bereits."""
+    standort = storage.load_standort(auftrag_id, standort_id)
+    if not standort:
+        return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
+
+    haengende = [o for o in storage.list_objekte(auftrag_id) if o.standort_id == standort_id]
+    if haengende:
+        return _loeschen_abgelehnt(auftrag_id, standort, haengende)
+
+    storage.delete_standort(auftrag_id, standort_id)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
+
+def _loeschen_abgelehnt(auftrag_id: str, standort, haengende) -> HTMLResponse:
+    """Benennt die Objekte, die dem Löschen im Weg stehen.
+
+    Ohne diese Liste müsste der Bearbeiter selbst durchzählen, was noch am
+    Standort hängt. Bewusst ohne Template, damit die Seite auch dann steht,
+    wenn mit den Auftragsdaten etwas nicht stimmt — dieselbe Überlegung wie
+    beim Konflikt-Handler in `app/main.py`."""
+    name = html.escape(standort.bezeichnung or standort.id)
+    anzahl = len(haengende)
+    if anzahl == 1:
+        satz = (f"An <strong>{name}</strong> hängt noch 1 Objekt. Es muss zuerst auf einen "
+                "anderen Standort verschoben oder gelöscht werden — sonst bliebe es ohne "
+                "Zuordnung zurück.")
+    else:
+        satz = (f"An <strong>{name}</strong> hängen noch {anzahl} Objekte. Sie müssen zuerst "
+                "auf einen anderen Standort verschoben oder gelöscht werden — sonst blieben "
+                "sie ohne Zuordnung zurück.")
+    zeilen = "\n".join(
+        f'<li><a href="/auftrag/{html.escape(auftrag_id)}/objekt/{html.escape(o.typ)}/{html.escape(o.id)}">'
+        f"{html.escape(o.bezeichnung or o.id)}</a></li>"
+        for o in haengende
+    )
+    return HTMLResponse(
+        status_code=409,
+        content=f"""<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<title>Standort nicht gelöscht</title>
+<link rel="stylesheet" href="/static/css/style.css"></head>
+<body><div class="container" style="max-width:640px;margin-top:64px;">
+<h1 style="font-size:22px;">Standort nicht gelöscht</h1>
+<p>{satz}</p>
+<ul>{zeilen}</ul>
+<p>Zum Verschieben das Objekt öffnen und oben einen anderen Standort wählen.</p>
+<p style="margin-top:28px;"><a href="/auftrag/{html.escape(auftrag_id)}/erfassung">Zurück zur Erfassung</a></p>
+</div></body></html>""",
     )

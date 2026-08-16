@@ -72,6 +72,16 @@
             <a href="/auftrag/{{ auftrag.id }}/objekt/neu?typ={{ typ }}&amp;standort_id={{ sto.id }}">{{ bausteine_labels.get(typ, typ.capitalize()) }}</a>
             {% endfor %}
           </div>
+          {# Erfasste Objekte müssen erst umgehängt oder gelöscht werden — der
+             Server weist das Löschen sonst ohnehin ab (Karte #307). Die Schaltfläche
+             sagt gleich hier, warum sie nicht geht, statt es erst nach dem Klick. #}
+          {% if sto_objekte %}
+          <button type="button" class="btn" disabled title="Erst die {{ sto_objekte|length }} Objekt{% if sto_objekte|length != 1 %}e{% endif %} an diesem Standort verschieben oder löschen">Löschen</button>
+          {% else %}
+          <form action="/auftrag/{{ auftrag.id }}/standort/{{ sto.id }}/loeschen" method="POST" style="display:inline;" onsubmit="return confirm('Standort „{{ sto.bezeichnung }}“ wirklich löschen?');">
+            <button type="submit" class="btn">Löschen</button>
+          </form>
+          {% endif %}
         </div>
       </div>
 
