@@ -317,6 +317,32 @@ class ReportBuilder:
                 lines.append(f"| {v.bezeichnung} | {v.vertragspartner} | {v.gegenstand} | {v.laufzeit_bis or 'k.A.'} | {v.monatliche_kosten:.2f} |")
             lines.append("")
 
+        # 10. Anhang: Beobachtungen vor Ort. Bewusst getrennt von Kapitel 5
+        # (Feststellungen): dort stehen die automatisch aus den Erfassungsregeln
+        # erzeugten Findings, hier der manuell notierte persönliche Eindruck vor
+        # Ort — sonst blieben `positive_aspekte`/`negative_aspekte` folgenlos
+        # (Karte #316). Wie die Verträge unterdrückt für die anonymisierte
+        # Fassung, da Freitext leicht auf den Kunden schliessen lässt.
+        if (auftrag.positive_aspekte or auftrag.negative_aspekte) and ziel_vertraulichkeit != "anonymisiert":
+            lines.append("## Anhang: Beobachtungen vor Ort")
+            lines.append(
+                "Persönlicher Eindruck vor Ort, unabhängig von den automatisch "
+                "erzeugten Feststellungen in Kapitel 5."
+            )
+            lines.append("")
+
+            if auftrag.positive_aspekte:
+                lines.append("### Positive Beobachtungen")
+                for a in auftrag.positive_aspekte:
+                    lines.append(f"- **{a.titel}:** {a.text}")
+                lines.append("")
+
+            if auftrag.negative_aspekte:
+                lines.append("### Negative Beobachtungen")
+                for a in auftrag.negative_aspekte:
+                    lines.append(f"- **{a.titel}:** {a.text}")
+                lines.append("")
+
         return "\n".join(lines)
 
     def _extract_snippet_pair(self, val: Any, feldef: Dict[str, Any]) -> Tuple[Optional[str], Optional[str]]:
