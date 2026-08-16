@@ -143,6 +143,10 @@
 
       <div class="form-bar">
         <button type="submit" class="btn btn-primary">Änderungen speichern</button>
+        <a href="/auftrag/{{ auftrag.id }}/wizard/init" class="btn btn-outline" 
+           onclick="return confirm('Interaktive Erfassung starten? Dies führt Sie Schritt-für-Schritt durch die wichtigsten Bausteine.')">
+          Interaktive Erfassung starten
+        </a>
         <a href="/auftrag/{{ auftrag.id }}/unternehmenskontext" class="btn">Zum Unternehmenskontext</a>
         <a href="/auftrag/{{ auftrag.id }}" class="btn">Zurück zum Auftrag</a>
       </div>

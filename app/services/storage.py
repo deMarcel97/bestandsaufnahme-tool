@@ -3,6 +3,7 @@ import copy
 import os
 import shutil
 import logging
+from datetime import datetime
 from typing import List, Optional, Dict, Any
 import yaml
 from pydantic import ValidationError
@@ -12,6 +13,7 @@ from app.models.standort import Standort
 from app.models.technik import TechnikObjekt
 from app.models.finding import Finding
 from app.models.massnahme import Massnahme
+from app.models.wizard import WizardProgress, create_empty_wizard_progress
 from app.services.slug import generate_slug_id, is_valid_id
 
 
@@ -407,5 +409,54 @@ class StorageService:
         if not data or not isinstance(data, list):
             return []
         return [Massnahme.model_validate(item) for item in data]
+
+    # --- WIZARD PROGRESS ---
+    def get_wizard_path(self, auftrag_id: str) -> Optional[Path]:
+        d = self.get_auftrag_dir(auftrag_id, create=True)
+        if d is None:
+            return None
+        return d / "wizard_progress.yaml"
+
+    def save_wizard_progress(self, progress: WizardProgress) -> Optional[str]:
+        """Speichert den Wizard-Fortschritt. Löst KonfliktFehler aus, wenn auf der Platte
+        bereits ein neuerer Stand liegt."""
+        fpath = self.get_wizard_path(progress.auftrag_id)
+        if fpath is None:
+            return None
+        self._pruefe_version(fpath, progress.version, f"Wizard-Fortschritt für {progress.auftrag_id}")
+        progress.version += 1
+        progress.last_updated = datetime.now().isoformat()
+        write_yaml_atomic(fpath, progress.model_dump())
+        return progress.auftrag_id
+
+    def load_wizard_progress(self, auftrag_id: str) -> Optional[WizardProgress]:
+        fpath = self.get_wizard_path(auftrag_id)
+        if fpath is None or not fpath.exists():
+            return None
+        with open(fpath, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+        if not data:
+            return None
+        try:
+            return WizardProgress.model_validate(data)
+        except ValidationError as e:
+            logging.error(f"Skipping invalid WizardProgress in {fpath}: {e}")
+            return None
+
+    def delete_wizard_progress(self, auftrag_id: str):
+        fpath = self.get_wizard_path(auftrag_id)
+        if fpath is not None and fpath.exists():
+            fpath.unlink()
+
+    def init_wizard_progress(self, auftrag_id: str) -> Optional[WizardProgress]:
+        """Initialisiert einen neuen Wizard-Fortschritt für einen Auftrag."""
+        existing = self.load_wizard_progress(auftrag_id)
+        if existing:
+            return existing
+        
+        progress = create_empty_wizard_progress(auftrag_id)
+        self.save_wizard_progress(progress)
+        return progress
+
 
 storage = StorageService()
