@@ -4,6 +4,12 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.9] - 2026-08-16
+
+### Fixed
+- **Konflikterkennung greift jetzt über die Dauer eines geöffneten Formulars (#308)**: Zähler und Prüfung gibt es seit v2.7.4 (#305), sie konnten aber nie anschlagen — die POST-Handler luden den Datensatz unmittelbar vor dem Speichern frisch von der Platte, wodurch die Version zwangsläufig übereinstimmte. Zwei Benutzer mit demselben geöffneten Formular überschrieben sich weiterhin stillschweigend. Die vier Bearbeitungsformulare (Stammdaten, Unternehmenskontext, Standort, Technik-Objekt) führen den beim Laden gesehenen Stand jetzt als verstecktes `version`-Feld mit, und die Handler in `routes_auftrag.py`, `routes_standort.py` und `routes_objekt.py` übernehmen ihn vor dem Speichern. Fehlt das Feld — etwa bei einem Formular aus einer älteren Programmversion —, bleibt es beim bisherigen Verhalten, statt das Speichern zu blockieren.
+- **Eingaben gehen bei einem Konflikt nicht mehr verloren (#308)**: Statt der allgemeinen Hinweisseite liefern die vier Formulare sich selbst mit den gerade eingegebenen Werten und einem Warnbanner zurück (HTTP 409, neues Teil-Template `app/templates/_konflikt_banner.html`). Das versteckte Feld trägt dabei den inzwischen auf der Platte liegenden Stand, sodass ein zweites Speichern die fremde Änderung bewusst überschreibt, statt in derselben Meldung hängenzubleiben. Die zentrale 409-Seite in `app/main.py` bleibt als Auffangnetz für alle übrigen Speicherstellen bestehen.
+
 ## [2.7.8] - 2026-08-15
 
 ### Fixed

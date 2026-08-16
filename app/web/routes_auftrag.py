@@ -2,7 +2,7 @@ import html
 from fastapi import APIRouter, Request, Form, Response
 from fastapi.responses import RedirectResponse, HTMLResponse
 from pathlib import Path
-from app.services.storage import storage
+from app.services.storage import storage, KonfliktFehler
 from app.services.schema_loader import schema_loader
 from app.services.slug import generate_slug_id
 from app.services.rule_engine import rule_engine
@@ -197,7 +197,9 @@ def stammdaten_form(request: Request, auftrag_id: str):
 
 @router.post("/auftrag/{auftrag_id}/stammdaten")
 def stammdaten_submit(
+    request: Request,
     auftrag_id: str,
+    version: str = Form(""),
     projekt_nummer: str = Form(""),
     jira_url: str = Form(""),
     kunde: str = Form(...),
@@ -241,8 +243,44 @@ def stammdaten_submit(
     auftrag.termine.entwurf_vorlage = entwurf_vorlage if entwurf_vorlage else None
     auftrag.termine.abgabe = abgabe if abgabe else None
 
-    storage.save_auftrag(auftrag)
+    # Massgeblich ist der Stand, den das Formular beim Laden gesehen hat — nicht
+    # der frisch geladene. Sonst stimmt die Version beim Speichern immer überein
+    # und die Konflikterkennung könnte nie anschlagen (Karte #308). Fehlt das
+    # Feld (Formular aus einer älteren Version), bleibt es beim bisherigen
+    # Verhalten.
+    auftrag.version = parse_int_german(version, auftrag.version)
+
+    try:
+        storage.save_auftrag(auftrag)
+    except KonfliktFehler:
+        auftrag.version = _aktuelle_version(auftrag_id, auftrag.version)
+        sidebar_context = build_sidebar_context(auftrag)
+        return templates.TemplateResponse(
+            request=request,
+            name="auftrag/stammdaten.html",
+            status_code=409,
+            context={
+                "auftrag": auftrag,
+                "verfuegbare_typen": schema_loader.get_all_types(),
+                "bausteine_labels": get_bausteine_labels(),
+                "grundlage_options": GRUNDLAGE_OPTIONS,
+                "konflikt": True,
+                "active_tab": "stammdaten",
+                "active_nav": "auftrag",
+                **sidebar_context
+            }
+        )
+
     return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
+
+def _aktuelle_version(auftrag_id: str, fallback: int) -> int:
+    """Der Stand, der nach einem Konflikt auf der Platte liegt.
+
+    Das Formular geht damit zurück an den Benutzer, damit ein zweites Speichern
+    die fremde Änderung bewusst überschreiben kann, statt in derselben Meldung
+    hängenzubleiben."""
+    aktuell = storage.load_auftrag(auftrag_id)
+    return aktuell.version if aktuell else fallback
 
 @router.get("/auftrag/{auftrag_id}/unternehmenskontext")
 def unternehmenskontext_form(request: Request, auftrag_id: str):
@@ -264,7 +302,9 @@ def unternehmenskontext_form(request: Request, auftrag_id: str):
 
 @router.post("/auftrag/{auftrag_id}/unternehmenskontext")
 def unternehmenskontext_submit(
+    request: Request,
     auftrag_id: str,
+    version: str = Form(""),
     kerngeschaeft: str = Form(""),
     anzahl_standorte_kunde: str = Form("1"),
     it_abteilung_vorhanden: str = Form("nein"),
@@ -295,7 +335,26 @@ def unternehmenskontext_submit(
     auftrag.unternehmenskontext.geschaeftszeiten_bis = geschaeftszeiten_bis
     auftrag.unternehmenskontext.allgemeine_hinweise = allgemeine_hinweise
 
-    storage.save_auftrag(auftrag)
+    # Siehe stammdaten_submit: massgeblich ist der beim Laden gesehene Stand.
+    auftrag.version = parse_int_german(version, auftrag.version)
+
+    try:
+        storage.save_auftrag(auftrag)
+    except KonfliktFehler:
+        auftrag.version = _aktuelle_version(auftrag_id, auftrag.version)
+        sidebar_context = build_sidebar_context(auftrag)
+        return templates.TemplateResponse(
+            request=request,
+            name="auftrag/unternehmenskontext.html",
+            status_code=409,
+            context={
+                "auftrag": auftrag,
+                "konflikt": True,
+                "active_tab": "unternehmenskontext",
+                "active_nav": "auftrag",
+                **sidebar_context
+            }
+        )
 
     # Auto-generate Standorte if target_count > current existing standorte count
     existing_standorte = storage.list_standorte(auftrag_id)

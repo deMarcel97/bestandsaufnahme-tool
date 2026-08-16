@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse
-from app.services.storage import storage
+from app.services.storage import storage, KonfliktFehler
 from app.services.schema_loader import schema_loader
 from app.services.slug import generate_slug_id
 from app.services.rule_engine import ConditionEvaluator
@@ -242,8 +242,54 @@ async def edit_objekt_submit(request: Request, auftrag_id: str, typ: str, objekt
                     else:
                         obj.daten[fname] = val
 
-    storage.save_objekt(obj)
+    # Massgeblich ist der Stand, den das Formular beim Laden gesehen hat — nicht
+    # der frisch geladene. Sonst stimmt die Version beim Speichern immer überein
+    # und die Konflikterkennung könnte nie anschlagen (Karte #308). Fehlt das
+    # Feld (Formular aus einer älteren Version), bleibt es beim bisherigen
+    # Verhalten.
+    obj.version = parse_int_german(form_data.get("version"), obj.version)
+
+    try:
+        storage.save_objekt(obj)
+    except KonfliktFehler:
+        return _konflikt_formular(request, auftrag_id, typ, objekt_id, obj)
+
     return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
+
+def _konflikt_formular(request: Request, auftrag_id: str, typ: str, objekt_id: str, obj: TechnikObjekt):
+    """Liefert das Bearbeitungsformular mit den gerade eingegebenen Werten und
+    einem Hinweis zurück, statt sie auf einer Fehlerseite zu verlieren.
+
+    Die Version wird auf den Stand der Platte gehoben: ein zweites Speichern
+    soll die fremde Änderung bewusst überschreiben können, statt in derselben
+    Meldung hängenzubleiben."""
+    auftrag = storage.load_auftrag(auftrag_id)
+    schema = schema_loader.get_schema(typ)
+    if not auftrag or not schema:
+        return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
+
+    aktuell = storage.load_objekt(auftrag_id, typ, objekt_id)
+    if aktuell:
+        obj.version = aktuell.version
+
+    sidebar_context = build_sidebar_context(auftrag)
+    return templates.TemplateResponse(
+        request=request,
+        name="technik/form.html",
+        status_code=409,
+        context={
+            "auftrag": auftrag,
+            "schema": schema,
+            "standorte": storage.list_standorte(auftrag_id),
+            "selected_standort_id": obj.standort_id,
+            "objekt_referenz_candidates": _collect_objekt_referenz_candidates(auftrag_id, schema),
+            "obj": obj,
+            "konflikt": True,
+            "active_tab": "erfassung",
+            "active_nav": "auftrag",
+            **sidebar_context
+        }
+    )
 
 @router.post("/auftrag/{auftrag_id}/objekt/{typ}/{objekt_id}/duplizieren")
 def duplicate_objekt_action(auftrag_id: str, typ: str, objekt_id: str):

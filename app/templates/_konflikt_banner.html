@@ -1,0 +1,16 @@
+{# Wird von den Bearbeitungsformularen eingebunden und nur dann sichtbar, wenn
+   der Handler beim Speichern einen KonfliktFehler abgefangen und das Formular
+   mit den eingegebenen Werten erneut ausgeliefert hat (Karte #308). #}
+{% if konflikt %}
+<div class="alert alert-warning" style="margin-bottom:20px;">
+  <strong>Nicht gespeichert</strong>
+  <span>
+    Dieser Datensatz wurde geändert, während du ihn bearbeitet hast. Damit die
+    fremde Änderung nicht stillschweigend verlorengeht, wurde nichts
+    geschrieben — deine Eingaben stehen unverändert im Formular. Erneutes
+    Speichern übernimmt sie und überschreibt dabei die fremde Änderung. Wer
+    stattdessen den fremden Stand behalten will, lädt die Seite neu; die
+    eigenen Eingaben sind dann verloren.
+  </span>
+</div>
+{% endif %}
