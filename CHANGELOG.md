@@ -4,6 +4,12 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.19] - 2026-08-16
+
+### Changed
+- **Offene Punkte hierarchisch nach Standort und Thema strukturiert (#314)**: Die Seite `/auftrag/{id}/offene_punkte` gliedert offene Punkte jetzt nach Standort (z. B. Standort 1, Standort 2, Standortübergreifend) und darunter nach Themenbereichen/Bausteinen (z. B. M365 Security, Firewall, Dokumente & Unterlagen).
+- **Ausklappbare Toggles & Zähler (#314)**: Standorte und Themenbereiche lassen sich per Klick ein- und ausklappen (`<details>`/`<summary>`-Akkordeon mit Zähler-Badges). Schnellauswahl über „Alle aufklappen" und „Alle zuklappen".
+
 ## [2.7.18] - 2026-08-16
 
 ### Changed

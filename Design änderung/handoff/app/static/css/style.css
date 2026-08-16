@@ -771,7 +771,7 @@ input[type="checkbox"], input[type="radio"] {
 .kv .eyebrow { display: block; margin-bottom: 2px; }
 .kv strong { font-weight: 600; font-size: 15px; }
 
-/* ── Gruppen ─────────────────────────────────────────────────────────── */
+/* ── Gruppen & Collapsible Toggles ──────────────────────────────────── */
 .group { margin-top: 36px; }
 .group-head {
   display: flex;
@@ -785,6 +785,137 @@ input[type="checkbox"], input[type="radio"] {
 .subgroup { margin-top: 22px; }
 .subgroup-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
 .subgroup-head h4 { margin: 0; font-size: 15px; }
+
+/* Collapsible Details/Summary Toggles */
+details.group-details {
+  margin-top: 24px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+details.group-details > summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  background: var(--panel);
+  border-bottom: 2px solid transparent;
+  transition: background 0.15s ease;
+}
+details.group-details > summary::-webkit-details-marker {
+  display: none;
+}
+details.group-details > summary:hover {
+  background: var(--hover);
+}
+details.group-details[open] > summary {
+  border-bottom: 2px solid var(--rule);
+}
+.group-summary-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.group-summary-title h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.group-details-body {
+  padding: 16px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: var(--bg);
+}
+
+details.subgroup-details {
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+details.subgroup-details > summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--panel);
+  border-bottom: 1px solid transparent;
+  transition: background 0.15s ease;
+}
+details.subgroup-details > summary::-webkit-details-marker {
+  display: none;
+}
+details.subgroup-details > summary:hover {
+  background: var(--hover);
+}
+details.subgroup-details[open] > summary {
+  border-bottom: 1px solid var(--line);
+}
+.subgroup-summary-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.subgroup-summary-title h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+.subgroup-details-body {
+  padding: 0;
+  background: var(--panel);
+}
+.subgroup-details-body table {
+  margin: 0;
+  border: 0;
+}
+
+.toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  color: var(--muted);
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+details[open] > summary .toggle-icon {
+  transform: rotate(90deg);
+  color: var(--accent);
+}
+.badge-count {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 7px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.badge-warning {
+  border-color: var(--warn);
+  color: var(--warn);
+}
+.badge-muted {
+  border-color: var(--line);
+  color: var(--muted);
+}
+.badge-info {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+.badge-danger {
+  border-color: var(--accent);
+  color: var(--accent);
+}
 
 .total-row {
   display: flex;

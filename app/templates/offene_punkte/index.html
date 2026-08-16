@@ -17,57 +17,86 @@
           <span>{{ offene_punkte|length }} Punkt{% if offene_punkte|length != 1 %}e{% endif %} auftragsweit</span>
         </div>
       </div>
+      {% if offene_punkte %}
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button type="button" class="btn btn-sm btn-outline" onclick="toggleAllOpenPoints(true)">Alle aufklappen</button>
+        <button type="button" class="btn btn-sm btn-outline" onclick="toggleAllOpenPoints(false)">Alle zuklappen</button>
+      </div>
+      {% endif %}
     </div>
 
     <p class="hint" style="margin-top:24px;">
       Diese Liste fasst automatisch alle Rückfragen aus Objekt-Formularen, unvollständige regelrelevante Felder und ausstehende Dokumentenanforderungen zusammen. Unvollständige Angaben führen zu keinem Punktabzug und keinem Finding.
     </p>
 
-    {% if offene_punkte %}
-      {% for sto_name, dev_dict in grouped_punkte.items() %}
-      {% if dev_dict %}
-      <div class="group">
-        <div class="group-head">
-          <h3>{{ sto_name }}</h3>
-          <span class="eyebrow">Standort</span>
-        </div>
-
-        {% for comp_name, items in dev_dict.items() %}
-        <div class="subgroup">
-          <div class="subgroup-head">
-            <h4>{{ comp_name }}</h4>
-            <span class="cell-sub">{{ items|length }} offene Punkte</span>
+    {% if grouped_standorte %}
+      {% for sto in grouped_standorte %}
+      <details class="group-details" open>
+        <summary>
+          <div class="group-summary-title">
+            <span class="toggle-icon">▶</span>
+            <h3>{{ sto.name }}</h3>
+            <span class="badge badge-count">{{ sto.total_count }}</span>
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th style="width:150px;">Quelle</th>
-                <th>Beschreibung</th>
-                <th style="width:130px;">Status</th>
-                <th class="col-right" style="width:180px;">Aktion</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for op in items %}
-              <tr>
-                <td class="cell-typ">{{ op.quelle }}</td>
-                <td>{{ op.text }}</td>
-                <td class="text-muted">{{ op.status }}</td>
-                <td class="col-right">
-                  {% if op.ziel_url %}
-                  <span class="linkact"><a href="{{ op.ziel_url }}">Direkt zur Eingabe →</a></span>
-                  {% else %}
-                  <span class="text-muted">—</span>
-                  {% endif %}
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+          <span class="eyebrow">{% if sto.typ == 'standort' %}Standort{% else %}Auftragsebene{% endif %}</span>
+        </summary>
+
+        <div class="group-details-body">
+          {% for thema in sto.themen_list %}
+          <details class="subgroup-details" open>
+            <summary>
+              <div class="subgroup-summary-title">
+                <span class="toggle-icon">▶</span>
+                <h4>{{ thema.name }}</h4>
+                <span class="badge badge-count">{{ thema.count }}</span>
+              </div>
+              <span class="cell-sub">{{ thema.count }} offene{% if thema.count == 1 %}r Punkt{% else %} Punkte{% endif %}</span>
+            </summary>
+
+            <div class="subgroup-details-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:160px;">Art / Quelle</th>
+                    <th>Beschreibung</th>
+                    <th style="width:130px;">Status</th>
+                    <th class="col-right" style="width:180px;">Aktion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for op in thema.punkte %}
+                  <tr>
+                    <td class="cell-typ">
+                      {% if op.quelle == 'rueckfrage' %}
+                      <span class="badge badge-warning">Rückfrage</span>
+                      {% elif op.quelle == 'regelrelevant_leer' %}
+                      <span class="badge badge-muted">Pflichtfeld</span>
+                      {% elif op.quelle == 'dokument' %}
+                      <span class="badge badge-info">Unterlage</span>
+                      {% elif op.quelle == 'struktur_fehlt' %}
+                      <span class="badge badge-danger">Fehlt</span>
+                      {% else %}
+                      <span class="badge">{{ op.quelle }}</span>
+                      {% endif %}
+                    </td>
+                    <td>{{ op.text }}</td>
+                    <td class="text-muted">{{ op.status }}</td>
+                    <td class="col-right">
+                      {% if op.ziel_url %}
+                      <span class="linkact"><a href="{{ op.ziel_url }}">Direkt zur Eingabe →</a></span>
+                      {% else %}
+                      <span class="text-muted">—</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </details>
+          {% endfor %}
         </div>
-        {% endfor %}
-      </div>
-      {% endif %}
+      </details>
       {% endfor %}
     {% else %}
     <div class="empty-state" style="margin-top:24px;">
@@ -77,4 +106,12 @@
     {% endif %}
   </main>
 </div>
+
+<script>
+function toggleAllOpenPoints(openState) {
+  document.querySelectorAll('details.group-details, details.subgroup-details').forEach(function(el) {
+    el.open = openState;
+  });
+}
+</script>
 {% endblock %}
