@@ -90,6 +90,31 @@
             {% endfor %}
           </div>
         </div>
+
+        <div class="subsection">
+          <span class="eyebrow">Zweck der Erfassung</span>
+          <div class="checkbox-grid">
+            {% for opt in zweck_options %}
+            <label><input type="checkbox" name="zweck" value="{{ opt }}" {% if opt in auftrag.zweck %}checked{% endif %}> {{ opt }}</label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Abgrenzung</label>
+          <textarea name="abgrenzung" class="form-control">{{ auftrag.abgrenzung }}</textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Aufwand geplant (Stunden)</label>
+            <input type="number" step="0.5" name="aufwand_geplant" value="{{ auftrag.aufwand_geplant }}" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Aufwand Ist (Stunden)</label>
+            <input type="number" step="0.5" name="aufwand_ist" value="{{ auftrag.aufwand_ist }}" class="form-control">
+          </div>
+        </div>
       </fieldset>
 
       <fieldset class="fieldset">

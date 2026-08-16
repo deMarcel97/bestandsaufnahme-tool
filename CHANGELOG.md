@@ -4,6 +4,25 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.14] - 2026-08-16
+
+### Added
+- **Vier neue Erfassungsseiten für bisher unerreichbare Felder (#316)**: „Beteiligte" (Kontakte bei Kunde und Dienstleistern inkl. „zuständig für Thema", E-Mail, Telefon), „Verträge" (Wartungsverträge mit Kündigungsfrist, Laufzeit und monatlichen Kosten), „Unterlagen" (angeforderte Dokumentation mit Status) und „Projektrahmen" (benötigte Zugänge, Zutrittsregelung, NDA, Wartungsfenster, Analysewerkzeuge, Ergebnisartefakte sowie manuelle Beobachtungen vor Ort).
+- **Beobachtungen vor Ort im Bericht (#316)**: `positive_aspekte`/`negative_aspekte` erscheinen als Anhang „Beobachtungen vor Ort". Bewusst getrennt von den Findings: die entstehen automatisch aus den Regeln, dies hier ist der Eindruck des Bearbeiters, den keine Regel erkennen kann. Bei Ziel „anonymisiert" entfällt der Anhang, weil Freitext den Kunden identifizierbar macht.
+- **Gemeinsamer Parser für wiederholbare Unterformulare (#316)**: `app/web/formular_listen.py::parse_unterobjekte()` liest Felder der Form `<praefix>_<feld>_<index>` und holt sich die Feldnamen aus dem Modell. Er bedient alle fünf neuen Listen; das Muster gab es bisher nur einmal für die Internetanbindungen am Standort.
+
+### Fixed
+- **Der Analysebericht hatte Abschnitte, die nie gefüllt werden konnten (#316)**: `geschaeftskritische_systeme`, `geplante_aenderungen` und `vertraege` wurden von `report_builder.py` gelesen, `dokumentenanforderung` von `progress.py` — nur schrieb sie **kein einziges Formular**. Betriebskritische Systeme und Verträge blieben im Kundenbericht zwangsläufig leer, die Schleife über die Dokumentenanforderungen lief immer über eine leere Liste. Neun Felder im `Auftrag`-Modell waren auf diese Weise tot.
+- **Leere Zeilen mit Auswahlfeld wurden gespeichert (#316)**: Der neue Parser prüfte zunächst nur auf einen nicht-leeren Rohwert. Ein `<select>` schickt aber immer einen Wert mit — eine hinzugefügte, aber nicht ausgefüllte Zeile wäre als leerer Datensatz in der Ablage gelandet. Verglichen wird jetzt gegen den Vorgabewert des Modells.
+- **Ziel der offenen Dokumentenanforderungen (#316)**: Die Liste „Offene Punkte" verwies für Unterlagen auf `/stammdaten`, wo das Feld nie lag. Jetzt zeigt sie auf die neue Seite „Unterlagen".
+
+### Changed
+- **Stammdaten und Unternehmenskontext erweitert (#316)**: `zweck` (Mehrfachauswahl, serverseitig geprüft wie in #309), `abgrenzung`, `aufwand_geplant` und `aufwand_ist` stehen in der Auftragssteuerung; die betriebskritischen Systeme und geplanten Änderungen auf der Kontextseite, wo sie sachlich hingehören — sie liegen im Modell innerhalb von `Unternehmenskontext`, nicht direkt am Auftrag.
+- **`aktuelle_version()` liegt jetzt in `shared_context.py` (#316)**: Die Konflikterkennung aus #308 gilt inzwischen für fünf Auftrags-Unterseiten, und der Helfer stand in jedem Route-Modul als eigene Kopie. Als private Kopie wäre absehbar der Tag gekommen, an dem eine davon nicht mitgezogen wird.
+
+### Known Issues
+- **Tausenderpunkte gehen in Zahlfeldern verloren (#319)**: `parse_float_german("1.249,90")` ergibt `0.0` statt `1249.90`, ohne Fehlermeldung. Betrifft die neuen Vertragskosten ebenso wie bestehende Felder (Bandbreiten, SLA-Zeiten). Der Fehler ist älter als #316; `tests/test_formular_listen.py::test_tausenderpunkt_geht_noch_verloren` hält den Stand fest, damit er nicht unbemerkt bleibt.
+
 ## [2.7.13] - 2026-08-16
 
 ### Fixed

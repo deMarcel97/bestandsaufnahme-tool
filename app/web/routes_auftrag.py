@@ -8,13 +8,15 @@ from app.services.slug import generate_slug_id
 from app.services.rule_engine import rule_engine
 from app.services.evaluator import evaluator_service
 from app.web.templates import templates
-from app.web.shared_context import build_sidebar_context
-from app.models.auftrag import Auftrag
-from app.utils.number_parser import parse_int_german
+from app.web.shared_context import build_sidebar_context, aktuelle_version
+from app.models.auftrag import Auftrag, Aspekt
+from app.utils.number_parser import parse_float_german, parse_int_german
+from app.web.formular_listen import parse_unterobjekte
 from app.web.optionen import (
     STATUS_OPTIONS,
     GRUNDLAGE_OPTIONS,
     VERTRAULICHKEIT_OPTIONS,
+    ZWECK_OPTIONS,
     gueltiger_wert,
 )
 
@@ -192,6 +194,7 @@ def stammdaten_form(request: Request, auftrag_id: str):
             "verfuegbare_typen": verfuegbare_typen,
             "bausteine_labels": bausteine_labels,
             "grundlage_options": GRUNDLAGE_OPTIONS,
+            "zweck_options": ZWECK_OPTIONS,
             "active_tab": "stammdaten",
             "active_nav": "auftrag",
             **sidebar_context
@@ -212,6 +215,10 @@ def stammdaten_submit(
     status: str = Form("Vorbereitung"),
     vertraulichkeit_default: str = Form("intern"),
     aktive_bausteine: list[str] = Form(default=[]),
+    zweck: list[str] = Form(default=[]),
+    abgrenzung: str = Form(""),
+    aufwand_geplant: str = Form(""),
+    aufwand_ist: str = Form(""),
     beauftragung: str = Form(""),
     kickoff: str = Form(""),
     entwurf_vorlage: str = Form(""),
@@ -245,6 +252,12 @@ def stammdaten_submit(
         vertraulichkeit_default, VERTRAULICHKEIT_OPTIONS, auftrag.vertraulichkeit_default
     )
     auftrag.aktive_bausteine = aktive_bausteine
+    # Wie bei den anderen Auswahlfeldern (#309): unbekannte Werte aus einem
+    # manipulierten POST fallen heraus statt gespeichert zu werden.
+    auftrag.zweck = [wert for wert in zweck if wert in ZWECK_OPTIONS]
+    auftrag.abgrenzung = abgrenzung
+    auftrag.aufwand_geplant = parse_float_german(aufwand_geplant, auftrag.aufwand_geplant)
+    auftrag.aufwand_ist = parse_float_german(aufwand_ist, auftrag.aufwand_ist)
 
     # Dates
     auftrag.termine.beauftragung = beauftragung if beauftragung else None
@@ -262,7 +275,7 @@ def stammdaten_submit(
     try:
         storage.save_auftrag(auftrag)
     except KonfliktFehler:
-        auftrag.version = _aktuelle_version(auftrag_id, auftrag.version)
+        auftrag.version = aktuelle_version(auftrag_id, auftrag.version)
         sidebar_context = build_sidebar_context(auftrag)
         return templates.TemplateResponse(
             request=request,
@@ -273,6 +286,7 @@ def stammdaten_submit(
                 "verfuegbare_typen": schema_loader.get_all_types(),
                 "bausteine_labels": get_bausteine_labels(),
                 "grundlage_options": GRUNDLAGE_OPTIONS,
+                "zweck_options": ZWECK_OPTIONS,
                 "konflikt": True,
                 "active_tab": "stammdaten",
                 "active_nav": "auftrag",
@@ -282,14 +296,6 @@ def stammdaten_submit(
 
     return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
 
-def _aktuelle_version(auftrag_id: str, fallback: int) -> int:
-    """Der Stand, der nach einem Konflikt auf der Platte liegt.
-
-    Das Formular geht damit zurück an den Benutzer, damit ein zweites Speichern
-    die fremde Änderung bewusst überschreiben kann, statt in derselben Meldung
-    hängenzubleiben."""
-    aktuell = storage.load_auftrag(auftrag_id)
-    return aktuell.version if aktuell else fallback
 
 @router.get("/auftrag/{auftrag_id}/unternehmenskontext")
 def unternehmenskontext_form(request: Request, auftrag_id: str):
@@ -310,7 +316,7 @@ def unternehmenskontext_form(request: Request, auftrag_id: str):
     )
 
 @router.post("/auftrag/{auftrag_id}/unternehmenskontext")
-def unternehmenskontext_submit(
+async def unternehmenskontext_submit(
     request: Request,
     auftrag_id: str,
     version: str = Form(""),
@@ -344,13 +350,24 @@ def unternehmenskontext_submit(
     auftrag.unternehmenskontext.geschaeftszeiten_bis = geschaeftszeiten_bis
     auftrag.unternehmenskontext.allgemeine_hinweise = allgemeine_hinweise
 
+    # Beliebig lange Listen — kommen nicht als benannte Form()-Parameter,
+    # sondern zeilenweise als system_<feld>_<index> / aenderung_<feld>_<index>
+    # (Karte #316, Parser aus formular_listen.py).
+    form_data = await request.form()
+    auftrag.unternehmenskontext.geschaeftskritische_systeme = parse_unterobjekte(
+        form_data, "system", Aspekt
+    )
+    auftrag.unternehmenskontext.geplante_aenderungen = parse_unterobjekte(
+        form_data, "aenderung", Aspekt
+    )
+
     # Siehe stammdaten_submit: massgeblich ist der beim Laden gesehene Stand.
     auftrag.version = parse_int_german(version, auftrag.version)
 
     try:
         storage.save_auftrag(auftrag)
     except KonfliktFehler:
-        auftrag.version = _aktuelle_version(auftrag_id, auftrag.version)
+        auftrag.version = aktuelle_version(auftrag_id, auftrag.version)
         sidebar_context = build_sidebar_context(auftrag)
         return templates.TemplateResponse(
             request=request,

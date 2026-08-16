@@ -140,7 +140,10 @@ class ProgressService:
         # 2. Open points from Rule Engine
         consolidated.extend(rule_open_points)
 
-        # 3. Document requests
+        # 3. Document requests. Lief bisher immer über eine leere Liste — es gab
+        # kein Formular, das `dokumentenanforderung` füllen konnte (Karte #316).
+        # Das Ziel ist die eigene Unterlagen-Seite, nicht die Stammdaten: dort
+        # steht das Feld gar nicht.
         for doc in auftrag.dokumentenanforderung:
             if doc.status in ("angefordert", "offen"):
                 consolidated.append(OffenerPunktItem(
@@ -148,7 +151,7 @@ class ProgressService:
                     text=f"Ausstehendes Dokument: '{doc.bezeichnung}' (Status: {doc.status})",
                     status="offen",
                     quelle="dokument",
-                    ziel_url=f"/auftrag/{auftrag.id}/stammdaten"
+                    ziel_url=f"/auftrag/{auftrag.id}/unterlagen"
                 ))
 
         return consolidated
