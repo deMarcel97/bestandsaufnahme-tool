@@ -22,25 +22,41 @@ def offene_punkte_page(request: Request, auftrag_id: str):
     objekte = storage.list_objekte(auftrag_id)
     offene_punkte = progress_service.collect_offene_punkte(auftrag, standorte, objekte, [])
 
-    standort_by_id = {s.id: s.bezeichnung for s in standorte}
+    standort_by_id = {s.id: s for s in standorte}
 
-    # Group open points hierarchically: standort -> hardware/komponente -> items
-    grouped: dict = {}
+    # Hierarchische Struktur: Standort -> Thema/Baustein -> Punkte
+    standort_groups = {}
     for s in standorte:
-        grouped[s.bezeichnung] = {}
-    grouped["Allgemein / Unternehmenskontext"] = {}
+        standort_groups[s.id] = {
+            "id": s.id,
+            "name": s.bezeichnung,
+            "typ": "standort",
+            "themen": {},
+            "total_count": 0
+        }
+
+    allgemein_id = "_allgemein"
+    standort_groups[allgemein_id] = {
+        "id": allgemein_id,
+        "name": "Standortübergreifend / Allgemein",
+        "typ": "allgemein",
+        "themen": {},
+        "total_count": 0
+    }
 
     for op in offene_punkte:
-        matched_sto = standort_by_id.get(op.standort_id)
-        if not matched_sto:
+        target_sto_id = None
+        if op.standort_id and op.standort_id in standort_groups:
+            target_sto_id = op.standort_id
+        else:
             for s in standorte:
-                if s.bezeichnung in op.text or s.id in op.ziel_url:
-                    matched_sto = s.bezeichnung
+                if s.bezeichnung in op.text or s.id in (op.ziel_url or ""):
+                    target_sto_id = s.id
                     break
-        if not matched_sto:
-            matched_sto = "Allgemein / Unternehmenskontext"
+        if not target_sto_id:
+            target_sto_id = allgemein_id
 
-        # Determine hardware/component label
+        # Themenbereich / Baustein-Label ermitteln
         comp_label = None
         if op.objekt_typ:
             comp_label = _hardware_label(op.objekt_typ)
@@ -62,18 +78,42 @@ def offene_punkte_page(request: Request, auftrag_id: str):
 
         if not comp_label:
             if op.quelle == "struktur_fehlt":
-                comp_label = "Fehlende Erfassung"
+                comp_label = "Fehlende Bausteine"
             elif op.quelle == "dokument":
-                comp_label = "Dokumentenanforderungen"
+                comp_label = "Dokumente & Unterlagen"
             elif "Firewall" in op.text or "firewall" in (op.ziel_url or ""):
                 comp_label = "Firewall-System"
             else:
                 comp_label = "Standort-Stammdaten & Anbindung"
 
-        if comp_label not in grouped[matched_sto]:
-            grouped[matched_sto][comp_label] = []
+        sto_entry = standort_groups[target_sto_id]
+        sto_entry["total_count"] += 1
+        if comp_label not in sto_entry["themen"]:
+            sto_entry["themen"][comp_label] = {
+                "name": comp_label,
+                "count": 0,
+                "punkte": []
+            }
+        sto_entry["themen"][comp_label]["punkte"].append(op)
+        sto_entry["themen"][comp_label]["count"] += 1
 
-        grouped[matched_sto][comp_label].append(op)
+    # Nur befüllte Gruppen weitergeben
+    grouped_standorte = []
+    for s in standorte:
+        g = standort_groups[s.id]
+        if g["total_count"] > 0:
+            g["themen_list"] = list(g["themen"].values())
+            grouped_standorte.append(g)
+
+    g_allg = standort_groups[allgemein_id]
+    if g_allg["total_count"] > 0:
+        g_allg["themen_list"] = list(g_allg["themen"].values())
+        grouped_standorte.append(g_allg)
+
+    # Abwärtskompatibles grouped_punkte dict
+    grouped_punkte = {}
+    for g in grouped_standorte:
+        grouped_punkte[g["name"]] = {t["name"]: t["punkte"] for t in g["themen_list"]}
 
     sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
@@ -82,7 +122,8 @@ def offene_punkte_page(request: Request, auftrag_id: str):
         context={
             "auftrag": auftrag,
             "offene_punkte": offene_punkte,
-            "grouped_punkte": grouped,
+            "grouped_standorte": grouped_standorte,
+            "grouped_punkte": grouped_punkte,
             "active_tab": "offene_punkte",
             "active_nav": "auftrag",
             **sidebar_context
