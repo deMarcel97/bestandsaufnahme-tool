@@ -49,7 +49,9 @@
         <thead>
           <tr>
             <th>Bezeichnung</th>
-            <th style="width:110px;">Priorität</th>
+            <th style="width:100px;">Priorität</th>
+            <th style="width:100px;">Dringlichkeit</th>
+            <th style="width:150px;">Förderprogramm</th>
             <th class="col-right" style="width:130px;">Investition</th>
             <th class="col-right" style="width:120px;">Monatlich</th>
             <th style="width:130px;">Zeitaufwand</th>
@@ -65,7 +67,9 @@
               {% if m.beschreibung %}<div class="cell-sub">{{ m.beschreibung }}</div>{% endif %}
             </td>
             <td class="top"><span class="badge badge-{{ m.prioritaet }}">{{ m.prioritaet }}</span></td>
-            <td class="top col-right tnum" colspan="2">
+            <td class="top"><span class="badge badge-{{ m.dringlichkeit }}">{{ m.dringlichkeit }}</span></td>
+            <td class="top">{{ m.foerderprogramm if m.foerderprogramm else "–" }}</td>
+            <td class="top col-right tnum">
               <form action="/auftrag/{{ auftrag.id }}/massnahme/{{ m.id }}/kosten" method="POST" class="kosten-inline-form">
                 <label class="cell-sub">Investition €<input type="number" step="0.01" name="investitionskosten" value="{{ '%.2f'|format(m.investitionskosten) }}" class="form-control form-control-sm"></label>
                 <label class="cell-sub">Monatlich €<input type="number" step="0.01" name="monatliche_kosten" value="{{ '%.2f'|format(m.monatliche_kosten) }}" class="form-control form-control-sm"></label>
@@ -145,6 +149,14 @@
             </select>
           </div>
           <div class="form-group">
+            <label>Dringlichkeit</label>
+            <select name="dringlichkeit" class="form-control">
+              <option value="hoch">hoch</option>
+              <option value="mittel" selected>mittel</option>
+              <option value="niedrig">niedrig</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label>Status</label>
             <select name="status" class="form-control">
               <option value="vorgeschlagen" selected>vorgeschlagen</option>
@@ -153,6 +165,10 @@
               <option value="verworfen">verworfen</option>
             </select>
           </div>
+        </div>
+        <div class="form-group">
+          <label>Förderprogramm</label>
+          <input type="text" name="foerderprogramm" class="form-control" placeholder="z. B. Mittelstand Digital, BSI-Förderung">
         </div>
         <div class="form-row">
           <div class="form-group">

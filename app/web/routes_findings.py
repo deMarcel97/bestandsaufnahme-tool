@@ -53,9 +53,11 @@ def _build_massnahme_from_finding(f: Finding, existing_m_ids: list[str]) -> Mass
         findings=[f.id],
         stufe=default_stufe,
         prioritaet=f.schweregrad if f.schweregrad in ("hoch", "mittel", "niedrig") else "niedrig",
+        dringlichkeit="mittel",
         investitionskosten=kosten_richtwert,
         zeitaufwand=aufwand_richtwert,
         kosten_quelle=kosten_quelle,
+        foerderprogramm="",
         status="vorgeschlagen"
     )
 
