@@ -65,19 +65,12 @@ def test_deutsches_dezimalkomma_wird_gelesen():
     assert ergebnis[0].monatliche_kosten == 49.90
 
 
-def test_tausenderpunkt_geht_noch_verloren():
-    """Hält den Stand fest, **nicht** das gewünschte Verhalten: `parse_float_german`
-    macht aus „1.249,90" die ungültige Zahl „1.249.90" und fällt still auf 0.0
-    zurück. Beim Bau dieses Parsers aufgefallen, als eigener Fehler auf Karte
-    #319 notiert — er ist älter als #316 und betrifft auch Bandbreiten und
-    SLA-Zeiten am Standort.
-
-    Der Test steht hier, damit der Fehler nicht unbemerkt bleibt: wer #319
-    behebt, sieht ihn fehlschlagen und weiss, dass er hier die Erwartung
-    umdrehen muss."""
+def test_tausenderpunkt_wird_korrekt_geparst():
+    """#319: `parse_float_german` erkennt deutsche Tausenderpunkte bei Beträgen
+    wie „1.249,90" und parst sie korrekt zu 1249.90."""
     form = {"vertrag_bezeichnung_0": "Wartung", "vertrag_monatliche_kosten_0": "1.249,90"}
     ergebnis = parse_unterobjekte(form, "vertrag", Vertrag)
-    assert ergebnis[0].monatliche_kosten == 0.0, "Ist #319 behoben? Dann hier 1249.90 erwarten."
+    assert ergebnis[0].monatliche_kosten == 1249.90
 
 
 def test_leeres_optionales_datum_wird_none_nicht_leerstring():
