@@ -14,6 +14,22 @@ Erfassungswerkzeug für alle Kundengrößen** — vom 5-PC-Betrieb bis zum
 Fragen, die für kleine Kunden offensichtlich irrelevant sind, gehören hinter
 eine `sichtbar_wenn`-Bedingung statt ins Standardformular.
 
+## Lokale Arbeitsnotizen
+
+Laufender Stand und nächste Schritte stehen in `TODO.md` und
+`ARBEITSPROTOKOLL.md` im Ordner `../001_bestandsaufnahme_tool-notizen/`
+(Geschwisterordner dieses Repos) — **absichtlich nicht im Git**, weil das
+Repo öffentlich ist und dort Zwischenstände und laufende Einschätzungen
+stehen, keine fertige Dokumentation.
+
+Fehlt der Ordner, bei Marcel danach fragen — nicht raten und nicht im Repo
+suchen. Nicht zu verwechseln mit der [TODO.md](TODO.md) hier im Repo: die
+behandelt größere strategische Fragen, nicht den Sitzungsfortschritt.
+
+Bei jeder abgeschlossenen Karte kurz nachziehen, nicht erst wenn das
+Kontingent zur Neige geht — ein Limit greift abrupt, ohne dass sich ein
+geplantes „jetzt noch schnell aufschreiben" ausgeht.
+
 ## Live-Server
 
 Das Tool läuft auf einem internen Server (Proxmox-LXC, Debian 13). Die

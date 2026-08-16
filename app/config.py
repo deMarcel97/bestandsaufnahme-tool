@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Kopfzeile der Weboberfläche und im .docx-Export verwendet — und muss beim
 # Release zusammen mit pyproject.toml, README.md und CHANGELOG.md angehoben
 # werden (siehe CLAUDE.md).
-APP_VERSION = "2.7.25"
+APP_VERSION = "2.7.26"
 
 # Nutzdaten (Aufträge, Standorte, Objekte, Findings) liegen lokal im
 # Projektverzeichnis. Im Serverbetrieb muss das Datenverzeichnis dagegen

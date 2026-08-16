@@ -4,6 +4,14 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.26] - 2026-08-16
+
+### Added
+- **Verweis auf lokale Arbeitsnotizen in `CLAUDE.md` (#327)**: `TODO.md` und `ARBEITSPROTOKOLL.md` liegen ab jetzt in `../001_bestandsaufnahme_tool-notizen/`, einem Geschwisterordner ausserhalb der Versionskontrolle — im selben Muster wie der bestehende Verweis auf `deploy/server.local.env`. Grund: Antigravity hatte ein gleichwertiges Protokoll bereits in `scratch/` geführt, das seit #318 gitignored ist und damit weder einen Clone noch den Server noch einen Subagenten im Worktree erreichte.
+
+### Changed
+- **Zwei unabhängig entstandene Arbeits-Manifeste zusammengeführt**: Claude Code und Antigravity hatten je ein eigenes Dokument für Marcels Arbeitsvorlieben angelegt. Beide lagen zufällig schon am selben externen Ort; zusammengeführt in `ARBEITSWEISE.md` (nicht Teil dieses Repos), ergänzt um die QA-Subagent-Pflicht und `Closes #<id>` im PR-Body aus dem Antigravity-Manifest.
+
 ## [2.7.25] - 2026-08-16
 
 ### Fixed
