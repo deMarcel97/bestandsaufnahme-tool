@@ -4,6 +4,12 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.15] - 2026-08-16
+
+### Added
+- **`HANDOFF_antigravity.md` (#320)**: Fahrplan für die Weiterarbeit in Antigravity (`agy`). Er wiederholt `CLAUDE.md` nicht, sondern nennt, was für diese Umgebung eigen ist — Superthread und GitHub sind dort in `~/.gemini/config/mcp_config.json` bereits als MCP-Server eingetragen, und `agy --print-timeout` verlangt eine Zeiteinheit (`90s`, nicht `90`). Letzteres sah ohne Meldung wie ein hängender Login aus und hat am 15.08.2026 Stunden gekostet.
+- **Reihenfolge der offenen Karten (#320)**: getrennt nach „ohne Rückfrage machbar" (#319, #318) und „erst entscheiden lassen" (#311, #314, #315, #312). Karten der zweiten Gruppe gehören nicht in eine Sitzung, in der gerade niemand mitliest — sie enden sonst in einer Umsetzung, die anschliessend verworfen wird.
+
 ## [2.7.14] - 2026-08-16
 
 ### Added

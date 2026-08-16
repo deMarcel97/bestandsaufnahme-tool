@@ -3,6 +3,11 @@
 Diese Datei ist der Einstieg, wenn eine Sitzung neu beginnt — im Terminal
 (`claude`), in der Desktop-App oder mit einem anderen Werkzeug.
 
+Wer in **Antigravity** (`agy`) arbeitet, liest zusätzlich
+[HANDOFF_antigravity.md](HANDOFF_antigravity.md): dort stehen die Eigenheiten
+dieser Umgebung und eine Reihenfolge der offenen Karten, getrennt nach „ohne
+Rückfrage machbar" und „braucht erst eine Entscheidung".
+
 **Sie wiederholt bewusst nicht, was anderswo steht.** Arbeitsregeln stehen in
 [CLAUDE.md](CLAUDE.md), das Projekt in [README.md](README.md), die Historie in
 [CHANGELOG.md](CHANGELOG.md), der Aufgabenstand auf dem Superthread-Board. Eine
