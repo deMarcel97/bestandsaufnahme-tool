@@ -13,3 +13,5 @@ dist/
 # Netzadressen und Zugangsdaten bleiben deshalb ausserhalb von Git.
 *.local.env
 
+# Temporäre Entwicklerskripte und Arbeitsdateien
+scratch/

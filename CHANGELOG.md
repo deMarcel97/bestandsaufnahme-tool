@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.16] - 2026-08-16
+
+### Fixed
+- **`scratch/` in `.gitignore` aufgenommen (#318)**: Verhindert, dass temporäre Hilfsskripte oder Arbeitsdateien versehentlich im öffentlichen Git-Repository mitversioniert werden.
+
 ## [2.7.15] - 2026-08-16
 
 ### Added
