@@ -111,4 +111,4 @@ function toggleFullscreenTopology(cardId) {
 }
 
 document.addEventListener("DOMContentLoaded", initMermaidTopology);
-document.body.addEventListener("htmx:afterSwap", initMermaidTopology);
+document.addEventListener("htmx:afterSwap", initMermaidTopology);
