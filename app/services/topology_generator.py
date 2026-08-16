@@ -426,9 +426,9 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
         primary_target = top_targets[0]
         for wan_nid, is_backup in wan_nodes:
             if is_backup:
-                lines.append(f"    {wan_nid} -.->|Backup WAN| {primary_target}")
+                lines.append(f'    {wan_nid} -.->|"Backup WAN"| {primary_target}')
             else:
-                lines.append(f"    {wan_nid} ==>|WAN Uplink| {primary_target}")
+                lines.append(f'    {wan_nid} ==>|"WAN Uplink"| {primary_target}')
 
     # Firewall -> Core-Switches / Access-Switches
     if fw_nodes:
@@ -436,38 +436,38 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
         if sw_targets:
             for fw_nid in fw_nodes:
                 for sw_nid in sw_targets:
-                    lines.append(f"    {fw_nid} ==>|Trunk / LAG 10G| {sw_nid}")
+                    lines.append(f'    {fw_nid} ==>|"Trunk / LAG 10G"| {sw_nid}')
         elif server_nodes:
             for fw_nid in fw_nodes:
                 for srv_nid in server_nodes.values():
-                    lines.append(f"    {fw_nid} -->|Server LAN| {srv_nid}")
+                    lines.append(f'    {fw_nid} -->|"Server LAN"| {srv_nid}')
         elif client_nodes:
             for fw_nid in fw_nodes:
                 for cli_nid in client_nodes:
-                    lines.append(f"    {fw_nid} -->|LAN 1G| {cli_nid}")
+                    lines.append(f'    {fw_nid} -->|"LAN 1G"| {cli_nid}')
 
     # Core-Switches -> Access-Switches
     if core_nodes and access_nodes:
         for c_nid in core_nodes:
             for a_nid in access_nodes:
-                lines.append(f"    {c_nid} ==>|Trunk Uplink| {a_nid}")
+                lines.append(f'    {c_nid} ==>|"Trunk Uplink"| {a_nid}')
 
     # Switching -> Server
     active_switch_nodes = core_nodes or access_nodes or fw_nodes
     if active_switch_nodes and server_nodes:
         sw_primary = active_switch_nodes[0]
         for srv_nid in server_nodes.values():
-            lines.append(f"    {sw_primary} ==>|Server Uplink (10G/LAG)| {srv_nid}")
+            lines.append(f'    {sw_primary} ==>|"Server Uplink (10G/LAG)"| {srv_nid}')
 
     # Server -> Storage
     if server_nodes and storage_nodes:
         for srv_nid in server_nodes.values():
             for sto_nid in storage_nodes:
-                lines.append(f"    {srv_nid} -.->|SAN / iSCSI / NFS| {sto_nid}")
+                lines.append(f'    {srv_nid} -.->|"SAN / iSCSI / NFS"| {sto_nid}')
     elif active_switch_nodes and storage_nodes:
         sw_primary = active_switch_nodes[0]
         for sto_nid in storage_nodes:
-            lines.append(f"    {sw_primary} -->|Storage VLAN / iSCSI| {sto_nid}")
+            lines.append(f'    {sw_primary} -->|"Storage VLAN / iSCSI"| {sto_nid}')
 
     # Server -> VMs
     if vms:
@@ -481,23 +481,23 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
                 target_srv_nid = active_switch_nodes[0]
             
             if target_srv_nid:
-                lines.append(f"    {target_srv_nid} -->|Hypervisor Host| {vm_nid}")
+                lines.append(f'    {target_srv_nid} -->|"Hypervisor Host"| {vm_nid}')
 
     # Switching -> WLAN Access Points
     ap_parent_switches = access_nodes or core_nodes or fw_nodes
     if ap_parent_switches and ap_nodes:
         ap_parent = ap_parent_switches[0]
         for ap_nid, has_gast in ap_nodes:
-            lines.append(f"    {ap_parent} -->|PoE+ / 1G| {ap_nid}")
+            lines.append(f'    {ap_parent} -->|"PoE+ / 1G"| {ap_nid}')
             if has_gast:
-                lines.append(f"    {ap_nid} -.->|WLAN Gast-SSID| gast_clients")
+                lines.append(f'    {ap_nid} -.->|"WLAN Gast-SSID"| gast_clients')
 
     # Switching / AP -> Clients
     cli_parent_switches = access_nodes or core_nodes or fw_nodes
     if cli_parent_switches and client_nodes:
         cli_parent = cli_parent_switches[0]
         for cli_nid in client_nodes:
-            lines.append(f"    {cli_parent} -->|LAN 1G| {cli_nid}")
+            lines.append(f'    {cli_parent} -->|"LAN 1G"| {cli_nid}')
 
     # USV -> Infrastructure
     if usv_nodes:
@@ -505,7 +505,7 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
         usv_target = (core_nodes or list(server_nodes.values()) or access_nodes or fw_nodes)
         if usv_target:
             target_id = usv_target[0]
-            lines.append(f"    {usv_primary} -.->|USV-Schutz| {target_id}")
+            lines.append(f'    {usv_primary} -.->|"USV-Schutz"| {target_id}')
 
     return "\n".join(lines)
 

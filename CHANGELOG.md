@@ -4,6 +4,13 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.25] - 2026-08-16
+
+### Fixed
+- **Mermaid-Topologie Edge-Escaping & HTMX Event Listener**:
+  - Sämtliche Verbindungspfeil-Labels im Mermaid-Diagramm (`topology_generator.py`) mit Anführungszeichen abgesichert, um Syntaxfehler bei Sonderzeichen (wie Klammern `(10G/LAG)`) zu verhindern.
+  - Event-Listener `htmx:afterSwap` in `topology.js` sicher an `document` gebunden.
+
 ## [2.7.24] - 2026-08-16
 
 ### Added
