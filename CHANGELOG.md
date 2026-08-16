@@ -4,6 +4,14 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.12] - 2026-08-16
+
+### Fixed
+- **`HANDOFF_claude_code.md` beschrieb ein Projekt, das es nicht mehr gibt (#317)**: Die Datei hatte den Stand vom 13.08.2026 — „Storage als YAML/**JSON**-Dateien" (es ist YAML, derselbe Fehler wie in `TODO.md` bei #312), „54 Tests" (es sind 171), „10 Bausteine" (es sind 13 Schemas), offene Punkte als `#9`/`#10`/`#11` nach einer Zählung, die durch die Superthread-Karten-IDs abgelöst wurde. Beim Beginn einer neuen Sitzung ist das die Datei, die zuerst gelesen wird; sie führte damit als Erstes in die Irre.
+
+### Changed
+- **Der Handoff verweist jetzt, statt zu wiederholen (#317)**: Arbeitsregeln stehen in `CLAUDE.md`, das Projekt im README, der Aufgabenstand auf dem Board — eine Übergabe, die all das dupliziert, veraltet innerhalb einer Woche, und genau das war passiert. Übrig bleibt, was nirgends sonst steht: wo gearbeitet wird (Hauptcheckout statt Worktree, weil der Dev-Server nur diesen bedient), die Architektur in fünf Sätzen, die Fallstricke aus #305/#308, #310, #311 und #316 — und der Hinweis, dass der Gesprächsverlauf einer Sitzung nicht mitwandert, weil er unter einem Pfad-Slug des Arbeitsverzeichnisses liegt.
+
 ## [2.7.11] - 2026-08-16
 
 ### Fixed
