@@ -21,13 +21,25 @@ class VertraulichkeitsStufe(IntEnum):
     INTERN = 3
 
     @classmethod
-    def parse(cls, val: str) -> "VertraulichkeitsStufe":
+    def parse(cls, val: str, default: "VertraulichkeitsStufe") -> "VertraulichkeitsStufe":
+        """Wandelt eine gespeicherte Stufe um; bei leerem oder unbekanntem Wert
+        greift `default`.
+
+        Der Vorgabewert ist bewusst verpflichtend und steht nicht hier fest: die
+        schützende Richtung ist nicht überall dieselbe. Für einen erfassten
+        Datensatz ist INTERN die sichere Annahme — er fliegt damit aus
+        Kundenunterlagen heraus. Für das Ziel eines Exports ist es umgekehrt
+        ANONYMISIERT, denn dort gibt die niedrigste Stufe am wenigsten preis.
+        Ein gemeinsamer Vorgabewert wäre in einer der beiden Richtungen immer
+        die riskante Wahl (Karte #310)."""
         s = str(val or "").strip().lower()
         if s == "anonymisiert":
             return cls.ANONYMISIERT
-        elif s == "intern":
+        if s == "kundentauglich":
+            return cls.KUNDENTAUGLICH
+        if s == "intern":
             return cls.INTERN
-        return cls.KUNDENTAUGLICH
+        return default
 
 class ExporterService:
     def _filter_and_evaluate(
@@ -37,7 +49,7 @@ class ExporterService:
         objekte: List[TechnikObjekt],
         ziel_vertraulichkeit: str
     ):
-        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit)
+        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit, VertraulichkeitsStufe.ANONYMISIERT)
 
         if target_level == VertraulichkeitsStufe.ANONYMISIERT:
             filtered_objekte = [copy.deepcopy(o) for o in objekte]
@@ -58,11 +70,11 @@ class ExporterService:
         else:
             filtered_objekte = [
                 o for o in objekte
-                if VertraulichkeitsStufe.parse(getattr(o, "vertraulichkeit", "kundentauglich")) <= target_level
+                if VertraulichkeitsStufe.parse(getattr(o, "vertraulichkeit", "intern"), VertraulichkeitsStufe.INTERN) <= target_level
             ]
             filtered_standorte = [
                 s for s in standorte
-                if VertraulichkeitsStufe.parse(getattr(s, "vertraulichkeit", "kundentauglich")) <= target_level
+                if VertraulichkeitsStufe.parse(getattr(s, "vertraulichkeit", "intern"), VertraulichkeitsStufe.INTERN) <= target_level
             ]
             auftrag_copy = auftrag
 
@@ -111,17 +123,17 @@ class ExporterService:
         standorte: List[Standort],
         objekte: List[TechnikObjekt],
         massnahmen: List[Massnahme],
-        ziel_vertraulichkeit: str = "kundentauglich",
+        ziel_vertraulichkeit: str,
         findings: Optional[List[Finding]] = None
     ) -> str:
         auftrag_copy, filtered_standorte, filtered_objekte, filtered_bewertung = self._filter_and_evaluate(
             auftrag, standorte, objekte, ziel_vertraulichkeit
         )
-        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit)
+        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit, VertraulichkeitsStufe.ANONYMISIERT)
         filtered_findings = self._filter_findings(auftrag.id, filtered_standorte, filtered_objekte, target_level, findings)
 
         md_text = report_builder.build_analysebericht(
-            auftrag_copy, filtered_standorte, filtered_objekte, massnahmen, filtered_bewertung, filtered_findings, ziel_vertraulichkeit
+            auftrag_copy, filtered_standorte, filtered_objekte, massnahmen, filtered_bewertung, filtered_findings, ziel_vertraulichkeit=ziel_vertraulichkeit
         )
         return md_text.replace("[[GRAFIK:executive_summary]]", "*(Visualisierung der Executive Summary im Word-Export)*")
 
@@ -131,17 +143,17 @@ class ExporterService:
         standorte: List[Standort],
         objekte: List[TechnikObjekt],
         massnahmen: List[Massnahme],
-        ziel_vertraulichkeit: str = "kundentauglich",
+        ziel_vertraulichkeit: str,
         findings: Optional[List[Finding]] = None
     ) -> io.BytesIO:
         auftrag_copy, filtered_standorte, filtered_objekte, filtered_bewertung = self._filter_and_evaluate(
             auftrag, standorte, objekte, ziel_vertraulichkeit
         )
-        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit)
+        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit, VertraulichkeitsStufe.ANONYMISIERT)
         filtered_findings = self._filter_findings(auftrag.id, filtered_standorte, filtered_objekte, target_level, findings)
 
         md_text = report_builder.build_analysebericht(
-            auftrag_copy, filtered_standorte, filtered_objekte, massnahmen, filtered_bewertung, filtered_findings, ziel_vertraulichkeit
+            auftrag_copy, filtered_standorte, filtered_objekte, massnahmen, filtered_bewertung, filtered_findings, ziel_vertraulichkeit=ziel_vertraulichkeit
         )
 
         if "[[GRAFIK:executive_summary]]" not in md_text:
@@ -250,8 +262,8 @@ class ExporterService:
         output.seek(0)
         return output
 
-    def export_massnahmenkatalog_md(self, massnahmen: List[Massnahme], ziel_vertraulichkeit: str = "kundentauglich") -> str:
-        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit)
+    def export_massnahmenkatalog_md(self, massnahmen: List[Massnahme], ziel_vertraulichkeit: str) -> str:
+        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit, VertraulichkeitsStufe.ANONYMISIERT)
         filtered_massnahmen = massnahmen if ziel_vertraulichkeit else massnahmen
         lines = []
         lines.append("# Maßnahmenkatalog\n")
@@ -275,8 +287,8 @@ class ExporterService:
 
         return "\n".join(lines)
 
-    def export_massnahmenkatalog_csv(self, massnahmen: List[Massnahme], ziel_vertraulichkeit: str = "kundentauglich") -> str:
-        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit)
+    def export_massnahmenkatalog_csv(self, massnahmen: List[Massnahme], ziel_vertraulichkeit: str) -> str:
+        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit, VertraulichkeitsStufe.ANONYMISIERT)
         filtered_massnahmen = massnahmen if ziel_vertraulichkeit else massnahmen
         output = io.StringIO()
         writer = csv.writer(output, delimiter=";")
@@ -293,12 +305,13 @@ class ExporterService:
         findings: List[Finding],
         massnahmen: List[Massnahme],
         bewertung: Optional[GesamtBewertung] = None,
-        ziel_vertraulichkeit: str = "kundentauglich"
+        *,
+        ziel_vertraulichkeit: str
     ) -> str:
         auftrag_copy, filtered_standorte, filtered_objekte, filtered_bewertung = self._filter_and_evaluate(
             auftrag, standorte, objekte, ziel_vertraulichkeit
         )
-        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit)
+        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit, VertraulichkeitsStufe.ANONYMISIERT)
         filtered_findings = self._filter_findings(auftrag.id, filtered_standorte, filtered_objekte, target_level, findings)
 
         lines = []
@@ -359,12 +372,12 @@ class ExporterService:
         objekte: List[TechnikObjekt],
         findings: List[Finding],
         massnahmen: List[Massnahme],
-        ziel_vertraulichkeit: str = "kundentauglich"
+        ziel_vertraulichkeit: str
     ) -> str:
         auftrag_copy, filtered_standorte, filtered_objekte, filtered_bewertung = self._filter_and_evaluate(
             auftrag, standorte, objekte, ziel_vertraulichkeit
         )
-        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit)
+        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit, VertraulichkeitsStufe.ANONYMISIERT)
         filtered_findings = self._filter_findings(auftrag.id, filtered_standorte, filtered_objekte, target_level, findings)
 
         valid_finding_ids = {f.id for f in filtered_findings}
@@ -380,6 +393,9 @@ class ExporterService:
         return json.dumps(data, indent=2, ensure_ascii=False)
 
     def _is_accessible(self, item_vertraulichkeit: str, target_vertraulichkeit: str) -> bool:
-        return VertraulichkeitsStufe.parse(item_vertraulichkeit) <= VertraulichkeitsStufe.parse(target_vertraulichkeit)
+        return (
+            VertraulichkeitsStufe.parse(item_vertraulichkeit, VertraulichkeitsStufe.INTERN)
+            <= VertraulichkeitsStufe.parse(target_vertraulichkeit, VertraulichkeitsStufe.ANONYMISIERT)
+        )
 
 exporter_service = ExporterService()

@@ -4,6 +4,15 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.11] - 2026-08-16
+
+### Fixed
+- **Rückfallwerte der Vertraulichkeit wählen jetzt die schützende Stufe (#310)**: Seit #302 gilt „intern" als Vorgabe — die Freigabe für Kundenunterlagen soll eine bewusste Entscheidung sein. Der Export folgte dem noch nicht: `getattr(o, "vertraulichkeit", "kundentauglich")` in `app/services/exporter.py` nahm im Zweifel die freizügigere Stufe an. Umgestellt auf `"intern"`.
+- **Der eigentliche Rückfallwert saß eine Ebene tiefer (#310)**: `VertraulichkeitsStufe.parse()` gab für **jeden** unbekannten Wert `KUNDENTAUGLICH` zurück. Anders als der `getattr`-Vorgabewert war das erreichbar — ein Tippfehler in einer YAML-Datei (`vertraulichkeit: intren`) hätte den Datensatz in Kundenunterlagen befördert. `parse()` verlangt den Rückfallwert jetzt als Argument, und die Aufrufstellen setzen ihn je nach Richtung: für einen erfassten Datensatz `INTERN` (fliegt aus Kundenunterlagen heraus), für das Ziel eines Exports `ANONYMISIERT` (gibt am wenigsten preis). Ein gemeinsamer Vorgabewert wäre in einer der beiden Richtungen immer die riskante Wahl gewesen — beim Exportziel, das als Adressparameter aus der URL kommt, hätte `INTERN` einen vollständigen internen Bericht ausgeliefert.
+
+### Changed
+- **`ziel_vertraulichkeit` ist keine optionale Angabe mehr (#310)**: Die stillen Vorgabewerte `= "kundentauglich"` in sechs Signaturen von `exporter.py` und in `report_builder.build_analysebericht()` sind entfallen; wo die Parameterreihenfolge es erzwingt, ist die Angabe benannt zu übergeben. Ein vergessener Aufruf fällt damit sofort auf, statt still die freizügigere Stufe zu wählen — `tests/test_exporter.py::test_csv_exporter` war genau so ein Aufrufer.
+
 ## [2.7.10] - 2026-08-16
 
 ### Fixed
