@@ -57,8 +57,13 @@ def parse_unterobjekte(form_data, praefix: str, modell: Type[T]) -> list[T]:
 
     Leere Zeilen fallen heraus: wer ein Unterformular hinzufügt und dann doch
     nichts einträgt, soll keinen leeren Datensatz hinterlassen. Als „leer" gilt
-    eine Zeile, in der kein einziges Feld einen Wert trägt — die Vorgabewerte
-    des Modells (etwa `status: "offen"`) zählen dabei nicht als Eingabe.
+    eine Zeile, in der kein einziges Feld vom Vorgabewert des Modells abweicht.
+
+    Der Vergleich gegen den Vorgabewert ist der Kern, nicht nur gegen den leeren
+    String: ein `<select>` schickt **immer** einen Wert mit, auch für eine
+    unberührte Zeile. Ein `status`-Feld mit der Vorauswahl „offen" hätte sonst
+    jede leere Zeile als Eingabe gelten lassen, und die Prüfung wäre wirkungslos
+    gewesen (beim Bau der Unterlagen-Seite aufgefallen, Karte #316).
     """
     felder = list(modell.model_fields.keys())
     ergebnis: list[T] = []
@@ -77,12 +82,12 @@ def parse_unterobjekte(form_data, praefix: str, modell: Type[T]) -> list[T]:
             if typ is float:
                 zahl = parse_float_german(roh)
                 werte[feld] = zahl
-                if zahl:
+                if zahl != info.default:
                     etwas_eingetragen = True
             elif typ is int:
                 zahl = parse_int_german(roh, 0)
                 werte[feld] = zahl
-                if zahl:
+                if zahl != info.default:
                     etwas_eingetragen = True
             else:
                 # Optionale Textfelder (Datumsangaben) bleiben leer statt "" zu
@@ -92,7 +97,7 @@ def parse_unterobjekte(form_data, praefix: str, modell: Type[T]) -> list[T]:
                     werte[feld] = None
                     continue
                 werte[feld] = roh
-                if roh:
+                if roh and roh != info.default:
                     etwas_eingetragen = True
 
         if etwas_eingetragen:
