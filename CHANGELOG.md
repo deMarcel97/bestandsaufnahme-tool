@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.17] - 2026-08-16
+
+### Fixed
+- **Zahlparser unterstützt deutsche Tausenderpunkte und internationale Formate (#319)**: `parse_float_german()` und `parse_int_german()` erkennen Tausenderpunkte in Beträgen und Mengenangaben (z. B. `"1.249,90"`, `"1.000.000"`, `"10.000"`), ohne Dezimalzahlen wie `"1.5"` oder `"0.123"` zu verfälschen. Verhindert stillen Datenverlust auf `0.0` bei Verträgen, Bandbreiten, SLA-Zeiten und Bausteinfeldern.
+
 ## [2.7.16] - 2026-08-16
 
 ### Fixed

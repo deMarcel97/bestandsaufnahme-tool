@@ -309,3 +309,25 @@ def test_1_14_german_number_parsing():
     assert parse_float_german("invalid", default=0.0) == 0.0
     assert parse_int_german("25,0") == 25
     assert parse_int_german("invalid", default=0) == 0
+
+    # #319: Tausenderpunkte und internationale Formate
+    assert parse_float_german("1.249,90") == 1249.90
+    assert parse_float_german("12.345,67") == 12345.67
+    assert parse_float_german("1.000.000,50") == 1000000.50
+    assert parse_float_german("1.000.000") == 1000000.0
+    assert parse_float_german("1.000") == 1000.0
+    assert parse_float_german("10.000") == 10000.0
+    assert parse_float_german("1.249") == 1249.0
+    assert parse_float_german("-1.249,90") == -1249.90
+    assert parse_float_german(" 1 249,90 ") == 1249.90
+    assert parse_float_german("1,249.90") == 1249.90
+    assert parse_float_german("1249.90") == 1249.90
+    assert parse_float_german("1.5") == 1.5
+    assert parse_float_german("0.123") == 0.123
+    assert parse_float_german("1249.500") == 1249.500
+
+    assert parse_int_german("1.249") == 1249
+    assert parse_int_german("1.249,90") == 1249
+    assert parse_int_german("1.000.000") == 1000000
+    assert parse_int_german("100") == 100
+
