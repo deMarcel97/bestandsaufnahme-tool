@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}Unternehmenskontext - {{ auftrag.bezeichnung }}{% endblock %}
+
+{% block content %}
+<div class="layout-sidebar">
+  {% include "_sidebar.html" %}
+
+  <main class="workspace">
+    <div class="page-head">
+      <div>
+        <div class="crumbs eyebrow">
+          <span>{{ auftrag.projekt_nummer }}</span><span class="sep">/</span><span>{{ auftrag.kunde }}</span>
+        </div>
+        <h1>Unternehmenskontext</h1>
+        <div class="meta-line"><span>{{ auftrag.bezeichnung }}</span></div>
+      </div>
+    </div>
+
+    {% include "_konflikt_banner.html" %}
+
+    <form action="/auftrag/{{ auftrag.id }}/unternehmenskontext" method="POST">
+      {# Stand, den dieses Formular beim Laden gesehen hat — siehe Karte #308. #}
+      <input type="hidden" name="version" value="{{ auftrag.version }}">
+
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>Unternehmenskontext</h2>
+        </div>
+        <div class="form-group">
+          <label>Kerngeschäft</label>
+          <textarea name="kerngeschaeft" class="form-control">{{ auftrag.unternehmenskontext.kerngeschaeft }}</textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Standorte des Kunden</label>
+            <input type="number" name="anzahl_standorte_kunde" value="{{ auftrag.unternehmenskontext.anzahl_standorte_kunde }}" class="form-control" min="1">
+          </div>
+          <div class="form-group">
+            <label>IT-Abteilung vorhanden?</label>
+            <select name="it_abteilung_vorhanden" id="it_abteilung_vorhanden" class="form-control" onchange="toggleEmpfehlungen()">
+              <option value="ja" {% if auftrag.unternehmenskontext.it_abteilung_vorhanden == 'ja' %}selected{% endif %}>Ja</option>
+              <option value="nein" {% if auftrag.unternehmenskontext.it_abteilung_vorhanden == 'nein' %}selected{% endif %}>Nein</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Mitarbeiter Gesamt</label>
+            <input type="number" name="anzahl_mitarbeiter_gesamt" value="{{ auftrag.unternehmenskontext.anzahl_mitarbeiter_gesamt or '' }}" class="form-control">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>IT-Mitarbeiter</label>
+            <input type="number" name="anzahl_it_mitarbeiter" value="{{ auftrag.unternehmenskontext.anzahl_it_mitarbeiter or '' }}" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>IT-Nutzer</label>
+            <input type="number" name="anzahl_it_nutzer" value="{{ auftrag.unternehmenskontext.anzahl_it_nutzer or '' }}" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Geschäftszeiten Tage</label>
+            <select name="geschaeftszeiten_tage" id="geschaeftszeiten_tage" class="form-control" onchange="toggleEmpfehlungen()">
+              <option value="Montag bis Freitag" {% if auftrag.unternehmenskontext.geschaeftszeiten_tage == 'Montag bis Freitag' %}selected{% endif %}>Montag bis Freitag</option>
+              <option value="Montag bis Samstag" {% if auftrag.unternehmenskontext.geschaeftszeiten_tage == 'Montag bis Samstag' %}selected{% endif %}>Montag bis Samstag</option>
+              <option value="Montag bis Sonntag" {% if auftrag.unternehmenskontext.geschaeftszeiten_tage == 'Montag bis Sonntag' %}selected{% endif %}>Montag bis Sonntag</option>
+              <option value="24/7" {% if auftrag.unternehmenskontext.geschaeftszeiten_tage == '24/7' %}selected{% endif %}>24/7</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row" id="geschaeftszeiten_zeit_row">
+          <div class="form-group">
+            <label>Geschäftszeiten Von</label>
+            <input type="time" name="geschaeftszeiten_von" value="{{ auftrag.unternehmenskontext.geschaeftszeiten_von }}" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Geschäftszeiten Bis</label>
+            <input type="time" name="geschaeftszeiten_bis" value="{{ auftrag.unternehmenskontext.geschaeftszeiten_bis }}" class="form-control">
+          </div>
+          <div class="form-group"></div>
+        </div>
+        <div class="alert alert-info" id="it_dienstleister_hinweis" style="display:{{ 'flex' if auftrag.unternehmenskontext.empfehlung_it_dienstleister else 'none' }}; margin-bottom: 10px;">
+          <strong>Empfehlung</strong>
+          <span>Da keine interne IT-Abteilung vorhanden ist, sollte ein externer IT-Dienstleister (Managed Services) einbezogen werden.</span>
+        </div>
+        <div class="alert alert-info" id="rufbereitschaft_hinweis" style="display:{{ 'flex' if auftrag.unternehmenskontext.empfehlung_rufbereitschaft else 'none' }};">
+          <strong>Empfehlung</strong>
+          <span>Bei Geschäftszeiten 24/7 sollte geprüft werden, ob eine Rufbereitschaft hinterlegt werden sollte.</span>
+        </div>
+        <div class="form-group">
+          <label>Allgemeine Hinweise</label>
+          <textarea name="allgemeine_hinweise" class="form-control">{{ auftrag.unternehmenskontext.allgemeine_hinweise }}</textarea>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>Geschäftskritische Systeme &amp; geplante Änderungen</h2>
+        </div>
+        <p class="hint">Fliesst unverändert in den Analysebericht ein — je Zeile Titel und Kurzbeschreibung.</p>
+
+        <div class="subsection" style="border-top:none; padding-top:0; margin-top:0;">
+          <span class="eyebrow">Geschäftskritische Systeme</span>
+          <div id="system_container">
+            {% for aspekt in auftrag.unternehmenskontext.geschaeftskritische_systeme %}
+            <div class="repeat-block" id="system_block_{{ loop.index0 }}">
+              <div class="repeat-head">
+                <h4>System {{ loop.index }}</h4>
+                <button type="button" class="btn btn-sm btn-danger" onclick="entferneAspektZeile('system_block_{{ loop.index0 }}')">Entfernen</button>
+              </div>
+              <div class="form-group">
+                <label>Titel</label>
+                <input type="text" name="system_titel_{{ loop.index0 }}" value="{{ aspekt.titel }}" class="form-control" placeholder="z. B. ERP-System">
+              </div>
+              <div class="form-group">
+                <label>Text</label>
+                <textarea name="system_text_{{ loop.index0 }}" class="form-control">{{ aspekt.text }}</textarea>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <button type="button" class="btn btn-outline" onclick="addAspektZeile('system', 'Geschäftskritisches System')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Weiteres System
+          </button>
+        </div>
+
+        <div class="subsection">
+          <span class="eyebrow">Geplante Änderungen</span>
+          <div id="aenderung_container">
+            {% for aspekt in auftrag.unternehmenskontext.geplante_aenderungen %}
+            <div class="repeat-block" id="aenderung_block_{{ loop.index0 }}">
+              <div class="repeat-head">
+                <h4>Änderung {{ loop.index }}</h4>
+                <button type="button" class="btn btn-sm btn-danger" onclick="entferneAspektZeile('aenderung_block_{{ loop.index0 }}')">Entfernen</button>
+              </div>
+              <div class="form-group">
+                <label>Titel</label>
+                <input type="text" name="aenderung_titel_{{ loop.index0 }}" value="{{ aspekt.titel }}" class="form-control" placeholder="z. B. Serverumzug Q3">
+              </div>
+              <div class="form-group">
+                <label>Text</label>
+                <textarea name="aenderung_text_{{ loop.index0 }}" class="form-control">{{ aspekt.text }}</textarea>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <button type="button" class="btn btn-outline" onclick="addAspektZeile('aenderung', 'Geplante Änderung')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Weitere Änderung
+          </button>
+        </div>
+      </fieldset>
+
+      <div class="form-bar">
+        <button type="submit" class="btn btn-primary">Änderungen speichern</button>
+        <a href="/auftrag/{{ auftrag.id }}/stammdaten" class="btn">Zu den Stammdaten</a>
+        <a href="/auftrag/{{ auftrag.id }}" class="btn">Zurück zum Auftrag</a>
+      </div>
+    </form>
+  </main>
+</div>
+
+<script>
+function toggleEmpfehlungen() {
+  var tageSelect = document.getElementById("geschaeftszeiten_tage");
+  var zeitRow = document.getElementById("geschaeftszeiten_zeit_row");
+  var rufHinweis = document.getElementById("rufbereitschaft_hinweis");
+
+  if (tageSelect && zeitRow) {
+    var ist247 = tageSelect.value === "24/7";
+    zeitRow.style.display = ist247 ? "none" : "grid";
+    if (rufHinweis) rufHinweis.style.display = ist247 ? "flex" : "none";
+  }
+
+  var itSelect = document.getElementById("it_abteilung_vorhanden");
+  var itHinweis = document.getElementById("it_dienstleister_hinweis");
+
+  if (itSelect && itHinweis) {
+    var keineIt = itSelect.value === "nein";
+    itHinweis.style.display = keineIt ? "flex" : "none";
+  }
+}
+document.addEventListener("DOMContentLoaded", toggleEmpfehlungen);
+
+// Geschäftskritische Systeme und geplante Änderungen sind beliebig lange
+// Listen aus Titel+Text (Karte #316). Der Praefix ("system"/"aenderung")
+// steuert sowohl den Container als auch die Feldnamen, die
+// parse_unterobjekte() auf dem Server erwartet.
+var aspektZaehler = {
+  system: document.querySelectorAll('#system_container .repeat-block').length,
+  aenderung: document.querySelectorAll('#aenderung_container .repeat-block').length
+};
+
+function addAspektZeile(praefix, ueberschrift) {
+  var container = document.getElementById(praefix + '_container');
+  var idx = aspektZaehler[praefix]++;
+  var block = document.createElement('div');
+  block.className = 'repeat-block';
+  block.id = praefix + '_block_' + idx;
+  block.innerHTML = `
+    <div class="repeat-head">
+      <h4>${ueberschrift}</h4>
+      <button type="button" class="btn btn-sm btn-danger" onclick="entferneAspektZeile('${praefix}_block_${idx}')">Entfernen</button>
+    </div>
+    <div class="form-group">
+      <label>Titel</label>
+      <input type="text" name="${praefix}_titel_${idx}" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Text</label>
+      <textarea name="${praefix}_text_${idx}" class="form-control"></textarea>
+    </div>
+  `;
+  container.appendChild(block);
+}
+
+function entferneAspektZeile(blockId) {
+  var block = document.getElementById(blockId);
+  if (block) block.remove();
+}
+</script>
+{% endblock %}

@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.18] - 2026-08-16
+
+### Changed
+- **Design-Handoff-Vorlagen aktualisiert (#311)**: `Design änderung/handoff/app/` mit dem aktuellen Stand von `app/templates/` und `app/static/` synchronisiert. Veraltete Einzeldateien (wie `edit.html`) entfernt und die neue Modulstruktur (Beteiligte, Verträge, Unterlagen, Projektrahmen, Stammdaten/Kontext-Trennung) sowie die Dokumentation in `README.md` nachgezogen.
+
 ## [2.7.17] - 2026-08-16
 
 ### Fixed
