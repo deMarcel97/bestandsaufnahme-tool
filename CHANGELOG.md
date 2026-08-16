@@ -4,6 +4,17 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.13] - 2026-08-16
+
+### Fixed
+- **Auswahlfelder werden serverseitig geprüft (#309)**: `create_auftrag()` und `stammdaten_submit()` schrieben `grundlage`, `status` und `vertraulichkeit_default` ungeprüft ins Modell, während `update_auftrag_status()` und `update_auftrag_vertraulichkeit()` längst gegen ihre Listen prüften. Über die Oberfläche liess das Dropdown nichts Ungültiges zu, ein direkter POST schon — der Wert wäre still gespeichert worden und später in Berichten aufgetaucht.
+- **Dieselbe Lücke stand bei `vertraulichkeit` an Standort und Technik-Objekt (#309)**: `routes_standort.py` und `routes_objekt.py` übernahmen den Formularwert an vier Stellen ungeprüft. Das wiegt schwerer als bei `grundlage`, weil an diesem Feld die Filterung beim Export hängt — genau das Szenario aus #310, nur eine Ebene früher.
+
+### Changed
+- **Eine Regel statt zweier Varianten (#309)**: Ein unbekannter Wert wird verworfen, nie gespeichert. Beim Bearbeiten ist der Rückfall der **bereits gespeicherte** Wert — ein fehlerhafter POST überschreibt damit nichts, statt den Datensatz auf einen Vorgabewert zurückzusetzen; die übrigen Felder des Formulars werden trotzdem gespeichert. Nur beim Neuanlegen, wo es nichts zu bewahren gibt, greift der Vorgabewert, bei der Vertraulichkeit also `intern` (die schützende Stufe, #310). Umgesetzt als `gueltiger_wert()` im neuen Modul `app/web/optionen.py`.
+- **Die Auswahllisten haben genau eine Quelle (#309)**: `STATUS_OPTIONS`, `GRUNDLAGE_OPTIONS` und das neue `VERTRAULICHKEIT_OPTIONS` liegen in `app/web/optionen.py`. Die Vertraulichkeitsstufen standen vorher literal in `routes_auftrag.py` **und** in fünf Templates; sie kommen jetzt als Jinja-Global `vertraulichkeit_options`, weil die betroffenen Templates von drei verschiedenen Route-Modulen bedient werden und ein Durchreichen über den Kontext fünf Stellen zum Vergessen geboten hätte. Ein eigenes Modul, weil `templates.py` sonst aus einem Route-Modul importieren müsste und ein Importzyklus entstünde.
+- **Ungenutzte Importe entfernt (#309)**: `Termine`, `Unternehmenskontext` und `parse_float_german` in `routes_auftrag.py` — die Namen kamen nur noch in Kommentartexten vor.
+
 ## [2.7.12] - 2026-08-16
 
 ### Fixed

@@ -9,18 +9,16 @@ from app.services.rule_engine import rule_engine
 from app.services.evaluator import evaluator_service
 from app.web.templates import templates
 from app.web.shared_context import build_sidebar_context
-from app.models.auftrag import Auftrag, Termine, Unternehmenskontext
-from app.utils.number_parser import parse_int_german, parse_float_german
+from app.models.auftrag import Auftrag
+from app.utils.number_parser import parse_int_german
+from app.web.optionen import (
+    STATUS_OPTIONS,
+    GRUNDLAGE_OPTIONS,
+    VERTRAULICHKEIT_OPTIONS,
+    gueltiger_wert,
+)
 
 router = APIRouter()
-
-STATUS_OPTIONS = ["Vorbereitung", "Erfassung", "Konsolidierung", "Bewertung", "Abgabe"]
-
-# Die Auswahl "Grundlage" stand vorher doppelt in den Templates (Anlege-Dialog
-# in list.html und Einstellungen in edit.html) — eine neue Option musste an
-# beiden Stellen nachgetragen werden. Sie kommt jetzt nur noch von hier und
-# wird ueber den Template-Kontext durchgereicht.
-GRUNDLAGE_OPTIONS = ["Ausschreibung", "Angebot", "Analyse", "Rahmenvertrag", "Sonstiges"]
 
 def get_bausteine_labels() -> dict:
     labels = {}
@@ -88,8 +86,13 @@ def create_auftrag(
         jira_url=jira_url if jira_url else None,
         kunde=kunde,
         bezeichnung=bezeichnung,
-        grundlage=grundlage,
-        vertraulichkeit_default=vertraulichkeit_default,
+        # Beim Neuanlegen gibt es noch keinen Wert zu bewahren — hier ist der
+        # Vorgabewert des Formulars der richtige Rückfall. Bei der
+        # Vertraulichkeit ist das "intern", also die schützende Stufe (#310).
+        grundlage=gueltiger_wert(grundlage, GRUNDLAGE_OPTIONS, "Sonstiges"),
+        vertraulichkeit_default=gueltiger_wert(
+            vertraulichkeit_default, VERTRAULICHKEIT_OPTIONS, "intern"
+        ),
         aktive_bausteine=aktive_bausteine
     )
     storage.save_auftrag(auftrag)
@@ -107,7 +110,7 @@ def update_auftrag_status(auftrag_id: str, status: str = Form(...), next: str = 
 @router.post("/auftrag/{auftrag_id}/vertraulichkeit")
 def update_auftrag_vertraulichkeit(auftrag_id: str, vertraulichkeit_default: str = Form(...), next: str = Form(default="")):
     auftrag = storage.load_auftrag(auftrag_id)
-    if auftrag and vertraulichkeit_default in ["intern", "kundentauglich", "anonymisiert"]:
+    if auftrag and vertraulichkeit_default in VERTRAULICHKEIT_OPTIONS:
         auftrag.vertraulichkeit_default = vertraulichkeit_default
         storage.save_auftrag(auftrag)
     redirect_url = next if next in ("/auftrag", f"/auftrag/{auftrag_id}") else f"/auftrag/{auftrag_id}"
@@ -232,9 +235,15 @@ def stammdaten_submit(
     auftrag.kunde = kunde
     auftrag.auftraggeber = auftraggeber
     auftrag.bezeichnung = bezeichnung
-    auftrag.grundlage = grundlage
-    auftrag.status = status
-    auftrag.vertraulichkeit_default = vertraulichkeit_default
+    # Beim Bearbeiten ist der bereits gespeicherte Wert der Rückfall: ein
+    # fehlerhafter POST überschreibt damit nichts, statt den Datensatz auf einen
+    # Vorgabewert zurückzusetzen. Die übrigen Felder des Formulars werden
+    # trotzdem gespeichert (Karte #309).
+    auftrag.grundlage = gueltiger_wert(grundlage, GRUNDLAGE_OPTIONS, auftrag.grundlage)
+    auftrag.status = gueltiger_wert(status, STATUS_OPTIONS, auftrag.status)
+    auftrag.vertraulichkeit_default = gueltiger_wert(
+        vertraulichkeit_default, VERTRAULICHKEIT_OPTIONS, auftrag.vertraulichkeit_default
+    )
     auftrag.aktive_bausteine = aktive_bausteine
 
     # Dates

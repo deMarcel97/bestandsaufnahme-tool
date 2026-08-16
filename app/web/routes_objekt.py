@@ -8,6 +8,7 @@ from app.web.templates import templates
 from app.web.shared_context import build_sidebar_context
 from app.models.technik import TechnikObjekt
 from app.utils.number_parser import parse_float_german, parse_int_german
+from app.web.optionen import VERTRAULICHKEIT_OPTIONS, gueltiger_wert
 
 router = APIRouter()
 
@@ -137,7 +138,13 @@ async def new_objekt_submit(request: Request, auftrag_id: str, typ: str = "firew
     betreut_durch = form_data.get("betreut_durch", "Kunde")
     dienstleister_name = form_data.get("dienstleister_name", "")
     notiz = form_data.get("notiz", "")
-    vertraulichkeit = form_data.get("vertraulichkeit", auftrag.vertraulichkeit_default)
+    # Siehe Karte #309: an der Vertraulichkeit hängt die Filterung beim Export,
+    # ein ungeprüfter Wert aus dem POST hätte dort Wirkung.
+    vertraulichkeit = gueltiger_wert(
+        form_data.get("vertraulichkeit", auftrag.vertraulichkeit_default),
+        VERTRAULICHKEIT_OPTIONS,
+        auftrag.vertraulichkeit_default,
+    )
     erfassungsstatus = form_data.get("erfassungsstatus", "unbekannt")
 
     existing_ids = [o.id for o in storage.list_objekte(auftrag_id)]
@@ -220,7 +227,11 @@ async def edit_objekt_submit(request: Request, auftrag_id: str, typ: str, objekt
     obj.betreut_durch = form_data.get("betreut_durch", obj.betreut_durch)
     obj.dienstleister_name = form_data.get("dienstleister_name", obj.dienstleister_name)
     obj.notiz = form_data.get("notiz", obj.notiz)
-    obj.vertraulichkeit = form_data.get("vertraulichkeit", obj.vertraulichkeit)
+    obj.vertraulichkeit = gueltiger_wert(
+        form_data.get("vertraulichkeit", obj.vertraulichkeit),
+        VERTRAULICHKEIT_OPTIONS,
+        obj.vertraulichkeit,
+    )
     obj.erfassungsstatus = form_data.get("erfassungsstatus", obj.erfassungsstatus)
 
     schema = schema_loader.get_schema(typ)

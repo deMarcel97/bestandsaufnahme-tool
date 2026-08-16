@@ -9,6 +9,7 @@ from app.web.templates import templates
 from app.web.shared_context import build_sidebar_context
 from app.models.standort import Standort, Internetanbindung
 from app.utils.number_parser import parse_float_german, parse_int_german
+from app.web.optionen import VERTRAULICHKEIT_OPTIONS, gueltiger_wert
 
 router = APIRouter()
 
@@ -107,7 +108,14 @@ async def new_standort_submit(
     if not auftrag:
         return RedirectResponse(url="/auftrag", status_code=303)
 
-    vertraulichkeit = form_data.get("vertraulichkeit", auftrag.vertraulichkeit_default)
+    # Unbekannte Stufe fällt auf die Vorgabe des Auftrags zurück statt ungeprüft
+    # gespeichert zu werden — an diesem Feld hängt die Filterung beim Export
+    # (Karte #309, gleiche Richtung wie #310).
+    vertraulichkeit = gueltiger_wert(
+        form_data.get("vertraulichkeit", auftrag.vertraulichkeit_default),
+        VERTRAULICHKEIT_OPTIONS,
+        auftrag.vertraulichkeit_default,
+    )
 
     existing_ids = [s.id for s in storage.list_standorte(auftrag_id)]
     sto_id = generate_slug_id("standort", bezeichnung, existing_ids)
@@ -173,7 +181,11 @@ async def edit_standort_submit(
     standort.anzahl_user = parse_int_german(form_data.get("anzahl_user"))
     standort.funktion = form_data.get("funktion", "").strip()
     standort.ansprechpartner_vor_ort = form_data.get("ansprechpartner_vor_ort", "").strip()
-    standort.vertraulichkeit = form_data.get("vertraulichkeit", standort.vertraulichkeit)
+    standort.vertraulichkeit = gueltiger_wert(
+        form_data.get("vertraulichkeit", standort.vertraulichkeit),
+        VERTRAULICHKEIT_OPTIONS,
+        standort.vertraulichkeit,
+    )
     begehung_am = form_data.get("begehung_am", "").strip()
     standort.begehung_am = begehung_am if begehung_am else None
 
