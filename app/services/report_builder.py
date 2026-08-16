@@ -22,7 +22,11 @@ class ReportBuilder:
         massnahmen: List[Massnahme],
         bewertung: GesamtBewertung,
         findings: Optional[List[Finding]] = None,
-        ziel_vertraulichkeit: str = "kundentauglich"  # intern, kundentauglich, anonymisiert
+        *,
+        # Ohne Vorgabewert und nur benannt übergebbar: ein stiller Default hat
+        # hier „kundentauglich" angenommen und damit die schützende Stufe
+        # verfehlt, sobald ein Aufrufer die Angabe schlicht vergisst (Karte #310).
+        ziel_vertraulichkeit: str  # intern, kundentauglich, anonymisiert
     ) -> str:
         """
         Builds the complete Markdown Analysebericht without emojis.

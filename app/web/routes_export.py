@@ -76,7 +76,7 @@ def download_export(auftrag_id: str, filename: str, ziel_vertraulichkeit: Option
 
     elif filename == "summary.md":
         bewertung = evaluator_service.evaluate_auftrag(auftrag.aktive_bausteine, objekte, standorte)
-        content = exporter_service.export_managementsummary(auftrag, standorte, objekte, findings, massnahmen, bewertung, ziel_vertraulichkeit)
+        content = exporter_service.export_managementsummary(auftrag, standorte, objekte, findings, massnahmen, bewertung, ziel_vertraulichkeit=ziel_vertraulichkeit)
         return Response(content=content, media_type="text/markdown", headers={"Content-Disposition": f"attachment; filename=summary_{auftrag_id}.md"})
 
     elif filename == "raw.json":

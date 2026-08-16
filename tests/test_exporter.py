@@ -31,7 +31,9 @@ def test_exporter_confidentiality_and_anonymization():
 def test_csv_exporter():
     exporter = ExporterService()
     m = Massnahme(id="m1", bezeichnung="USV Erneuern", stufe=1, investitionskosten=1500.0, prioritaet="hoch")
-    csv_out = exporter.export_massnahmenkatalog_csv([m])
+    # Die Stufe wird bewusst mitgegeben: seit #310 hat die Signatur keinen
+    # stillen Vorgabewert mehr, der sonst „kundentauglich" angenommen hätte.
+    csv_out = exporter.export_massnahmenkatalog_csv([m], ziel_vertraulichkeit="kundentauglich")
     assert "USV Erneuern" in csv_out
     assert "1500.00" in csv_out
 
