@@ -418,13 +418,14 @@ class ReportBuilder:
             tot_count += len(st_massnahmen)
             tot_uncalc += uncalc_cnt
 
-            lines.append("| Maßnahme | Priorität | Investition (€) | Monatlich (€) | Aufwand (Aufwandseinheiten) | Status |")
-            lines.append("| --- | --- | --- | --- | --- | --- |")
+            lines.append("| Maßnahme | Priorität | Dringlichkeit | Förderprogramm | Investition (€) | Monatlich (€) | Aufwand (Aufwandseinheiten) | Status |")
+            lines.append("| --- | --- | --- | --- | --- | --- | --- | --- |")
             for m in st_massnahmen:
                 inv_str = f"{m.investitionskosten:.2f} €" if m.investitionskosten > 0 else "noch zu kalkulieren"
                 mon_str = f"{m.monatliche_kosten:.2f} €" if m.monatliche_kosten > 0 else "noch zu kalkulieren"
                 zeit_str = f"{m.zeitaufwand:g}" if m.zeitaufwand > 0 else "noch zu kalkulieren"
-                lines.append(f"| {m.bezeichnung} | {m.prioritaet} | {inv_str} | {mon_str} | {zeit_str} | {m.status} |")
+                foerder = getattr(m, "foerderprogramm", "") or "–"
+                lines.append(f"| {m.bezeichnung} | {m.prioritaet} | {getattr(m, 'dringlichkeit', 'mittel')} | {foerder} | {inv_str} | {mon_str} | {zeit_str} | {m.status} |")
 
             inv_sum_str = f"{inv_sum:.2f} €" if inv_sum > 0 else "noch zu kalkulieren"
             mon_sum_str = f"{mon_sum:.2f} €" if mon_sum > 0 else "noch zu kalkulieren"

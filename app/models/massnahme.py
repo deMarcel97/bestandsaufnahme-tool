@@ -13,6 +13,8 @@ class Massnahme(BaseModel):
     zeitaufwand: float = 0.0
     zeitaufwand_einheit: str = "Stunden"  # Stunden, Tage
     prioritaet: str = "mittel"  # hoch, mittel, niedrig
+    dringlichkeit: str = "mittel"  # hoch, mittel, niedrig — zweite Priorisierungsachse
     status: str = "vorgeschlagen"  # vorgeschlagen, im Angebot, beauftragt, verworfen
     kosten_quelle: str = "offen"  # regelwerk, manuell, offen
+    foerderprogramm: str = ""  # z. B. "Mittelstand Digital", "BSI-Förderung"
     bemerkung: str = ""

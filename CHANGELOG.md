@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.27] - 2026-08-16
+
+### Added
+- **Maßnahmenkatalog: Dringlichkeitsachse und Förderprogramm (#322)**: Erweiterte Priorisierung um `dringlichkeit`-Feld (hoch/mittel/niedrig) als zweite Achse neben `prioritaet` — ermöglicht zweiachsiges Modell (Kosten × Dringlichkeit) analog DIN SPEC 27076. Neues `foerderprogramm`-Feld für optionale Metadaten (z. B. "Mittelstand Digital", "BSI-Förderung"). Ändert: Modell, Formular, Tabelle, MD/CSV-Export, Berichts-Generator.
+
 ## [2.7.26] - 2026-08-16
 
 ### Added

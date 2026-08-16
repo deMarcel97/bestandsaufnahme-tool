@@ -48,11 +48,13 @@ def new_massnahme_submit(
     beschreibung: str = Form(""),
     stufe: str = Form("2"),
     prioritaet: str = Form("mittel"),
+    dringlichkeit: str = Form("mittel"),
     status: str = Form("vorgeschlagen"),
     investitionskosten: str = Form("0.0"),
     monatliche_kosten: str = Form("0.0"),
     zeitaufwand: str = Form("0.0"),
-    zeitaufwand_einheit: str = Form("Stunden")
+    zeitaufwand_einheit: str = Form("Stunden"),
+    foerderprogramm: str = Form("")
 ):
     massnahmen = storage.list_massnahmen(auftrag_id)
     mid = generate_slug_id("massnahme", bezeichnung, [m.id for m in massnahmen])
@@ -69,11 +71,13 @@ def new_massnahme_submit(
         beschreibung=beschreibung,
         stufe=stufe_val,
         prioritaet=prioritaet,
+        dringlichkeit=dringlichkeit,
         status=status,
         investitionskosten=inv_val,
         monatliche_kosten=mon_val,
         zeitaufwand=zeit_val,
         zeitaufwand_einheit=zeitaufwand_einheit,
+        foerderprogramm=foerderprogramm,
         kosten_quelle="manuell" if (inv_val > 0 or mon_val > 0 or zeit_val > 0) else "offen"
     )
     massnahmen.append(new_m)
