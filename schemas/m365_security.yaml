@@ -2,6 +2,7 @@ schema_version: 1
 typ: m365_security
 bezeichnung_anzeige: Microsoft 365 & Security
 berichtskapitel: cloud_und_m365
+standortbezug: false
 abschnitte:
   - id: was_ist_es
     titel: Was ist es

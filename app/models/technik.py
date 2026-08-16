@@ -7,7 +7,7 @@ class OffenerPunktItem(BaseModel):
     status: str = "offen"  # offen, erledigt
     quelle: str = "manuell"  # manuell, rueckfrage, regelrelevant_leer, dokument
     ziel_url: str = ""
-    standort_id: str = ""
+    standort_id: Optional[str] = None
     objekt_typ: str = ""
 
 class TechnikObjekt(BaseModel):
@@ -17,7 +17,7 @@ class TechnikObjekt(BaseModel):
     typ: str
     bezeichnung: str = ""
     auftrag_id: str
-    standort_id: str
+    standort_id: Optional[str] = None
     betreut_durch: str = "Kunde"  # wir, Kunde, Dritter
     dienstleister_name: str = ""
     notiz: str = ""

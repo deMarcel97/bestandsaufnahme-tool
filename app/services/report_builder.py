@@ -204,6 +204,64 @@ class ReportBuilder:
                     lines.append(f"- **HA-fähig:** {ha_str}")
                     lines.append("")
 
+        cloud_objekte = [o for o in objekte if not o.standort_id]
+        if cloud_objekte:
+            lines.append("### Standortübergreifende Infrastruktur & Cloud-Dienste")
+            vm_objekte = [o for o in cloud_objekte if o.typ == "vm"]
+            cloud_objekte_ohne_vms = [o for o in cloud_objekte if o.typ != "vm"]
+
+            vms_by_host_id = {}
+            for vm in vm_objekte:
+                host_ref = vm.daten.get("host_referenz")
+                if host_ref:
+                    if host_ref not in vms_by_host_id:
+                        vms_by_host_id[host_ref] = []
+                    vms_by_host_id[host_ref].append(vm)
+
+            for obj in cloud_objekte_ohne_vms:
+                schema = schema_loader.get_schema(obj.typ)
+                if not schema:
+                    continue
+
+                kapitel_titel = schema.get("bezeichnung_anzeige", obj.typ.capitalize())
+                lines.append(f"#### {obj.bezeichnung} ({kapitel_titel})")
+
+                if obj.id in vms_by_host_id:
+                    for vm in vms_by_host_id[obj.id]:
+                        vm_name = vm.daten.get("name", "Unbenannte VM")
+                        vm_os = vm.daten.get("betriebssystem", "n/a")
+                        vm_cpu = vm.daten.get("cpu_kerne", "n/a")
+                        vm_ram = vm.daten.get("ram_gb", "n/a")
+                        vm_funktion = vm.daten.get("funktion_dienst", "n/a")
+                        vm_ha = vm.daten.get("ha_faehig", "n/a")
+                        ha_str = "JA" if vm_ha == "ja" else "NEIN" if vm_ha == "nein" else vm_ha
+                        lines.append(f"##### VM: {vm_name}")
+                        lines.append(f"- **Betriebssystem:** {vm_os}")
+                        lines.append(f"- **CPU-Kerne:** {vm_cpu}")
+                        lines.append(f"- **RAM (GB):** {vm_ram}")
+                        lines.append(f"- **Funktion/Dienst:** {vm_funktion}")
+                        lines.append(f"- **HA-fähig:** {ha_str}")
+                        lines.append("")
+
+                snippets = []
+                for abschnitt in schema.get("abschnitte", []):
+                    for feldef in abschnitt.get("felder", []):
+                        fname = feldef.get("name")
+                        val = obj.daten.get(fname)
+                        fest, ausw = self._extract_snippet_pair(val, feldef)
+                        if fest:
+                            snippets.append(fest)
+                        if ausw:
+                            snippets.append(ausw)
+
+                if snippets:
+                    for snip in snippets:
+                        lines.append(snip)
+                        lines.append("")
+                else:
+                    lines.append("Keine detaillierten Angaben zu diesem Objekt vorhanden.")
+                    lines.append("")
+
         # 6. Übersichtstabellen Erfasster Systeme (Chapter 4)
         lines.append("## 4. Übersichtstabellen Erfasster Systeme")
         if objekte:
@@ -212,7 +270,10 @@ class ReportBuilder:
             for o in objekte:
                 schema = schema_loader.get_schema(o.typ)
                 typ_name = schema.get("bezeichnung_anzeige", o.typ) if schema else o.typ
-                sto_name = next((s.bezeichnung for s in standorte if s.id == o.standort_id), "Unbekannt")
+                if o.standort_id:
+                    sto_name = next((s.bezeichnung for s in standorte if s.id == o.standort_id), "Unbekannt")
+                else:
+                    sto_name = "Standortübergreifend"
                 calc_status = evaluator_service.calculate_objekt_status(o)
                 lines.append(f"| {o.bezeichnung} | {typ_name} | {sto_name} | {o.betreut_durch} | {calc_status} |")
             lines.append("")

@@ -5,7 +5,7 @@ class Finding(BaseModel):
     schema_version: int = 1
     id: str
     auftrag_id: str
-    standort_id: str
+    standort_id: Optional[str] = None
     objekt_id: Optional[str] = None
     quelle: str = "manuell"  # regel_id oder "manuell"
     schweregrad: str = "mittel"  # hoch, mittel, niedrig, empfehlung
