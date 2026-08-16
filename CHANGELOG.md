@@ -4,6 +4,14 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.23] - 2026-08-16
+
+### Changed
+- **Sidebar-Layout & Scrollbarkeit (#326)**:
+  - **Scrollbarkeit**: Linke Auftrags-Sidebar mit `height: 100vh`, `max-height: 100vh` und dezentem `overflow-y: auto` scrollbar gemacht.
+  - **Kompaktere Navigation**: Zeilenabstände, Schriftgrößen und Paddings der Menüpunkte (Übersicht, Erfassung, Stammdaten, Beteiligte etc.) optimiert.
+  - **Kompaktere Baustein-Listen & Chips**: Reduzierte Abstände für Fortschrittszeilen, Balken und „Noch nicht erfasst"-Chips im unteren Bereich der Sidebar.
+
 ## [2.7.22] - 2026-08-16
  
 ### Added
