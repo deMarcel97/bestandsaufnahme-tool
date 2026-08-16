@@ -15,6 +15,14 @@ STATUS_OPTIONS = ["Vorbereitung", "Erfassung", "Konsolidierung", "Bewertung", "A
 
 GRUNDLAGE_OPTIONS = ["Ausschreibung", "Angebot", "Analyse", "Rahmenvertrag", "Sonstiges"]
 
+ZWECK_OPTIONS = [
+    "Infrastrukturanalyse",
+    "Migrationsvorbereitung",
+    "Notfalldokumentation",
+    "Betriebsuebernahme",
+    "Optimierung",
+]
+
 # Reihenfolge von der vollständigsten zur zurückhaltendsten Stufe. Die Werte
 # sind dieselben, die `VertraulichkeitsStufe.parse()` in
 # `app/services/exporter.py` erkennt.
