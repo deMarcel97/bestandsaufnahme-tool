@@ -75,7 +75,7 @@
           <div class="form-group">
             <label>Vertraulichkeit Default</label>
             <select name="vertraulichkeit_default" class="form-control">
-              {% for opt in ["intern", "kundentauglich", "anonymisiert"] %}
+              {% for opt in vertraulichkeit_options %}
               <option value="{{ opt }}" {% if auftrag.vertraulichkeit_default == opt %}selected{% endif %}>{{ opt }}</option>
               {% endfor %}
             </select>
