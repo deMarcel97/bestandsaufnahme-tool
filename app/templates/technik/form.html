@@ -148,6 +148,16 @@
             <option value="rueckfrage" {% if current_val == 'rueckfrage' %}selected{% endif %}>Rückfrage erforderlich</option>
           </select>
 
+          {% elif field.typ == 'mehrfachauswahl' %}
+          <div class="checkbox-group" style="display:flex; flex-direction:column; gap:6px; margin-top:4px;">
+            {% for w in field.werte %}
+            <label style="display:inline-flex; align-items:center; gap:8px; font-weight:normal; cursor:pointer;">
+              <input type="checkbox" name="{{ field.name }}" value="{{ w.wert }}" {% if current_val and w.wert in current_val %}checked{% endif %}>
+              <span>{{ w.label if w.label else w.wert.replace('_', ' ') }}</span>
+            </label>
+            {% endfor %}
+          </div>
+
           {% elif field.typ == 'objekt_referenz' %}
           <select name="{{ field.name }}" id="input_{{ field.name }}" class="form-control">
             <option value="" {% if current_val is none or current_val == '' %}selected{% endif %}>bitte wählen</option>
@@ -282,6 +292,13 @@ document.addEventListener("DOMContentLoaded", function () {
       // offsetParent statt style.display: erkennt auch Ausblenden über ein
       // übergeordnetes Element (z.B. ein per sichtbar_wenn verstecktes Fieldset/Abschnitt).
       if (group.offsetParent === null) return;
+      const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+      if (checkboxes.length > 0) {
+        total++;
+        const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+        if (anyChecked) filled++;
+        return;
+      }
       const field = group.querySelector("input, select, textarea");
       if (!field) return;
       total++;

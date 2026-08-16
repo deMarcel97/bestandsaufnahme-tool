@@ -66,6 +66,26 @@ class ConditionEvaluator:
 
     @staticmethod
     def _evaluate_op(val: Any, operator: str, expected: Any) -> bool:
+        if isinstance(val, (list, tuple)):
+            val_strs = [str(x).lower() for x in val]
+            if operator == "in_liste" or operator == "enthaelt":
+                if isinstance(expected, (list, tuple)):
+                    return any(str(e).lower() in val_strs for e in expected)
+                return str(expected).lower() in val_strs
+            elif operator == "nicht_in_liste" or operator == "enthaelt_nicht":
+                if isinstance(expected, (list, tuple)):
+                    return not any(str(e).lower() in val_strs for e in expected)
+                return str(expected).lower() not in val_strs
+            elif operator == "gleich":
+                return str(expected).lower() in val_strs
+            elif operator == "ungleich":
+                return str(expected).lower() not in val_strs
+            elif operator == "ist_leer":
+                return len(val) == 0
+            elif operator == "ist_nicht_leer":
+                return len(val) > 0
+            return False
+
         if operator == "gleich":
             return str(val).lower() == str(expected).lower()
         elif operator == "ungleich":

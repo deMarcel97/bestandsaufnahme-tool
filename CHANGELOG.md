@@ -4,6 +4,15 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.22] - 2026-08-16
+ 
+### Added
+- **Trennung Storage vs. Backup & Neuer Baustein Organisation & Prozesse (#323)**:
+  - **Neuer Baustein Storage (`storage.yaml` & `rules/storage.yaml`)**: Detaillierte Erfassung von Bereitstellungsart (Shared SAN/NAS vs. Local Host/HCI), Herstellern (NetApp, Dell, Huawei, HPE, Synology, QNAP, TrueNAS), Protokollen (iSCSI, FC, NFS, SMB, SAS), Controller-Redundanz, lokalen Technologien (ZFS, LVM-Thin, Hardware-RAID, Software-RAID, Ceph/vSAN), Medientypen (NVMe, SSD, Hybrid, HDD), Kapazitäten, Füllgrad und Wartungsvertragsstatus inkl. automatischer Regelauswertung und Risikobewertung.
+  - **Neuer Baustein Backup & Recovery (`backup.yaml` & `rules/backup.yaml`)**: Detaillierte Erfassung von Backup-Software (Veeam, Synology Active Backup, Datto, Acronis, Proxmox Backup Server, Commvault, M365 Backup), Sicherungsumfang (Mehrfachauswahl), primären & sekundären Offsite-Zielen (S3 Object Storage, 2. Standort, Band/Tape, RDX), Unveränderbarkeit (Immutability / Ransomware-Schutz), RPO, RTO, Wiederherstellungstests und Monitoring/Alerting inkl. dedizierter BSI-konformer Bewertungsregeln.
+  - **Neuer Baustein Organisation & Prozesse (`organisation_prozesse.yaml` & `rules/organisation_prozesse.yaml`)**: Standortübergreifender Baustein (`standortbezug: false`) zur Erfassung und Bewertung von IT-Notfallhandbuch, Wiederanlaufplan (Disaster Recovery), IT-Infrastrukturdokumentation, unterschriebenen Sicherheitsrichtlinien, Passwort-Policies & MFA, Passwort-Managern, BYOD-Regelung, Gäste-WLAN-Segmentierung, Awareness-Schulungen, Zutrittskontrolle Serverraum, standardisiertem Offboarding-Prozess und DSGVO-Auftragsverarbeitungsverträgen.
+  - **Unterstützung für Mehrfachauswahl-Felder**: Erweiterung von `schema_loader.py`, `routes_objekt.py`, `rule_engine.py`, `report_builder.py` und Web-Formularen zur Unterstützung des Feldtyps `mehrfachauswahl`.
+
 ## [2.7.21] - 2026-08-16
  
 ### Added

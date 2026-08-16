@@ -1,0 +1,239 @@
+schema_version: 1
+regeln:
+  - id: org-kein-notfallhandbuch
+    gilt_fuer: organisation_prozesse
+    bedingung:
+      alle:
+        - feld: notfallhandbuch_status
+          operator: gleich
+          wert: nicht_vorhanden
+    schweregrad: kritisch
+    befund: Kein IT-Notfallhandbuch vorhanden
+    risiko: Im Krisen- oder Ausfallfall fehlen definierte Eskalationswege, Notfallkontakte und Handlungsanweisungen, was zu erheblichen Verzögerungen und Fehlentscheidungen führt.
+    empfehlung: IT-Notfallhandbuch mit klaren Notfallplänen, Kontaktlisten, Eskalationsstufen und Rollen erstellen.
+    referenz: "BSI IT-Grundschutz DER.2.1 / ISO 27001"
+    massnahme_vorschlag:
+      bezeichnung: Erstellung eines praxisorientierten IT-Notfallhandbuchs
+      kosten_richtwert: 2500
+      aufwand_richtwert: 12
+
+  - id: org-notfallhandbuch-veraltet
+    gilt_fuer: organisation_prozesse
+    bedingung:
+      alle:
+        - feld: notfallhandbuch_status
+          operator: gleich
+          wert: vorhanden_nicht_aktuell
+    schweregrad: hoch
+    befund: IT-Notfallhandbuch ist veraltet oder unvollständig
+    risiko: Veraltete Telefonnummern, Ansprechpartner oder veraltete Systemarchitekturen in Notfallplänen behindern die Notfallbewältigung.
+    empfehlung: Notfallhandbuch grundlegend aktualisieren und in jährlichen Notfallübungen verifizieren.
+    referenz: "BSI IT-Grundschutz DER.2.1"
+    massnahme_vorschlag:
+      bezeichnung: Aktualisierung und Überprüfung des IT-Notfallhandbuchs
+      kosten_richtwert: 1000
+      aufwand_richtwert: 4
+
+  - id: org-kein-wiederanlaufplan
+    gilt_fuer: organisation_prozesse
+    bedingung:
+      alle:
+        - feld: wiederanlaufplan_dokumentiert
+          operator: gleich
+          wert: "nein"
+    schweregrad: kritisch
+    befund: Kein dokumentierter Wiederanlaufplan (Disaster Recovery Plan)
+    risiko: Nach einem Totalausfall oder Ransomware-Befall ist die geordnete und priorisierte Wiederinbetriebnahme nicht gesichert.
+    empfehlung: Wiederanlaufplan mit definierten Wiederanlauf-Reihenfolgen, RTO/RPO-Zielen und Verantwortlichkeiten erstellen.
+    referenz: "BSI IT-Grundschutz DER.4"
+    massnahme_vorschlag:
+      bezeichnung: Erstellung eines IT-Wiederanlauf- und Disaster-Recovery-Plans
+      kosten_richtwert: 2000
+      aufwand_richtwert: 8
+
+  - id: org-it-doku-fehlt
+    gilt_fuer: organisation_prozesse
+    bedingung:
+      alle:
+        - feld: it_dokumentation_status
+          operator: gleich
+          wert: nicht_vorhanden
+    schweregrad: hoch
+    befund: Keine systematische IT-Infrastrukturdokumentation vorhanden
+    risiko: Extreme Abhängigkeit von individuellem Kopfwissen; erhebliche Verlängerung von Fehleranalyse und Wiederherstellungszeiten.
+    empfehlung: Zentrale und strukturierte IT-Infrastruktur- und Systemdokumentation aufbauen.
+    referenz: "BSI IT-Grundschutz ORP.4"
+    massnahme_vorschlag:
+      bezeichnung: Aufbau einer zentralen IT-Infrastruktur- und Betriebsdokumentation
+      kosten_richtwert: 1500
+      aufwand_richtwert: 10
+
+  - id: org-it-doku-lueckenhaft
+    gilt_fuer: organisation_prozesse
+    bedingung:
+      alle:
+        - feld: it_dokumentation_status
+          operator: gleich
+          wert: lueckenhaft
+    schweregrad: mittel
+    befund: IT-Dokumentation ist unvollständig oder lückenhaft
+    risiko: Verzögerungen bei Fehlersuche und erschwerte Einarbeitung von Betreuungspersonal.
+    empfehlung: Lücken in der Netzwerk-, Server- und Berechtigungsdokumentation schließen und Aktualisierungs-Workflows etablieren.
+    referenz: "BSI IT-Grundschutz ORP.4"
+    massnahme_vorschlag:
+      bezeichnung: Schließung von Dokumentationslücken in der IT-Dokumentation
+      kosten_richtwert: 500
+      aufwand_richtwert: 4
+
+  - id: org-keine-sicherheitsrichtlinie
+    gilt_fuer: organisation_prozesse
+    bedingung:
+      alle:
+        - feld: it_sicherheitsrichtlinie_unterschrieben
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Keine gegengezeichnete IT-Sicherheitsrichtlinie vorhanden
+    risiko: Mitarbeiter agieren ohne verbindliche Vorgaben zu Passwörtern, E-Mail-Nutzung, externen Datenträgern und Meldepflichten.
+    empfehlung: Verständliche IT-Sicherheitsrichtlinie ausrollen und von jedem Mitarbeiter verbindlich unterschreiben lassen.
+    referenz: "BSI IT-Grundschutz ORP.1 / DSGVO Art. 32"
+    massnahme_vorschlag:
+      bezeichnung: Einführung und Gegenzeichnung einer IT-Sicherheitsrichtlinie
+      kosten_richtwert: 800
+      aufwand_richtwert: 3
+
+  - id: org-passwort-policy-keine
+    gilt_fuer: organisation_prozesse
+    bedingung:
+      alle:
+        - feld: passwort_policy_mfa
+          operator: gleich
+          wert: keine_vorgaben
+    schweregrad: kritisch
+    befund: Keine Vorgaben zu Passwort-Komplexität oder Multi-Faktor-Authentifizierung
+    risiko: Triviale Kennwörter und fehlendes MFA ermöglichen Angreifern die mühelose Übernahme von Unternehmens- und Cloud-Konten.
+    empfehlung: Strenge Kennwortrichtlinie und flächendeckende MFA-Pflicht für alle Dienste (M365, VPN, Admin-Konten) aktivieren.
+    referenz: "BSI IT-Grundschutz ORP.4 / BSI CS 006"
+    massnahme_vorschlag:
+      bezeichnung: Durchsetzung einer Passwort-Policy und flächendeckender MFA-Pflicht
+      kosten_richtwert: 0
+      aufwand_richtwert: 4
+
+  - id: org-kein-passwort-manager
+    gilt_fuer: organisation_prozesse
+    bedingung:
+      alle:
+        - feld: passwort_manager_einsatz
+          operator: gleich
+          wert: kein_manager_im_browser
+    schweregrad: mittel
+    befund: Kein unternehmensweiter Passwort-Manager im Einsatz
+    risiko: Passwörter werden unsicher in Webbrowsern, Notizzetteln oder Tabellen gespeichert und mehrfach verwendet.
+    empfehlung: Zentral verwalteten Enterprise-Passwort-Manager (z.B. Bitwarden, 1Password) bereitstellen.
+    referenz: "BSI Empfehlung Kennwort-Management"
+    massnahme_vorschlag:
+      bezeichnung: Einführung eines zentral verwalteten Unternehmens-Passwort-Managers
+      kosten_richtwert: 600
+      aufwand_richtwert: 3
+
+  - id: org-keine-awareness
+    gilt_fuer: organisation_prozesse
+    bedingung:
+      alle:
+        - feld: mitarbeiter_awareness_schulungen
+          operator: gleich
+          wert: keine_schulungen
+    schweregrad: hoch
+    befund: Keine Mitarbeiter-Awareness-Schulungen oder Phishing-Tests
+    risiko: Menschliche Fehlhandlungen (Anklicken von Phishing-Links, Preisgabe von Zugangsdaten) stellen das größte Einfallstor für Angriffe dar.
+    empfehlung: Regelmäßige E-Learning-Kurse und simulierte Phishing-Kampagnen zur Mitarbeitersensibilisierung etablieren.
+    referenz: "BSI IT-Grundschutz ORP.3"
+    massnahme_vorschlag:
+      bezeichnung: Einführung von regelmäßigen Security-Awareness-Schulungen und Phishing-Simulationen
+      kosten_richtwert: 1200
+      aufwand_richtwert: 3
+
+  - id: org-byod-ungeregelt
+    gilt_fuer: organisation_prozesse
+    bedingung:
+      alle:
+        - feld: byod_policy
+          operator: gleich
+          wert: geduldet_ohne_regeln
+    schweregrad: hoch
+    befund: Ungeregelte Nutzung privater Endgeräte (BYOD) ohne Richtlinie oder MDM
+    risiko: Unkontrollierter Abfluss vertraulicher Unternehmensdaten auf unverschlüsselte Privatgeräte ohne Löschmöglichkeit.
+    empfehlung: BYOD-Richtlinie mit verbindlichem MDM/MAM (Mobile Application Management) einführen oder Privatgeräte verbieten.
+    referenz: "BSI IT-Grundschutz SYS.3.2.2"
+    massnahme_vorschlag:
+      bezeichnung: Erstellung einer BYOD-Richtlinie und Integration in Mobile Device Management
+      kosten_richtwert: 500
+      aufwand_richtwert: 3
+
+  - id: org-gaeste-wlan-ungesichert
+    gilt_fuer: organisation_prozesse
+    bedingung:
+      alle:
+        - feld: gaeste_wlan_trennung
+          operator: gleich
+          wert: geteiltes_netz_mit_passwort
+    schweregrad: hoch
+    befund: Gäste-WLAN ist nicht vom internen Produktionsnetzwerk isoliert
+    risiko: Externe Besucher und kompromittierte Gastgeräte können interne Server, Drucker und Netzwerkkomponenten direkt ansprechen.
+    empfehlung: Einrichtung eines isolierten Gast-VLANs mit separatem Subnetz, Captive Portal und Firewall-Regeln.
+    referenz: "BSI IT-Grundschutz NET.2.1"
+    massnahme_vorschlag:
+      bezeichnung: Technische Trennung und Isolierung des Gäste-WLANs per VLAN
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
+
+  - id: org-serverraum-zutritt-offen
+    gilt_fuer: organisation_prozesse
+    bedingung:
+      alle:
+        - feld: zutrittskontrolle_serverraum
+          operator: gleich
+          wert: offen_zugaenglich
+    schweregrad: kritisch
+    befund: Serverraum / Technikbereich ist unverschlossen und frei zugänglich
+    risiko: Physischer Zugriff durch Unbefugte ermöglicht direkten Datendiebstahl, Manipulation an Verkabelung und Hardware-Sabotage.
+    empfehlung: Serverraum permanent verschließen und elektronische, protokollierte Zutrittskontrolle installieren.
+    referenz: "BSI IT-Grundschutz INF.1 / INF.2"
+    massnahme_vorschlag:
+      bezeichnung: Sicherung des Serverraums mit elektronischer Zutrittskontrolle
+      kosten_richtwert: 1500
+      aufwand_richtwert: 4
+
+  - id: org-kein-offboarding
+    gilt_fuer: organisation_prozesse
+    bedingung:
+      alle:
+        - feld: offboarding_prozess
+          operator: gleich
+          wert: kein_prozess
+    schweregrad: hoch
+    befund: Kein geregelter IT-Offboarding-Prozess bei Mitarbeiteraustritten
+    risiko: Zugänge und VPN-Konten ehemaliger Mitarbeiter bleiben aktiv, was ein erhebliches Sicherheits- und Datenschutzrisiko darstellt.
+    empfehlung: Standardisierte Checkliste und automatisierten Deaktivierungsworkflow für das IT-Offboarding implementieren.
+    referenz: "BSI IT-Grundschutz ORP.2"
+    massnahme_vorschlag:
+      bezeichnung: Einführung eines standardisierten IT-Offboarding-Workflows mit Checkliste
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
+
+  - id: org-av-vertraege-fehlen
+    gilt_fuer: organisation_prozesse
+    bedingung:
+      alle:
+        - feld: av_vertraege_dsgvo
+          operator: gleich
+          wert: nicht_geprueft
+    schweregrad: mittel
+    befund: Auftragsverarbeitungsverträge (AVV) nach DSGVO sind ungeprüft
+    risiko: Bei Weitergabe von personenbezogenen Daten an externe Dienstleister ohne AVV drohen empfindliche DSGVO-Bußgelder.
+    empfehlung: IT-Dienstleister, Cloud-Services und Hosting-Partner erfassen und AV-Verträge abschließen.
+    referenz: "DSGVO Art. 28"
+    massnahme_vorschlag:
+      bezeichnung: Prüfung und Abschluss aller erforderlichen AV-Verträge nach DSGVO
+      kosten_richtwert: 0
+      aufwand_richtwert: 4

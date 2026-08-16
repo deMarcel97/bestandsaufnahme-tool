@@ -483,6 +483,19 @@ class ReportBuilder:
                         return (tb.get("feststellung"), tb.get("auswirkung"))
                     elif isinstance(tb, str):
                         return (tb, None)
+        elif ftype == "mehrfachauswahl" and "werte" in feldef:
+            val_list = val if isinstance(val, (list, tuple)) else [val]
+            feststellungen = []
+            for item in val_list:
+                for w in feldef["werte"]:
+                    if str(w.get("wert")).lower() == str(item).lower():
+                        tb = w.get("textbaustein")
+                        if isinstance(tb, dict) and tb.get("feststellung"):
+                            feststellungen.append(tb.get("feststellung"))
+                        elif isinstance(tb, str) and tb:
+                            feststellungen.append(tb)
+            if feststellungen:
+                return ("\n".join(feststellungen), None)
         return (None, None)
 
     def _extract_snippet(self, val: Any, feldef: Dict[str, Any]) -> Optional[str]:

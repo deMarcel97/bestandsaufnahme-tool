@@ -1,0 +1,388 @@
+schema_version: 1
+typ: organisation_prozesse
+bezeichnung_anzeige: Organisation & Prozesse
+berichtskapitel: organisation
+standortbezug: false
+abschnitte:
+  - id: notfallmanagement_und_doku
+    titel: Notfallmanagement und Dokumentation
+    felder:
+      - name: notfallhandbuch_status
+        label: IT-Notfallhandbuch
+        typ: auswahl
+        pflicht: true
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: org_notfallhandbuch
+          max_punkte: 20
+        werte:
+          - wert: vorhanden_aktuell_getestet
+            punkte: 20
+            textbaustein:
+              feststellung: Ein aktuelles und praxiserprobtes IT-Notfallhandbuch liegt vor.
+              auswirkung: null
+          - wert: vorhanden_nicht_aktuell
+            punkte: 10
+            textbaustein:
+              feststellung: Ein Notfallhandbuch existiert, ist jedoch veraltet oder unvollständig.
+              auswirkung: null
+          - wert: in_erstellung
+            punkte: 5
+            textbaustein:
+              feststellung: Das IT-Notfallhandbuch befindet sich derzeit in der Erstellung.
+              auswirkung: null
+          - wert: nicht_vorhanden
+            punkte: 0
+            textbaustein:
+              feststellung: Es liegt kein schriftliches IT-Notfallhandbuch vor.
+              auswirkung: Im Krisenfall fehlen definierte Abläufe, was zu chaotischen Reaktionen und langen Ausfallzeiten führt.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: wiederanlaufplan_dokumentiert
+        label: Dokumentierter Wiederanlaufplan (Disaster Recovery Plan)
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: org_wiederanlaufplan
+          max_punkte: 20
+        werte:
+          - wert: ja_vollstaendig
+            punkte: 20
+            textbaustein:
+              feststellung: Ein detaillierter Wiederanlaufplan mit Systemprioritäten und Wiederherstellungsreihenfolgen ist dokumentiert.
+              auswirkung: null
+          - wert: teilweise
+            punkte: 10
+            textbaustein:
+              feststellung: Ein Wiederanlaufplan ist nur für ausgewählte Kernsysteme dokumentiert.
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Es existiert kein dokumentierter Wiederanlaufplan.
+              auswirkung: Bei Totalausfällen ist die koordinierte Wiederinbetriebnahme von Systemen nicht geregelt.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: it_dokumentation_status
+        label: IT-Infrastruktur- und Systemdokumentation
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: rechtliche_anforderungen
+          kriterium: org_it_dokumentation
+          max_punkte: 15
+        werte:
+          - wert: vollstaendig_aktuell
+            punkte: 15
+            textbaustein:
+              feststellung: Die IT-Infrastruktur, Netzwerktopologie und Zugangsdaten sind vollständig und aktuell dokumentiert.
+              auswirkung: null
+          - wert: lueckenhaft
+            punkte: 7
+            textbaustein:
+              feststellung: Die IT-Dokumentation weist wesentliche Lücken oder veraltete Stände auf.
+              auswirkung: null
+          - wert: nicht_vorhanden
+            punkte: 0
+            textbaustein:
+              feststellung: Es liegt keine systematische IT-Dokumentation vor.
+              auswirkung: Starke Abhängigkeit von individuellem Kopfwissen und stark verlängerte Entstörzeiten.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+  - id: richtlinien_und_compliance
+    titel: Richtlinien, Passwörter und Datenschutz
+    felder:
+      - name: it_sicherheitsrichtlinie_unterschrieben
+        label: IT-Sicherheitsrichtlinie durch Mitarbeiter unterschrieben
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: rechtliche_anforderungen
+          kriterium: org_sicherheitsrichtlinie
+          max_punkte: 15
+        werte:
+          - wert: ja_alle_mitarbeiter
+            punkte: 15
+            textbaustein:
+              feststellung: Eine verbindliche IT-Sicherheitsrichtlinie liegt vor und wurde von allen Mitarbeitern gegengezeichnet.
+              auswirkung: null
+          - wert: teilweise_oder_veraltet
+            punkte: 7
+            textbaustein:
+              feststellung: IT-Sicherheitsrichtlinien sind nur teilweise unterschrieben oder veraltet.
+              auswirkung: null
+          - wert: nein
+            punkte: 0
+            textbaustein:
+              feststellung: Es existiert keine gegengezeichnete IT-Sicherheitsrichtlinie.
+              auswirkung: Fehlende Verbindlichkeit im Umgang mit Unternehmensdaten und IT-Ressourcen.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: passwort_policy_mfa
+        label: Passwort-Policy & Multi-Faktor-Authentifizierung (MFA)
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: org_passwort_policy_mfa
+          max_punkte: 20
+        werte:
+          - wert: mfa_pflicht_und_strenge_policy
+            punkte: 20
+            textbaustein:
+              feststellung: MFA ist für alle Zugänge verpflichtend und wird mit einer starken Passwort-Policy kombiniert.
+              auswirkung: null
+          - wert: strenge_policy_ohne_mfa
+            punkte: 12
+            textbaustein:
+              feststellung: Eine strenge Kennwort-Policy ist aktiv, MFA wird jedoch nicht flächendeckend erzwungen.
+              auswirkung: null
+          - wert: einfache_policy
+            punkte: 5
+            textbaustein:
+              feststellung: Es gelten nur minimale Basisanforderungen an Kennwörter.
+              auswirkung: null
+          - wert: keine_vorgaben
+            punkte: 0
+            textbaustein:
+              feststellung: Es existieren keine Vorgaben zu Kennwortkomplexität oder MFA.
+              auswirkung: Erhöhtes Risiko für Brute-Force- und Credential-Stuffing-Angriffe.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: passwort_manager_einsatz
+        label: Passwort-Manager Einsatz
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: org_passwort_manager
+          max_punkte: 15
+        werte:
+          - wert: unternehmensweit_zentral
+            punkte: 15
+            textbaustein:
+              feststellung: Ein zentraler Enterprise Passwort-Manager (z.B. Bitwarden, 1Password, KeePass) wird unternehmensweit genutzt.
+              auswirkung: null
+          - wert: individuell_durch_user
+            punkte: 8
+            textbaustein:
+              feststellung: Passwort-Manager werden von einzelnen Mitarbeitern individuell und ungesteuert genutzt.
+              auswirkung: null
+          - wert: kein_manager_im_browser
+            punkte: 0
+            textbaustein:
+              feststellung: Kein zentraler Passwort-Manager im Einsatz; Passwörter werden oft im Browser oder ungesichert notiert.
+              auswirkung: Hohes Risiko unsicherer oder mehrfach verwendeter Passwörter.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: byod_policy
+        label: Bring Your Own Device (BYOD) Regelung
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: org_byod_policy
+          max_punkte: 10
+        werte:
+          - wert: klare_regelung_mit_mdm
+            punkte: 10
+            textbaustein:
+              feststellung: Für private Geräte existiert eine klare BYOD-Richtlinie mit Absicherung über MDM/MAM.
+              auswirkung: null
+          - wert: privatnutzung_verboten
+            punkte: 10
+            textbaustein:
+              feststellung: Die Nutzung privater Endgeräte für geschäftliche Zwecke ist strikt untersagt.
+              auswirkung: null
+          - wert: geduldet_ohne_regeln
+            punkte: 0
+            textbaustein:
+              feststellung: Privatgeräte werden ohne technische Kontrolle oder Richtlinie geduldet.
+              auswirkung: Gefahr von Datenabfluss und unkontrolliertem Zugriff auf Firmenressourcen.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: gaeste_wlan_trennung
+        label: Gäste-WLAN Trennung & Portalsicherheit
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: org_gaeste_wlan
+          max_punkte: 10
+        werte:
+          - wert: vollstaendig_isoliertes_vlan_portal
+            punkte: 10
+            textbaustein:
+              feststellung: Das Gäste-WLAN ist vollständig über ein isoliertes VLAN mit Captive Portal vom Produktivnetz getrennt.
+              auswirkung: null
+          - wert: geteiltes_netz_mit_passwort
+            punkte: 0
+            textbaustein:
+              feststellung: Gäste erhalten Zugriff auf das interne Unternehmensnetzwerk ohne Segmentierung.
+              auswirkung: Gäste haben potenziellen Zugriff auf interne Server und Netzwerkfreigaben.
+          - wert: kein_gaeste_wlan
+            punkte: 10
+            textbaustein:
+              feststellung: Am Standort wird kein Gäste-WLAN bereitgestellt.
+              auswirkung: null
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: mitarbeiter_awareness_schulungen
+        label: Mitarbeiter Security-Awareness Schulungen
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: org_awareness_schulungen
+          max_punkte: 15
+        werte:
+          - wert: regelmaessig_mit_phishing_tests
+            punkte: 15
+            textbaustein:
+              feststellung: Regelmäßige Awareness-Schulungen inklusive simulierter Phishing-Kampagnen werden durchgeführt.
+              auswirkung: null
+          - wert: einmalig_bei_einstellung
+            punkte: 8
+            textbaustein:
+              feststellung: Sicherheitsschulungen erfolgen nur einmalig im Rahmen des Onboardings.
+              auswirkung: null
+          - wert: keine_schulungen
+            punkte: 0
+            textbaustein:
+              feststellung: Es finden keine Sicherheits-Awareness-Schulungen für Mitarbeiter statt.
+              auswirkung: Mitarbeiter sind anfällig für Phishing-, Social-Engineering- und CEO-Fraud-Angriffe.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: zutrittskontrolle_serverraum
+        label: Zutrittskontrolle Serverraum / Technikraum
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: org_zutrittskontrolle
+          max_punkte: 10
+        werte:
+          - wert: protokolliert_elektronisch_transponder
+            punkte: 10
+            textbaustein:
+              feststellung: Der Zutritt zum Serverraum wird elektronisch per Transponder/Chipkarte gesteuert und protokolliert.
+              auswirkung: null
+          - wert: schluessel_abgeschlossen
+            punkte: 7
+            textbaustein:
+              feststellung: Der Serverraum ist mechanisch abgeschlossen mit manuellem Schlüsselmanagement.
+              auswirkung: null
+          - wert: offen_zugaenglich
+            punkte: 0
+            textbaustein:
+              feststellung: Der Serverraum oder Technikschrank ist unverschlossen und frei zugänglich.
+              auswirkung: Risiko physischer Sabotage, Datendiebstahl oder unbefugter Trennung von Systemen.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: offboarding_prozess
+        label: Standardisierter Mitarbeiter-Offboarding Prozess
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: it_security
+          kriterium: org_offboarding
+          max_punkte: 10
+        werte:
+          - wert: standardisierter_prozess_mit_checkliste
+            punkte: 10
+            textbaustein:
+              feststellung: Ein geregelter Offboarding-Prozess mit Checkliste stellt die sofortige Deaktivierung aller Benutzerkonten und Berechtigungen sicher.
+              auswirkung: null
+          - wert: informell_nach_bedarf
+            punkte: 5
+            textbaustein:
+              feststellung: Die Kontendeaktivierung beim Mitarbeiteraustritt erfolgt informell ohne feste Checkliste.
+              auswirkung: null
+          - wert: kein_prozess
+            punkte: 0
+            textbaustein:
+              feststellung: Es existiert kein definierter Prozess zur Entziehung von Berechtigungen beim Ausscheiden von Personal.
+              auswirkung: Gefahr verwaister Accounts und unbefugter Zugriffe ehemaliger Mitarbeiter.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: av_vertraege_dsgvo
+        label: Auftragsverarbeitungsverträge (AVV) nach DSGVO
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: rechtliche_anforderungen
+          kriterium: org_av_vertraege
+          max_punkte: 15
+        werte:
+          - wert: vollstaendig_vorhanden
+            punkte: 15
+            textbaustein:
+              feststellung: Alle Dienstleister mit Zugriff auf personenbezogene Daten verfügen über gültige AV-Verträge gem. DSGVO.
+              auswirkung: null
+          - wert: teilweise
+            punkte: 7
+            textbaustein:
+              feststellung: AV-Verträge liegen nur für einen Teil der externen IT-Dienstleister vor.
+              auswirkung: null
+          - wert: nicht_geprueft
+            punkte: 0
+            textbaustein:
+              feststellung: Auftragsverarbeitungsverträge wurden bisher nicht systematisch geprüft oder abgeschlossen.
+              auswirkung: Datenschutz- und Compliance-Risiken sowie Bußgeldrisiken nach DSGVO.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: kommentar
+        label: Kommentar
+        typ: mehrzeiliger_text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: intern

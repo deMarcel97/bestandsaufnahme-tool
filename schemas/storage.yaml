@@ -1,0 +1,314 @@
+schema_version: 1
+typ: storage
+bezeichnung_anzeige: Storage & Speicher-Systeme
+berichtskapitel: infrastruktur
+standortbezug: true
+abschnitte:
+  - id: bereitstellung_und_architektur
+    titel: Bereitstellung und Architektur
+    felder:
+      - name: bereitstellung
+        label: Bereitstellungsart
+        typ: auswahl
+        pflicht: true
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: shared_storage
+            textbaustein:
+              feststellung: Als zentraler Speicher kommt ein Shared Storage (SAN / NAS Appliance) zum Einsatz.
+              auswirkung: null
+          - wert: local_storage
+            textbaustein:
+              feststellung: Der Speicher wird als lokaler Speicher in Virtualisierungs-Hosts oder als HCI-Cluster bereitgestellt.
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: hersteller_shared
+        label: Hersteller Shared Storage
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: bereitstellung
+          operator: gleich
+          wert: shared_storage
+        werte:
+          - wert: netapp
+            textbaustein:
+              feststellung: Das Speichersystem stammt vom Hersteller NetApp.
+              auswirkung: null
+          - wert: dell_powervault_powerstore_unity
+            textbaustein:
+              feststellung: Das Speichersystem stammt von Dell (PowerVault / PowerStore / Unity).
+              auswirkung: null
+          - wert: huawei_oceanstor_dorado
+            textbaustein:
+              feststellung: Das Speichersystem stammt von Huawei (OceanStor / Dorado).
+              auswirkung: null
+          - wert: hpe_msa_primera
+            textbaustein:
+              feststellung: Das Speichersystem stammt von HPE (MSA / Primera).
+              auswirkung: null
+          - wert: synology
+            textbaustein:
+              feststellung: Als Storage-System wird ein Synology NAS / IP-SAN eingesetzt.
+              auswirkung: null
+          - wert: qnap
+            textbaustein:
+              feststellung: Als Storage-System wird ein QNAP NAS / IP-SAN eingesetzt.
+              auswirkung: null
+          - wert: truenas_enterprise
+            textbaustein:
+              feststellung: Als Speichersystem kommt TrueNAS Enterprise zum Einsatz.
+              auswirkung: null
+          - wert: sonstige
+            textbaustein:
+              feststellung: Es kommt ein sonstiges Speichersystem zum Einsatz.
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: hersteller_sonstige
+        label: Hersteller Freitext (Sonstige)
+        typ: text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller_shared
+          operator: gleich
+          wert: sonstige
+
+      - name: protokoll_anbindung
+        label: Protokoll & Anbindung
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: iscsi
+            textbaustein:
+              feststellung: Die Storage-Anbindung erfolgt über iSCSI (IP-SAN).
+              auswirkung: null
+          - wert: fibre_channel
+            textbaustein:
+              feststellung: Die Storage-Anbindung erfolgt über ein Fibre Channel SAN (FC).
+              auswirkung: null
+          - wert: nfs
+            textbaustein:
+              feststellung: Die Speicherbereitstellung erfolgt über das NFS-Protokoll.
+              auswirkung: null
+          - wert: smb_cifs
+            textbaustein:
+              feststellung: Die Speicherbereitstellung erfolgt über SMB/CIFS-Shares.
+              auswirkung: null
+          - wert: sas_direct_attach
+            textbaustein:
+              feststellung: Die Storage-Anbindung erfolgt direkt per SAS Direct-Attach.
+              auswirkung: null
+          - wert: unbekannt
+            textbaustein: null
+
+      - name: controller_redundanz
+        label: Controller-Redundanz
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: storage_controller_redundanz
+          max_punkte: 25
+        werte:
+          - wert: dual_active_active
+            punkte: 25
+            textbaustein:
+              feststellung: Das Storage-System verfügt über redundante Dual-Controller im Active/Active-Betrieb.
+              auswirkung: null
+          - wert: dual_active_passive
+            punkte: 20
+            textbaustein:
+              feststellung: Das Storage-System verfügt über redundante Controller im Active/Passive-Failover-Modus.
+              auswirkung: null
+          - wert: single_controller
+            punkte: 0
+            textbaustein:
+              feststellung: Das Storage-System wird nur mit einem Single-Controller (keine Redundanz) betrieben.
+              auswirkung: Bei einem Controller-Defekt steht der gesamte Speicher still.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: technologie_local
+        label: Lokale Speicher-Technologie / HCI
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: bereitstellung
+          operator: gleich
+          wert: local_storage
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: storage_technologie_local
+          max_punkte: 15
+        werte:
+          - wert: zfs
+            punkte: 15
+            textbaustein:
+              feststellung: Der lokale Speicher wird über ZFS mit Prüfsummen und Snapshot-Funktionalität verwaltet.
+              auswirkung: null
+          - wert: hci_vsan_ceph
+            punkte: 15
+            textbaustein:
+              feststellung: Der Speicher wird über eine hyperkonvergente HCI-Lösung (Ceph / vSAN / StarWind) redundant über Hosts synchronisiert.
+              auswirkung: null
+          - wert: hardware_raid
+            punkte: 12
+            textbaustein:
+              feststellung: Der lokale Speicher wird über dedizierte Hardware-RAID-Controller mit BBU/Flash-Cache abgesichert.
+              auswirkung: null
+          - wert: lvm_thin
+            punkte: 10
+            textbaustein:
+              feststellung: Als Speicherpool kommt LVM-Thin zum Einsatz.
+              auswirkung: null
+          - wert: software_raid
+            punkte: 0
+            textbaustein:
+              feststellung: Als lokaler Speicher kommt einfaches Software-RAID / Windows Storage Spaces ohne Hardware-Cache zum Einsatz.
+              auswirkung: Erhöhte Ausfallrisiken und Schreiblatenzen bei Host-Abstürzen.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+  - id: kapazitaet_und_medien
+    titel: Kapazität und Speichermedien
+    felder:
+      - name: medientyp
+        label: Medientyp / Festplattentechnologie
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: hardware_und_software
+          kriterium: storage_medientyp
+          max_punkte: 10
+        werte:
+          - wert: all_flash_nvme
+            punkte: 10
+            textbaustein:
+              feststellung: Das Speichersystem ist vollständig mit NVMe All-Flash SSDs bestückt.
+              auswirkung: null
+          - wert: all_flash_ssd
+            punkte: 10
+            textbaustein:
+              feststellung: Das Speichersystem basiert auf All-Flash SATA/SAS SSDs.
+              auswirkung: null
+          - wert: hybrid_ssd_hdd
+            punkte: 5
+            textbaustein:
+              feststellung: Das Storage-System nutzt ein Hybrid-Design aus SSD-Caching und HDD-Speicherpools.
+              auswirkung: null
+          - wert: hdd_only
+            punkte: 0
+            textbaustein:
+              feststellung: Das Speichersystem nutzt ausschließlich mechanische Festplatten (HDD-only).
+              auswirkung: Hohe Latenzen und begrenzte IOPS bei anspruchsvollen Workloads.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: kapazitaet_brutto_tb
+        label: Gesamtkapazität Brutto (TB)
+        typ: zahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+
+      - name: kapazitaet_netto_tb
+        label: Gesamtkapazität Netto nutzbar (TB)
+        typ: zahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+
+      - name: fuellgrad_prozent
+        label: Füllgrad / Speicherauslastung
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: betriebsrisiken
+          kriterium: storage_fuellgrad
+          max_punkte: 20
+        werte:
+          - wert: unter_70
+            punkte: 20
+            textbaustein:
+              feststellung: Die Speicherauslastung liegt im optimalen Bereich (unter 70 %).
+              auswirkung: null
+          - wert: 70_bis_85
+            punkte: 10
+            textbaustein:
+              feststellung: Die Speicherauslastung liegt zwischen 70 % und 85 % und sollte beobachtet werden.
+              auswirkung: null
+          - wert: ueber_85
+            punkte: 0
+            textbaustein:
+              feststellung: Die Speicherauslastung liegt kritisch hoch bei über 85 %.
+              auswirkung: Akute Gefahr von Ausfällen durch volllaufende Datastores und Schreibblockaden.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+  - id: service_und_wartung
+    titel: Service und Wartungsvertrag
+    felder:
+      - name: wartungsvertrag_status
+        label: Wartungsvertrag & Support-Status
+        typ: auswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        bewertung:
+          kategorie: hardware_und_software
+          kriterium: storage_wartungsvertrag
+          max_punkte: 20
+        werte:
+          - wert: aktiv_24_7
+            punkte: 20
+            textbaustein:
+              feststellung: Für das Speichersystem besteht ein aktiver 24/7 Hersteller-Wartungsvertrag mit 4h Reaktionszeit.
+              auswirkung: null
+          - wert: aktiv_nbd
+            punkte: 15
+            textbaustein:
+              feststellung: Für das Speichersystem besteht ein aktiver Hersteller-Wartungsvertrag (Next Business Day / NBD).
+              auswirkung: null
+          - wert: abgelaufen_eol
+            punkte: 0
+            textbaustein:
+              feststellung: Der Wartungsvertrag für das Speichersystem ist abgelaufen (End-of-Life / EOL).
+              auswirkung: Bei Hardwareausfällen sind keine Ersatzteile und kein Herstellersupport mehr garantiert.
+          - wert: kein_vertrag
+            punkte: 0
+            textbaustein:
+              feststellung: Für das Speichersystem besteht kein Wartungs- oder Supportvertrag.
+              auswirkung: Im Schadensfall drohen unkalkulierbare Stillstandszeiten.
+          - wert: unbekannt
+            punkte: null
+            textbaustein: null
+
+      - name: kommentar
+        label: Kommentar
+        typ: mehrzeiliger_text
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: intern
