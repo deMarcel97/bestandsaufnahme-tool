@@ -8,6 +8,11 @@ class Beteiligter(BaseModel):
     zustaendig_fuer_thema: str = ""
     email: str = ""
     telefon: str = ""
+    objekt_id: Optional[str] = None
+    notfall_telefon: str = ""
+    erreichbarkeit: str = ""
+    sla_reaktionszeit: str = ""
+
 
 class Dokumentenanforderung(BaseModel):
     bezeichnung: str = ""

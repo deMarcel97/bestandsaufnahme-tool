@@ -263,3 +263,190 @@ def test_sidebar_zeigt_anzahl_beteiligter(bestand):
 
     seite = client.get(f"/auftrag/{AUFTRAG_ID}/beteiligte")
     assert '<span class="count">2</span>' in seite.text
+
+
+# ── Feature #321: Support-Matrix mit Technik-Verknüpfung, Notfall & SLAs ────
+
+def test_speichert_und_laedt_erweiterte_felder(bestand):
+    from app.models.technik import TechnikObjekt
+
+    bestand.save_objekt(TechnikObjekt(
+        id="fw-test-1",
+        typ="firewall",
+        bezeichnung="Haupt-Firewall",
+        auftrag_id=AUFTRAG_ID
+    ))
+
+    stand = _version_im_formular(client.get(f"/auftrag/{AUFTRAG_ID}/beteiligte").text)
+
+    antwort = client.post(
+        f"/auftrag/{AUFTRAG_ID}/beteiligte",
+        data={
+            "version": stand,
+            "beteiligter_name_0": "Max Notfall",
+            "beteiligter_organisation_0": "IT-Service GmbH",
+            "beteiligter_rolle_0": "Dienstleister",
+            "beteiligter_objekt_id_0": "fw-test-1",
+            "beteiligter_zustaendig_fuer_thema_0": "VPN & Routing",
+            "beteiligter_email_0": "support@itservice.de",
+            "beteiligter_telefon_0": "089-11111",
+            "beteiligter_notfall_telefon_0": "0800-99999",
+            "beteiligter_erreichbarkeit_0": "24/7 Rufbereitschaft",
+            "beteiligter_sla_reaktionszeit_0": "2h Reaktionszeit",
+        },
+        follow_redirects=False,
+    )
+    assert antwort.status_code == 303
+
+    auftrag = bestand.load_auftrag(AUFTRAG_ID)
+    assert len(auftrag.beteiligte) == 1
+    b = auftrag.beteiligte[0]
+    assert b.name == "Max Notfall"
+    assert b.objekt_id == "fw-test-1"
+    assert b.notfall_telefon == "0800-99999"
+    assert b.erreichbarkeit == "24/7 Rufbereitschaft"
+    assert b.sla_reaktionszeit == "2h Reaktionszeit"
+
+    # Formular zeigt gespeicherte Daten und selektiertes Dropdown
+    seite = client.get(f"/auftrag/{AUFTRAG_ID}/beteiligte")
+    assert "0800-99999" in seite.text
+    assert "24/7 Rufbereitschaft" in seite.text
+    assert "2h Reaktionszeit" in seite.text
+    assert 'selected>Firewall: Haupt-Firewall</option>' in seite.text
+
+
+def test_formular_objekte_dropdown_und_neues_objekt_link(bestand):
+    from app.models.technik import TechnikObjekt
+
+    bestand.save_objekt(TechnikObjekt(
+        id="sw-test-1",
+        typ="switch",
+        bezeichnung="Core Switch",
+        auftrag_id=AUFTRAG_ID
+    ))
+
+    seite = client.get(f"/auftrag/{AUFTRAG_ID}/beteiligte")
+    assert "+ Neues Technik-Objekt anlegen ↗" in seite.text
+    assert f'/auftrag/{AUFTRAG_ID}/erfassung' in seite.text
+    assert 'target="_blank"' in seite.text
+    assert "Switch: Core Switch" in seite.text
+    assert "-- Allgemein / Gesamt-IT --" in seite.text
+
+
+def test_formular_hinweis_wenn_keine_objekte(bestand):
+    seite = client.get(f"/auftrag/{AUFTRAG_ID}/beteiligte")
+    assert "Noch keine Technik-Objekte erfasst" in seite.text
+    assert f'/auftrag/{AUFTRAG_ID}/erfassung' in seite.text
+
+
+def test_report_builder_support_matrix_tabelle(bestand):
+    from app.models.technik import TechnikObjekt
+    from app.models.auftrag import Beteiligter
+    from app.services.report_builder import report_builder
+    from app.services.evaluator import evaluator_service
+
+    fw = TechnikObjekt(
+        id="fw-test-1",
+        typ="firewall",
+        bezeichnung="Zentrale Firewall",
+        auftrag_id=AUFTRAG_ID
+    )
+    bestand.save_objekt(fw)
+
+    auftrag = bestand.load_auftrag(AUFTRAG_ID)
+    auftrag.beteiligte = [
+        Beteiligter(
+            name="Max Mustermann",
+            organisation="IT Partner",
+            rolle="Techniker",
+            objekt_id="fw-test-1",
+            zustaendig_fuer_thema="Firewall & Security",
+            email="max@partner.de",
+            telefon="089-12345",
+            notfall_telefon="0800-99999",
+            erreichbarkeit="Mo-Fr 8-18 Uhr",
+            sla_reaktionszeit="4h Vor-Ort"
+        ),
+        Beteiligter(
+            name="Erika Musterfrau",
+            organisation="Kunde",
+            rolle="Ansprechpartner_Kunde",
+            objekt_id=None,
+            zustaendig_fuer_thema="Gesamt-IT",
+            email="erika@kunde.de",
+            telefon="089-54321",
+            notfall_telefon="",
+            erreichbarkeit="Mo-Fr 9-17 Uhr",
+            sla_reaktionszeit=""
+        )
+    ]
+
+    bewertung = evaluator_service.evaluate_auftrag(auftrag.aktive_bausteine, [fw])
+    md = report_builder.build_analysebericht(auftrag, [], [fw], [], bewertung, [], ziel_vertraulichkeit="kundentauglich")
+
+    assert "## 2. Ansprechpartner & Support-Matrix" in md
+    assert "| System/Bereich | Ansprechpartner & Rolle | Service- & Notfallkontakt | Service-Zeiten & SLA |" in md
+    assert "Zentrale Firewall (Firewall) - Firewall & Security" in md
+    assert "Max Mustermann (Techniker, IT Partner)" in md
+    assert "Tel: 089-12345 / Notfall: 0800-99999 / Mail: max@partner.de" in md
+    assert "Zeiten: Mo-Fr 8-18 Uhr / SLA: 4h Vor-Ort" in md
+    assert "Gesamt-IT" in md
+    assert "Erika Musterfrau (Ansprechpartner_Kunde, Kunde)" in md
+
+    # Anonymisierter Bericht maskiert persönliche Daten
+    md_anon = report_builder.build_analysebericht(auftrag, [], [fw], [], bewertung, [], ziel_vertraulichkeit="anonymisiert")
+    assert "## 2. Ansprechpartner & Support-Matrix" in md_anon
+    assert "[ANONYMISIERT]" in md_anon
+    assert "Max Mustermann" not in md_anon
+    assert "max@partner.de" not in md_anon
+    assert "0800-99999" not in md_anon
+
+
+def test_docx_export_support_matrix(bestand):
+    from app.models.technik import TechnikObjekt
+    from app.models.auftrag import Beteiligter
+    from app.services.exporter import exporter_service
+    from docx import Document
+
+    fw = TechnikObjekt(
+        id="fw-test-1",
+        typ="firewall",
+        bezeichnung="Zentrale Firewall",
+        auftrag_id=AUFTRAG_ID,
+        vertraulichkeit="kundentauglich"
+    )
+    bestand.save_objekt(fw)
+
+    auftrag = bestand.load_auftrag(AUFTRAG_ID)
+    auftrag.beteiligte = [
+        Beteiligter(
+            name="Max Mustermann",
+            organisation="IT Partner",
+            rolle="Techniker",
+            objekt_id="fw-test-1",
+            zustaendig_fuer_thema="Firewall & Security",
+            email="max@partner.de",
+            telefon="089-12345",
+            notfall_telefon="0800-99999",
+            erreichbarkeit="Mo-Fr 8-18 Uhr",
+            sla_reaktionszeit="4h Vor-Ort"
+        )
+    ]
+
+    docx_stream = exporter_service.export_analysebericht_docx(auftrag, [], [fw], [], "kundentauglich")
+    doc = Document(docx_stream)
+
+    # Suche Support-Matrix Tabelle im DOCX
+    found_table = False
+    for t in doc.tables:
+        header = [c.text.strip() for c in t.rows[0].cells]
+        if "System/Bereich" in header and "Service- & Notfallkontakt" in header:
+            found_table = True
+            row_text = " | ".join(c.text.strip() for c in t.rows[1].cells)
+            assert "Zentrale Firewall" in row_text
+            assert "Max Mustermann" in row_text
+            assert "0800-99999" in row_text
+            assert "4h Vor-Ort" in row_text
+            break
+    assert found_table, "Support-Matrix Tabelle wurde nicht in das DOCX Dokument gerendert"
+

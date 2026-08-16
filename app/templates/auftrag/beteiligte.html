@@ -24,11 +24,25 @@
       <input type="hidden" name="version" value="{{ auftrag.version }}">
 
       <fieldset class="fieldset">
-        <div class="fieldset-head">
-          <h2>Beteiligte</h2>
-          <span class="eyebrow">Ansprechpartner, Techniker &amp; Dienstleister</span>
+        <div class="fieldset-head" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <h2>Beteiligte</h2>
+            <span class="eyebrow">Ansprechpartner, Techniker &amp; Dienstleister</span>
+          </div>
+          <div>
+            <a href="/auftrag/{{ auftrag.id }}/erfassung" target="_blank" class="btn btn-sm btn-outline">
+              + Neues Technik-Objekt anlegen ↗
+            </a>
+          </div>
         </div>
         <p class="hint">Eine leer gelassene Zeile wird beim Speichern verworfen.</p>
+
+        {% if not objekte %}
+        <div class="alert alert-info" style="margin-bottom: 1rem;">
+          Noch keine Technik-Objekte erfasst. Ansprechpartner können aktuell nur allgemein oder nach der Erfassung von Systemen direkt zugeordnet werden.
+          <a href="/auftrag/{{ auftrag.id }}/erfassung" target="_blank" style="text-decoration: underline; margin-left: 0.5rem;">Zur Erfassungsseite ↗</a>
+        </div>
+        {% endif %}
 
         <div style="overflow-x:auto;">
           <table>
@@ -37,9 +51,13 @@
                 <th>Name</th>
                 <th>Organisation</th>
                 <th>Rolle</th>
+                <th>Verknüpftes System / Objekt</th>
                 <th>Zuständig für</th>
                 <th>E-Mail</th>
                 <th>Telefon</th>
+                <th>Notfall-Telefon</th>
+                <th>Erreichbarkeit</th>
+                <th>SLA / Reaktionszeit</th>
                 <th></th>
               </tr>
             </thead>
@@ -60,9 +78,20 @@
                     <option value="Sonstiges"></option>
                   </datalist>
                 </td>
+                <td>
+                  <select class="form-control" name="beteiligter_objekt_id_{{ loop.index0 }}">
+                    <option value="">-- Allgemein / Gesamt-IT --</option>
+                    {% for obj in objekte %}
+                    <option value="{{ obj.id }}" {% if b and b.objekt_id == obj.id %}selected{% endif %}>{{ obj.typ|capitalize }}: {{ obj.bezeichnung }}</option>
+                    {% endfor %}
+                  </select>
+                </td>
                 <td><input type="text" class="form-control" name="beteiligter_zustaendig_fuer_thema_{{ loop.index0 }}" value="{{ b.zustaendig_fuer_thema if b else '' }}" placeholder="z. B. Firewall, Backup"></td>
                 <td><input type="email" class="form-control" name="beteiligter_email_{{ loop.index0 }}" value="{{ b.email if b else '' }}"></td>
                 <td><input type="tel" class="form-control" name="beteiligter_telefon_{{ loop.index0 }}" value="{{ b.telefon if b else '' }}"></td>
+                <td><input type="tel" class="form-control" name="beteiligter_notfall_telefon_{{ loop.index0 }}" value="{{ b.notfall_telefon if b else '' }}" placeholder="z. B. 24/7 Hotline"></td>
+                <td><input type="text" class="form-control" name="beteiligter_erreichbarkeit_{{ loop.index0 }}" value="{{ b.erreichbarkeit if b else '' }}" placeholder="z. B. Mo-Fr 8-17 Uhr"></td>
+                <td><input type="text" class="form-control" name="beteiligter_sla_reaktionszeit_{{ loop.index0 }}" value="{{ b.sla_reaktionszeit if b else '' }}" placeholder="z. B. 4h Vor-Ort"></td>
                 <td class="col-right"><button type="button" class="btn btn-sm btn-danger" onclick="removeBeteiligterRow({{ loop.index0 }})">Entfernen</button></td>
               </tr>
               {% endfor %}
@@ -99,9 +128,20 @@
         <option value="Sonstiges"></option>
       </datalist>
     </td>
+    <td>
+      <select class="form-control" name="beteiligter_objekt_id___IDX__">
+        <option value="">-- Allgemein / Gesamt-IT --</option>
+        {% for obj in objekte %}
+        <option value="{{ obj.id }}">{{ obj.typ|capitalize }}: {{ obj.bezeichnung }}</option>
+        {% endfor %}
+      </select>
+    </td>
     <td><input type="text" class="form-control" name="beteiligter_zustaendig_fuer_thema___IDX__" placeholder="z. B. Firewall, Backup"></td>
     <td><input type="email" class="form-control" name="beteiligter_email___IDX__"></td>
     <td><input type="tel" class="form-control" name="beteiligter_telefon___IDX__"></td>
+    <td><input type="tel" class="form-control" name="beteiligter_notfall_telefon___IDX__" placeholder="z. B. 24/7 Hotline"></td>
+    <td><input type="text" class="form-control" name="beteiligter_erreichbarkeit___IDX__" placeholder="z. B. Mo-Fr 8-17 Uhr"></td>
+    <td><input type="text" class="form-control" name="beteiligter_sla_reaktionszeit___IDX__" placeholder="z. B. 4h Vor-Ort"></td>
     <td class="col-right"><button type="button" class="btn btn-sm btn-danger" onclick="removeBeteiligterRow(__IDX__)">Entfernen</button></td>
   </tr>
 </template>

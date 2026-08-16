@@ -90,8 +90,72 @@ class ReportBuilder:
                 lines.append(f"- **{aend.titel}:** {aend.text}")
         lines.append("")
 
-        # 4. Executive Summary & Bewertung (now Chapter 2)
-        lines.append("## 2. Executive Summary & Bewertung der IT-Umgebung")
+        # 4. Ansprechpartner & Support-Matrix (Chapter 2)
+        lines.append("## 2. Ansprechpartner & Support-Matrix")
+        if auftrag.beteiligte:
+            lines.append("| System/Bereich | Ansprechpartner & Rolle | Service- & Notfallkontakt | Service-Zeiten & SLA |")
+            lines.append("| --- | --- | --- | --- |")
+            for b in auftrag.beteiligte:
+                matching_obj = next((o for o in objekte if o.id == b.objekt_id), None) if b.objekt_id else None
+                if matching_obj:
+                    schema = schema_loader.get_schema(matching_obj.typ)
+                    typ_label = schema.get("bezeichnung_anzeige", matching_obj.typ.capitalize()) if schema else matching_obj.typ.capitalize()
+                    sys_name = f"{matching_obj.bezeichnung} ({typ_label})"
+                    if b.zustaendig_fuer_thema:
+                        system_bereich = f"{sys_name} - {b.zustaendig_fuer_thema}"
+                    else:
+                        system_bereich = sys_name
+                else:
+                    system_bereich = b.zustaendig_fuer_thema if b.zustaendig_fuer_thema else "Allgemein / Gesamt-IT"
+
+                if ziel_vertraulichkeit == "anonymisiert":
+                    ansprechpartner = "[ANONYMISIERT]"
+                    if b.rolle:
+                        ansprechpartner += f" ({b.rolle})"
+                else:
+                    ansp_parts = []
+                    if b.name:
+                        ansp_parts.append(b.name)
+                    rolle_info = []
+                    if b.rolle and b.rolle != "Sonstiges":
+                        rolle_info.append(b.rolle)
+                    if b.organisation:
+                        rolle_info.append(b.organisation)
+                    if rolle_info:
+                        ansp_parts.append(f"({', '.join(rolle_info)})")
+                    ansprechpartner = " ".join(ansp_parts) if ansp_parts else "-"
+
+                if ziel_vertraulichkeit == "anonymisiert":
+                    kontakt = "[ANONYMISIERT]"
+                else:
+                    kontakte = []
+                    if b.telefon:
+                        kontakte.append(f"Tel: {b.telefon}")
+                    if b.notfall_telefon:
+                        kontakte.append(f"Notfall: {b.notfall_telefon}")
+                    if b.email:
+                        kontakte.append(f"Mail: {b.email}")
+                    kontakt = " / ".join(kontakte) if kontakte else "-"
+
+                sla_parts = []
+                if b.erreichbarkeit:
+                    sla_parts.append(f"Zeiten: {b.erreichbarkeit}")
+                if b.sla_reaktionszeit:
+                    sla_parts.append(f"SLA: {b.sla_reaktionszeit}")
+                service_sla = " / ".join(sla_parts) if sla_parts else "-"
+
+                clean_sb = system_bereich.replace("|", "/").replace("\n", " ").strip()
+                clean_ap = ansprechpartner.replace("|", "/").replace("\n", " ").strip()
+                clean_kt = kontakt.replace("|", "/").replace("\n", " ").strip()
+                clean_sla = service_sla.replace("|", "/").replace("\n", " ").strip()
+
+                lines.append(f"| {clean_sb} | {clean_ap} | {clean_kt} | {clean_sla} |")
+            lines.append("")
+        else:
+            lines.append("Es wurden keine Ansprechpartner oder Support-Kontakte erfasst.\n")
+
+        # 5. Executive Summary & Bewertung (Chapter 3)
+        lines.append("## 3. Executive Summary & Bewertung der IT-Umgebung")
         lines.append(f"**Gesamteinstufung:** {bewertung.gesamt_stufe_bezeichnung} ({bewertung.gesamt_prozent:.1f} %)")
         lines.append(f"**Feldabdeckung:** {bewertung.feldabdeckung_prozent:.1f} % | **Bausteinabdeckung:** {bewertung.bausteinabdeckung_prozent:.1f} %")
         lines.append("")
@@ -112,8 +176,8 @@ class ReportBuilder:
             lines.append(f"| {kat.bezeichnung} | {kat.erreichte_punkte:.1f} / {kat.max_punkte:.1f} | {kat.prozent:.1f} % | {kat.stufe_bezeichnung} |")
         lines.append("")
 
-        # 5. Fachkapitel nach Objekttyp-berichtskapitel (Chapter 3)
-        lines.append("## 3. Technische Infrastruktur und Fachkapitel")
+        # 6. Fachkapitel nach Objekttyp-berichtskapitel (Chapter 4)
+        lines.append("## 4. Technische Infrastruktur und Fachkapitel")
         for sto in standorte:
             sto_title = f"### Standort: {sto.bezeichnung} ({sto.ort})" if sto.ort else f"### Standort: {sto.bezeichnung}"
             lines.append(sto_title)
@@ -262,8 +326,8 @@ class ReportBuilder:
                     lines.append("Keine detaillierten Angaben zu diesem Objekt vorhanden.")
                     lines.append("")
 
-        # 6. Übersichtstabellen Erfasster Systeme (Chapter 4)
-        lines.append("## 4. Übersichtstabellen Erfasster Systeme")
+        # 7. Übersichtstabellen Erfasster Systeme (Chapter 5)
+        lines.append("## 5. Übersichtstabellen Erfasster Systeme")
         if objekte:
             lines.append("| Bezeichnung | Objekttyp | Standort | Betreut durch | Status |")
             lines.append("| --- | --- | --- | --- | --- |")
@@ -280,8 +344,8 @@ class ReportBuilder:
         else:
             lines.append("Keine Objekte erfasst.\n")
 
-        # 7. Chapter 5: Feststellungen (Findings)
-        lines.append("## 5. Feststellungen (Findings)")
+        # 8. Chapter 6: Feststellungen (Findings)
+        lines.append("## 6. Feststellungen (Findings)")
         active_findings = [f for f in findings if f.status != "uebernommen"]
         if active_findings:
             lines.append("| Objekt / Standort | Feld | Erfasster Wert | Schweregrad | Feststellung | Auswirkung | Maßnahme |")
@@ -319,8 +383,8 @@ class ReportBuilder:
         else:
             lines.append("Es wurden keine aktiven Risiken oder Befunde identifiziert.\n")
 
-        # 8. Chapter 6: Priorisierter Maßnahmenkatalog
-        lines.append("## 6. Priorisierter Maßnahmenkatalog")
+        # 9. Chapter 7: Priorisierter Maßnahmenkatalog
+        lines.append("## 7. Priorisierter Maßnahmenkatalog")
         tot_inv = 0.0
         tot_mon = 0.0
         tot_zeit = 0.0
@@ -369,7 +433,7 @@ class ReportBuilder:
             lines.append(f"| **Gesamtsumme Aller Stufen** | | **{tot_inv_str}** | **{tot_mon_str}** | **{tot_zeit_str}**{tot_note} | |")
             lines.append("")
 
-        # 9. Anhang: Verträge
+        # 10. Anhang: Verträge
         if auftrag.vertraege and ziel_vertraulichkeit != "anonymisiert":
             lines.append("## Anhang: Vertragsübersicht")
             lines.append("| Vertrag | Partner | Gegenstand | Laufzeit bis | Monatl. Kosten (€) |")
@@ -378,7 +442,7 @@ class ReportBuilder:
                 lines.append(f"| {v.bezeichnung} | {v.vertragspartner} | {v.gegenstand} | {v.laufzeit_bis or 'k.A.'} | {v.monatliche_kosten:.2f} |")
             lines.append("")
 
-        # 10. Anhang: Beobachtungen vor Ort. Bewusst getrennt von Kapitel 5
+        # 11. Anhang: Beobachtungen vor Ort. Bewusst getrennt von Kapitel 6
         # (Feststellungen): dort stehen die automatisch aus den Erfassungsregeln
         # erzeugten Findings, hier der manuell notierte persönliche Eindruck vor
         # Ort — sonst blieben `positive_aspekte`/`negative_aspekte` folgenlos
@@ -388,7 +452,7 @@ class ReportBuilder:
             lines.append("## Anhang: Beobachtungen vor Ort")
             lines.append(
                 "Persönlicher Eindruck vor Ort, unabhängig von den automatisch "
-                "erzeugten Feststellungen in Kapitel 5."
+                "erzeugten Feststellungen in Kapitel 6."
             )
             lines.append("")
 

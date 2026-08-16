@@ -4,6 +4,14 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.21] - 2026-08-16
+ 
+### Added
+- **Beteiligte: Support-Matrix mit Technik-Verknüpfung, Notfallkontakt & SLAs (#321)**:
+  - **Erweitertes Modell `Beteiligter`**: Neue Felder `objekt_id` (Verknüpfung zu Technik-Objekt), `notfall_telefon` (Notfallnummer / 24/7 Hotline), `erreichbarkeit` (Service-Zeiten) und `sla_reaktionszeit` (vereinbarte SLA / Reaktionszeit).
+  - **Erfassungsformular (`/auftrag/{id}/beteiligte`)**: Dropdown zur direkten Zuweisung eines Technik-Objekts (`Typ: Bezeichnung`) oder `-- Allgemein / Gesamt-IT --`, Eingabefelder für Notfallkontakt, Erreichbarkeit und SLAs, Direktlink `+ Neues Technik-Objekt anlegen ↗` sowie Info-Hinweis bei noch fehlenden Objekten.
+  - **Analysebericht & DOCX-Export**: Neues Kapitel 2 „Ansprechpartner & Support-Matrix" mit formatierter Übersichtstabelle (Spalten: System/Bereich, Ansprechpartner & Rolle, Service- & Notfallkontakt, Service-Zeiten & SLA). Automatische Maskierung persönlicher Daten im anonymisierten Export.
+
 ## [2.7.20] - 2026-08-16
 
 ### Changed
