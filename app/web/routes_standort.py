@@ -1,7 +1,7 @@
 from datetime import date
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse
-from app.services.storage import storage
+from app.services.storage import storage, KonfliktFehler
 from app.services.slug import generate_slug_id
 from app.services.rule_engine import rule_engine
 from app.web.templates import templates
@@ -185,6 +185,47 @@ async def edit_standort_submit(
     standort.notiz = form_data.get("notiz", "").strip()
 
     standort.anbindungen = _parse_anbindungen_from_form(form_data)
-    storage.save_standort(standort)
+
+    # Massgeblich ist der Stand, den das Formular beim Laden gesehen hat — nicht
+    # der frisch geladene. Sonst stimmt die Version beim Speichern immer überein
+    # und die Konflikterkennung könnte nie anschlagen (Karte #308). Fehlt das
+    # Feld (Formular aus einer älteren Version), bleibt es beim bisherigen
+    # Verhalten.
+    standort.version = parse_int_german(form_data.get("version"), standort.version)
+
+    try:
+        storage.save_standort(standort)
+    except KonfliktFehler:
+        return _konflikt_formular(request, auftrag_id, standort_id, standort)
 
     return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
+
+def _konflikt_formular(request: Request, auftrag_id: str, standort_id: str, standort: Standort):
+    """Liefert das Bearbeitungsformular mit den gerade eingegebenen Werten und
+    einem Hinweis zurück, statt sie auf einer Fehlerseite zu verlieren.
+
+    Die Version wird auf den Stand der Platte gehoben: ein zweites Speichern
+    soll die fremde Änderung bewusst überschreiben können, statt in derselben
+    Meldung hängenzubleiben."""
+    auftrag = storage.load_auftrag(auftrag_id)
+    if not auftrag:
+        return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
+
+    aktuell = storage.load_standort(auftrag_id, standort_id)
+    if aktuell:
+        standort.version = aktuell.version
+
+    sidebar_context = build_sidebar_context(auftrag)
+    return templates.TemplateResponse(
+        request=request,
+        name="standort/form.html",
+        status_code=409,
+        context={
+            "auftrag": auftrag,
+            "standort": standort,
+            "konflikt": True,
+            "active_tab": "erfassung",
+            "active_nav": "auftrag",
+            **sidebar_context
+        }
+    )

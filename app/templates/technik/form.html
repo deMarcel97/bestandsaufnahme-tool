@@ -19,7 +19,14 @@
     <a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn" style="flex:none;">Zurück zur Erfassung</a>
   </div>
 
+  {% include "_konflikt_banner.html" %}
+
   <form action="{% if obj %}/auftrag/{{ auftrag.id }}/objekt/{{ schema.typ }}/{{ obj.id }}{% else %}/auftrag/{{ auftrag.id }}/objekt/neu?typ={{ schema.typ }}{% endif %}" method="POST">
+    {% if obj %}
+    {# Stand, den dieses Formular beim Laden gesehen hat — siehe Karte #308.
+       Beim Neuanlegen gibt es noch nichts, womit sich vergleichen liesse. #}
+    <input type="hidden" name="version" value="{{ obj.version }}">
+    {% endif %}
 
     <fieldset class="fieldset">
       <div class="fieldset-head"><h2>Zuordnung</h2></div>
