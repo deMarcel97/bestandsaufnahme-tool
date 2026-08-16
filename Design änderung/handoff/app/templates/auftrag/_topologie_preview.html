@@ -1,0 +1,23 @@
+{% for sto in standorte %}
+<div class="topology-card" id="topo-card-uebersicht-{{ sto.id }}" style="margin-bottom:18px;">
+  <div class="topology-head">
+    <div class="topology-title">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+      <span>Netzwerktopologie: {{ sto.bezeichnung }}</span>
+    </div>
+    <div class="topology-toolbar">
+      <button type="button" class="topology-btn" onclick="zoomTopology('uebersicht-{{ sto.id }}', 1.2)" title="Vergrößern">+</button>
+      <button type="button" class="topology-btn" onclick="zoomTopology('uebersicht-{{ sto.id }}', 0.8)" title="Verkleinern">−</button>
+      <button type="button" class="topology-btn" onclick="resetTopology('uebersicht-{{ sto.id }}')" title="Zurücksetzen">1:1</button>
+      <button type="button" class="topology-btn" onclick="toggleFullscreenTopology('topo-card-uebersicht-{{ sto.id }}')" title="Vollbild">⛶ Vollbild</button>
+    </div>
+  </div>
+  <div class="topology-viewport" id="viewport-uebersicht-{{ sto.id }}">
+    <div class="mermaid" id="mermaid-uebersicht-{{ sto.id }}">
+{{ topologien.get(sto.id, '') }}
+    </div>
+  </div>
+</div>
+{% else %}
+<p class="text-muted">Keine Standorte für diesen Auftrag vorhanden.</p>
+{% endfor %}

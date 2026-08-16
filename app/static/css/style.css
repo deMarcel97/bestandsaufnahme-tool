@@ -1051,3 +1051,82 @@ td.top { vertical-align: top; }
   header { padding: 0 16px; }
   .workspace { padding: 20px 16px 60px; }
 }
+
+/* ── Netzwerktopologie & Visualisierung (#324) ── */
+.topology-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-top: 18px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.topology-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 92%, var(--bg));
+}
+
+.topology-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.topology-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.topology-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.topology-btn:hover {
+  background: var(--hover);
+  border-color: var(--muted);
+}
+
+.topology-viewport {
+  position: relative;
+  width: 100%;
+  min-height: 260px;
+  max-height: 520px;
+  overflow: auto;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: var(--panel);
+  cursor: grab;
+  user-select: none;
+}
+
+.topology-viewport:active {
+  cursor: grabbing;
+}
+
+.topology-viewport .mermaid {
+  transform-origin: top center;
+  transition: transform 0.1s ease-out;
+}
+

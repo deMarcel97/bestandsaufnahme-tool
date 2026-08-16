@@ -160,7 +160,7 @@ class ExporterService:
             raise ValueError("DOCX export failed: Placeholder [[GRAFIK:executive_summary]] not found in report text")
 
         from docx import Document
-        from docx.shared import Inches
+        from docx.shared import Inches, Pt
         from app.services.chart_generator import chart_generator
 
         doc = Document()
@@ -169,6 +169,8 @@ class ExporterService:
         lines = md_text.split('\n')
         in_table = False
         table_data = []
+        in_mermaid = False
+        mermaid_lines = []
 
         def flush_table():
             nonlocal in_table, table_data
@@ -199,6 +201,38 @@ class ExporterService:
 
         for line in lines:
             line_str = line.strip()
+
+            if line_str == "```mermaid":
+                if in_table:
+                    flush_table()
+                in_mermaid = True
+                mermaid_lines = []
+                continue
+            elif in_mermaid:
+                if line_str == "```":
+                    in_mermaid = False
+                    p_title = doc.add_paragraph()
+                    r_title = p_title.add_run("Netzwerktopologie (Mermaid-Struktur):")
+                    r_title.bold = True
+
+                    box_table = doc.add_table(rows=1, cols=1)
+                    box_table.style = 'Table Grid'
+                    cell = box_table.cell(0, 0)
+                    cell.text = ""
+                    p_box = cell.paragraphs[0]
+                    p_box.paragraph_format.space_before = Inches(0.05)
+                    p_box.paragraph_format.space_after = Inches(0.05)
+                    r_box = p_box.add_run("\n".join(mermaid_lines))
+                    r_box.font.name = 'Consolas'
+                    r_box.font.size = Pt(8.5)
+                    mermaid_lines = []
+                    continue
+                else:
+                    mermaid_lines.append(line)
+                    continue
+
+            if line_str == "```":
+                continue
             
             if line_str == "[[GRAFIK:executive_summary]]":
                 if in_table:

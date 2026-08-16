@@ -161,6 +161,28 @@
         <span>Lege das erste Objekt für diesen Standort über „+ Objekt“ an.</span>
       </div>
       {% endif %}
+
+      {% if sto_objekte or sto.anbindungen %}
+      <div class="topology-card" id="topo-card-{{ sto.id }}">
+        <div class="topology-head">
+          <div class="topology-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+            <span>Netzwerktopologie: {{ sto.bezeichnung }}</span>
+          </div>
+          <div class="topology-toolbar">
+            <button type="button" class="topology-btn" onclick="zoomTopology('{{ sto.id }}', 1.2)" title="Vergrößern">+</button>
+            <button type="button" class="topology-btn" onclick="zoomTopology('{{ sto.id }}', 0.8)" title="Verkleinern">−</button>
+            <button type="button" class="topology-btn" onclick="resetTopology('{{ sto.id }}')" title="Zurücksetzen">1:1</button>
+            <button type="button" class="topology-btn" onclick="toggleFullscreenTopology('topo-card-{{ sto.id }}')" title="Vollbild">⛶ Vollbild</button>
+          </div>
+        </div>
+        <div class="topology-viewport" id="viewport-{{ sto.id }}">
+          <div class="mermaid" id="mermaid-{{ sto.id }}">
+{{ topologien.get(sto.id, '') }}
+          </div>
+        </div>
+      </div>
+      {% endif %}
     </section>
     {% else %}
     <div class="empty-state" style="margin-top:24px;">
