@@ -10,6 +10,7 @@
     <li><a href="/auftrag/{{ auftrag.id }}/vertraege" {% if active_tab == 'vertraege' %}class="active"{% endif %}>Verträge {% if auftrag.vertraege %}<span class="count">{{ auftrag.vertraege|length }}</span>{% endif %}</a></li>
     <li><a href="/auftrag/{{ auftrag.id }}/unterlagen" {% if active_tab == 'unterlagen' %}class="active"{% endif %}>Unterlagen {% if auftrag.dokumentenanforderung %}<span class="count">{{ auftrag.dokumentenanforderung|length }}</span>{% endif %}</a></li>
     <li><a href="/auftrag/{{ auftrag.id }}/projektrahmen" {% if active_tab == 'projektrahmen' %}class="active"{% endif %}>Projektrahmen</a></li>
+    <li><a href="/auftrag/{{ auftrag.id }}/versionierung" {% if active_tab == 'versionierung' %}class="active"{% endif %}>Versionierung <span class="count">{{ auftrag.aktuelle_berichts_version }}</span></a></li>
     <li><a href="/auftrag/{{ auftrag.id }}/offene_punkte" {% if active_tab == 'offene_punkte' %}class="active"{% endif %}>Offene Punkte {% if offene_punkte %}<span class="count">{{ offene_punkte|length }}</span>{% endif %}</a></li>
     <li><a href="/auftrag/{{ auftrag.id }}/findings" {% if active_tab == 'findings' %}class="active"{% endif %}>Findings {% if findings %}<span class="count-accent">{{ findings|length }}</span>{% endif %}</a></li>
     <li><a href="/auftrag/{{ auftrag.id }}/massnahmen" {% if active_tab == 'massnahmen' %}class="active"{% endif %}>Maßnahmenkatalog {% if massnahmen %}<span class="count">{{ massnahmen|length }}</span>{% endif %}</a></li>

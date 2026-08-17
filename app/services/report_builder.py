@@ -40,10 +40,12 @@ class ReportBuilder:
 
         # 1. Header
         kunde_display = "[ANONYMISIERT]" if ziel_vertraulichkeit == "anonymisiert" else auftrag.kunde
+        berichts_version = getattr(auftrag, "aktuelle_berichts_version", "v0.1")
         lines.append(f"# Analysebericht: IT-Bestandsaufnahme")
         lines.append(f"**Kunde:** {kunde_display or 'Kein Kunde angegeben'}")
         lines.append(f"**Projektnummer:** {auftrag.projekt_nummer}")
         lines.append(f"**Bezeichnung:** {auftrag.bezeichnung}")
+        lines.append(f"**Version:** {berichts_version}")
         lines.append(f"**Datum:** {datetime.now().strftime('%d.%m.%Y')}")
         lines.append(f"**Vertraulichkeitsstufe:** {ziel_vertraulichkeit.upper()}")
         lines.append("")
@@ -53,6 +55,16 @@ class ReportBuilder:
         lines.append("Dieses Dokument enthält vertrauliche Informationen zur IT-Infrastruktur des Kunden. "
                      "Eine Weitergabe an unbefugte Dritte ist ohne vorherige schriftliche Zustimmung nicht gestattet.")
         lines.append("")
+
+        # Dokumentenhistorie
+        if getattr(auftrag, "versionshistorie", None):
+            lines.append("## Dokumentenhistorie")
+            lines.append("| Version | Datum | Autor | Status | Änderung / Beschreibung |")
+            lines.append("| --- | --- | --- | --- | --- |")
+            for v in auftrag.versionshistorie:
+                autor_str = "[ANONYMISIERT]" if ziel_vertraulichkeit == "anonymisiert" else (v.autor or "–")
+                lines.append(f"| {v.version} | {v.datum or '–'} | {autor_str} | {v.status} | {v.beschreibung or '–'} |")
+            lines.append("")
 
         # 3. Einleitung: Unternehmenskontext
         ctx = auftrag.unternehmenskontext
