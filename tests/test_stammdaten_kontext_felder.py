@@ -13,7 +13,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.models.auftrag import Auftrag, Aspekt
+from app.models.auftrag import Auftrag, Aspekt, GeplanteAenderung
 from app.services.report_builder import ReportBuilder
 from app.web.optionen import ZWECK_OPTIONS
 
@@ -245,7 +245,7 @@ def test_analysebericht_enthaelt_geschaeftskritische_systeme_und_aenderungen():
         Aspekt(titel="ERP-System", text="SAP S/4HANA, zentral gehostet.")
     ]
     a.unternehmenskontext.geplante_aenderungen = [
-        Aspekt(titel="Serverumzug", text="Migration ins neue Rechenzentrum Q3.")
+        GeplanteAenderung(titel="Serverumzug", text="Migration ins neue Rechenzentrum Q3.", status="in_planung")
     ]
 
     from app.services.evaluator import evaluator_service
@@ -256,7 +256,7 @@ def test_analysebericht_enthaelt_geschaeftskritische_systeme_und_aenderungen():
     assert "### Geschäftskritische Systeme" in report
     assert "- **ERP-System:** SAP S/4HANA, zentral gehostet." in report
     assert "### Geplante Änderungen" in report
-    assert "- **Serverumzug:** Migration ins neue Rechenzentrum Q3." in report
+    assert "- **Serverumzug** (Status: In Planung): Migration ins neue Rechenzentrum Q3." in report
 
 
 def test_unternehmenskontext_kerngeschaeft_hinweistext(auftrag):
@@ -264,3 +264,41 @@ def test_unternehmenskontext_kerngeschaeft_hinweistext(auftrag):
     assert response.status_code == 200
     assert "Beschreiben Sie kurz die Haupttätigkeit" in response.text
     assert "placeholder=\"z. B. Mittelständischer Großhandel" in response.text
+
+
+def test_unternehmenskontext_geplante_aenderung_status_flow(auftrag):
+    antwort = client.post(
+        f"/auftrag/{AUFTRAG_ID}/unternehmenskontext",
+        data={
+            "aenderung_titel_0": "M365 Migration",
+            "aenderung_status_0": "in_durchfuehrung",
+            "aenderung_text_0": "Migration aller Postfächer zu Exchange Online.",
+            "aenderung_titel_1": "Glasfaser-Ausbau",
+            "aenderung_status_1": "budgetierung",
+            "aenderung_text_1": "Anbindung 1 GBit/s synchron.",
+        },
+        follow_redirects=False,
+    )
+    assert antwort.status_code == 303
+
+    gespeichert = auftrag.load_auftrag(AUFTRAG_ID)
+    aend = gespeichert.unternehmenskontext.geplante_aenderungen
+    assert len(aend) == 2
+    assert aend[0].titel == "M365 Migration"
+    assert aend[0].status == "in_durchfuehrung"
+    assert aend[1].titel == "Glasfaser-Ausbau"
+    assert aend[1].status == "budgetierung"
+
+    # Formular anzeigen und prüfen
+    form_resp = client.get(f"/auftrag/{AUFTRAG_ID}/unternehmenskontext")
+    assert form_resp.status_code == 200
+    assert 'value="in_durchfuehrung" selected' in form_resp.text
+    assert 'value="budgetierung" selected' in form_resp.text
+
+    # Bericht prüfen
+    rb = ReportBuilder()
+    from app.services.evaluator import evaluator_service
+    bew = evaluator_service.evaluate_auftrag([], [])
+    rep = rb.build_analysebericht(gespeichert, [], [], [], bew, [], ziel_vertraulichkeit="kundentauglich")
+    assert "- **M365 Migration** (Status: In Durchführung / Projektstart bestätigt): Migration aller Postfächer zu Exchange Online." in rep
+    assert "- **Glasfaser-Ausbau** (Status: Budgetierung): Anbindung 1 GBit/s synchron." in rep

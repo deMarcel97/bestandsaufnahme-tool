@@ -10,7 +10,7 @@ from app.services.evaluator import evaluator_service
 from app.services.topology_generator import generate_network_topology_mermaid
 from app.web.templates import templates
 from app.web.shared_context import build_sidebar_context, aktuelle_version
-from app.models.auftrag import Auftrag, Aspekt
+from app.models.auftrag import Auftrag, Aspekt, GeplanteAenderung
 from app.utils.number_parser import parse_float_german, parse_int_german
 from app.web.formular_listen import parse_unterobjekte
 from app.web.optionen import (
@@ -401,7 +401,7 @@ async def unternehmenskontext_submit(
         form_data, "system", Aspekt
     )
     auftrag.unternehmenskontext.geplante_aenderungen = parse_unterobjekte(
-        form_data, "aenderung", Aspekt
+        form_data, "aenderung", GeplanteAenderung
     )
 
     # Siehe stammdaten_submit: massgeblich ist der beim Laden gesehene Stand.
