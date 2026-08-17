@@ -15,7 +15,7 @@ from app.services.slug import generate_slug_id
 from app.web.templates import templates
 from app.web.shared_context import build_sidebar_context
 from app.models.auftrag import Auftrag
-from app.models.standort import Standort
+from app.models.standort import Standort, Internetanbindung
 from app.models.technik import TechnikObjekt
 from app.models.wizard import (
     WizardProgress,
@@ -127,7 +127,7 @@ def wizard_init(auftrag_id: str):
     return RedirectResponse(url=f"/auftrag/{auftrag_id}/wizard", status_code=303)
 
 
-@router.post("/auftrag/{auftrag_id}/wizard/step/{step: int}")
+@router.post("/auftrag/{auftrag_id}/wizard/step/{step}")
 async def wizard_save_step(
     request: Request,
     auftrag_id: str,
@@ -223,9 +223,224 @@ def wizard_abschliessen(auftrag_id: str):
     if not progress:
         return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
 
-    # Hier würden die erfassten Daten in echte Objekte umgewandelt
-    # Für jetzt: einfach den Fortschritt löschen und zur Erfassung weiterleiten
-    # TODO: Automatisches Anlegen der Bausteine implementieren
+    summary_data = {}
+    for step_num, step_data in progress.steps.items():
+        summary_data[step_data.step_type] = step_data.data
+
+    # 1. Schritt: Auftragsgrunddaten
+    d1 = summary_data.get("auftragsgrunddaten") or {}
+    if d1:
+        if d1.get("kunde"):
+            auftrag.kunde = d1["kunde"].strip()
+        if "projekt_nummer" in d1:
+            auftrag.projekt_nummer = d1["projekt_nummer"].strip()
+        if d1.get("bezeichnung"):
+            auftrag.bezeichnung = d1["bezeichnung"].strip()
+        if "abgrenzung" in d1:
+            auftrag.abgrenzung = d1["abgrenzung"].strip()
+
+    # 2. Schritt: Standort-Grunddaten
+    d2 = summary_data.get("standort_grunddaten") or {}
+    standorte = storage.list_standorte(auftrag_id)
+    standort = None
+    if d2:
+        sto_id = d2.get("standort_id")
+        if sto_id:
+            standort = storage.load_standort(auftrag_id, sto_id)
+        if not standort:
+            if standorte:
+                standort = standorte[0]
+            else:
+                new_id = generate_slug_id("standort", d2.get("bezeichnung") or "Hauptsitz", [s.id for s in standorte])
+                standort = Standort(
+                    schema_version=1,
+                    id=new_id,
+                    auftrag_id=auftrag_id,
+                    bezeichnung=d2.get("bezeichnung") or "Hauptsitz",
+                    anzahl_user=10
+                )
+        if d2.get("bezeichnung"):
+            standort.bezeichnung = d2["bezeichnung"].strip()
+        if d2.get("anzahl_user"):
+            try:
+                standort.anzahl_user = int(d2["anzahl_user"])
+            except (ValueError, TypeError):
+                pass
+        if "strasse" in d2:
+            standort.strasse = d2["strasse"].strip()
+        if "plz" in d2:
+            standort.plz = d2["plz"].strip()
+        if "ort" in d2:
+            standort.ort = d2["ort"].strip()
+        if "ansprechpartner_vor_ort" in d2:
+            standort.ansprechpartner_vor_ort = d2["ansprechpartner_vor_ort"].strip()
+        if "funktion" in d2:
+            standort.funktion = d2["funktion"].strip()
+    else:
+        if standorte:
+            standort = standorte[0]
+        else:
+            sto_id = generate_slug_id("standort", "Hauptsitz", [])
+            standort = Standort(
+                schema_version=1,
+                id=sto_id,
+                auftrag_id=auftrag_id,
+                bezeichnung="Hauptsitz",
+                anzahl_user=10
+            )
+
+    # 3. Schritt: Internetanbindungen am Standort
+    d3 = summary_data.get("internetanbindungen") or {}
+    if d3 and d3.get("hat_internetanbindung") == "ja":
+        down = 0.0
+        up = 0.0
+        try:
+            if d3.get("bandbreite_down"):
+                down = float(str(d3["bandbreite_down"]).replace(",", "."))
+        except ValueError:
+            pass
+        try:
+            if d3.get("bandbreite_up"):
+                up = float(str(d3["bandbreite_up"]).replace(",", "."))
+        except ValueError:
+            pass
+
+        anbindung = Internetanbindung(
+            anbieter=d3.get("anbieter", "").strip(),
+            art=d3.get("art") or "DSL",
+            bandbreite_down_mbit=down,
+            bandbreite_up_mbit=up
+        )
+        if not standort.anbindungen:
+            standort.anbindungen.append(anbindung)
+        else:
+            standort.anbindungen[0] = anbindung
+
+    # Standort speichern
+    storage.save_standort(standort)
+
+    # 4. Schritt: Firewall
+    existing_objekte = storage.list_objekte(auftrag_id)
+    d4 = summary_data.get("firewall") or {}
+    if d4 and d4.get("hat_firewall") == "ja":
+        if "firewall" not in auftrag.aktive_bausteine:
+            auftrag.aktive_bausteine.append("firewall")
+
+        alter_val = ""
+        if d4.get("alter"):
+            alter_val = str(d4["alter"]).strip()
+
+        wartung_val = "ja" if d4.get("wartungsvertrag") == "ja" else ("nein" if d4.get("wartungsvertrag") == "nein" else "")
+
+        fw_id = generate_slug_id("firewall", d4.get("modell") or d4.get("hersteller") or "Firewall", [o.id for o in existing_objekte])
+        fw_bez = f"Firewall {d4.get('modell', '')}".strip() or f"Firewall {d4.get('hersteller', '')}".strip() or "Firewall"
+        fw_objekt = TechnikObjekt(
+            schema_version=1,
+            id=fw_id,
+            typ="firewall",
+            bezeichnung=fw_bez,
+            auftrag_id=auftrag_id,
+            standort_id=standort.id if standort else None,
+            erfassungsstatus="teilweise",
+            daten={
+                "hersteller": d4.get("hersteller", ""),
+                "modell": d4.get("modell", ""),
+                "hardware_alter": alter_val,
+                "wartungsvertrag_vorhanden": wartung_val
+            }
+        )
+        storage.save_objekt(fw_objekt)
+        existing_objekte.append(fw_objekt)
+
+    # 5. Schritt: Switch
+    d5 = summary_data.get("switch") or {}
+    if d5 and d5.get("hat_switch") == "ja":
+        if "switch" not in auftrag.aktive_bausteine:
+            auftrag.aktive_bausteine.append("switch")
+
+        ports_val = 0
+        if d5.get("anzahl_ports"):
+            try:
+                ports_val = int(d5["anzahl_ports"])
+            except (ValueError, TypeError):
+                pass
+
+        genutzt_val = 0
+        if d5.get("anzahl_genutzt"):
+            try:
+                genutzt_val = int(d5["anzahl_genutzt"])
+            except (ValueError, TypeError):
+                pass
+
+        switch_typ = "fully_managed" if d5.get("managed") == "managed" else ("unmanaged" if d5.get("managed") == "unmanaged" else "")
+
+        sw_id = generate_slug_id("switch", d5.get("modell") or d5.get("hersteller") or "Switch", [o.id for o in existing_objekte])
+        sw_bez = f"Switch {d5.get('modell', '')}".strip() or f"Switch {d5.get('hersteller', '')}".strip() or "Switch"
+        sw_objekt = TechnikObjekt(
+            schema_version=1,
+            id=sw_id,
+            typ="switch",
+            bezeichnung=sw_bez,
+            auftrag_id=auftrag_id,
+            standort_id=standort.id if standort else None,
+            erfassungsstatus="teilweise",
+            daten={
+                "hersteller": d5.get("hersteller", ""),
+                "modell": d5.get("modell", ""),
+                "port_anzahl": ports_val,
+                "ports_belegt": genutzt_val,
+                "switch_typ": switch_typ
+            }
+        )
+        storage.save_objekt(sw_objekt)
+        existing_objekte.append(sw_objekt)
+
+    # 6. Schritt: Backup
+    d6 = summary_data.get("backup") or {}
+    if d6 and d6.get("hat_backup") == "ja":
+        if "backup" not in auftrag.aktive_bausteine:
+            auftrag.aktive_bausteine.append("backup")
+
+        sw_raw = (d6.get("software") or "").lower()
+        sw_map = {
+            "veeam": "veeam",
+            "synology": "synology_active_backup",
+            "datto": "datto_bcdr",
+            "acronis": "acronis_cyber_protect",
+            "proxmox": "proxmox_backup_server",
+            "commvault": "commvault"
+        }
+        sw_val = "sonstige"
+        for k, v in sw_map.items():
+            if k in sw_raw:
+                sw_val = v
+                break
+        if not sw_raw:
+            sw_val = "unbekannt"
+
+        bk_id = generate_slug_id("backup", d6.get("software") or "Backup", [o.id for o in existing_objekte])
+        bk_bez = f"Backup {d6.get('software', '')}".strip() or "Backup & Recovery"
+        bk_objekt = TechnikObjekt(
+            schema_version=1,
+            id=bk_id,
+            typ="backup",
+            bezeichnung=bk_bez,
+            auftrag_id=auftrag_id,
+            standort_id=standort.id if standort else None,
+            erfassungsstatus="teilweise",
+            daten={
+                "backup_software": sw_val,
+                "backup_ziel": d6.get("ziel", ""),
+                "strategie": d6.get("strategie", ""),
+                "testwiederherstellung": d6.get("testwiederherstellung", "")
+            }
+        )
+        storage.save_objekt(bk_objekt)
+
+    # Auftrag mit aktualisierten aktiven Bausteinen und Grunddaten speichern
+    storage.save_auftrag(auftrag)
+
+    # Wizard-Fortschritt löschen
     storage.delete_wizard_progress(auftrag_id)
 
     return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
