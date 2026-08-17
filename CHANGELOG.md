@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.29] - 2026-08-17
+
+### Added
+- **Hersteller-Listen erweitert (#355)**: Recherche und Ergänzung aller relevanten Hardware-Hersteller der letzten 15 Jahre (2011–2026) für sechs Baustein-Schemas: Firewall (+SonicWall, Juniper, Check_Point, Barracuda, Zyxel, Stormshield), Switch (+Juniper, Extreme_Networks, Zyxel, D-Link, TP-Link, Brocade_Ruckus, Allied_Telesis), Server (+Cisco_UCS, Huawei, ASUS, Gigabyte), Storage (+Pure_Storage, IBM, Hitachi, Fujitsu, Lenovo, Buffalo), USV (+Generex, Socomec, CyberPower, FSP), Access Point (+Ruckus, Zyxel, TP-Link, DrayTek, LANCOM, Extreme_Networks). Jeder Eintrag mit Textbaustein fuer den Analysebericht.
+
 ## [2.7.28] - 2026-08-16
 
 ### Added

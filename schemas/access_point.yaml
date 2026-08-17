@@ -38,6 +38,30 @@ abschnitte:
             textbaustein:
               feststellung: "Im WLAN kommen Access Points von Netgear zum Einsatz."
               auswirkung:
+          - wert: Ruckus
+            textbaustein:
+              feststellung: "Im WLAN kommen Access Points von Ruckus (CommScope) zum Einsatz."
+              auswirkung:
+          - wert: Zyxel
+            textbaustein:
+              feststellung: "Im WLAN kommen Access Points von Zyxel zum Einsatz."
+              auswirkung:
+          - wert: TP-Link
+            textbaustein:
+              feststellung: "Im WLAN kommen Access Points von TP-Link (Omada) zum Einsatz."
+              auswirkung:
+          - wert: DrayTek
+            textbaustein:
+              feststellung: "Im WLAN kommen Access Points von DrayTek zum Einsatz."
+              auswirkung:
+          - wert: LANCOM
+            textbaustein:
+              feststellung: "Im WLAN kommen Access Points von LANCOM zum Einsatz."
+              auswirkung:
+          - wert: Extreme_Networks
+            textbaustein:
+              feststellung: "Im WLAN kommen Access Points von Extreme Networks zum Einsatz."
+              auswirkung:
           - wert: Sonstiges
             textbaustein:
               feststellung: "Im WLAN kommen Access Points eines sonstigen Herstellers

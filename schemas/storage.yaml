@@ -64,6 +64,30 @@ abschnitte:
             textbaustein:
               feststellung: Als Speichersystem kommt TrueNAS Enterprise zum Einsatz.
               auswirkung: null
+          - wert: pure_storage
+            textbaustein:
+              feststellung: Das Speichersystem stammt von Pure Storage (FlashArray).
+              auswirkung: null
+          - wert: ibm_storwize_flashsystem
+            textbaustein:
+              feststellung: Das Speichersystem stammt von IBM (Storwize/FlashSystem).
+              auswirkung: null
+          - wert: hitachi_vantara
+            textbaustein:
+              feststellung: Das Speichersystem stammt von Hitachi Vantara (VSP).
+              auswirkung: null
+          - wert: fujitsu_eternus
+            textbaustein:
+              feststellung: Das Speichersystem stammt von Fujitsu (ETERNUS).
+              auswirkung: null
+          - wert: lenovo_thinksystem
+            textbaustein:
+              feststellung: Das Speichersystem stammt von Lenovo (ThinkSystem DE/DM).
+              auswirkung: null
+          - wert: buffalo
+            textbaustein:
+              feststellung: Als Storage-System wird ein Buffalo TeraStation NAS eingesetzt.
+              auswirkung: null
           - wert: sonstige
             textbaustein:
               feststellung: Es kommt ein sonstiges Speichersystem zum Einsatz.

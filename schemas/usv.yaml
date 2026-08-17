@@ -37,6 +37,26 @@ abschnitte:
               feststellung: "Als USV-System kommt ein Gerät des Herstellers Vertiv
                 zum Einsatz."
               auswirkung:
+          - wert: Generex
+            textbaustein:
+              feststellung: "Als USV-System kommt ein Gerät des Herstellers Generex
+                zum Einsatz."
+              auswirkung:
+          - wert: Socomec
+            textbaustein:
+              feststellung: "Als USV-System kommt ein Gerät des Herstellers Socomec
+                zum Einsatz."
+              auswirkung:
+          - wert: CyberPower
+            textbaustein:
+              feststellung: "Als USV-System kommt ein Gerät des Herstellers CyberPower
+                zum Einsatz."
+              auswirkung:
+          - wert: FSP
+            textbaustein:
+              feststellung: "Als USV-System kommt ein Gerät des Herstellers FSP
+                zum Einsatz."
+              auswirkung:
           - wert: Sonstiges
             textbaustein:
               feststellung: "Als USV-System kommt ein Gerät eines sonstigen Herstellers
