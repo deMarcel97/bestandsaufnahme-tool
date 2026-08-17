@@ -20,6 +20,7 @@ from app.web import (
     routes_unterlagen,
     routes_projektrahmen,
     routes_wizard,
+    routes_versionierung,
 )
 
 app = FastAPI(title="IT-Bestandsaufnahme Tool", version=APP_VERSION)
@@ -108,3 +109,4 @@ app.include_router(routes_vertraege.router)
 app.include_router(routes_unterlagen.router)
 app.include_router(routes_projektrahmen.router)
 app.include_router(routes_wizard.router)
+app.include_router(routes_versionierung.router)

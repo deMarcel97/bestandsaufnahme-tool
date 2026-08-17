@@ -88,6 +88,14 @@ class Rahmenbedingungen(BaseModel):
     wartungsfenster_einschraenkungen: str = ""
     analysewerkzeuge: str = ""
 
+class VersionsEintrag(BaseModel):
+    version: str = "0.1"
+    datum: Optional[str] = None
+    autor: str = ""
+    status: str = "Entwurf"  # Entwurf, In Prüfung, Freigegeben
+    beschreibung: str = ""
+
+
 class Auftrag(BaseModel):
     schema_version: int = 1
     # Zählt bei jedem Speichern hoch. Formulare führen den beim Laden
@@ -119,3 +127,13 @@ class Auftrag(BaseModel):
     vertraege: List[Vertrag] = Field(default_factory=list)
     positive_aspekte: List[Aspekt] = Field(default_factory=list)
     negative_aspekte: List[Aspekt] = Field(default_factory=list)
+    versionshistorie: List[VersionsEintrag] = Field(default_factory=list)
+
+    @property
+    def aktuelle_berichts_version(self) -> str:
+        if self.versionshistorie:
+            for v in reversed(self.versionshistorie):
+                if v.version and v.version.strip():
+                    raw = v.version.strip()
+                    return f"v{raw}" if not raw.lower().startswith("v") else raw
+        return "v0.1"

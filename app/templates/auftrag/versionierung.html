@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Versionierung - {{ auftrag.bezeichnung }}{% endblock %}
+
+{% block content %}
+<div class="layout-sidebar">
+  {% include "_sidebar.html" %}
+
+  <main class="workspace">
+    <div class="page-head">
+      <div>
+        <div class="crumbs eyebrow">
+          <span>{{ auftrag.projekt_nummer }}</span><span class="sep">/</span><span>{{ auftrag.kunde }}</span>
+        </div>
+        <h1>Versionierung &amp; Dokumentenhistorie</h1>
+        <div class="meta-line">
+          <span>Aktuelle Version: <strong>{{ auftrag.aktuelle_berichts_version }}</strong></span>
+          <span class="sep">·</span>
+          <span>{{ auftrag.bezeichnung }}</span>
+        </div>
+      </div>
+    </div>
+
+    {% include "_konflikt_banner.html" %}
+
+    <form action="/auftrag/{{ auftrag.id }}/versionierung" method="POST">
+      <input type="hidden" name="version" value="{{ auftrag.version }}">
+
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>Berichtsversionen</h2>
+          <span class="eyebrow">Änderungshistorie für Analyseberichte und Kundendokumente</span>
+        </div>
+        <p class="hint">
+          Halten Sie hier die Entwicklungsschritte der Analyse fest (z. B. <em>v0.1 – Analyse Hauptstandort</em>, <em>v0.2 – Nebenstandorte</em>, <em>v1.0 – Finalisierung</em>). Die Versionen werden tabellarisch im Analysebericht ausgegeben.
+        </p>
+
+        <div id="version_container">
+          {% for v in auftrag.versionshistorie %}
+          <div class="repeat-block" id="ver_block_{{ loop.index0 }}">
+            <div class="repeat-head">
+              <h4>Version {{ loop.index }} ({{ v.version }})</h4>
+              <button type="button" class="btn btn-sm btn-danger" onclick="removeRow('ver_block_{{ loop.index0 }}')">Entfernen</button>
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="flex: 1;">
+                <label>Version</label>
+                <input type="text" name="ver_version_{{ loop.index0 }}" value="{{ v.version }}" class="form-control" placeholder="z. B. 0.1 oder 1.0">
+              </div>
+              <div class="form-group" style="flex: 1.2;">
+                <label>Datum</label>
+                <input type="date" name="ver_datum_{{ loop.index0 }}" value="{{ v.datum or '' }}" class="form-control" lang="de">
+              </div>
+              <div class="form-group" style="flex: 1.5;">
+                <label>Autor / Bearbeiter</label>
+                <input type="text" name="ver_autor_{{ loop.index0 }}" value="{{ v.autor }}" class="form-control" placeholder="z. B. Marcel Russlies">
+              </div>
+              <div class="form-group" style="flex: 1.2;">
+                <label>Status</label>
+                <select name="ver_status_{{ loop.index0 }}" class="form-control">
+                  {% for opt in version_status_options %}
+                  <option value="{{ opt }}" {% if v.status == opt %}selected{% endif %}>{{ opt }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Änderung / Beschreibung</label>
+              <input type="text" name="ver_beschreibung_{{ loop.index0 }}" value="{{ v.beschreibung }}" class="form-control" placeholder="z. B. Erstanalyse Hauptstandort und Firewall-Audit">
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <button type="button" class="btn btn-outline" onclick="addVersionRow()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          Neue Version hinzufügen
+        </button>
+      </fieldset>
+
+      <div class="form-bar">
+        <button type="submit" class="btn btn-primary">Versionen speichern</button>
+        <a href="/auftrag/{{ auftrag.id }}/stammdaten" class="btn">Zu den Stammdaten</a>
+        <a href="/auftrag/{{ auftrag.id }}" class="btn">Zurück zum Auftrag</a>
+      </div>
+    </form>
+  </main>
+</div>
+
+<script>
+var versionZaehler = document.querySelectorAll('#version_container .repeat-block').length;
+
+function addVersionRow() {
+  var container = document.getElementById('version_container');
+  var idx = versionZaehler++;
+  var today = new Date().toISOString().split('T')[0];
+  
+  // Vorschlag für Versionsnummer berechnen
+  var lastVerInput = container.querySelector('.repeat-block:last-child input[name^="ver_version_"]');
+  var nextVer = "0.1";
+  if (lastVerInput && lastVerInput.value) {
+    var val = lastVerInput.value.replace(/^v/i, '').trim();
+    var num = parseFloat(val);
+    if (!isNaN(num)) {
+      nextVer = (num + 0.1).toFixed(1);
+    }
+  }
+
+  var block = document.createElement('div');
+  block.className = 'repeat-block';
+  block.id = 'ver_block_' + idx;
+  block.innerHTML = `
+    <div class="repeat-head">
+      <h4>Neue Version</h4>
+      <button type="button" class="btn btn-sm btn-danger" onclick="removeRow('ver_block_${idx}')">Entfernen</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="flex: 1;">
+        <label>Version</label>
+        <input type="text" name="ver_version_${idx}" value="${nextVer}" class="form-control" placeholder="z. B. 0.1 oder 1.0">
+      </div>
+      <div class="form-group" style="flex: 1.2;">
+        <label>Datum</label>
+        <input type="date" name="ver_datum_${idx}" value="${today}" class="form-control" lang="de">
+      </div>
+      <div class="form-group" style="flex: 1.5;">
+        <label>Autor / Bearbeiter</label>
+        <input type="text" name="ver_autor_${idx}" class="form-control" placeholder="z. B. Marcel Russlies">
+      </div>
+      <div class="form-group" style="flex: 1.2;">
+        <label>Status</label>
+        <select name="ver_status_${idx}" class="form-control">
+          <option value="Entwurf">Entwurf</option>
+          <option value="In Prüfung">In Prüfung</option>
+          <option value="Freigegeben">Freigegeben</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Änderung / Beschreibung</label>
+      <input type="text" name="ver_beschreibung_${idx}" class="form-control" placeholder="z. B. Ergänzung der Nebenstandorte und Diagramme">
+    </div>
+  `;
+  container.appendChild(block);
+}
+
+function removeRow(blockId) {
+  var block = document.getElementById(blockId);
+  if (block) block.remove();
+}
+</script>
+{% endblock %}
