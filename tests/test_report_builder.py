@@ -38,3 +38,33 @@ def test_structured_textbaustein_extraction():
     }
     extracted = rb._extract_snippet("gut", feldef)
     assert extracted == "Das System ist ordnungsgemäß konfiguriert.\n\nKeine Sicherheitsrisiken identifiziert."
+
+
+def test_massnahmenkatalog_table_sum_columns_alignment():
+    from app.models.massnahme import Massnahme
+    rb = ReportBuilder()
+    auftrag = Auftrag(id="a-sum-test", kunde="Summenkunde", bezeichnung="Summentest")
+    m1 = Massnahme(
+        id="m-1",
+        bezeichnung="Firewall Update",
+        stufe=1,
+        investitionskosten=1200.0,
+        monatliche_kosten=50.0,
+        zeitaufwand=4.0,
+        prioritaet="hoch",
+        dringlichkeit="hoch",
+        foerderprogramm="Digital Jetzt"
+    )
+    from app.services.evaluator import evaluator_service
+    bew = evaluator_service.evaluate_auftrag([], [])
+    report = rb.build_analysebericht(auftrag, [], [], [m1], bew, [], ziel_vertraulichkeit="kundentauglich")
+
+    # Nur die Zeilen im Maßnahmenkatalog prüfen
+    massnahmen_section = report.split("## 7. Priorisierter Maßnahmenkatalog")[1].split("##")[0]
+    lines = [line.strip() for line in massnahmen_section.split("\n") if line.strip().startswith("|")]
+    for line in lines:
+        if line.startswith("| ---"):
+            continue
+        cells = [c.strip() for c in line.split("|")[1:-1]]
+        assert len(cells) == 8, f"Tabellenzeile hat {len(cells)} statt 8 Spalten: {line}"
+

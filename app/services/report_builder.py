@@ -431,7 +431,7 @@ class ReportBuilder:
             mon_sum_str = f"{mon_sum:.2f} €" if mon_sum > 0 else "noch zu kalkulieren"
             zeit_sum_str = f"{zeit_sum:g}" if zeit_sum > 0 else "noch zu kalkulieren"
             uncalc_note = f" ({uncalc_cnt} von {len(st_massnahmen)} Maßnahmen noch nicht kalkuliert)" if uncalc_cnt > 0 else ""
-            lines.append(f"| **Zwischensumme Stufe {stufe}** | | **{inv_sum_str}** | **{mon_sum_str}** | **{zeit_sum_str}**{uncalc_note} | |")
+            lines.append(f"| **Zwischensumme Stufe {stufe}** | | | | **{inv_sum_str}** | **{mon_sum_str}** | **{zeit_sum_str}**{uncalc_note} | |")
             lines.append("")
 
         if massnahmen:
@@ -440,7 +440,7 @@ class ReportBuilder:
             tot_zeit_str = f"{tot_zeit:g}" if tot_zeit > 0 else "noch zu kalkulieren"
             tot_note = f" ({tot_uncalc} von {tot_count} Maßnahmen noch nicht kalkuliert)" if tot_uncalc > 0 else ""
             lines.append(f"### Gesamtsumme Maßnahmenkatalog")
-            lines.append(f"| **Gesamtsumme Aller Stufen** | | **{tot_inv_str}** | **{tot_mon_str}** | **{tot_zeit_str}**{tot_note} | |")
+            lines.append(f"| **Gesamtsumme Aller Stufen** | | | | **{tot_inv_str}** | **{tot_mon_str}** | **{tot_zeit_str}**{tot_note} | |")
             lines.append("")
 
         # 10. Anhang: Verträge

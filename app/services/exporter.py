@@ -318,7 +318,7 @@ class ExporterService:
             for m in st_m:
                 foerder = m.foerderprogramm if m.foerderprogramm else "–"
                 lines.append(f"| {m.bezeichnung} | {m.beschreibung} | {m.prioritaet} | {m.dringlichkeit} | {foerder} | {m.investitionskosten:.2f} | {m.monatliche_kosten:.2f} | {m.zeitaufwand} {m.zeitaufwand_einheit} | {m.status} |")
-            lines.append(f"| **Summe Stufe {stufe}** | | | **{inv:.2f}** | **{mon:.2f}** | **{zeit} Aufwandseinheiten** | |\n")
+            lines.append(f"| **Summe Stufe {stufe}** | | | | | **{inv:.2f}** | **{mon:.2f}** | **{zeit} Aufwandseinheiten** | |\n")
 
         return "\n".join(lines)
 

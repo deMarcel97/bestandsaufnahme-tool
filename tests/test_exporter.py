@@ -50,3 +50,27 @@ def test_docx_exporter():
     assert docx_stream is not None
     assert docx_stream.getbuffer().nbytes > 0
 
+
+def test_massnahmenkatalog_md_export_sum_columns_alignment():
+    exporter = ExporterService()
+    m1 = Massnahme(
+        id="m1",
+        bezeichnung="USV Erneuern",
+        beschreibung="Alte USV austauschen",
+        stufe=1,
+        investitionskosten=1500.0,
+        monatliche_kosten=0.0,
+        zeitaufwand=2.0,
+        prioritaet="hoch",
+        dringlichkeit="hoch",
+        foerderprogramm="Digitalbonus"
+    )
+    md_out = exporter.export_massnahmenkatalog_md([m1], ziel_vertraulichkeit="kundentauglich")
+    lines = [line.strip() for line in md_out.split("\n") if line.strip().startswith("|")]
+    for line in lines:
+        if line.startswith("| ---"):
+            continue
+        cells = [c.strip() for c in line.split("|")[1:-1]]
+        assert len(cells) == 9, f"Tabellenzeile hat {len(cells)} statt 9 Spalten: {line}"
+
+
