@@ -86,9 +86,17 @@ class ReportBuilder:
                 lines.append(f"- **{sys.titel}:** {sys.text}")
 
         if ctx.geplante_aenderungen:
+            status_labels = {
+                "in_planung": "In Planung",
+                "budgetierung": "Budgetierung",
+                "in_durchfuehrung": "In Durchführung / Projektstart bestätigt",
+                "abgeschlossen": "Abgeschlossen",
+            }
             lines.append("\n### Geplante Änderungen")
             for aend in ctx.geplante_aenderungen:
-                lines.append(f"- **{aend.titel}:** {aend.text}")
+                status_raw = getattr(aend, "status", "")
+                status_suffix = f" (Status: {status_labels.get(status_raw, status_raw)})" if status_raw else ""
+                lines.append(f"- **{aend.titel}**{status_suffix}: {aend.text}")
         lines.append("")
 
         # 4. Ansprechpartner & Support-Matrix (Chapter 2)

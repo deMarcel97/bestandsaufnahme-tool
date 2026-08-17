@@ -39,6 +39,13 @@ class Aspekt(BaseModel):
     titel: str = ""
     text: str = ""
 
+
+class GeplanteAenderung(BaseModel):
+    titel: str = ""
+    text: str = ""
+    status: str = "in_planung"  # in_planung, budgetierung, in_durchfuehrung, abgeschlossen
+
+
 class Unternehmenskontext(BaseModel):
     kerngeschaeft: str = ""
     anzahl_standorte_kunde: int = 1
@@ -50,7 +57,7 @@ class Unternehmenskontext(BaseModel):
     geschaeftszeiten_von: str = "08:00"
     geschaeftszeiten_bis: str = "17:00"
     geschaeftskritische_systeme: List[Aspekt] = Field(default_factory=list)
-    geplante_aenderungen: List[Aspekt] = Field(default_factory=list)
+    geplante_aenderungen: List[GeplanteAenderung] = Field(default_factory=list)
     allgemeine_hinweise: str = ""
 
     @property

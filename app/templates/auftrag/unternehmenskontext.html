@@ -130,19 +130,30 @@
         <div class="subsection">
           <span class="eyebrow">Geplante Änderungen</span>
           <div id="aenderung_container">
-            {% for aspekt in auftrag.unternehmenskontext.geplante_aenderungen %}
+            {% for aend in auftrag.unternehmenskontext.geplante_aenderungen %}
             <div class="repeat-block" id="aenderung_block_{{ loop.index0 }}">
               <div class="repeat-head">
                 <h4>Änderung {{ loop.index }}</h4>
                 <button type="button" class="btn btn-sm btn-danger" onclick="entferneAspektZeile('aenderung_block_{{ loop.index0 }}')">Entfernen</button>
               </div>
-              <div class="form-group">
-                <label>Titel</label>
-                <input type="text" name="aenderung_titel_{{ loop.index0 }}" value="{{ aspekt.titel }}" class="form-control" placeholder="z. B. Serverumzug Q3">
+              <div class="form-row">
+                <div class="form-group" style="flex: 2;">
+                  <label>Titel</label>
+                  <input type="text" name="aenderung_titel_{{ loop.index0 }}" value="{{ aend.titel }}" class="form-control" placeholder="z. B. Serverumzug Q3">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                  <label>Fortschritt / Status</label>
+                  <select name="aenderung_status_{{ loop.index0 }}" class="form-control">
+                    <option value="in_planung" {% if aend.status == 'in_planung' %}selected{% endif %}>In Planung</option>
+                    <option value="budgetierung" {% if aend.status == 'budgetierung' %}selected{% endif %}>Budgetierung</option>
+                    <option value="in_durchfuehrung" {% if aend.status == 'in_durchfuehrung' %}selected{% endif %}>In Durchführung / Projektstart bestätigt</option>
+                    <option value="abgeschlossen" {% if aend.status == 'abgeschlossen' %}selected{% endif %}>Abgeschlossen</option>
+                  </select>
+                </div>
               </div>
               <div class="form-group">
-                <label>Text</label>
-                <textarea name="aenderung_text_{{ loop.index0 }}" class="form-control">{{ aspekt.text }}</textarea>
+                <label>Beschreibung / Details</label>
+                <textarea name="aenderung_text_{{ loop.index0 }}" class="form-control">{{ aend.text }}</textarea>
               </div>
             </div>
             {% endfor %}
@@ -186,7 +197,7 @@ function toggleEmpfehlungen() {
 document.addEventListener("DOMContentLoaded", toggleEmpfehlungen);
 
 // Geschäftskritische Systeme und geplante Änderungen sind beliebig lange
-// Listen aus Titel+Text (Karte #316). Der Praefix ("system"/"aenderung")
+// Listen (Karte #316, #352). Der Praefix ("system"/"aenderung")
 // steuert sowohl den Container als auch die Feldnamen, die
 // parse_unterobjekte() auf dem Server erwartet.
 var aspektZaehler = {
@@ -200,20 +211,49 @@ function addAspektZeile(praefix, ueberschrift) {
   var block = document.createElement('div');
   block.className = 'repeat-block';
   block.id = praefix + '_block_' + idx;
-  block.innerHTML = `
-    <div class="repeat-head">
-      <h4>${ueberschrift}</h4>
-      <button type="button" class="btn btn-sm btn-danger" onclick="entferneAspektZeile('${praefix}_block_${idx}')">Entfernen</button>
-    </div>
-    <div class="form-group">
-      <label>Titel</label>
-      <input type="text" name="${praefix}_titel_${idx}" class="form-control">
-    </div>
-    <div class="form-group">
-      <label>Text</label>
-      <textarea name="${praefix}_text_${idx}" class="form-control"></textarea>
-    </div>
-  `;
+
+  if (praefix === 'aenderung') {
+    block.innerHTML = `
+      <div class="repeat-head">
+        <h4>${ueberschrift}</h4>
+        <button type="button" class="btn btn-sm btn-danger" onclick="entferneAspektZeile('${praefix}_block_${idx}')">Entfernen</button>
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="flex: 2;">
+          <label>Titel</label>
+          <input type="text" name="${praefix}_titel_${idx}" class="form-control" placeholder="z. B. Serverumzug Q3">
+        </div>
+        <div class="form-group" style="flex: 1;">
+          <label>Fortschritt / Status</label>
+          <select name="${praefix}_status_${idx}" class="form-control">
+            <option value="in_planung">In Planung</option>
+            <option value="budgetierung">Budgetierung</option>
+            <option value="in_durchfuehrung">In Durchführung / Projektstart bestätigt</option>
+            <option value="abgeschlossen">Abgeschlossen</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Beschreibung / Details</label>
+        <textarea name="${praefix}_text_${idx}" class="form-control"></textarea>
+      </div>
+    `;
+  } else {
+    block.innerHTML = `
+      <div class="repeat-head">
+        <h4>${ueberschrift}</h4>
+        <button type="button" class="btn btn-sm btn-danger" onclick="entferneAspektZeile('${praefix}_block_${idx}')">Entfernen</button>
+      </div>
+      <div class="form-group">
+        <label>Titel</label>
+        <input type="text" name="${praefix}_titel_${idx}" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Text</label>
+        <textarea name="${praefix}_text_${idx}" class="form-control"></textarea>
+      </div>
+    `;
+  }
   container.appendChild(block);
 }
 
