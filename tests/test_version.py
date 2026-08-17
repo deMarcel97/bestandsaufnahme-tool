@@ -3,7 +3,13 @@ Dokumentation). Diese Tests halten sie zusammen — sonst zeigt die Oberfläche
 irgendwann eine Version an, die nicht der ausgelieferten entspricht."""
 
 import re
-import tomllib
+try:
+    import tomllib
+except ModuleNotFoundError:
+    try:
+        import tomli as tomllib
+    except ModuleNotFoundError:
+        tomllib = None
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -19,8 +25,13 @@ def test_version_ist_semver():
 
 
 def test_pyproject_hat_dieselbe_version():
-    data = tomllib.loads((BASE_DIR / "pyproject.toml").read_text(encoding="utf-8"))
-    assert data["project"]["version"] == APP_VERSION
+    if tomllib is not None:
+        data = tomllib.loads((BASE_DIR / "pyproject.toml").read_text(encoding="utf-8"))
+        assert data["project"]["version"] == APP_VERSION
+    else:
+        text = (BASE_DIR / "pyproject.toml").read_text(encoding="utf-8")
+        m = re.search(r'version\s*=\s*"([^"]+)"', text)
+        assert m and m.group(1) == APP_VERSION
 
 
 def test_readme_nennt_dieselbe_version():
