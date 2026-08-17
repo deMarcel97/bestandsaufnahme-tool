@@ -74,3 +74,65 @@ def test_massnahmenkatalog_md_export_sum_columns_alignment():
         assert len(cells) == 9, f"Tabellenzeile hat {len(cells)} statt 9 Spalten: {line}"
 
 
+def test_massnahmenkatalog_vertraulichkeit_filtering():
+    from app.models.finding import Finding
+    exporter = ExporterService()
+    auftrag = Auftrag(id="auf-filter", kunde="Geheim GmbH", bezeichnung="Filter-Test")
+    sto_intern = Standort(id="sto-intern", auftrag_id="auf-filter", bezeichnung="Geheimer Bunker", vertraulichkeit="intern")
+    obj_intern = TechnikObjekt(
+        id="obj-intern",
+        typ="firewall",
+        bezeichnung="Geheime FW",
+        auftrag_id="auf-filter",
+        standort_id="sto-intern",
+        vertraulichkeit="intern"
+    )
+    finding_intern = Finding(
+        id="f-intern",
+        auftrag_id="auf-filter",
+        standort_id="sto-intern",
+        objekt_id="obj-intern",
+        titel="Internes Finding",
+        befund="Sensibler Befund"
+    )
+    m_intern = Massnahme(
+        id="m-intern",
+        bezeichnung="Bunker-Schutz",
+        beschreibung="Sensible Maßnahme",
+        findings=["f-intern"],
+        stufe=1
+    )
+    m_extern = Massnahme(
+        id="m-extern",
+        bezeichnung="Standard Backup",
+        beschreibung="Reguläre Maßnahme",
+        findings=[],
+        stufe=2
+    )
+
+    # 1. Kundentauglich: m_intern muss gefiltert werden, da an internem Finding/Objekt
+    md_kd = exporter.export_massnahmenkatalog_md(
+        [m_intern, m_extern],
+        ziel_vertraulichkeit="kundentauglich",
+        findings=[finding_intern],
+        standorte=[sto_intern],
+        objekte=[obj_intern],
+        auftrag=auftrag
+    )
+    assert "Standard Backup" in md_kd
+    assert "Bunker-Schutz" not in md_kd
+
+    # 2. Intern: Beide Maßnahmen enthalten
+    md_intern = exporter.export_massnahmenkatalog_md(
+        [m_intern, m_extern],
+        ziel_vertraulichkeit="intern",
+        findings=[finding_intern],
+        standorte=[sto_intern],
+        objekte=[obj_intern],
+        auftrag=auftrag
+    )
+    assert "Standard Backup" in md_intern
+    assert "Bunker-Schutz" in md_intern
+
+
+
