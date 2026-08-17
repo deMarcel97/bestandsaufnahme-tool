@@ -257,3 +257,10 @@ def test_analysebericht_enthaelt_geschaeftskritische_systeme_und_aenderungen():
     assert "- **ERP-System:** SAP S/4HANA, zentral gehostet." in report
     assert "### Geplante Änderungen" in report
     assert "- **Serverumzug:** Migration ins neue Rechenzentrum Q3." in report
+
+
+def test_unternehmenskontext_kerngeschaeft_hinweistext(auftrag):
+    response = client.get(f"/auftrag/{AUFTRAG_ID}/unternehmenskontext")
+    assert response.status_code == 200
+    assert "Beschreiben Sie kurz die Haupttätigkeit" in response.text
+    assert "placeholder=\"z. B. Mittelständischer Großhandel" in response.text
