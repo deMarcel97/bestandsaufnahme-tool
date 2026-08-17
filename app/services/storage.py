@@ -408,7 +408,13 @@ class StorageService:
             data = yaml.safe_load(f)
         if not data or not isinstance(data, list):
             return []
-        return [Massnahme.model_validate(item) for item in data]
+        valid = []
+        for item in data:
+            try:
+                valid.append(Massnahme.model_validate(item))
+            except ValidationError as e:
+                logging.error(f"Skipping invalid Massnahme in {fpath}: {e}")
+        return valid
 
     # --- WIZARD PROGRESS ---
     def get_wizard_path(self, auftrag_id: str) -> Optional[Path]:

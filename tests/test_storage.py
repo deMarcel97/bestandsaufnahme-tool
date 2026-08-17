@@ -190,3 +190,26 @@ def test_path_traversal_rejected_in_all_id_params(tmp_path):
     assert storage.load_objekt("auf-test", "firewall", "..") is None
     storage.delete_objekt("auf-test", "..", "auftrag")  # darf nicht auftrag.yaml treffen
     assert storage.load_auftrag("auf-test") is not None
+
+
+def test_list_massnahmen_skips_invalid_items(tmp_path):
+    storage = StorageService(data_dir=tmp_path)
+    a = Auftrag(id="auf-test-mass", kunde="Test", bezeichnung="Test")
+    storage.save_auftrag(a)
+
+    d = storage.get_auftrag_dir("auf-test-mass")
+    fpath = d / "massnahmen.yaml"
+    # Ein valider und ein invalider Datensatz (z.B. id fehlt oder Typfehler)
+    import yaml
+    with open(fpath, "w", encoding="utf-8") as f:
+        yaml.safe_dump([
+            {"id": "m-01", "bezeichnung": "Gueltige Massnahme", "stufe": 1},
+            {"id": 12345, "invalid_field": True, "stufe": "invalid_number_fail"},  # Defekter Eintrag
+            {"id": "m-02", "bezeichnung": "Zweite gueltige Massnahme", "stufe": 2}
+        ], f)
+
+    res = storage.list_massnahmen("auf-test-mass")
+    assert len(res) == 2
+    assert res[0].id == "m-01"
+    assert res[1].id == "m-02"
+
