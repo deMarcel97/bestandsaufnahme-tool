@@ -126,6 +126,22 @@ abschnitte:
             textbaustein:
               feststellung: Als Server-Hersteller kommt Supermicro zum Einsatz.
               auswirkung: null
+          - wert: cisco_ucs
+            textbaustein:
+              feststellung: Als Server-Hersteller kommt Cisco (UCS C-Serie) zum Einsatz.
+              auswirkung: null
+          - wert: huawei
+            textbaustein:
+              feststellung: Als Server-Hersteller kommt Huawei (FusionServer) zum Einsatz.
+              auswirkung: null
+          - wert: asus
+            textbaustein:
+              feststellung: Als Server-Hersteller kommt ASUS (RS-Serie) zum Einsatz.
+              auswirkung: null
+          - wert: gigabyte
+            textbaustein:
+              feststellung: Als Server-Hersteller kommt Gigabyte (R-Serie) zum Einsatz.
+              auswirkung: null
           - wert: sonstiges
             textbaustein:
               feststellung: Als Server-Hersteller kommt ein sonstiger Hersteller zum Einsatz.

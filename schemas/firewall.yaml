@@ -42,6 +42,36 @@ abschnitte:
               feststellung: Als zentrale Firewall kommt eine pfSense/OPNsense 
                 Open-Source-Lösung zum Einsatz.
               auswirkung:
+          - wert: SonicWall
+            textbaustein:
+              feststellung: Als zentrale Firewall kommt ein System des
+                Herstellers SonicWall zum Einsatz.
+              auswirkung:
+          - wert: Juniper
+            textbaustein:
+              feststellung: Als zentrale Firewall kommt ein System des
+                Herstellers Juniper (SRX-Serie) zum Einsatz.
+              auswirkung:
+          - wert: Check_Point
+            textbaustein:
+              feststellung: Als zentrale Firewall kommt ein System des
+                Herstellers Check Point zum Einsatz.
+              auswirkung:
+          - wert: Barracuda
+            textbaustein:
+              feststellung: Als zentrale Firewall kommt ein CloudGen Firewall
+                System des Herstellers Barracuda zum Einsatz.
+              auswirkung:
+          - wert: Zyxel
+            textbaustein:
+              feststellung: Als zentrale Firewall kommt ein System des
+                Herstellers Zyxel zum Einsatz.
+              auswirkung:
+          - wert: Stormshield
+            textbaustein:
+              feststellung: Als zentrale Firewall kommt ein System des
+                Herstellers Stormshield zum Einsatz.
+              auswirkung:
           - wert: Sonstiges
             textbaustein:
               feststellung: Als zentrale Firewall kommt ein System eines 

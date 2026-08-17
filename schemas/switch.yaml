@@ -38,6 +38,34 @@ abschnitte:
             textbaustein:
               feststellung: "Im Netzwerk kommen Switches von Netgear zum Einsatz."
               auswirkung:
+          - wert: Juniper
+            textbaustein:
+              feststellung: "Im Netzwerk kommen Switches von Juniper (EX/QFX-Serie) zum Einsatz."
+              auswirkung:
+          - wert: Extreme_Networks
+            textbaustein:
+              feststellung: "Im Netzwerk kommen Switches von Extreme Networks zum Einsatz."
+              auswirkung:
+          - wert: Zyxel
+            textbaustein:
+              feststellung: "Im Netzwerk kommen Switches von Zyxel zum Einsatz."
+              auswirkung:
+          - wert: D-Link
+            textbaustein:
+              feststellung: "Im Netzwerk kommen Switches von D-Link zum Einsatz."
+              auswirkung:
+          - wert: TP-Link
+            textbaustein:
+              feststellung: "Im Netzwerk kommen Switches von TP-Link zum Einsatz."
+              auswirkung:
+          - wert: Brocade_Ruckus
+            textbaustein:
+              feststellung: "Im Netzwerk kommen Switches von Brocade/Ruckus zum Einsatz."
+              auswirkung:
+          - wert: Allied_Telesis
+            textbaustein:
+              feststellung: "Im Netzwerk kommen Switches von Allied Telesis zum Einsatz."
+              auswirkung:
           - wert: Sonstiges
             textbaustein:
               feststellung: "Im Netzwerk kommen Switches eines sonstigen Herstellers
