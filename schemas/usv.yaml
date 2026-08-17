@@ -70,6 +70,74 @@ abschnitte:
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Sonstiges
+      - name: modell_apc
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: APC
+        werte:
+          - wert: Smart-UPS SMT1000
+          - wert: Smart-UPS SMT1500
+          - wert: Smart-UPS SMT2200
+          - wert: Smart-UPS SMT3000
+          - wert: Smart-UPS SMC1000
+          - wert: Smart-UPS SMC1500
+          - wert: Smart-UPS SMX750
+          - wert: Smart-UPS SMX1000
+          - wert: Smart-UPS SMX1500
+          - wert: Smart-UPS SMX2200
+          - wert: Smart-UPS SMX3000
+          - wert: Smart-UPS SMTL1000
+          - wert: Smart-UPS SMTL1500
+          - wert: Smart-UPS SRT5K
+          - wert: Smart-UPS SRT6K
+          - wert: Smart-UPS SRT8K
+          - wert: Smart-UPS SRT10K
+          - wert: Back-UPS Pro BR1000
+          - wert: Back-UPS Pro BR1500
+          - wert: Back-UPS BX1500
+          - wert: Back-UPS BE850
+      - name: modell_eaton
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Eaton
+        werte:
+          - wert: 5P 650
+          - wert: 5P 1000
+          - wert: 5P 1500
+          - wert: 5P 2200
+          - wert: 5P 3000
+          - wert: 9SX 5000
+          - wert: 9SX 6000
+          - wert: 9SX 8000
+          - wert: 9SX 10000
+          - wert: 9PX 700
+          - wert: 9PX 1000
+          - wert: 9PX 1500
+          - wert: 9PX 2000
+          - wert: 9PX 3000
+          - wert: 9PX 5000
+          - wert: 9PX 6000
+          - wert: 9PX 8000
+          - wert: 9PX 10000
+          - wert: 93PM 100kVA
+          - wert: 93PM 150kVA
+          - wert: 93PM 200kVA
 
       - name: kapazitaet_va
         typ: zahl

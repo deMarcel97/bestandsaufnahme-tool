@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.30] - 2026-08-17
+
+### Added
+- **Modell-Auswahllisten pro Hersteller (#355)**: Recherche und Ergaenzung echter Modellreihen (2011-2026) fuer Firewall (Fortinet, Sophos, Palo Alto, Cisco, WatchGuard, SonicWall, Juniper, Check Point, Barracuda), Switch (Cisco, Aruba/HPE, Dell, Ubiquiti), Server (Dell PowerEdge, HPE ProLiant, Lenovo ThinkSystem, Fujitsu PRIMERGY), USV (APC, Eaton) und Access Point (Cisco, Aruba/HPE, Ubiquiti). Pro Hersteller ein eigenes Auswahlfeld mit `sichtbar_wenn`-Bedingung; Freitext-Fallback fuer Sonstiges. Template-Fix fuer numerische Modell-Werte (Check Point 600/700).
+
 ## [2.7.29] - 2026-08-17
 
 ### Added

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bestandsaufnahme-tool"
-version = "2.7.29"
+version = "2.7.30"
 description = "Tool für IT-Bestandsaufnahmen beim Kunden"
 authors = [{ name = "IT Systemhaus" }]
 requires-python = ">=3.10"
