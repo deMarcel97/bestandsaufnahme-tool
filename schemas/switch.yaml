@@ -79,6 +79,126 @@ abschnitte:
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Sonstiges
+      - name: modell_cisco
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Cisco
+        werte:
+          - wert: Catalyst 2960
+          - wert: Catalyst 2960-S
+          - wert: Catalyst 2960-X
+          - wert: Catalyst 2960-XR
+          - wert: Catalyst 2960-C
+          - wert: Catalyst 2960-L
+          - wert: Catalyst 9200
+          - wert: Catalyst 9200L
+          - wert: Catalyst 9200CX
+          - wert: Catalyst 9300
+          - wert: Catalyst 9300X
+          - wert: Catalyst 1000
+          - wert: Catalyst 1200
+          - wert: Catalyst 1300
+          - wert: Business 110
+          - wert: Business 220
+          - wert: Business 250
+          - wert: Business 350
+          - wert: SG350
+          - wert: SG550
+      - name: modell_aruba_hpe
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Aruba_HPE
+        werte:
+          - wert: 2530-8
+          - wert: 2530-24
+          - wert: 2530-48
+          - wert: 2530-8-PoE+
+          - wert: 2530-24-PoE+
+          - wert: 2530-48-PoE+
+          - wert: 2930F-24G
+          - wert: 2930F-48G
+          - wert: 2930F-24G-PoE+
+          - wert: 2930F-48G-PoE+
+          - wert: 2930M-24G
+          - wert: 2930M-48G
+          - wert: 2930M-24G-PoE+
+          - wert: 2930M-48G-PoE+
+          - wert: 3810M-24G
+          - wert: 3810M-48G
+          - wert: CX 6300F-24Y
+          - wert: CX 6300F-48Y
+          - wert: CX 6300M-24Y
+          - wert: CX 6300M-48Y
+          - wert: CX 6300L-24Y
+          - wert: CX 6300L-48Y
+      - name: modell_dell
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Dell
+        werte:
+          - wert: N1108T-ON
+          - wert: N1124T-ON
+          - wert: N1148T-ON
+          - wert: N1524
+          - wert: N1548
+          - wert: N2024
+          - wert: N2048
+          - wert: N2224X-ON
+          - wert: N2248X-ON
+          - wert: N3024
+          - wert: N3048
+          - wert: N3224T-ON
+          - wert: N3248TE-ON
+          - wert: N4032
+          - wert: N4064
+          - wert: S4128F-ON
+          - wert: S4148F-ON
+          - wert: S5224F-ON
+          - wert: S5248F-ON
+      - name: modell_ubiquiti
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Ubiquiti
+        werte:
+          - wert: USW-Lite-8
+          - wert: USW-Lite-16
+          - wert: USW-24
+          - wert: USW-48
+          - wert: USW-Pro-24
+          - wert: USW-Pro-48
+          - wert: USW-Pro-24-PoE
+          - wert: USW-Pro-48-PoE
+          - wert: USW-Aggregation
+          - wert: USW-Enterprise-24
+          - wert: USW-Enterprise-48
 
       - name: port_anzahl
         typ: zahl

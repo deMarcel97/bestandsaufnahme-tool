@@ -154,6 +154,145 @@ abschnitte:
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: sonstiges
+      - name: modell_dell
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: dell
+        werte:
+          - wert: PowerEdge R230
+          - wert: PowerEdge R240
+          - wert: PowerEdge R250
+          - wert: PowerEdge R320
+          - wert: PowerEdge R330
+          - wert: PowerEdge R340
+          - wert: PowerEdge R350
+          - wert: PowerEdge R420
+          - wert: PowerEdge R430
+          - wert: PowerEdge R440
+          - wert: PowerEdge R450
+          - wert: PowerEdge R540
+          - wert: PowerEdge R620
+          - wert: PowerEdge R630
+          - wert: PowerEdge R640
+          - wert: PowerEdge R650
+          - wert: PowerEdge R720
+          - wert: PowerEdge R730
+          - wert: PowerEdge R740
+          - wert: PowerEdge R750
+          - wert: PowerEdge T130
+          - wert: PowerEdge T140
+          - wert: PowerEdge T150
+          - wert: PowerEdge T320
+          - wert: PowerEdge T330
+          - wert: PowerEdge T340
+          - wert: PowerEdge T420
+          - wert: PowerEdge T430
+          - wert: PowerEdge T440
+          - wert: PowerEdge T550
+          - wert: PowerEdge T630
+          - wert: PowerEdge T640
+      - name: modell_hpe
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: hp
+        werte:
+          - wert: ProLiant DL120 Gen8
+          - wert: ProLiant DL160 Gen9
+          - wert: ProLiant DL180 Gen10
+          - wert: ProLiant DL320 Gen8
+          - wert: ProLiant DL325 Gen10
+          - wert: ProLiant DL360 Gen8
+          - wert: ProLiant DL360 Gen9
+          - wert: ProLiant DL360 Gen10
+          - wert: ProLiant DL360 Gen10 Plus
+          - wert: ProLiant DL360 Gen11
+          - wert: ProLiant DL380 Gen8
+          - wert: ProLiant DL380 Gen9
+          - wert: ProLiant DL380 Gen10
+          - wert: ProLiant DL380 Gen10 Plus
+          - wert: ProLiant DL380 Gen11
+          - wert: ProLiant DL385 Gen10
+          - wert: ProLiant DL560 Gen10
+          - wert: ProLiant DL580 Gen10
+          - wert: ProLiant ML110 Gen8
+          - wert: ProLiant ML110 Gen9
+          - wert: ProLiant ML110 Gen10
+          - wert: ProLiant ML150 Gen9
+          - wert: ProLiant ML350 Gen8
+          - wert: ProLiant ML350 Gen9
+          - wert: ProLiant ML350 Gen10
+          - wert: ProLiant ML350 Gen11
+      - name: modell_lenovo
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: lenovo
+        werte:
+          - wert: ThinkSystem SR250
+          - wert: ThinkSystem SR260
+          - wert: ThinkSystem SR530
+          - wert: ThinkSystem SR550
+          - wert: ThinkSystem SR570
+          - wert: ThinkSystem SR580
+          - wert: ThinkSystem SR630
+          - wert: ThinkSystem SR635
+          - wert: ThinkSystem SR650
+          - wert: ThinkSystem SR655
+          - wert: ThinkSystem SR850
+          - wert: ThinkSystem SR860
+          - wert: ThinkServer TS140
+          - wert: ThinkServer TS150
+          - wert: ThinkServer TS250
+          - wert: ThinkServer TS440
+          - wert: ThinkServer TS450
+      - name: modell_fujitsu
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: fujitsu
+        werte:
+          - wert: PRIMERGY RX100 S7
+          - wert: PRIMERGY RX100 S8
+          - wert: PRIMERGY RX100 S9
+          - wert: PRIMERGY RX100 S10
+          - wert: PRIMERGY RX200 S7
+          - wert: PRIMERGY RX200 S8
+          - wert: PRIMERGY RX200 S9
+          - wert: PRIMERGY RX200 S10
+          - wert: PRIMERGY RX2530
+          - wert: PRIMERGY RX2540
+          - wert: PRIMERGY TX1310 M1
+          - wert: PRIMERGY TX1310 M2
+          - wert: PRIMERGY TX1310 M3
+          - wert: PRIMERGY TX1310 M4
+          - wert: PRIMERGY TX1320 M1
+          - wert: PRIMERGY TX1320 M2
       - name: seriennummer
         label: Seriennummer
         typ: text

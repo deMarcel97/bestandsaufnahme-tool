@@ -84,6 +84,295 @@ abschnitte:
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Sonstiges
+      - name: modell_fortinet
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Fortinet
+        werte:
+          - wert: FortiGate 30E
+          - wert: FortiGate 30F
+          - wert: FortiGate 40F
+          - wert: FortiGate 50E
+          - wert: FortiGate 50F
+          - wert: FortiGate 60D
+          - wert: FortiGate 60E
+          - wert: FortiGate 60F
+          - wert: FortiGate 80E
+          - wert: FortiGate 80F
+          - wert: FortiGate 90G
+          - wert: FortiGate 100E
+          - wert: FortiGate 100F
+          - wert: FortiGate 200E
+          - wert: FortiGate 200F
+          - wert: FortiGate 300E
+          - wert: FortiGate 300F
+          - wert: FortiGate 400E
+          - wert: FortiGate 600E
+          - wert: FortiGate 800E
+          - wert: FortiGate 1000E
+      - name: modell_sophos
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Sophos
+        werte:
+          - wert: SG 105
+          - wert: SG 115
+          - wert: SG 125
+          - wert: SG 135
+          - wert: SG 210
+          - wert: SG 230
+          - wert: SG 310
+          - wert: SG 330
+          - wert: SG 430
+          - wert: SG 450
+          - wert: XG 85
+          - wert: XG 105
+          - wert: XG 115
+          - wert: XG 125
+          - wert: XG 135
+          - wert: XG 210
+          - wert: XG 230
+          - wert: XG 310
+          - wert: XG 330
+          - wert: XG 430
+          - wert: XG 450
+          - wert: XGS 86
+          - wert: XGS 106
+          - wert: XGS 116
+          - wert: XGS 126
+          - wert: XGS 136
+          - wert: XGS 2100
+          - wert: XGS 2300
+          - wert: XGS 3100
+          - wert: XGS 3300
+      - name: modell_palo_alto
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Palo_Alto
+        werte:
+          - wert: PA-220
+          - wert: PA-410
+          - wert: PA-415
+          - wert: PA-440
+          - wert: PA-450
+          - wert: PA-460
+          - wert: PA-820
+          - wert: PA-850
+          - wert: PA-3220
+          - wert: PA-3250
+          - wert: PA-3260
+          - wert: PA-1410
+          - wert: PA-1420
+          - wert: PA-3410
+          - wert: PA-3420
+          - wert: PA-3440
+          - wert: PA-5220
+          - wert: PA-5250
+          - wert: PA-5260
+          - wert: PA-5280
+      - name: modell_cisco
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Cisco
+        werte:
+          - wert: ASA 5506-X
+          - wert: ASA 5508-X
+          - wert: ASA 5512-X
+          - wert: ASA 5515-X
+          - wert: ASA 5516-X
+          - wert: ASA 5525-X
+          - wert: ASA 5545-X
+          - wert: ASA 5555-X
+          - wert: Firepower 1010
+          - wert: Firepower 1120
+          - wert: Firepower 1140
+          - wert: Firepower 1150
+          - wert: Firepower 2110
+          - wert: Firepower 2120
+          - wert: Firepower 2130
+          - wert: Firepower 2140
+          - wert: FPR-1010E
+          - wert: FPR-1011
+          - wert: FPR-1012
+          - wert: FPR-1013
+          - wert: FPR-1014
+      - name: modell_watchguard
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Watchguard
+        werte:
+          - wert: Firebox T10
+          - wert: Firebox T15
+          - wert: Firebox T30
+          - wert: Firebox T35
+          - wert: Firebox T50
+          - wert: Firebox T55
+          - wert: Firebox T70
+          - wert: Firebox T85
+          - wert: Firebox M200
+          - wert: Firebox M270
+          - wert: Firebox M300
+          - wert: Firebox M370
+          - wert: Firebox M400
+          - wert: Firebox M440
+          - wert: Firebox M460
+          - wert: Firebox M470
+          - wert: Firebox M500
+          - wert: Firebox M560
+          - wert: Firebox M570
+          - wert: Firebox M670
+      - name: modell_sonicwall
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: SonicWall
+        werte:
+          - wert: TZ 100
+          - wert: TZ 105
+          - wert: TZ 200
+          - wert: TZ 205
+          - wert: TZ 215
+          - wert: TZ 300
+          - wert: TZ 400
+          - wert: TZ 500
+          - wert: TZ 600
+          - wert: TZ 270
+          - wert: TZ 370
+          - wert: TZ 470
+          - wert: TZ 570
+          - wert: TZ 670
+          - wert: TZ 280
+          - wert: TZ 380
+          - wert: TZ 480
+          - wert: TZ 580
+          - wert: TZ 680
+          - wert: NSa 2650
+          - wert: NSa 3650
+          - wert: NSa 4650
+          - wert: NSa 5650
+          - wert: NSa 6650
+          - wert: NSa 2700
+          - wert: NSa 3700
+          - wert: NSa 4700
+          - wert: NSa 5700
+          - wert: NSa 6700
+      - name: modell_juniper
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Juniper
+        werte:
+          - wert: SRX100
+          - wert: SRX110
+          - wert: SRX210
+          - wert: SRX220
+          - wert: SRX240
+          - wert: SRX300
+          - wert: SRX320
+          - wert: SRX340
+          - wert: SRX345
+          - wert: SRX380
+          - wert: SRX550
+          - wert: SRX1500
+          - wert: SRX1600
+          - wert: SRX2300
+          - wert: SRX3400
+      - name: modell_check_point
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Check_Point
+        werte:
+          - wert: 600
+          - wert: 700
+          - wert: 1100
+          - wert: 1400
+          - wert: Quantum Spark 1535
+          - wert: Quantum Spark 1555
+          - wert: Quantum Spark 1575
+          - wert: Quantum Spark 1595
+          - wert: Quantum Spark 1600
+          - wert: Quantum Spark 1800
+          - wert: Quantum 3600
+          - wert: Quantum 3800
+          - wert: Quantum 6200
+          - wert: Quantum 6400
+          - wert: Quantum 6600
+          - wert: Quantum 6700
+          - wert: Quantum 6900
+      - name: modell_barracuda
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Barracuda
+        werte:
+          - wert: F40
+          - wert: F80
+          - wert: F100
+          - wert: F180
+          - wert: F200
+          - wert: F280
+          - wert: F300
+          - wert: F380
+          - wert: F400
+          - wert: F600
+          - wert: F800
+          - wert: F900
+          - wert: F1000
       - name: firmware_version
         typ: text
         pflicht: false

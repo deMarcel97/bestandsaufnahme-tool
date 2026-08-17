@@ -75,6 +75,84 @@ abschnitte:
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Sonstiges
+      - name: modell_cisco
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Cisco
+        werte:
+          - wert: Aironet 2700
+          - wert: Aironet 2800
+          - wert: Aironet 3700
+          - wert: Aironet 3800
+          - wert: Aironet 9100
+          - wert: Catalyst 9105
+          - wert: Catalyst 9115
+          - wert: Catalyst 9120
+          - wert: Catalyst 9130
+          - wert: Meraki MR33
+          - wert: Meraki MR36
+          - wert: Meraki MR44
+          - wert: Meraki MR46
+          - wert: Meraki MR57
+          - wert: Meraki MR76
+      - name: modell_aruba_hpe
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Aruba_HPE
+        werte:
+          - wert: AP-303
+          - wert: AP-315
+          - wert: AP-335
+          - wert: AP-505
+          - wert: AP-515
+          - wert: AP-535
+          - wert: AP-555
+          - wert: AP-575
+          - wert: AP-635
+          - wert: AP-655
+          - wert: AP-675
+          - wert: Instant AP-325
+          - wert: Instant AP-515
+      - name: modell_ubiquiti
+        label: Modell
+        typ: auswahl
+        pflicht: false
+        regelrelevant: false
+        vertraulichkeit: kundentauglich
+        sichtbar_wenn:
+          feld: hersteller
+          operator: gleich
+          wert: Ubiquiti
+        werte:
+          - wert: UAP-AC-Lite
+          - wert: UAP-AC-LR
+          - wert: UAP-AC-Pro
+          - wert: UAP-nanoHD
+          - wert: UAP-FlexHD
+          - wert: UAP-IW
+          - wert: UAP-IW-HD
+          - wert: U6-Lite
+          - wert: U6-Pro
+          - wert: U6-LR
+          - wert: U6-IW
+          - wert: U6-Mesh
+          - wert: U6-Enterprise
 
       - name: wlan_standard
         typ: auswahl
