@@ -67,11 +67,25 @@ def download_export(auftrag_id: str, filename: str, ziel_vertraulichkeit: Option
         return Response(content=docx_bytes.getvalue(), media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document", headers={"Content-Disposition": f"attachment; filename=analysebericht_{auftrag_id}.docx"})
 
     elif filename == "massnahmen.md":
-        content = exporter_service.export_massnahmenkatalog_md(massnahmen, ziel_vertraulichkeit)
+        content = exporter_service.export_massnahmenkatalog_md(
+            massnahmen,
+            ziel_vertraulichkeit,
+            findings=findings,
+            standorte=standorte,
+            objekte=objekte,
+            auftrag=auftrag
+        )
         return Response(content=content, media_type="text/markdown", headers={"Content-Disposition": f"attachment; filename=massnahmen_{auftrag_id}.md"})
 
     elif filename == "massnahmen.csv":
-        content = exporter_service.export_massnahmenkatalog_csv(massnahmen, ziel_vertraulichkeit)
+        content = exporter_service.export_massnahmenkatalog_csv(
+            massnahmen,
+            ziel_vertraulichkeit,
+            findings=findings,
+            standorte=standorte,
+            objekte=objekte,
+            auftrag=auftrag
+        )
         return Response(content=content, media_type="text/csv", headers={"Content-Disposition": f"attachment; filename=massnahmen_{auftrag_id}.csv"})
 
     elif filename == "summary.md":

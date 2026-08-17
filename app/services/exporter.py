@@ -296,9 +296,62 @@ class ExporterService:
         output.seek(0)
         return output
 
-    def export_massnahmenkatalog_md(self, massnahmen: List[Massnahme], ziel_vertraulichkeit: str) -> str:
+    def _filter_massnahmen(
+        self,
+        massnahmen: List[Massnahme],
+        ziel_vertraulichkeit: str,
+        *,
+        findings: Optional[List[Finding]] = None,
+        standorte: Optional[List[Standort]] = None,
+        objekte: Optional[List[TechnikObjekt]] = None,
+        auftrag: Optional[Auftrag] = None
+    ) -> List[Massnahme]:
         target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit, VertraulichkeitsStufe.ANONYMISIERT)
-        filtered_massnahmen = massnahmen if ziel_vertraulichkeit else massnahmen
+
+        # 1. Wenn vertraulichkeit direkt an der Maßnahme hängt
+        filtered = [
+            m for m in massnahmen
+            if VertraulichkeitsStufe.parse(getattr(m, "vertraulichkeit", "kundentauglich"), VertraulichkeitsStufe.INTERN) <= target_level
+        ]
+
+        # 2. Wenn verknüpfte Findings übergeben wurden: filtern auf sichtbare Findings
+        if findings is not None and (standorte is not None or objekte is not None) and auftrag is not None:
+            _, filtered_standorte, filtered_objekte, _ = self._filter_and_evaluate(
+                auftrag, standorte or [], objekte or [], ziel_vertraulichkeit
+            )
+            filtered_findings = self._filter_findings(auftrag.id, filtered_standorte, filtered_objekte, target_level, findings)
+            valid_finding_ids = {f.id for f in filtered_findings}
+            filtered = [m for m in filtered if not m.findings or any(fid in valid_finding_ids for fid in m.findings)]
+
+        # 3. Wenn Anonymisiert: Tiefe Kopien mit bereinigten Bemerkungen
+        if target_level == VertraulichkeitsStufe.ANONYMISIERT:
+            res = []
+            for m in filtered:
+                m_copy = copy.deepcopy(m)
+                m_copy.bemerkung = ""
+                res.append(m_copy)
+            return res
+
+        return filtered
+
+    def export_massnahmenkatalog_md(
+        self,
+        massnahmen: List[Massnahme],
+        ziel_vertraulichkeit: str,
+        *,
+        findings: Optional[List[Finding]] = None,
+        standorte: Optional[List[Standort]] = None,
+        objekte: Optional[List[TechnikObjekt]] = None,
+        auftrag: Optional[Auftrag] = None
+    ) -> str:
+        filtered_massnahmen = self._filter_massnahmen(
+            massnahmen,
+            ziel_vertraulichkeit,
+            findings=findings,
+            standorte=standorte,
+            objekte=objekte,
+            auftrag=auftrag
+        )
         lines = []
         lines.append("# Maßnahmenkatalog\n")
         
@@ -322,9 +375,24 @@ class ExporterService:
 
         return "\n".join(lines)
 
-    def export_massnahmenkatalog_csv(self, massnahmen: List[Massnahme], ziel_vertraulichkeit: str) -> str:
-        target_level = VertraulichkeitsStufe.parse(ziel_vertraulichkeit, VertraulichkeitsStufe.ANONYMISIERT)
-        filtered_massnahmen = massnahmen if ziel_vertraulichkeit else massnahmen
+    def export_massnahmenkatalog_csv(
+        self,
+        massnahmen: List[Massnahme],
+        ziel_vertraulichkeit: str,
+        *,
+        findings: Optional[List[Finding]] = None,
+        standorte: Optional[List[Standort]] = None,
+        objekte: Optional[List[TechnikObjekt]] = None,
+        auftrag: Optional[Auftrag] = None
+    ) -> str:
+        filtered_massnahmen = self._filter_massnahmen(
+            massnahmen,
+            ziel_vertraulichkeit,
+            findings=findings,
+            standorte=standorte,
+            objekte=objekte,
+            auftrag=auftrag
+        )
         output = io.StringIO()
         writer = csv.writer(output, delimiter=";")
         writer.writerow(["Stufe", "Bezeichnung", "Beschreibung", "Prioritaet", "Dringlichkeit", "Foerderprogramm", "Investitionskosten_EUR", "Monatliche_Kosten_EUR", "Zeitaufwand", "Einheit", "Status"])
