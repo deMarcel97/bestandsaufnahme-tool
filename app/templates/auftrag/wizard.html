@@ -1,0 +1,414 @@
+{% extends "base.html" %}
+
+{% block title %}Erfassungs-Wizard - {{ auftrag.bezeichnung }}{% endblock %}
+
+{% block content %}
+<div class="layout-sidebar">
+  {% include "_sidebar.html" %}
+
+  <main class="workspace">
+    <div class="page-head">
+      <div>
+        <div class="crumbs eyebrow">
+          <span>{{ auftrag.projekt_nummer }}</span>
+          <span class="sep">/</span>
+          <span>{{ auftrag.kunde }}</span>
+          <span class="sep">/</span>
+          <span>{{ auftrag.bezeichnung }}</span>
+        </div>
+        <h1>Interaktive Erfassung</h1>
+        <div class="meta-line">
+          <span>Schritt {{ current_step }} von {{ total_steps }}: {{ step_label }}</span>
+        </div>
+      </div>
+    </div>
+
+    {# Fortschrittsbalken #}
+    <div class="wizard-progress" style="margin-bottom: 24px;">
+      <div class="wizard-steps">
+        {% for i in range(1, total_steps + 1) %}
+        <div class="wizard-step {% if i <= current_step %}completed{% endif %} {% if i == current_step %}active{% endif %}" 
+             style="flex: 1; text-align: center; padding: 8px 0; position: relative;">
+          <div style="display: inline-block; position: relative; z-index: 2;">
+            <span style="display: block; font-weight: 600; font-size: 14px;">{{ i }}</span>
+            <span style="display: block; font-size: 11px; margin-top: 2px;">{{ progress.get_step_label(i) }}</span>
+          </div>
+          {% if i < total_steps %}
+          <div style="position: absolute; top: 50%; left: 50%; width: 100%; height: 2px; background: #d1d5db; z-index: 1;"></div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    {# aktiver Schritt Inhalt #}
+    <form action="/auftrag/{{ auftrag.id }}/wizard/step/{{ current_step }}" method="POST" style="margin-bottom: 24px;">
+      
+      {% if step_type == "auftragsgrunddaten" %}
+      {# Schritt 1: Auftragsgrunddaten #}
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>Auftragsgrunddaten</h2>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Kunde</label>
+            <input type="text" name="kunde" value="{{ auftrag.kunde }}" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Projektnummer</label>
+            <input type="text" name="projekt_nummer" value="{{ auftrag.projekt_nummer }}" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Bezeichnung</label>
+          <input type="text" name="bezeichnung" value="{{ auftrag.bezeichnung }}" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Bemerkung/Abgrenzung</label>
+          <textarea name="abgrenzung" class="form-control" rows="3">{{ step_data.get('abgrenzung', auftrag.abgrenzung or '') }}</textarea>
+        </div>
+      </fieldset>
+      
+      {% elif step_type == "standort_grunddaten" %}
+      {# Schritt 2: Standort-Grunddaten #}
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>Standort-Grunddaten</h2>
+        </div>
+        {% if standorte %}
+        <div class="form-group">
+          <label>Standort auswählen</label>
+          <select name="standort_id" class="form-control">
+            {% for sto in standorte %}
+            <option value="{{ sto.id }}" {% if step_data.get('standort_id') == sto.id or (not step_data.get('standort_id') and loop.first) %}selected{% endif %}>{{ sto.bezeichnung }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {% endif %}
+        <div class="form-row">
+          <div class="form-group">
+            <label>Bezeichnung</label>
+            <input type="text" name="bezeichnung" value="{{ step_data.get('bezeichnung', standort.bezeichnung if standort else '') }}" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Anzahl User</label>
+            <input type="number" name="anzahl_user" value="{{ step_data.get('anzahl_user', standort.anzahl_user if standort else 10) }}" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Strasse</label>
+          <input type="text" name="strasse" value="{{ step_data.get('strasse', standort.strasse if standort else '') }}" class="form-control">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>PLZ</label>
+            <input type="text" name="plz" value="{{ step_data.get('plz', standort.plz if standort else '') }}" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Ort</label>
+            <input type="text" name="ort" value="{{ step_data.get('ort', standort.ort if standort else '') }}" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Ansprechpartner vor Ort</label>
+          <input type="text" name="ansprechpartner_vor_ort" value="{{ step_data.get('ansprechpartner_vor_ort', standort.ansprechpartner_vor_ort if standort else '') }}" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Funktion</label>
+          <input type="text" name="funktion" value="{{ step_data.get('funktion', standort.funktion if standort else '') }}" class="form-control">
+        </div>
+      </fieldset>
+      
+      {% elif step_type == "internetanbindungen" %}
+      {# Schritt 3: Internetanbindungen #}
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>Internetanbindungen</h2>
+        </div>
+        <div class="form-group">
+          <label>Hat der Standort eine Internetanbindung?</label>
+          <select name="hat_internetanbindung" class="form-control" id="hat-internet">
+            <option value="" {% if not step_data.get('hat_internetanbindung') %}selected{% endif %}>Bitte auswählen</option>
+            <option value="ja" {% if step_data.get('hat_internetanbindung') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_internetanbindung') == 'nein' %}selected{% endif %}>Nein</option>
+          </select>
+        </div>
+        <div id="internet-details" style="{% if step_data.get('hat_internetanbindung') != 'ja' %}display: none;{% endif %}">
+          <div class="form-group">
+            <label>Anzahl Internetanbindungen</label>
+            <input type="number" name="anzahl_anbindungen" value="{{ step_data.get('anzahl_anbindungen', 1) }}" class="form-control" min="1">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Anbieter</label>
+              <input type="text" name="anbieter" value="{{ step_data.get('anbieter', '') }}" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Art</label>
+              <select name="art" class="form-control">
+                <option value="" {% if not step_data.get('art') %}selected{% endif %}>Bitte auswählen</option>
+                <option value="DSL" {% if step_data.get('art') == 'DSL' %}selected{% endif %}>DSL</option>
+                <option value="Glasfaser" {% if step_data.get('art') == 'Glasfaser' %}selected{% endif %}>Glasfaser</option>
+                <option value="Kabel" {% if step_data.get('art') == 'Kabel' %}selected{% endif %}>Kabel</option>
+                <option value="LTE/5G" {% if step_data.get('art') == 'LTE/5G' %}selected{% endif %}>LTE/5G</option>
+                <option value="Sonstiges" {% if step_data.get('art') == 'Sonstiges' %}selected{% endif %}>Sonstiges</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Bandbreite Downstream (Mbit/s)</label>
+              <input type="number" name="bandbreite_down" value="{{ step_data.get('bandbreite_down', '') }}" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Bandbreite Upstream (Mbit/s)</label>
+              <input type="number" name="bandbreite_up" value="{{ step_data.get('bandbreite_up', '') }}" class="form-control">
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      
+      {% elif step_type == "firewall" %}
+      {# Schritt 4: Firewall #}
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>Firewall</h2>
+        </div>
+        <div class="form-group">
+          <label>Wird eine Firewall eingesetzt?</label>
+          <select name="hat_firewall" class="form-control" id="hat-firewall">
+            <option value="" {% if not step_data.get('hat_firewall') %}selected{% endif %}>Bitte auswählen</option>
+            <option value="ja" {% if step_data.get('hat_firewall') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_firewall') == 'nein' %}selected{% endif %}>Nein</option>
+          </select>
+        </div>
+        <div id="firewall-details" style="{% if step_data.get('hat_firewall') != 'ja' %}display: none;{% endif %}">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Hersteller</label>
+              <select name="hersteller" class="form-control">
+                <option value="" {% if not step_data.get('hersteller') %}selected{% endif %}>Bitte auswählen</option>
+                {% for hw in ['Fortinet', 'Cisco', 'Palo Alto', 'Check Point', 'Sophos', 'WatchGuard', 'Juniper', 'Sonstiges'] %}
+                <option value="{{ hw }}" {% if step_data.get('hersteller') == hw %}selected{% endif %}>{{ hw }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Modell</label>
+              <input type="text" name="modell" value="{{ step_data.get('modell', '') }}" class="form-control">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Hardware-Alter (Jahre)</label>
+              <input type="number" name="alter" value="{{ step_data.get('alter', '') }}" class="form-control" min="0">
+            </div>
+            <div class="form-group">
+              <label>Wartungsvertrag vorhanden?</label>
+              <select name="wartungsvertrag" class="form-control">
+                <option value="" {% if not step_data.get('wartungsvertrag') %}selected{% endif %}>Bitte auswählen</option>
+                <option value="ja" {% if step_data.get('wartungsvertrag') == 'ja' %}selected{% endif %}>Ja</option>
+                <option value="nein" {% if step_data.get('wartungsvertrag') == 'nein' %}selected{% endif %}>Nein</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      
+      {% elif step_type == "switch" %}
+      {# Schritt 5: Switch #}
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>Switch</h2>
+        </div>
+        <div class="form-group">
+          <label>Wird ein Switch eingesetzt?</label>
+          <select name="hat_switch" class="form-control" id="hat-switch">
+            <option value="" {% if not step_data.get('hat_switch') %}selected{% endif %}>Bitte auswählen</option>
+            <option value="ja" {% if step_data.get('hat_switch') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_switch') == 'nein' %}selected{% endif %}>Nein</option>
+          </select>
+        </div>
+        <div id="switch-details" style="{% if step_data.get('hat_switch') != 'ja' %}display: none;{% endif %}">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Hersteller</label>
+              <select name="hersteller" class="form-control">
+                <option value="" {% if not step_data.get('hersteller') %}selected{% endif %}>Bitte auswählen</option>
+                {% for hw in ['Cisco', 'HP/Aruba', 'Juniper', 'Netgear', 'Ubiquiti', 'MikroTik', 'Sonstiges'] %}
+                <option value="{{ hw }}" {% if step_data.get('hersteller') == hw %}selected{% endif %}>{{ hw }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Modell</label>
+              <input type="text" name="modell" value="{{ step_data.get('modell', '') }}" class="form-control">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Anzahl Ports</label>
+              <input type="number" name="anzahl_ports" value="{{ step_data.get('anzahl_ports', '') }}" class="form-control" min="0">
+            </div>
+            <div class="form-group">
+              <label>Anzahl genutzt</label>
+              <input type="number" name="anzahl_genutzt" value="{{ step_data.get('anzahl_genutzt', '') }}" class="form-control" min="0">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Managed/Unmanaged</label>
+            <select name="managed" class="form-control">
+              <option value="" {% if not step_data.get('managed') %}selected{% endif %}>Bitte auswählen</option>
+              <option value="managed" {% if step_data.get('managed') == 'managed' %}selected{% endif %}>Managed</option>
+              <option value="unmanaged" {% if step_data.get('managed') == 'unmanaged' %}selected{% endif %}>Unmanaged</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+      
+      {% elif step_type == "backup" %}
+      {# Schritt 6: Backup #}
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>Backup</h2>
+        </div>
+        <div class="form-group">
+          <label>Wird Backup betrieben?</label>
+          <select name="hat_backup" class="form-control" id="hat-backup">
+            <option value="" {% if not step_data.get('hat_backup') %}selected{% endif %}>Bitte auswählen</option>
+            <option value="ja" {% if step_data.get('hat_backup') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_backup') == 'nein' %}selected{% endif %}>Nein</option>
+          </select>
+        </div>
+        <div id="backup-details" style="{% if step_data.get('hat_backup') != 'ja' %}display: none;{% endif %}">
+          <div class="form-group">
+            <label>Backup-Strategie</label>
+            <select name="strategie" class="form-control">
+              <option value="" {% if not step_data.get('strategie') %}selected{% endif %}>Bitte auswählen</option>
+              <option value="3-2-1" {% if step_data.get('strategie') == '3-2-1' %}selected{% endif %}>3-2-1 Regel</option>
+              <option value="Täglich/Wöchentlich/Monatlich" {% if step_data.get('strategie') == 'Täglich/Wöchentlich/Monatlich' %}selected{% endif %}>Täglich/Wöchentlich/Monatlich</option>
+              <option value="Nur lokal" {% if step_data.get('strategie') == 'Nur lokal' %}selected{% endif %}>Nur lokal</option>
+              <option value="Cloud-Only" {% if step_data.get('strategie') == 'Cloud-Only' %}selected{% endif %}>Cloud-Only</option>
+              <option value="Keine" {% if step_data.get('strategie') == 'Keine' %}selected{% endif %}>Keine</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Backup-Software</label>
+            <input type="text" name="software" value="{{ step_data.get('software', '') }}" class="form-control" placeholder="z.B. Veeam, Acronis, Windows Backup">
+          </div>
+          <div class="form-group">
+            <label>Backup-Ziel</label>
+            <select name="ziel" class="form-control">
+              <option value="" {% if not step_data.get('ziel') %}selected{% endif %}>Bitte auswählen</option>
+              <option value="Lokal" {% if step_data.get('ziel') == 'Lokal' %}selected{% endif %}>Lokale Festplatte</option>
+              <option value="NAS" {% if step_data.get('ziel') == 'NAS' %}selected{% endif %}>NAS</option>
+              <option value="Tape" {% if step_data.get('ziel') == 'Tape' %}selected{% endif %}>Bandlaufwerk</option>
+              <option value="Cloud" {% if step_data.get('ziel') == 'Cloud' %}selected{% endif %}>Cloud-Storage</option>
+              <option value="Externer Dienstleister" {% if step_data.get('ziel') == 'Externer Dienstleister' %}selected{% endif %}>Externer Dienstleister</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Testwiederherstellung möglich?</label>
+            <select name="testwiederherstellung" class="form-control">
+              <option value="" {% if not step_data.get('testwiederherstellung') %}selected{% endif %}>Bitte auswählen</option>
+              <option value="ja" {% if step_data.get('testwiederherstellung') == 'ja' %}selected{% endif %}>Ja, regelmäßig getestet</option>
+              <option value="nein" {% if step_data.get('testwiederherstellung') == 'nein' %}selected{% endif %}>Nein</option>
+              <option value="unbekannt" {% if step_data.get('testwiederherstellung') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+      
+      {% endif %}
+
+      {# Navigation #}
+      <div class="form-bar" style="display: flex; gap: 12px; justify-content: space-between;">
+        <div>
+          {% if current_step > 1 %}
+          <a href="/auftrag/{{ auftrag.id }}/wizard/abbruch" class="btn" onclick="return confirm('Wirklich abbrechen? Ihr Fortschritt wird gespeichert und Sie können später weitermachen.')">Abbrechen</a>
+          {% endif %}
+        </div>
+        <div style="display: flex; gap: 12px;">
+          {% if current_step > 1 %}
+          <a href="/auftrag/{{ auftrag.id }}/wizard" class="btn btn-outline">Zurück</a>
+          {% endif %}
+          <button type="submit" class="btn btn-primary">
+            {% if current_step == total_steps %}Zur Zusammenfassung{% else %}Weiter{% endif %}
+          </button>
+          {% if current_step < total_steps %}
+          <a href="/auftrag/{{ auftrag.id }}/wizard/skip" class="btn btn-outline">Überspringen</a>
+          {% endif %}
+        </div>
+      </div>
+    </form>
+  </main>
+</div>
+
+<style>
+.wizard-steps {
+  display: flex;
+  position: relative;
+  margin-bottom: 24px;
+}
+.wizard-step {
+  position: relative;
+  z-index: 1;
+}
+.wizard-step.completed {
+  color: #16a34a;
+}
+.wizard-step.completed svg {
+  fill: #16a34a;
+}
+.wizard-step.active {
+  color: #2563eb;
+  font-weight: 600;
+}
+.wizard-steps::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #d1d5db;
+  z-index: 1;
+}
+.wizard-steps::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: calc((100% / {{ total_steps }}) * ({{ current_step }} - 1));
+  right: calc(100% - calc((100% / {{ total_steps }}) * ({{ current_step }} - 1)));
+  height: 2px;
+  background: #16a34a;
+  z-index: 1;
+}
+</style>
+
+<script>
+// Dynamische Felder ein-/ausblenden
+{% if step_type == "internetanbindungen" %}
+document.getElementById('hat-internet')?.addEventListener('change', function() {
+  document.getElementById('internet-details').style.display = this.value === 'ja' ? 'block' : 'none';
+});
+{% endif %}
+{% if step_type == "firewall" %}
+document.getElementById('hat-firewall')?.addEventListener('change', function() {
+  document.getElementById('firewall-details').style.display = this.value === 'ja' ? 'block' : 'none';
+});
+{% endif %}
+{% if step_type == "switch" %}
+document.getElementById('hat-switch')?.addEventListener('change', function() {
+  document.getElementById('switch-details').style.display = this.value === 'ja' ? 'block' : 'none';
+});
+{% endif %}
+{% if step_type == "backup" %}
+document.getElementById('hat-backup')?.addEventListener('change', function() {
+  document.getElementById('backup-details').style.display = this.value === 'ja' ? 'block' : 'none';
+});
+{% endif %}
+</script>
+{% endblock %}

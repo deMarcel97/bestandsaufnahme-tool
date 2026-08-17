@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.28] - 2026-08-16
+
+### Added
+- **Erfassungs-Wizard / Interaktive Erfassung (#325)**: Geführter, linearer Durchlauf durch die wichtigsten Bausteine beim Anlegen eines Auftrags. Button "Interaktive Erfassung starten" auf der Stammdaten-Seite. 7 Schritte: Auftragsgrunddaten, Standort-Grunddaten, Internetanbindungen, Firewall, Switch, Backup, Zusammenfassung. Dynamisches Ein-/Ausblenden von Detailfeldern basierend auf Ja/Nein-Antworten. Fortschrittsspeicherung in `wizard_progress.yaml` pro Auftrag mit Wiedereinstieg. Überspringen nicht-relevanter Schritte möglich. Zusammenfassung aller erfassten Daten am Ende. (Noch ohne automatisches Anlegen der Bausteine — TODO).
+
 ## [2.7.27] - 2026-08-16
 
 ### Added
