@@ -10,18 +10,32 @@ WIZARD_STEP_TYPES = [
     "internetanbindungen",
     "firewall",
     "switch",
+    "access_point",
+    "server_virtualisierung",
+    "storage",
     "backup",
+    "usv",
+    "clients",
+    "m365_security",
+    "organisation_prozesse",
     "zusammenfassung",
 ]
 
 # Label für die Schritte
 WIZARD_STEP_LABELS = {
-    "auftragsgrunddaten": "Auftragsgrunddaten",
-    "standort_grunddaten": "Standort-Grunddaten",
-    "internetanbindungen": "Internetanbindungen",
+    "auftragsgrunddaten": "Auftragsdaten",
+    "standort_grunddaten": "Standort",
+    "internetanbindungen": "Internet",
     "firewall": "Firewall",
     "switch": "Switch",
+    "access_point": "WLAN / AP",
+    "server_virtualisierung": "Server / Virtualisierung",
+    "storage": "Storage / NAS",
     "backup": "Backup",
+    "usv": "USV",
+    "clients": "Clients / PCs",
+    "m365_security": "M365 / Cloud",
+    "organisation_prozesse": "Organisation & Notfall",
     "zusammenfassung": "Zusammenfassung",
 }
 
@@ -52,8 +66,8 @@ class WizardProgress(BaseModel):
         return step in self.completed_steps
 
     def is_complete(self) -> bool:
-        """Prüft, ob alle Schritte abgeschlossen sind."""
-        return self.current_step > len(WIZARD_STEP_TYPES)
+        """Prüft, ob alle Datenerfassungs-Schritte abgeschlossen sind."""
+        return self.current_step >= len(WIZARD_STEP_TYPES)
 
     def get_next_step(self) -> Optional[int]:
         """Gibt die nächste Schritt-Nummer zurück oder None, wenn fertig."""

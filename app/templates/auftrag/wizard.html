@@ -16,57 +16,54 @@
           <span class="sep">/</span>
           <span>{{ auftrag.bezeichnung }}</span>
         </div>
-        <h1>Interaktive Erfassung</h1>
+        <h1>Interaktive Bestandsaufnahme</h1>
         <div class="meta-line">
-          <span>Schritt {{ current_step }} von {{ total_steps }}: {{ step_label }}</span>
+          <span>Schritt {{ current_step }} von {{ data_steps_count }}: <strong>{{ step_label }}</strong></span>
         </div>
       </div>
     </div>
 
-    {# Fortschrittsbalken #}
-    <div class="wizard-progress" style="margin-bottom: 24px;">
-      <div class="wizard-steps">
-        {% for i in range(1, total_steps + 1) %}
-        <div class="wizard-step {% if i <= current_step %}completed{% endif %} {% if i == current_step %}active{% endif %}" 
-             style="flex: 1; text-align: center; padding: 8px 0; position: relative;">
-          <div style="display: inline-block; position: relative; z-index: 2;">
-            <span style="display: block; font-weight: 600; font-size: 14px;">{{ i }}</span>
-            <span style="display: block; font-size: 11px; margin-top: 2px;">{{ progress.get_step_label(i) }}</span>
-          </div>
-          {% if i < total_steps %}
-          <div style="position: absolute; top: 50%; left: 50%; width: 100%; height: 2px; background: #d1d5db; z-index: 1;"></div>
-          {% endif %}
-        </div>
+    {# Fortschritts-Leiste mit klickbaren Schritten #}
+    <div class="wizard-progress-card" style="margin-bottom: 24px; padding: 16px; background: var(--bg-surface, #fff); border: 1px solid var(--border-color, #e5e7eb); border-radius: 8px;">
+      <div class="wizard-step-list" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px;">
+        {% for i in range(1, data_steps_count + 1) %}
+        <a href="/auftrag/{{ auftrag.id }}/wizard/goto/{{ i }}" 
+           class="wizard-step-chip {% if i == current_step %}active{% elif progress.is_step_completed(i) %}completed{% endif %}"
+           style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; text-decoration: none; white-space: nowrap; border: 1px solid {% if i == current_step %}#2563eb; background: #eff6ff; color: #1d4ed8;{% elif progress.is_step_completed(i) %}#86efac; background: #f0fdf4; color: #15803d;{% else %}#e5e7eb; background: #f9fafb; color: #6b7280;{% endif %}">
+          <span style="display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; font-size: 11px; font-weight: 700; background: {% if i == current_step %}#2563eb; color: #fff;{% elif progress.is_step_completed(i) %}#16a34a; color: #fff;{% else %}#d1d5db; color: #374151;{% endif %}">{{ i }}</span>
+          <span>{{ progress.get_step_label(i) }}</span>
+        </a>
         {% endfor %}
       </div>
     </div>
 
-    {# aktiver Schritt Inhalt #}
+    {# Aktiver Schritt Inhalt #}
     <form action="/auftrag/{{ auftrag.id }}/wizard/step/{{ current_step }}" method="POST" style="margin-bottom: 24px;">
       
       {% if step_type == "auftragsgrunddaten" %}
       {# Schritt 1: Auftragsgrunddaten #}
       <fieldset class="fieldset">
         <div class="fieldset-head">
-          <h2>Auftragsgrunddaten</h2>
+          <h2>1. Auftragsgrunddaten</h2>
+          <p class="fieldset-desc" style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Kunde, Projekt und Rahmen der Bestandsaufnahme festlegen.</p>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Kunde</label>
-            <input type="text" name="kunde" value="{{ auftrag.kunde }}" class="form-control" required>
+            <label>Kunde *</label>
+            <input type="text" name="kunde" value="{{ step_data.get('kunde', auftrag.kunde) }}" class="form-control" required>
           </div>
           <div class="form-group">
             <label>Projektnummer</label>
-            <input type="text" name="projekt_nummer" value="{{ auftrag.projekt_nummer }}" class="form-control">
+            <input type="text" name="projekt_nummer" value="{{ step_data.get('projekt_nummer', auftrag.projekt_nummer or '') }}" class="form-control">
           </div>
         </div>
         <div class="form-group">
-          <label>Bezeichnung</label>
-          <input type="text" name="bezeichnung" value="{{ auftrag.bezeichnung }}" class="form-control" required>
+          <label>Bezeichnung des Auftrags *</label>
+          <input type="text" name="bezeichnung" value="{{ step_data.get('bezeichnung', auftrag.bezeichnung) }}" class="form-control" required>
         </div>
         <div class="form-group">
-          <label>Bemerkung/Abgrenzung</label>
-          <textarea name="abgrenzung" class="form-control" rows="3">{{ step_data.get('abgrenzung', auftrag.abgrenzung or '') }}</textarea>
+          <label>Scope / Abgrenzung (optional)</label>
+          <textarea name="abgrenzung" class="form-control" rows="3" placeholder="z. B. Nur Hauptstandort und Serverinfrastruktur...">{{ step_data.get('abgrenzung', auftrag.abgrenzung or '') }}</textarea>
         </div>
       </fieldset>
       
@@ -74,11 +71,12 @@
       {# Schritt 2: Standort-Grunddaten #}
       <fieldset class="fieldset">
         <div class="fieldset-head">
-          <h2>Standort-Grunddaten</h2>
+          <h2>2. Standort-Grunddaten</h2>
+          <p class="fieldset-desc" style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Hauptstandort oder zu erfassende Niederlassung definieren.</p>
         </div>
-        {% if standorte %}
+        {% if standorte and standorte|length > 1 %}
         <div class="form-group">
-          <label>Standort auswählen</label>
+          <label>Bestehenden Standort auswählen</label>
           <select name="standort_id" class="form-control">
             {% for sto in standorte %}
             <option value="{{ sto.id }}" {% if step_data.get('standort_id') == sto.id or (not step_data.get('standort_id') and loop.first) %}selected{% endif %}>{{ sto.bezeichnung }}</option>
@@ -88,16 +86,16 @@
         {% endif %}
         <div class="form-row">
           <div class="form-group">
-            <label>Bezeichnung</label>
-            <input type="text" name="bezeichnung" value="{{ step_data.get('bezeichnung', standort.bezeichnung if standort else '') }}" class="form-control" required>
+            <label>Standort-Bezeichnung *</label>
+            <input type="text" name="bezeichnung" value="{{ step_data.get('bezeichnung', standort.bezeichnung if standort else 'Hauptsitz') }}" class="form-control" required>
           </div>
           <div class="form-group">
-            <label>Anzahl User</label>
-            <input type="number" name="anzahl_user" value="{{ step_data.get('anzahl_user', standort.anzahl_user if standort else 10) }}" class="form-control">
+            <label>Anzahl User / Mitarbeiter vor Ort</label>
+            <input type="number" name="anzahl_user" value="{{ step_data.get('anzahl_user', standort.anzahl_user if standort else 10) }}" class="form-control" min="1">
           </div>
         </div>
         <div class="form-group">
-          <label>Strasse</label>
+          <label>Straße & Hausnummer</label>
           <input type="text" name="strasse" value="{{ step_data.get('strasse', standort.strasse if standort else '') }}" class="form-control">
         </div>
         <div class="form-row">
@@ -110,13 +108,15 @@
             <input type="text" name="ort" value="{{ step_data.get('ort', standort.ort if standort else '') }}" class="form-control">
           </div>
         </div>
-        <div class="form-group">
-          <label>Ansprechpartner vor Ort</label>
-          <input type="text" name="ansprechpartner_vor_ort" value="{{ step_data.get('ansprechpartner_vor_ort', standort.ansprechpartner_vor_ort if standort else '') }}" class="form-control">
-        </div>
-        <div class="form-group">
-          <label>Funktion</label>
-          <input type="text" name="funktion" value="{{ step_data.get('funktion', standort.funktion if standort else '') }}" class="form-control">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ansprechpartner vor Ort</label>
+            <input type="text" name="ansprechpartner_vor_ort" value="{{ step_data.get('ansprechpartner_vor_ort', standort.ansprechpartner_vor_ort if standort else '') }}" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Funktion / Rolle</label>
+            <input type="text" name="funktion" value="{{ step_data.get('funktion', standort.funktion if standort else '') }}" class="form-control" placeholder="z. B. Geschäftsführer, IT-Leiter">
+          </div>
         </div>
       </fieldset>
       
@@ -124,46 +124,64 @@
       {# Schritt 3: Internetanbindungen #}
       <fieldset class="fieldset">
         <div class="fieldset-head">
-          <h2>Internetanbindungen</h2>
+          <h2>3. Internetanbindung</h2>
+          <p class="fieldset-desc" style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Primäre WAN-/Internetanbindung des Standorts erfassen.</p>
         </div>
         <div class="form-group">
-          <label>Hat der Standort eine Internetanbindung?</label>
+          <label>Gibt es an diesem Standort eine Internetanbindung?</label>
           <select name="hat_internetanbindung" class="form-control" id="hat-internet">
-            <option value="" {% if not step_data.get('hat_internetanbindung') %}selected{% endif %}>Bitte auswählen</option>
-            <option value="ja" {% if step_data.get('hat_internetanbindung') == 'ja' %}selected{% endif %}>Ja</option>
-            <option value="nein" {% if step_data.get('hat_internetanbindung') == 'nein' %}selected{% endif %}>Nein</option>
+            <option value="ja" {% if step_data.get('hat_internetanbindung', 'ja') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_internetanbindung') == 'nein' %}selected{% endif %}>Nein / Nicht vorhanden</option>
           </select>
         </div>
-        <div id="internet-details" style="{% if step_data.get('hat_internetanbindung') != 'ja' %}display: none;{% endif %}">
-          <div class="form-group">
-            <label>Anzahl Internetanbindungen</label>
-            <input type="number" name="anzahl_anbindungen" value="{{ step_data.get('anzahl_anbindungen', 1) }}" class="form-control" min="1">
-          </div>
+        <div id="internet-details" style="{% if step_data.get('hat_internetanbindung') == 'nein' %}display: none;{% endif %}">
           <div class="form-row">
             <div class="form-group">
-              <label>Anbieter</label>
-              <input type="text" name="anbieter" value="{{ step_data.get('anbieter', '') }}" class="form-control">
+              <label>Internetanbieter (ISP)</label>
+              <input type="text" name="anbieter" value="{{ step_data.get('anbieter', '') }}" class="form-control" placeholder="z. B. Telekom, Vodafone, 1&1">
             </div>
             <div class="form-group">
-              <label>Art</label>
+              <label>Anschlussart</label>
               <select name="art" class="form-control">
-                <option value="" {% if not step_data.get('art') %}selected{% endif %}>Bitte auswählen</option>
-                <option value="DSL" {% if step_data.get('art') == 'DSL' %}selected{% endif %}>DSL</option>
-                <option value="Glasfaser" {% if step_data.get('art') == 'Glasfaser' %}selected{% endif %}>Glasfaser</option>
-                <option value="Kabel" {% if step_data.get('art') == 'Kabel' %}selected{% endif %}>Kabel</option>
-                <option value="LTE/5G" {% if step_data.get('art') == 'LTE/5G' %}selected{% endif %}>LTE/5G</option>
-                <option value="Sonstiges" {% if step_data.get('art') == 'Sonstiges' %}selected{% endif %}>Sonstiges</option>
+                <option value="Glasfaser_FTTH" {% if step_data.get('art') == 'Glasfaser_FTTH' %}selected{% endif %}>Glasfaser (FTTH)</option>
+                <option value="Glasfaser_FTTB" {% if step_data.get('art') == 'Glasfaser_FTTB' %}selected{% endif %}>Glasfaser (FTTB)</option>
+                <option value="DSL" {% if step_data.get('art') == 'DSL' or not step_data.get('art') %}selected{% endif %}>VDSL / DSL</option>
+                <option value="Kabel" {% if step_data.get('art') == 'Kabel' %}selected{% endif %}>Kabel (DOCSIS)</option>
+                <option value="Standleitung_MPLS" {% if step_data.get('art') == 'Standleitung_MPLS' %}selected{% endif %}>Standleitung / MPLS</option>
+                <option value="Mobilfunk_5G" {% if step_data.get('art') == 'Mobilfunk_5G' %}selected{% endif %}>Mobilfunk (5G)</option>
+                <option value="Mobilfunk_LTE" {% if step_data.get('art') == 'Mobilfunk_LTE' %}selected{% endif %}>Mobilfunk (LTE/4G)</option>
+                <option value="Starlink_Satellit" {% if step_data.get('art') == 'Starlink_Satellit' %}selected{% endif %}>Starlink / Satellit</option>
+                <option value="Richtfunk" {% if step_data.get('art') == 'Richtfunk' %}selected{% endif %}>Richtfunk</option>
+                <option value="Sonstige" {% if step_data.get('art') == 'Sonstige' %}selected{% endif %}>Sonstige</option>
               </select>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label>Bandbreite Downstream (Mbit/s)</label>
-              <input type="number" name="bandbreite_down" value="{{ step_data.get('bandbreite_down', '') }}" class="form-control">
+              <input type="number" name="bandbreite_down" value="{{ step_data.get('bandbreite_down', '') }}" class="form-control" placeholder="z. B. 250">
             </div>
             <div class="form-group">
               <label>Bandbreite Upstream (Mbit/s)</label>
-              <input type="number" name="bandbreite_up" value="{{ step_data.get('bandbreite_up', '') }}" class="form-control">
+              <input type="number" name="bandbreite_up" value="{{ step_data.get('bandbreite_up', '') }}" class="form-control" placeholder="z. B. 50">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Feste öffentliche IP vorhanden?</label>
+              <select name="feste_ip_vorhanden" class="form-control">
+                <option value="ja" {% if step_data.get('feste_ip_vorhanden') == 'ja' %}selected{% endif %}>Ja</option>
+                <option value="nein" {% if step_data.get('feste_ip_vorhanden') == 'nein' %}selected{% endif %}>Nein / Dynamisch</option>
+                <option value="unbekannt" {% if step_data.get('feste_ip_vorhanden') == 'unbekannt' or not step_data.get('feste_ip_vorhanden') %}selected{% endif %}>Unbekannt</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Redundante 2. Anbindung vorhanden?</label>
+              <select name="redundante_anbindung" class="form-control">
+                <option value="nein" {% if step_data.get('redundante_anbindung') == 'nein' or not step_data.get('redundante_anbindung') %}selected{% endif %}>Nein</option>
+                <option value="ja" {% if step_data.get('redundante_anbindung') == 'ja' %}selected{% endif %}>Ja (Fallback vorhanden)</option>
+                <option value="unbekannt" {% if step_data.get('redundante_anbindung') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
             </div>
           </div>
         </div>
@@ -173,43 +191,65 @@
       {# Schritt 4: Firewall #}
       <fieldset class="fieldset">
         <div class="fieldset-head">
-          <h2>Firewall</h2>
+          <h2>4. Firewall & Netzwerksicherheit</h2>
+          <p class="fieldset-desc" style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Zentrales Sicherheitsgateway erfassen.</p>
         </div>
         <div class="form-group">
-          <label>Wird eine Firewall eingesetzt?</label>
+          <label>Wird eine dedizierte Firewall eingesetzt?</label>
           <select name="hat_firewall" class="form-control" id="hat-firewall">
-            <option value="" {% if not step_data.get('hat_firewall') %}selected{% endif %}>Bitte auswählen</option>
-            <option value="ja" {% if step_data.get('hat_firewall') == 'ja' %}selected{% endif %}>Ja</option>
-            <option value="nein" {% if step_data.get('hat_firewall') == 'nein' %}selected{% endif %}>Nein</option>
+            <option value="ja" {% if step_data.get('hat_firewall', 'ja') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_firewall') == 'nein' %}selected{% endif %}>Nein (nur Router / Modem)</option>
           </select>
         </div>
-        <div id="firewall-details" style="{% if step_data.get('hat_firewall') != 'ja' %}display: none;{% endif %}">
+        <div id="firewall-details" style="{% if step_data.get('hat_firewall') == 'nein' %}display: none;{% endif %}">
           <div class="form-row">
             <div class="form-group">
               <label>Hersteller</label>
               <select name="hersteller" class="form-control">
-                <option value="" {% if not step_data.get('hersteller') %}selected{% endif %}>Bitte auswählen</option>
-                {% for hw in ['Fortinet', 'Cisco', 'Palo Alto', 'Check Point', 'Sophos', 'WatchGuard', 'Juniper', 'Sonstiges'] %}
-                <option value="{{ hw }}" {% if step_data.get('hersteller') == hw %}selected{% endif %}>{{ hw }}</option>
+                {% for hw in ['Fortinet', 'Sophos', 'Palo_Alto', 'Cisco', 'Watchguard', 'SonicWall', 'pfSense_OPNsense', 'Juniper', 'Check_Point', 'Barracuda', 'Zyxel', 'Stormshield', 'sonstige'] %}
+                <option value="{{ hw }}" {% if step_data.get('hersteller', 'Fortinet') == hw %}selected{% endif %}>{{ hw|replace('_', ' ') }}</option>
                 {% endfor %}
               </select>
             </div>
             <div class="form-group">
               <label>Modell</label>
-              <input type="text" name="modell" value="{{ step_data.get('modell', '') }}" class="form-control">
+              <input type="text" name="modell" value="{{ step_data.get('modell', '') }}" class="form-control" placeholder="z. B. FortiGate 60F, XGS 126">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Hardware-Alter (Jahre)</label>
-              <input type="number" name="alter" value="{{ step_data.get('alter', '') }}" class="form-control" min="0">
+              <label>Hardware-Alter</label>
+              <select name="hardware_alter" class="form-control">
+                <option value="unter_3_jahre" {% if step_data.get('hardware_alter') == 'unter_3_jahre' or not step_data.get('hardware_alter') %}selected{% endif %}>Unter 3 Jahre</option>
+                <option value="3_bis_5_jahre" {% if step_data.get('hardware_alter') == '3_bis_5_jahre' %}selected{% endif %}>3 bis 5 Jahre</option>
+                <option value="ueber_5_jahre" {% if step_data.get('hardware_alter') == 'ueber_5_jahre' %}selected{% endif %}>Über 5 Jahre</option>
+                <option value="unbekannt" {% if step_data.get('hardware_alter') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
             </div>
             <div class="form-group">
-              <label>Wartungsvertrag vorhanden?</label>
-              <select name="wartungsvertrag" class="form-control">
-                <option value="" {% if not step_data.get('wartungsvertrag') %}selected{% endif %}>Bitte auswählen</option>
-                <option value="ja" {% if step_data.get('wartungsvertrag') == 'ja' %}selected{% endif %}>Ja</option>
-                <option value="nein" {% if step_data.get('wartungsvertrag') == 'nein' %}selected{% endif %}>Nein</option>
+              <label>Wartungsvertrag / Lizenz aktiv?</label>
+              <select name="wartungsvertrag_vorhanden" class="form-control">
+                <option value="ja" {% if step_data.get('wartungsvertrag_vorhanden', 'ja') == 'ja' %}selected{% endif %}>Ja (aktiv)</option>
+                <option value="nein" {% if step_data.get('wartungsvertrag_vorhanden') == 'nein' %}selected{% endif %}>Nein / Abgelaufen</option>
+                <option value="unbekannt" {% if step_data.get('wartungsvertrag_vorhanden') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>HA-Cluster (Hochverfügbarkeit)?</label>
+              <select name="ha_cluster_eingerichtet" class="form-control">
+                <option value="nein" {% if step_data.get('ha_cluster_eingerichtet') == 'nein' or not step_data.get('ha_cluster_eingerichtet') %}selected{% endif %}>Nein (Einzelgerät)</option>
+                <option value="ja" {% if step_data.get('ha_cluster_eingerichtet') == 'ja' %}selected{% endif %}>Ja (Aktiv/Passiv oder Aktiv/Aktiv)</option>
+                <option value="unbekannt" {% if step_data.get('ha_cluster_eingerichtet') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>IPS / Antivirus auf Firewall aktiv?</label>
+              <select name="ips_ids_aktiv" class="form-control">
+                <option value="ja" {% if step_data.get('ips_ids_aktiv', 'ja') == 'ja' %}selected{% endif %}>Ja</option>
+                <option value="nein" {% if step_data.get('ips_ids_aktiv') == 'nein' %}selected{% endif %}>Nein</option>
+                <option value="unbekannt" {% if step_data.get('ips_ids_aktiv') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
               </select>
             </div>
           </div>
@@ -220,195 +260,557 @@
       {# Schritt 5: Switch #}
       <fieldset class="fieldset">
         <div class="fieldset-head">
-          <h2>Switch</h2>
+          <h2>5. Switch & Netzwerk-Infrastruktur</h2>
+          <p class="fieldset-desc" style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Zentrale Switche für LAN und Clients erfassen.</p>
         </div>
         <div class="form-group">
-          <label>Wird ein Switch eingesetzt?</label>
+          <label>Werden Switches im Netzwerk eingesetzt?</label>
           <select name="hat_switch" class="form-control" id="hat-switch">
-            <option value="" {% if not step_data.get('hat_switch') %}selected{% endif %}>Bitte auswählen</option>
-            <option value="ja" {% if step_data.get('hat_switch') == 'ja' %}selected{% endif %}>Ja</option>
-            <option value="nein" {% if step_data.get('hat_switch') == 'nein' %}selected{% endif %}>Nein</option>
+            <option value="ja" {% if step_data.get('hat_switch', 'ja') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_switch') == 'nein' %}selected{% endif %}>Nein (keine Switche vorhanden)</option>
           </select>
         </div>
-        <div id="switch-details" style="{% if step_data.get('hat_switch') != 'ja' %}display: none;{% endif %}">
+        <div id="switch-details" style="{% if step_data.get('hat_switch') == 'nein' %}display: none;{% endif %}">
           <div class="form-row">
             <div class="form-group">
               <label>Hersteller</label>
               <select name="hersteller" class="form-control">
-                <option value="" {% if not step_data.get('hersteller') %}selected{% endif %}>Bitte auswählen</option>
-                {% for hw in ['Cisco', 'HP/Aruba', 'Juniper', 'Netgear', 'Ubiquiti', 'MikroTik', 'Sonstiges'] %}
-                <option value="{{ hw }}" {% if step_data.get('hersteller') == hw %}selected{% endif %}>{{ hw }}</option>
+                {% for hw in ['Cisco', 'Aruba_HPE', 'Ubiquiti', 'Dell', 'Fortinet', 'Netgear', 'Juniper', 'Extreme_Networks', 'Zyxel', 'D_Link', 'TP_Link', 'Brocade_Ruckus', 'sonstige'] %}
+                <option value="{{ hw }}" {% if step_data.get('hersteller', 'Cisco') == hw %}selected{% endif %}>{{ hw|replace('_', ' ') }}</option>
                 {% endfor %}
               </select>
             </div>
             <div class="form-group">
               <label>Modell</label>
-              <input type="text" name="modell" value="{{ step_data.get('modell', '') }}" class="form-control">
+              <input type="text" name="modell" value="{{ step_data.get('modell', '') }}" class="form-control" placeholder="z. B. Catalyst 9200, UniFi USW-24">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Anzahl Ports</label>
-              <input type="number" name="anzahl_ports" value="{{ step_data.get('anzahl_ports', '') }}" class="form-control" min="0">
+              <label>Gesamtanzahl Ports</label>
+              <input type="number" name="port_anzahl" value="{{ step_data.get('port_anzahl', 24) }}" class="form-control" min="4">
             </div>
             <div class="form-group">
-              <label>Anzahl genutzt</label>
-              <input type="number" name="anzahl_genutzt" value="{{ step_data.get('anzahl_genutzt', '') }}" class="form-control" min="0">
+              <label>Belegte Ports</label>
+              <input type="number" name="ports_belegt" value="{{ step_data.get('ports_belegt', '') }}" class="form-control" min="0">
             </div>
           </div>
-          <div class="form-group">
-            <label>Managed/Unmanaged</label>
-            <select name="managed" class="form-control">
-              <option value="" {% if not step_data.get('managed') %}selected{% endif %}>Bitte auswählen</option>
-              <option value="managed" {% if step_data.get('managed') == 'managed' %}selected{% endif %}>Managed</option>
-              <option value="unmanaged" {% if step_data.get('managed') == 'unmanaged' %}selected{% endif %}>Unmanaged</option>
-            </select>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Management-Typ</label>
+              <select name="management_typ" class="form-control">
+                <option value="managed_l2" {% if step_data.get('management_typ', 'managed_l2') == 'managed_l2' %}selected{% endif %}>Managed (Layer 2)</option>
+                <option value="managed_l3" {% if step_data.get('management_typ') == 'managed_l3' %}selected{% endif %}>Managed (Layer 3 / Routing)</option>
+                <option value="smart_managed" {% if step_data.get('management_typ') == 'smart_managed' %}selected{% endif %}>Smart-Managed / Web-Managed</option>
+                <option value="unmanaged" {% if step_data.get('management_typ') == 'unmanaged' %}selected{% endif %}>Unmanaged</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>VLAN-Netztrennung eingerichtet?</label>
+              <select name="netztrennung" class="form-control">
+                <option value="vlan_getrennt" {% if step_data.get('netztrennung', 'vlan_getrennt') == 'vlan_getrennt' %}selected{% endif %}>Ja, VLANs aktiv getrennt</option>
+                <option value="keine_trennung" {% if step_data.get('netztrennung') == 'keine_trennung' %}selected{% endif %}>Nein, flaches Netz (Default-VLAN)</option>
+                <option value="unbekannt" {% if step_data.get('netztrennung') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      
+      {% elif step_type == "access_point" %}
+      {# Schritt 6: WLAN / Access Points #}
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>6. WLAN & Access Points</h2>
+          <p class="fieldset-desc" style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Drahtloses Netzwerk und Gast-WLAN erfassen.</p>
+        </div>
+        <div class="form-group">
+          <label>Gibt es am Standort WLAN / Access Points?</label>
+          <select name="hat_access_point" class="form-control" id="hat-ap">
+            <option value="ja" {% if step_data.get('hat_access_point', 'ja') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_access_point') == 'nein' %}selected{% endif %}>Nein (kein WLAN vorhanden)</option>
+          </select>
+        </div>
+        <div id="ap-details" style="{% if step_data.get('hat_access_point') == 'nein' %}display: none;{% endif %}">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Hersteller</label>
+              <select name="hersteller" class="form-control">
+                {% for hw in ['Ubiquiti', 'Aruba_HPE', 'Cisco', 'Ruckus', 'LANCOM', 'Zyxel', 'TP_Link', 'DrayTek', 'Extreme_Networks', 'sonstige'] %}
+                <option value="{{ hw }}" {% if step_data.get('hersteller', 'Ubiquiti') == hw %}selected{% endif %}>{{ hw|replace('_', ' ') }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Modell</label>
+              <input type="text" name="modell" value="{{ step_data.get('modell', '') }}" class="form-control" placeholder="z. B. UniFi U6 Pro, Aruba AP-515">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Gast-WLAN vorhanden?</label>
+              <select name="gast_wlan_vorhanden" class="form-control">
+                <option value="ja" {% if step_data.get('gast_wlan_vorhanden', 'ja') == 'ja' %}selected{% endif %}>Ja</option>
+                <option value="nein" {% if step_data.get('gast_wlan_vorhanden') == 'nein' %}selected{% endif %}>Nein</option>
+                <option value="unbekannt" {% if step_data.get('gast_wlan_vorhanden') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Gast-WLAN vom internen Netz isoliert?</label>
+              <select name="gast_wlan_isoliert" class="form-control">
+                <option value="ja" {% if step_data.get('gast_wlan_isoliert', 'ja') == 'ja' %}selected{% endif %}>Ja (vollständig isoliert)</option>
+                <option value="nein" {% if step_data.get('gast_wlan_isoliert') == 'nein' %}selected{% endif %}>Nein (Gäste im internen Netz!)</option>
+                <option value="unbekannt" {% if step_data.get('gast_wlan_isoliert') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      
+      {% elif step_type == "server_virtualisierung" %}
+      {# Schritt 7: Server & Virtualisierung #}
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>7. Server & Virtualisierung</h2>
+          <p class="fieldset-desc" style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Physische Server und Hypervisor-Umgebung erfassen.</p>
+        </div>
+        <div class="form-group">
+          <label>Werden eigene Server / VMs vor Ort betrieben?</label>
+          <select name="hat_server" class="form-control" id="hat-server">
+            <option value="ja" {% if step_data.get('hat_server', 'ja') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_server') == 'nein' %}selected{% endif %}>Nein (Cloud-Only / Serverlos)</option>
+          </select>
+        </div>
+        <div id="server-details" style="{% if step_data.get('hat_server') == 'nein' %}display: none;{% endif %}">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Virtualisierung im Einsatz?</label>
+              <select name="wird_virtualisiert" class="form-control">
+                <option value="ja" {% if step_data.get('wird_virtualisiert', 'ja') == 'ja' %}selected{% endif %}>Ja (VMs / Hypervisor)</option>
+                <option value="nein" {% if step_data.get('wird_virtualisiert') == 'nein' %}selected{% endif %}>Nein (Bare-Metal)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Hypervisor-System</label>
+              <select name="hypervisor_typ" class="form-control">
+                <option value="vmware_esxi" {% if step_data.get('hypervisor_typ', 'vmware_esxi') == 'vmware_esxi' %}selected{% endif %}>VMware ESXi / vSphere</option>
+                <option value="microsoft_hyper_v" {% if step_data.get('hypervisor_typ') == 'microsoft_hyper_v' %}selected{% endif %}>Microsoft Hyper-V</option>
+                <option value="proxmox_ve" {% if step_data.get('hypervisor_typ') == 'proxmox_ve' %}selected{% endif %}>Proxmox VE</option>
+                <option value="nutanix_ahv" {% if step_data.get('hypervisor_typ') == 'nutanix_ahv' %}selected{% endif %}>Nutanix AHV</option>
+                <option value="xcp_ng_citrix" {% if step_data.get('hypervisor_typ') == 'xcp_ng_citrix' %}selected{% endif %}>XCP-ng / Citrix Hypervisor</option>
+                <option value="kvm_qemu" {% if step_data.get('hypervisor_typ') == 'kvm_qemu' %}selected{% endif %}>KVM / QEMU</option>
+                <option value="sonstige" {% if step_data.get('hypervisor_typ') == 'sonstige' %}selected{% endif %}>Sonstige</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Server-Hardware-Hersteller</label>
+              <select name="hersteller" class="form-control">
+                {% for hw in ['Dell', 'HPE', 'Lenovo', 'Fujitsu', 'Supermicro', 'Cisco_UCS', 'Huawei', 'sonstige'] %}
+                <option value="{{ hw }}" {% if step_data.get('hersteller', 'Dell') == hw %}selected{% endif %}>{{ hw|replace('_', ' ') }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Modell</label>
+              <input type="text" name="modell" value="{{ step_data.get('modell', '') }}" class="form-control" placeholder="z. B. PowerEdge R740, ProLiant DL380 Gen10">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Anzahl virtueller Maschinen (VMs)</label>
+              <input type="number" name="anzahl_vms" value="{{ step_data.get('anzahl_vms', '') }}" class="form-control" min="0" placeholder="z. B. 4">
+            </div>
+            <div class="form-group">
+              <label>Hardware-Alter</label>
+              <select name="hardware_alter" class="form-control">
+                <option value="unter_3_jahre" {% if step_data.get('hardware_alter') == 'unter_3_jahre' or not step_data.get('hardware_alter') %}selected{% endif %}>Unter 3 Jahre</option>
+                <option value="3_bis_5_jahre" {% if step_data.get('hardware_alter') == '3_bis_5_jahre' %}selected{% endif %}>3 bis 5 Jahre</option>
+                <option value="ueber_5_jahre" {% if step_data.get('hardware_alter') == 'ueber_5_jahre' %}selected{% endif %}>Über 5 Jahre</option>
+                <option value="unbekannt" {% if step_data.get('hardware_alter') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      
+      {% elif step_type == "storage" %}
+      {# Schritt 8: Storage / NAS #}
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>8. Storage & Datenspeicher</h2>
+          <p class="fieldset-desc" style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Zentrale Netzlaufwerke, SAN oder NAS-Systeme erfassen.</p>
+        </div>
+        <div class="form-group">
+          <label>Wird ein dediziertes Storage- / NAS-System eingesetzt?</label>
+          <select name="hat_storage" class="form-control" id="hat-storage">
+            <option value="ja" {% if step_data.get('hat_storage', 'ja') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_storage') == 'nein' %}selected{% endif %}>Nein (nur lokaler Server-Speicher)</option>
+          </select>
+        </div>
+        <div id="storage-details" style="{% if step_data.get('hat_storage') == 'nein' %}display: none;{% endif %}">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Hersteller</label>
+              <select name="hersteller_shared" class="form-control">
+                {% for hw in ['Synology', 'QNAP', 'NetApp', 'Dell_EMC', 'HPE', 'Pure_Storage', 'TrueNAS', 'IBM', 'Fujitsu', 'sonstige'] %}
+                <option value="{{ hw }}" {% if step_data.get('hersteller_shared', 'Synology') == hw %}selected{% endif %}>{{ hw|replace('_', ' ') }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Speicher-Typ</label>
+              <select name="bereitstellung" class="form-control">
+                <option value="shared_storage" {% if step_data.get('bereitstellung', 'shared_storage') == 'shared_storage' %}selected{% endif %}>Zentrales Shared Storage (SAN / iSCSI / NFS)</option>
+                <option value="lokaler_storage" {% if step_data.get('bereitstellung') == 'lokaler_storage' %}selected{% endif %}>NAS / Netzlaufwerk (SMB)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nettokapazität (TB)</label>
+              <input type="number" step="0.1" name="kapazitaet_netto_tb" value="{{ step_data.get('kapazitaet_netto_tb', '') }}" class="form-control" placeholder="z. B. 12">
+            </div>
+            <div class="form-group">
+              <label>Aktueller Füllgrad (%)</label>
+              <input type="number" name="fuellgrad_prozent" value="{{ step_data.get('fuellgrad_prozent', '') }}" class="form-control" min="0" max="100" placeholder="z. B. 65">
+            </div>
           </div>
         </div>
       </fieldset>
       
       {% elif step_type == "backup" %}
-      {# Schritt 6: Backup #}
+      {# Schritt 9: Backup & Recovery #}
       <fieldset class="fieldset">
         <div class="fieldset-head">
-          <h2>Backup</h2>
+          <h2>9. Datensicherung & Backup</h2>
+          <p class="fieldset-desc" style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Backup-Software, Sicherungsziele und Wiederherstellungstests erfassen.</p>
         </div>
         <div class="form-group">
-          <label>Wird Backup betrieben?</label>
+          <label>Wird eine regelmäßige Datensicherung betrieben?</label>
           <select name="hat_backup" class="form-control" id="hat-backup">
-            <option value="" {% if not step_data.get('hat_backup') %}selected{% endif %}>Bitte auswählen</option>
-            <option value="ja" {% if step_data.get('hat_backup') == 'ja' %}selected{% endif %}>Ja</option>
-            <option value="nein" {% if step_data.get('hat_backup') == 'nein' %}selected{% endif %}>Nein</option>
+            <option value="ja" {% if step_data.get('hat_backup', 'ja') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_backup') == 'nein' %}selected{% endif %}>Nein (kein Backup vorhanden!)</option>
           </select>
         </div>
-        <div id="backup-details" style="{% if step_data.get('hat_backup') != 'ja' %}display: none;{% endif %}">
-          <div class="form-group">
-            <label>Backup-Strategie</label>
-            <select name="strategie" class="form-control">
-              <option value="" {% if not step_data.get('strategie') %}selected{% endif %}>Bitte auswählen</option>
-              <option value="3-2-1" {% if step_data.get('strategie') == '3-2-1' %}selected{% endif %}>3-2-1 Regel</option>
-              <option value="Täglich/Wöchentlich/Monatlich" {% if step_data.get('strategie') == 'Täglich/Wöchentlich/Monatlich' %}selected{% endif %}>Täglich/Wöchentlich/Monatlich</option>
-              <option value="Nur lokal" {% if step_data.get('strategie') == 'Nur lokal' %}selected{% endif %}>Nur lokal</option>
-              <option value="Cloud-Only" {% if step_data.get('strategie') == 'Cloud-Only' %}selected{% endif %}>Cloud-Only</option>
-              <option value="Keine" {% if step_data.get('strategie') == 'Keine' %}selected{% endif %}>Keine</option>
-            </select>
+        <div id="backup-details" style="{% if step_data.get('hat_backup') == 'nein' %}display: none;{% endif %}">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Backup-Software</label>
+              <select name="backup_software" class="form-control">
+                <option value="veeam" {% if step_data.get('backup_software', 'veeam') == 'veeam' %}selected{% endif %}>Veeam Backup & Replication</option>
+                <option value="synology_active_backup" {% if step_data.get('backup_software') == 'synology_active_backup' %}selected{% endif %}>Synology Active Backup</option>
+                <option value="acronis_cyber_protect" {% if step_data.get('backup_software') == 'acronis_cyber_protect' %}selected{% endif %}>Acronis Cyber Protect</option>
+                <option value="datto_bcdr" {% if step_data.get('backup_software') == 'datto_bcdr' %}selected{% endif %}>Datto BCDR</option>
+                <option value="proxmox_backup_server" {% if step_data.get('backup_software') == 'proxmox_backup_server' %}selected{% endif %}>Proxmox Backup Server (PBS)</option>
+                <option value="commvault" {% if step_data.get('backup_software') == 'commvault' %}selected{% endif %}>Commvault</option>
+                <option value="windows_server_backup" {% if step_data.get('backup_software') == 'windows_server_backup' %}selected{% endif %}>Windows Server Sicherung</option>
+                <option value="sonstige" {% if step_data.get('backup_software') == 'sonstige' %}selected{% endif %}>Sonstige</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Haupt-Sicherungsziel</label>
+              <select name="backup_ziel" class="form-control">
+                <option value="lokal_nas" {% if step_data.get('backup_ziel', 'lokal_nas') == 'lokal_nas' %}selected{% endif %}>Lokales NAS</option>
+                <option value="cloud_storage" {% if step_data.get('backup_ziel') == 'cloud_storage' %}selected{% endif %}>Cloud-Storage / Offsite</option>
+                <option value="lokal_rdx_usb" {% if step_data.get('backup_ziel') == 'lokal_rdx_usb' %}selected{% endif %}>Externe Festplatte / RDX</option>
+                <option value="lokal_tape" {% if step_data.get('backup_ziel') == 'lokal_tape' %}selected{% endif %}>Bandlaufwerk (Tape / LTO)</option>
+                <option value="externer_dienstleister" {% if step_data.get('backup_ziel') == 'externer_dienstleister' %}selected{% endif %}>Managed Backup Dienstleister</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group">
-            <label>Backup-Software</label>
-            <input type="text" name="software" value="{{ step_data.get('software', '') }}" class="form-control" placeholder="z.B. Veeam, Acronis, Windows Backup">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Backup-Strategie</label>
+              <select name="strategie" class="form-control">
+                <option value="3_2_1_regel" {% if step_data.get('strategie', '3_2_1_regel') == '3_2_1_regel' %}selected{% endif %}>3-2-1 Regel (3 Kopien, 2 Medien, 1 Offsite)</option>
+                <option value="taeglich_inkrementell_woechentlich_voll" {% if step_data.get('strategie') == 'taeglich_inkrementell_woechentlich_voll' %}selected{% endif %}>Täglich inkrementell / wöchentlich voll</option>
+                <option value="taeglich_voll" {% if step_data.get('strategie') == 'taeglich_voll' %}selected{% endif %}>Täglich Vollbackup</option>
+                <option value="unregelmaessig" {% if step_data.get('strategie') == 'unregelmaessig' %}selected{% endif %}>Unregelmäßig / Manuell</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Wiederherstellungstest durchgeführt?</label>
+              <select name="testwiederherstellung" class="form-control">
+                <option value="ja_regelmaessig_protokolliert" {% if step_data.get('testwiederherstellung', 'ja_regelmaessig_protokolliert') == 'ja_regelmaessig_protokolliert' %}selected{% endif %}>Ja, regelmäßig & protokolliert</option>
+                <option value="ja_sporadisch_ohne_protokoll" {% if step_data.get('testwiederherstellung') == 'ja_sporadisch_ohne_protokoll' %}selected{% endif %}>Sporadisch ohne Protokoll</option>
+                <option value="nein_noch_nie" {% if step_data.get('testwiederherstellung') == 'nein_noch_nie' %}selected{% endif %}>Nein, noch nie getestet</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group">
-            <label>Backup-Ziel</label>
-            <select name="ziel" class="form-control">
-              <option value="" {% if not step_data.get('ziel') %}selected{% endif %}>Bitte auswählen</option>
-              <option value="Lokal" {% if step_data.get('ziel') == 'Lokal' %}selected{% endif %}>Lokale Festplatte</option>
-              <option value="NAS" {% if step_data.get('ziel') == 'NAS' %}selected{% endif %}>NAS</option>
-              <option value="Tape" {% if step_data.get('ziel') == 'Tape' %}selected{% endif %}>Bandlaufwerk</option>
-              <option value="Cloud" {% if step_data.get('ziel') == 'Cloud' %}selected{% endif %}>Cloud-Storage</option>
-              <option value="Externer Dienstleister" {% if step_data.get('ziel') == 'Externer Dienstleister' %}selected{% endif %}>Externer Dienstleister</option>
-            </select>
+        </div>
+      </fieldset>
+      
+      {% elif step_type == "usv" %}
+      {# Schritt 10: USV #}
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>10. USV (Unterbrechungsfreie Stromversorgung)</h2>
+          <p class="fieldset-desc" style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Notstromabsicherung für Server & Netzwerkschrank erfassen.</p>
+        </div>
+        <div class="form-group">
+          <label>Wird eine USV eingesetzt?</label>
+          <select name="hat_usv" class="form-control" id="hat-usv">
+            <option value="ja" {% if step_data.get('hat_usv', 'ja') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_usv') == 'nein' %}selected{% endif %}>Nein (keine USV vorhanden)</option>
+          </select>
+        </div>
+        <div id="usv-details" style="{% if step_data.get('hat_usv') == 'nein' %}display: none;{% endif %}">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Hersteller</label>
+              <select name="hersteller" class="form-control">
+                {% for hw in ['APC', 'Eaton', 'CyberPower', 'Socomec', 'Generex', 'FSP', 'Riello', 'sonstige'] %}
+                <option value="{{ hw }}" {% if step_data.get('hersteller', 'APC') == hw %}selected{% endif %}>{{ hw }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Modell</label>
+              <input type="text" name="modell" value="{{ step_data.get('modell', '') }}" class="form-control" placeholder="z. B. Smart-UPS 1500, 9PX 3000">
+            </div>
           </div>
-          <div class="form-group">
-            <label>Testwiederherstellung möglich?</label>
-            <select name="testwiederherstellung" class="form-control">
-              <option value="" {% if not step_data.get('testwiederherstellung') %}selected{% endif %}>Bitte auswählen</option>
-              <option value="ja" {% if step_data.get('testwiederherstellung') == 'ja' %}selected{% endif %}>Ja, regelmäßig getestet</option>
-              <option value="nein" {% if step_data.get('testwiederherstellung') == 'nein' %}selected{% endif %}>Nein</option>
-              <option value="unbekannt" {% if step_data.get('testwiederherstellung') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
-            </select>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Alter der Akkus / Batterien</label>
+              <select name="batterie_alter" class="form-control">
+                <option value="unter_3_jahre" {% if step_data.get('batterie_alter', 'unter_3_jahre') == 'unter_3_jahre' %}selected{% endif %}>Unter 3 Jahre (gut)</option>
+                <option value="3_bis_5_jahre" {% if step_data.get('batterie_alter') == '3_bis_5_jahre' %}selected{% endif %}>3 bis 5 Jahre (Austausch planen)</option>
+                <option value="ueber_5_jahre" {% if step_data.get('batterie_alter') == 'ueber_5_jahre' %}selected{% endif %}>Über 5 Jahre (Kritisch / Akkutausch fällig)</option>
+                <option value="unbekannt" {% if step_data.get('batterie_alter') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Automatischer Server-Shutdown konfiguriert?</label>
+              <select name="abschaltsignal_an_server" class="form-control">
+                <option value="ja" {% if step_data.get('abschaltsignal_an_server', 'ja') == 'ja' %}selected{% endif %}>Ja (Netzwerkkarte / USB Shutdown)</option>
+                <option value="nein" {% if step_data.get('abschaltsignal_an_server') == 'nein' %}selected{% endif %}>Nein (Server laufen bis Batterie leer)</option>
+                <option value="unbekannt" {% if step_data.get('abschaltsignal_an_server') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      
+      {% elif step_type == "clients" %}
+      {# Schritt 11: Clients & Arbeitsplätze #}
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>11. Clients & Arbeitsplätze</h2>
+          <p class="fieldset-desc" style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Endgeräte, Betriebssysteme und Endgerätesicherheit erfassen.</p>
+        </div>
+        <div class="form-group">
+          <label>Arbeitsplätze / Clients im Tool erfassen?</label>
+          <select name="hat_clients" class="form-control" id="hat-clients">
+            <option value="ja" {% if step_data.get('hat_clients', 'ja') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_clients') == 'nein' %}selected{% endif %}>Nein / Überspringen</option>
+          </select>
+        </div>
+        <div id="clients-details" style="{% if step_data.get('hat_clients') == 'nein' %}display: none;{% endif %}">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Anzahl Windows PCs / Laptops</label>
+              <input type="number" name="anzahl_windows_clients" value="{{ step_data.get('anzahl_windows_clients', 10) }}" class="form-control" min="0">
+            </div>
+            <div class="form-group">
+              <label>Anzahl macOS Clients</label>
+              <input type="number" name="anzahl_mac_clients" value="{{ step_data.get('anzahl_mac_clients', 0) }}" class="form-control" min="0">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Haupt-Betriebssystem</label>
+              <select name="haupt_betriebssystem_version" class="form-control">
+                <option value="windows_11" {% if step_data.get('haupt_betriebssystem_version', 'windows_11') == 'windows_11' %}selected{% endif %}>Windows 11</option>
+                <option value="windows_10" {% if step_data.get('haupt_betriebssystem_version') == 'windows_10' %}selected{% endif %}>Windows 10 (EOL beachten)</option>
+                <option value="macos_aktuell" {% if step_data.get('haupt_betriebssystem_version') == 'macos_aktuell' %}selected{% endif %}>macOS (aktuell)</option>
+                <option value="gemischt" {% if step_data.get('haupt_betriebssystem_version') == 'gemischt' %}selected{% endif %}>Gemischt</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Zentral verwalteter Virenschutz / EDR?</label>
+              <select name="edr_antivirus_zentral_gemanagt" class="form-control">
+                <option value="ja" {% if step_data.get('edr_antivirus_zentral_gemanagt', 'ja') == 'ja' %}selected{% endif %}>Ja (zentral gemanagt)</option>
+                <option value="nein" {% if step_data.get('edr_antivirus_zentral_gemanagt') == 'nein' %}selected{% endif %}>Nein (nur Einzelplatz-Virenschutz / keiner)</option>
+                <option value="unbekannt" {% if step_data.get('edr_antivirus_zentral_gemanagt') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Zentrales Patchmanagement aktiv?</label>
+              <select name="zentrales_patchmanagement_aktiv" class="form-control">
+                <option value="ja" {% if step_data.get('zentrales_patchmanagement_aktiv', 'ja') == 'ja' %}selected{% endif %}>Ja (RMM / WSUS / Intune)</option>
+                <option value="nein" {% if step_data.get('zentrales_patchmanagement_aktiv') == 'nein' %}selected{% endif %}>Nein (Benutzer aktualisieren selbst)</option>
+                <option value="unbekannt" {% if step_data.get('zentrales_patchmanagement_aktiv') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Lokale Admin-Rechte eingeschränkt?</label>
+              <select name="lokale_adminrechte_eingeschraenkt" class="form-control">
+                <option value="ja" {% if step_data.get('lokale_adminrechte_eingeschraenkt', 'ja') == 'ja' %}selected{% endif %}>Ja (Benutzer arbeiten ohne Adminrechte)</option>
+                <option value="nein" {% if step_data.get('lokale_adminrechte_eingeschraenkt') == 'nein' %}selected{% endif %}>Nein (Jeder User hat Adminrechte!)</option>
+                <option value="unbekannt" {% if step_data.get('lokale_adminrechte_eingeschraenkt') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      
+      {% elif step_type == "m365_security" %}
+      {# Schritt 12: M365 & Cloud #}
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>12. Microsoft 365 & Cloud-Security</h2>
+          <p class="fieldset-desc" style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Cloud-Dienste, Multi-Faktor-Authentifizierung (MFA) und Cloud-Backup erfassen.</p>
+        </div>
+        <div class="form-group">
+          <label>Wird Microsoft 365 / Cloud-E-Mail genutzt?</label>
+          <select name="hat_m365" class="form-control" id="hat-m365">
+            <option value="ja" {% if step_data.get('hat_m365', 'ja') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_m365') == 'nein' %}selected{% endif %}>Nein (nur On-Premise Exchange / sonstiges)</option>
+          </select>
+        </div>
+        <div id="m365-details" style="{% if step_data.get('hat_m365') == 'nein' %}display: none;{% endif %}">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Lizenztyp</label>
+              <select name="tenant_typ" class="form-control">
+                <option value="microsoft_365_business" {% if step_data.get('tenant_typ', 'microsoft_365_business') == 'microsoft_365_business' %}selected{% endif %}>Microsoft 365 Business (Standard / Premium)</option>
+                <option value="microsoft_365_enterprise" {% if step_data.get('tenant_typ') == 'microsoft_365_enterprise' %}selected{% endif %}>Microsoft 365 Enterprise (E3 / E5)</option>
+                <option value="exchange_online_only" {% if step_data.get('tenant_typ') == 'exchange_online_only' %}selected{% endif %}>Exchange Online Only</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>MFA (Multifaktor-Auth) für alle Pflicht?</label>
+              <select name="mfa_fuer_alle_benutzer" class="form-control">
+                <option value="ja" {% if step_data.get('mfa_fuer_alle_benutzer', 'ja') == 'ja' %}selected{% endif %}>Ja (für ausnahmslos alle Pflicht)</option>
+                <option value="nein" {% if step_data.get('mfa_fuer_alle_benutzer') == 'nein' %}selected{% endif %}>Nein (Passwort allein reicht aus!)</option>
+                <option value="unbekannt" {% if step_data.get('mfa_fuer_alle_benutzer') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>MFA für globale Administratoren?</label>
+              <select name="mfa_fuer_administratoren" class="form-control">
+                <option value="ja" {% if step_data.get('mfa_fuer_administratoren', 'ja') == 'ja' %}selected{% endif %}>Ja (MFA erzwungen)</option>
+                <option value="nein" {% if step_data.get('mfa_fuer_administratoren') == 'nein' %}selected{% endif %}>Nein</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Drittanbieter Cloud-to-Cloud Backup aktiv?</label>
+              <select name="m365_drittanbieter_backup_aktiv" class="form-control">
+                <option value="ja" {% if step_data.get('m365_drittanbieter_backup_aktiv', 'ja') == 'ja' %}selected{% endif %}>Ja (z. B. Veeam Cloud Backup, Hornetsecurity)</option>
+                <option value="nein" {% if step_data.get('m365_drittanbieter_backup_aktiv') == 'nein' %}selected{% endif %}>Nein (nur Microsoft Standard-Papierkorb)</option>
+                <option value="unbekannt" {% if step_data.get('m365_drittanbieter_backup_aktiv') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      
+      {% elif step_type == "organisation_prozesse" %}
+      {# Schritt 13: Organisation & Prozesse #}
+      <fieldset class="fieldset">
+        <div class="fieldset-head">
+          <h2>13. Organisation, Prozesse & Notfallvorsorge</h2>
+          <p class="fieldset-desc" style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Governance, Richtlinien, Notfallhandbuch und Dokumentation erfassen.</p>
+        </div>
+        <div class="form-group">
+          <label>Organisatorische IT-Sicherheit erfassen?</label>
+          <select name="hat_organisation" class="form-control" id="hat-org">
+            <option value="ja" {% if step_data.get('hat_organisation', 'ja') == 'ja' %}selected{% endif %}>Ja</option>
+            <option value="nein" {% if step_data.get('hat_organisation') == 'nein' %}selected{% endif %}>Nein / Überspringen</option>
+          </select>
+        </div>
+        <div id="org-details" style="{% if step_data.get('hat_organisation') == 'nein' %}display: none;{% endif %}">
+          <div class="form-row">
+            <div class="form-group">
+              <label>IT-Notfallhandbuch / Notfallplan vorhanden?</label>
+              <select name="notfallhandbuch_status" class="form-control">
+                <option value="vollstaendig_aktuell" {% if step_data.get('notfallhandbuch_status') == 'vollstaendig_aktuell' %}selected{% endif %}>Vollständig & aktuell</option>
+                <option value="teilweise_veraltet" {% if step_data.get('notfallhandbuch_status') == 'teilweise_veraltet' %}selected{% endif %}>Teilweise vorhanden / veraltet</option>
+                <option value="nicht_vorhanden" {% if step_data.get('notfallhandbuch_status', 'nicht_vorhanden') == 'nicht_vorhanden' %}selected{% endif %}>Nicht vorhanden</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>IT-Dokumentation vorhanden & aktuell?</label>
+              <select name="it_dokumentation_status" class="form-control">
+                <option value="vollstaendig_aktuell" {% if step_data.get('it_dokumentation_status') == 'vollstaendig_aktuell' %}selected{% endif %}>Vollständig & gepflegt</option>
+                <option value="lueckenhaft" {% if step_data.get('it_dokumentation_status', 'lueckenhaft') == 'lueckenhaft' %}selected{% endif %}>Lückenhaft / teilweise veraltet</option>
+                <option value="nicht_vorhanden" {% if step_data.get('it_dokumentation_status') == 'nicht_vorhanden' %}selected{% endif %}>Nicht vorhanden</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>IT-Sicherheitsrichtlinie von Mitarbeitern unterschrieben?</label>
+              <select name="it_sicherheitsrichtlinie_unterschrieben" class="form-control">
+                <option value="ja_alle" {% if step_data.get('it_sicherheitsrichtlinie_unterschrieben') == 'ja_alle' %}selected{% endif %}>Ja, von allen Mitarbeitern</option>
+                <option value="teilweise" {% if step_data.get('it_sicherheitsrichtlinie_unterschrieben') == 'teilweise' %}selected{% endif %}>Teilweise</option>
+                <option value="nein" {% if step_data.get('it_sicherheitsrichtlinie_unterschrieben', 'nein') == 'nein' %}selected{% endif %}>Nein / Nicht vorhanden</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Passwort-Manager im Einsatz?</label>
+              <select name="passwort_manager_einsatz" class="form-control">
+                <option value="unternehmensweit_verpflichtend" {% if step_data.get('passwort_manager_einsatz') == 'unternehmensweit_verpflichtend' %}selected{% endif %}>Unternehmensweit verpflichtend</option>
+                <option value="optional_vorhanden" {% if step_data.get('passwort_manager_einsatz', 'optional_vorhanden') == 'optional_vorhanden' %}selected{% endif %}>Optional / Uneinheitlich</option>
+                <option value="nicht_im_einsatz" {% if step_data.get('passwort_manager_einsatz') == 'nicht_im_einsatz' %}selected{% endif %}>Nicht im Einsatz</option>
+              </select>
+            </div>
           </div>
         </div>
       </fieldset>
       
       {% endif %}
 
-      {# Navigation #}
-      <div class="form-bar" style="display: flex; gap: 12px; justify-content: space-between;">
+      {# Navigations-Aktionsleiste #}
+      <div class="form-bar" style="display: flex; gap: 12px; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
         <div>
-          {% if current_step > 1 %}
-          <a href="/auftrag/{{ auftrag.id }}/wizard/abbruch" class="btn" onclick="return confirm('Wirklich abbrechen? Ihr Fortschritt wird gespeichert und Sie können später weitermachen.')">Abbrechen</a>
-          {% endif %}
+          <a href="/auftrag/{{ auftrag.id }}/wizard/abbruch" class="btn btn-outline" onclick="return confirm('Erfassung unterbrechen? Der bisherige Fortschritt bleibt gespeichert.')">Erfassung pausieren</a>
         </div>
-        <div style="display: flex; gap: 12px;">
+        <div style="display: flex; gap: 12px; align-items: center;">
           {% if current_step > 1 %}
-          <a href="/auftrag/{{ auftrag.id }}/wizard" class="btn btn-outline">Zurück</a>
+          <a href="/auftrag/{{ auftrag.id }}/wizard/back" class="btn btn-outline">← Zurück</a>
           {% endif %}
-          <button type="submit" class="btn btn-primary">
-            {% if current_step == total_steps %}Zur Zusammenfassung{% else %}Weiter{% endif %}
-          </button>
-          {% if current_step < total_steps %}
           <a href="/auftrag/{{ auftrag.id }}/wizard/skip" class="btn btn-outline">Überspringen</a>
-          {% endif %}
+          <button type="submit" class="btn btn-primary">
+            {% if current_step == data_steps_count %}Zur Zusammenfassung →{% else %}Weiter →{% endif %}
+          </button>
         </div>
       </div>
     </form>
   </main>
 </div>
 
-<style>
-.wizard-steps {
-  display: flex;
-  position: relative;
-  margin-bottom: 24px;
-}
-.wizard-step {
-  position: relative;
-  z-index: 1;
-}
-.wizard-step.completed {
-  color: #16a34a;
-}
-.wizard-step.completed svg {
-  fill: #16a34a;
-}
-.wizard-step.active {
-  color: #2563eb;
-  font-weight: 600;
-}
-.wizard-steps::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #d1d5db;
-  z-index: 1;
-}
-.wizard-steps::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: calc((100% / {{ total_steps }}) * ({{ current_step }} - 1));
-  right: calc(100% - calc((100% / {{ total_steps }}) * ({{ current_step }} - 1)));
-  height: 2px;
-  background: #16a34a;
-  z-index: 1;
-}
-</style>
-
 <script>
-// Dynamische Felder ein-/ausblenden
-{% if step_type == "internetanbindungen" %}
-document.getElementById('hat-internet')?.addEventListener('change', function() {
-  document.getElementById('internet-details').style.display = this.value === 'ja' ? 'block' : 'none';
+// Dynamische Detail-Umschaltung
+const toggleConfig = [
+  { selectId: 'hat-internet', containerId: 'internet-details' },
+  { selectId: 'hat-firewall', containerId: 'firewall-details' },
+  { selectId: 'hat-switch', containerId: 'switch-details' },
+  { selectId: 'hat-ap', containerId: 'ap-details' },
+  { selectId: 'hat-server', containerId: 'server-details' },
+  { selectId: 'hat-storage', containerId: 'storage-details' },
+  { selectId: 'hat-backup', containerId: 'backup-details' },
+  { selectId: 'hat-usv', containerId: 'usv-details' },
+  { selectId: 'hat-clients', containerId: 'clients-details' },
+  { selectId: 'hat-m365', containerId: 'm365-details' },
+  { selectId: 'hat-org', containerId: 'org-details' },
+];
+
+toggleConfig.forEach(cfg => {
+  const el = document.getElementById(cfg.selectId);
+  const target = document.getElementById(cfg.containerId);
+  if (el && target) {
+    el.addEventListener('change', function() {
+      target.style.display = this.value === 'ja' ? 'block' : 'none';
+    });
+  }
 });
-{% endif %}
-{% if step_type == "firewall" %}
-document.getElementById('hat-firewall')?.addEventListener('change', function() {
-  document.getElementById('firewall-details').style.display = this.value === 'ja' ? 'block' : 'none';
-});
-{% endif %}
-{% if step_type == "switch" %}
-document.getElementById('hat-switch')?.addEventListener('change', function() {
-  document.getElementById('switch-details').style.display = this.value === 'ja' ? 'block' : 'none';
-});
-{% endif %}
-{% if step_type == "backup" %}
-document.getElementById('hat-backup')?.addEventListener('change', function() {
-  document.getElementById('backup-details').style.display = this.value === 'ja' ? 'block' : 'none';
-});
-{% endif %}
 </script>
 {% endblock %}
+

@@ -12,21 +12,21 @@ def client(tmp_path, monkeypatch):
     return TestClient(app)
 
 
-def test_wizard_init_and_flow(client, tmp_path):
+def test_wizard_init_and_full_flow(client, tmp_path):
     # 1. Auftrag anlegen
     auftrag = Auftrag(
         id="proj-wiz-test",
         kunde="Wizard Kunde",
         projekt_nummer="P-WIZ-01",
         bezeichnung="Test Wizard Auftrag",
-        aktive_bausteine=[]
+        aktive_bausteine=[],
     )
     storage.save_auftrag(auftrag)
 
     # 2. Wizard initialisieren
     resp = client.post("/auftrag/proj-wiz-test/wizard/init", follow_redirects=True)
     assert resp.status_code == 200
-    assert "Interaktive Erfassung" in resp.text
+    assert "Interaktive Bestandsaufnahme" in resp.text
     assert "Auftragsgrunddaten" in resp.text
 
     # Fortschritt prüfen
@@ -41,9 +41,9 @@ def test_wizard_init_and_flow(client, tmp_path):
             "kunde": "Wizard Kunde Aktualisiert",
             "projekt_nummer": "P-WIZ-99",
             "bezeichnung": "Aktualisierter Wizard Auftrag",
-            "abgrenzung": "Scope nur Hauptstandort"
+            "abgrenzung": "Scope nur Hauptstandort",
         },
-        follow_redirects=True
+        follow_redirects=True,
     )
     assert resp.status_code == 200
     assert "Standort-Grunddaten" in resp.text
@@ -58,12 +58,12 @@ def test_wizard_init_and_flow(client, tmp_path):
             "plz": "10115",
             "ort": "Berlin",
             "ansprechpartner_vor_ort": "Max Mustermann",
-            "funktion": "IT-Leiter"
+            "funktion": "IT-Leiter",
         },
-        follow_redirects=True
+        follow_redirects=True,
     )
     assert resp.status_code == 200
-    assert "Internetanbindungen" in resp.text
+    assert "Internetanbindung" in resp.text
 
     # 5. Schritt 3: Internetanbindungen speichern
     resp = client.post(
@@ -71,11 +71,13 @@ def test_wizard_init_and_flow(client, tmp_path):
         data={
             "hat_internetanbindung": "ja",
             "anbieter": "Telekom",
-            "art": "Glasfaser",
+            "art": "Glasfaser_FTTH",
             "bandbreite_down": "1000",
-            "bandbreite_up": "500"
+            "bandbreite_up": "500",
+            "feste_ip_vorhanden": "ja",
+            "redundante_anbindung": "nein",
         },
-        follow_redirects=True
+        follow_redirects=True,
     )
     assert resp.status_code == 200
     assert "Firewall" in resp.text
@@ -87,10 +89,12 @@ def test_wizard_init_and_flow(client, tmp_path):
             "hat_firewall": "ja",
             "hersteller": "Fortinet",
             "modell": "FortiGate 60F",
-            "alter": "2",
-            "wartungsvertrag": "ja"
+            "hardware_alter": "unter_3_jahre",
+            "wartungsvertrag_vorhanden": "ja",
+            "ha_cluster_eingerichtet": "nein",
+            "ips_ids_aktiv": "ja",
         },
-        follow_redirects=True
+        follow_redirects=True,
     )
     assert resp.status_code == 200
     assert "Switch" in resp.text
@@ -102,38 +106,151 @@ def test_wizard_init_and_flow(client, tmp_path):
             "hat_switch": "ja",
             "hersteller": "Cisco",
             "modell": "Catalyst 9200",
-            "anzahl_ports": "48",
-            "anzahl_genutzt": "32",
-            "managed": "managed"
+            "port_anzahl": "48",
+            "ports_belegt": "32",
+            "management_typ": "managed_l2",
+            "netztrennung": "vlan_getrennt",
         },
-        follow_redirects=True
+        follow_redirects=True,
+    )
+    assert resp.status_code == 200
+    assert "WLAN" in resp.text
+
+    # 8. Schritt 6: Access Point speichern
+    resp = client.post(
+        "/auftrag/proj-wiz-test/wizard/step/6",
+        data={
+            "hat_access_point": "ja",
+            "hersteller": "Ubiquiti",
+            "modell": "UniFi U6 Pro",
+            "gast_wlan_vorhanden": "ja",
+            "gast_wlan_isoliert": "ja",
+        },
+        follow_redirects=True,
+    )
+    assert resp.status_code == 200
+    assert "Server" in resp.text
+
+    # 9. Schritt 7: Server & Virtualisierung speichern
+    resp = client.post(
+        "/auftrag/proj-wiz-test/wizard/step/7",
+        data={
+            "hat_server": "ja",
+            "wird_virtualisiert": "ja",
+            "hypervisor_typ": "vmware_esxi",
+            "hersteller": "Dell",
+            "modell": "PowerEdge R740",
+            "anzahl_vms": "6",
+            "hardware_alter": "unter_3_jahre",
+        },
+        follow_redirects=True,
+    )
+    assert resp.status_code == 200
+    assert "Storage" in resp.text
+
+    # 10. Schritt 8: Storage speichern
+    resp = client.post(
+        "/auftrag/proj-wiz-test/wizard/step/8",
+        data={
+            "hat_storage": "ja",
+            "bereitstellung": "shared_storage",
+            "hersteller_shared": "Synology",
+            "kapazitaet_netto_tb": "16",
+            "fuellgrad_prozent": "60",
+        },
+        follow_redirects=True,
     )
     assert resp.status_code == 200
     assert "Backup" in resp.text
 
-    # 8. Schritt 6: Backup speichern
+    # 11. Schritt 9: Backup speichern
     resp = client.post(
-        "/auftrag/proj-wiz-test/wizard/step/6",
+        "/auftrag/proj-wiz-test/wizard/step/9",
         data={
             "hat_backup": "ja",
-            "strategie": "3-2-1",
-            "software": "Veeam",
-            "ziel": "NAS",
-            "testwiederherstellung": "ja"
+            "backup_software": "veeam",
+            "backup_ziel": "lokal_nas",
+            "strategie": "3_2_1_regel",
+            "testwiederherstellung": "ja_regelmaessig_protokolliert",
         },
-        follow_redirects=True
+        follow_redirects=True,
     )
     assert resp.status_code == 200
-    assert "Zusammenfassung" in resp.text
+    assert "USV" in resp.text
 
-    # 9. Zusammenfassung anzeigen
+    # 12. Schritt 10: USV speichern
+    resp = client.post(
+        "/auftrag/proj-wiz-test/wizard/step/10",
+        data={
+            "hat_usv": "ja",
+            "hersteller": "APC",
+            "modell": "Smart-UPS 1500",
+            "batterie_alter": "unter_3_jahre",
+            "abschaltsignal_an_server": "ja",
+        },
+        follow_redirects=True,
+    )
+    assert resp.status_code == 200
+    assert "Clients" in resp.text
+
+    # 13. Schritt 11: Clients speichern
+    resp = client.post(
+        "/auftrag/proj-wiz-test/wizard/step/11",
+        data={
+            "hat_clients": "ja",
+            "anzahl_windows_clients": "20",
+            "anzahl_mac_clients": "5",
+            "anzahl_linux_clients": "0",
+            "haupt_betriebssystem_version": "windows_11",
+            "edr_antivirus_zentral_gemanagt": "ja",
+            "zentrales_patchmanagement_aktiv": "ja",
+            "lokale_adminrechte_eingeschraenkt": "ja",
+        },
+        follow_redirects=True,
+    )
+    assert resp.status_code == 200
+    assert "M365" in resp.text
+
+    # 14. Schritt 12: M365 speichern
+    resp = client.post(
+        "/auftrag/proj-wiz-test/wizard/step/12",
+        data={
+            "hat_m365": "ja",
+            "tenant_typ": "microsoft_365_business",
+            "mfa_fuer_alle_benutzer": "ja",
+            "mfa_fuer_administratoren": "ja",
+            "m365_drittanbieter_backup_aktiv": "ja",
+        },
+        follow_redirects=True,
+    )
+    assert resp.status_code == 200
+    assert "Organisation" in resp.text
+
+    # 15. Schritt 13: Organisation speichern
+    resp = client.post(
+        "/auftrag/proj-wiz-test/wizard/step/13",
+        data={
+            "hat_organisation": "ja",
+            "notfallhandbuch_status": "vollstaendig_aktuell",
+            "it_dokumentation_status": "vollstaendig_aktuell",
+            "it_sicherheitsrichtlinie_unterschrieben": "ja_alle",
+            "passwort_manager_einsatz": "unternehmensweit_verpflichtend",
+        },
+        follow_redirects=True,
+    )
+    assert resp.status_code == 200
+    assert "Zusammenfassung der Bestandsaufnahme" in resp.text
+
+    # 16. Zusammenfassung anzeigen & überprüfen
     resp = client.get("/auftrag/proj-wiz-test/wizard/zusammenfassung")
     assert resp.status_code == 200
-    assert "Zusammenfassung - Interaktive Erfassung" in resp.text
     assert "Fortinet" in resp.text
     assert "Catalyst 9200" in resp.text
+    assert "PowerEdge R740" in resp.text
+    assert "Synology" in resp.text
+    assert "Veeam" in resp.text or "veeam" in resp.text
 
-    # 10. Wizard abschließen und Bausteine anlegen
+    # 17. Wizard abschließen und alle Bausteine erzeugen
     resp = client.post("/auftrag/proj-wiz-test/wizard/abschliessen", follow_redirects=False)
     assert resp.status_code == 303
     assert resp.headers["location"] == "/auftrag/proj-wiz-test/erfassung"
@@ -145,9 +262,13 @@ def test_wizard_init_and_flow(client, tmp_path):
     saved_auftrag = storage.load_auftrag("proj-wiz-test")
     assert saved_auftrag.kunde == "Wizard Kunde Aktualisiert"
     assert saved_auftrag.projekt_nummer == "P-WIZ-99"
-    assert "firewall" in saved_auftrag.aktive_bausteine
-    assert "switch" in saved_auftrag.aktive_bausteine
-    assert "backup" in saved_auftrag.aktive_bausteine
+
+    expected_bausteine = [
+        "firewall", "switch", "access_point", "server_virtualisierung",
+        "storage", "backup", "usv", "clients", "m365_security", "organisation_prozesse"
+    ]
+    for b in expected_bausteine:
+        assert b in saved_auftrag.aktive_bausteine
 
     # Standorte prüfen
     standorte = storage.list_standorte("proj-wiz-test")
@@ -156,48 +277,93 @@ def test_wizard_init_and_flow(client, tmp_path):
     assert standorte[0].anzahl_user == 25
     assert len(standorte[0].anbindungen) == 1
     assert standorte[0].anbindungen[0].anbieter == "Telekom"
+    assert standorte[0].anbindungen[0].art == "Glasfaser_FTTH"
     assert standorte[0].anbindungen[0].bandbreite_down_mbit == 1000.0
 
     # Technik-Objekte prüfen
     objekte = storage.list_objekte("proj-wiz-test")
     typen = [o.typ for o in objekte]
-    assert "firewall" in typen
-    assert "switch" in typen
-    assert "backup" in typen
+    for b in expected_bausteine:
+        assert b in typen
 
     fw = next(o for o in objekte if o.typ == "firewall")
     assert fw.daten["hersteller"] == "Fortinet"
     assert fw.daten["modell"] == "FortiGate 60F"
-    assert fw.daten["hardware_alter"] == "2"
+    assert fw.daten["hardware_alter"] == "unter_3_jahre"
 
     sw = next(o for o in objekte if o.typ == "switch")
     assert sw.daten["hersteller"] == "Cisco"
     assert sw.daten["port_anzahl"] == 48
-    assert sw.daten["switch_typ"] == "fully_managed"
+    assert sw.daten["management_typ"] == "managed_l2"
+
+    ap = next(o for o in objekte if o.typ == "access_point")
+    assert ap.daten["hersteller"] == "Ubiquiti"
+    assert ap.daten["gast_wlan_isoliert"] == "ja"
+
+    srv = next(o for o in objekte if o.typ == "server_virtualisierung")
+    assert srv.daten["hersteller"] == "Dell"
+    assert srv.daten["anzahl_vms"] == 6
+
+    sto = next(o for o in objekte if o.typ == "storage")
+    assert sto.daten["hersteller_shared"] == "Synology"
+    assert sto.daten["kapazitaet_netto_tb"] == 16.0
 
     bk = next(o for o in objekte if o.typ == "backup")
     assert bk.daten["backup_software"] == "veeam"
-    assert bk.daten["backup_ziel"] == "NAS"
+    assert bk.daten["strategie"] == "3_2_1_regel"
+
+    usv = next(o for o in objekte if o.typ == "usv")
+    assert usv.daten["hersteller"] == "APC"
+    assert usv.daten["abschaltsignal_an_server"] == "ja"
+
+    cl = next(o for o in objekte if o.typ == "clients")
+    assert cl.daten["anzahl_windows_clients"] == 20
+    assert cl.daten["edr_antivirus_zentral_gemanagt"] == "ja"
+
+    m365 = next(o for o in objekte if o.typ == "m365_security")
+    assert m365.daten["mfa_fuer_alle_benutzer"] == "ja"
+    assert m365.standort_id is None
+
+    org = next(o for o in objekte if o.typ == "organisation_prozesse")
+    assert org.daten["notfallhandbuch_status"] == "vollstaendig_aktuell"
+    assert org.standort_id is None
 
 
-def test_wizard_skip_and_abbruch(client, tmp_path):
+def test_wizard_navigation_helpers(client, tmp_path):
     auftrag = Auftrag(
-        id="proj-skip-test",
-        kunde="Skip Kunde",
-        bezeichnung="Test Skip",
-        aktive_bausteine=[]
+        id="proj-nav-test",
+        kunde="Nav Kunde",
+        bezeichnung="Test Nav",
+        aktive_bausteine=[],
     )
     storage.save_auftrag(auftrag)
 
     # Init
-    client.post("/auftrag/proj-skip-test/wizard/init", follow_redirects=True)
+    client.post("/auftrag/proj-nav-test/wizard/init", follow_redirects=True)
+    prog = storage.load_wizard_progress("proj-nav-test")
+    assert prog.current_step == 1
 
-    # Step 1 überspringen
-    client.post("/auftrag/proj-skip-test/wizard/skip", follow_redirects=True)
-    prog = storage.load_wizard_progress("proj-skip-test")
+    # Step 1 überspringen via GET Link
+    resp = client.get("/auftrag/proj-nav-test/wizard/skip", follow_redirects=False)
+    assert resp.status_code == 303
+    prog = storage.load_wizard_progress("proj-nav-test")
     assert prog.current_step == 2
 
-    # Abbruch aufrufen (Fortschritt bleibt erhalten)
-    resp = client.post("/auftrag/proj-skip-test/wizard/abbruch", follow_redirects=False)
+    # Direkt zu Schritt 5 springen
+    resp = client.get("/auftrag/proj-nav-test/wizard/goto/5", follow_redirects=False)
     assert resp.status_code == 303
-    assert storage.load_wizard_progress("proj-skip-test") is not None
+    prog = storage.load_wizard_progress("proj-nav-test")
+    assert prog.current_step == 5
+
+    # Zurück-Button testen
+    resp = client.get("/auftrag/proj-nav-test/wizard/back", follow_redirects=False)
+    assert resp.status_code == 303
+    prog = storage.load_wizard_progress("proj-nav-test")
+    assert prog.current_step == 4
+
+    # Abbruch via GET (pausieren)
+    resp = client.get("/auftrag/proj-nav-test/wizard/abbruch", follow_redirects=False)
+    assert resp.status_code == 303
+    assert resp.headers["location"] == "/auftrag/proj-nav-test"
+    assert storage.load_wizard_progress("proj-nav-test") is not None
+

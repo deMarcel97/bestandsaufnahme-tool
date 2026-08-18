@@ -4,7 +4,22 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.32] - 2026-08-18
+
+### Added
+- **Erfassungs-Wizard Vollausbau & automatische Baustein-Erstellung (#325)**:
+  - Vollausbau des Erfassungs-Wizards von 6 auf alle 13 relevanten IT-Themenbereiche der Bestandsaufnahme (Auftragsgrunddaten, Standort, Internetanbindung, Firewall, Switch, WLAN/AP, Server/Virtualisierung, Storage/NAS, Backup, USV, Clients/Arbeitsplätze, M365/Cloud, Organisation & Prozesse).
+  - Automatisches Erstellen und Zuordnen aller aktivierten Bausteine und schemakonformen `TechnikObjekt`-Instanzen beim Wizard-Abschluss.
+  - Horizontale, klickbare Schritt-Navigationsleiste zum direkten Springen zwischen bereits durchlaufenen Themen.
+  - Dynamische Feld-Einblendungen je nach Vorhandensein ("Wird eingesetzt? Ja/Nein").
+
+### Fixed
+- **Navigations- und Methoden-Fehler im Erfassungs-Wizard (#325)**:
+  - HTTP 405 Method Not Allowed Fehler bei Überspringen- und Abbrechen-Links behoben (Unterstützung für GET und POST).
+  - Korrekte Rückwärts-Navigation über `/auftrag/{id}/wizard/back` und direktes Anspringen über `/auftrag/{id}/wizard/goto/{step}`.
+
 ## [2.7.31] - 2026-08-18
+
 
 ### Fixed
 - **Doppeltes Kommentarfeld in Technik-Formular (#354)**: Das hartcodierte "Notizen"-Feld aus `technik/form.html` entfernt — jedes Schema definiert bereits ein `kommentar`-Feld, sodass zwei Kommentarboxen übereinander erschienen. Das Modellfeld `notiz` bleibt für Standort-Formulare erhalten.
