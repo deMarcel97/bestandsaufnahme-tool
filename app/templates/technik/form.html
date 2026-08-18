@@ -230,14 +230,6 @@
     </fieldset>
     {% endfor %}
 
-    <fieldset class="fieldset">
-      <div class="fieldset-head"><h2>Notizen</h2></div>
-      <div class="form-group">
-        <label>Bemerkungen</label>
-        <textarea name="notiz" class="form-control">{{ obj.notiz if obj else '' }}</textarea>
-      </div>
-    </fieldset>
-
     <div class="form-bar">
       <button type="submit" class="btn btn-primary">Objekt speichern</button>
       {% if obj %}<a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn">Abbrechen</a>{% endif %}
