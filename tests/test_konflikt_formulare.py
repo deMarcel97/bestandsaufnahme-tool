@@ -164,10 +164,10 @@ def test_konflikt_liefert_das_formular_mit_den_eingegebenen_werten_zurueck(besta
     ziel = f"/auftrag/{AUFTRAG_ID}/objekt/firewall/{OBJEKT_ID}"
     basis = {"bezeichnung": "Firewall Zentrale", "standort_id": STANDORT_ID}
 
-    client.post(ziel, data={**basis, "version": stand, "notiz": "Von A"}, follow_redirects=False)
+    client.post(ziel, data={**basis, "version": stand, "kommentar": "Von A"}, follow_redirects=False)
     antwort = client.post(
         ziel,
-        data={**basis, "version": stand, "notiz": "Muehsam getippter Text von B"},
+        data={**basis, "version": stand, "kommentar": "Muehsam getippter Text von B"},
         follow_redirects=False,
     )
 

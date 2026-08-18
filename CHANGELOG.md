@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.31] - 2026-08-18
+
+### Fixed
+- **Doppeltes Kommentarfeld in Technik-Formular (#354)**: Das hartcodierte "Notizen"-Feld aus `technik/form.html` entfernt — jedes Schema definiert bereits ein `kommentar`-Feld, sodass zwei Kommentarboxen übereinander erschienen. Das Modellfeld `notiz` bleibt für Standort-Formulare erhalten.
+
 ## [2.7.30] - 2026-08-17
 
 ### Added
