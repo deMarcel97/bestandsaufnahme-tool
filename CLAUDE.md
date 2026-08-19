@@ -107,8 +107,12 @@ ohne Flag bricht bei uncommitteten Änderungen bewusst ab, statt sie zu
    | `pyproject.toml` | `version` |
    | `README.md` | Überschrift und „Aktuelle Version" |
    | `CHANGELOG.md` | neuer `## [x.y.z]`-Abschnitt |
-5. **Lokal *und* GitHub.** Jede Änderung landet sowohl im lokalen
-   Dev-Checkout als auch als gepushter PR — nie nur in einem von beidem.
+5. **Lokal, GitHub *und* Live-Server.** Jede Änderung landet im lokalen
+   Dev-Checkout, als gepushter PR auf GitHub **und** wird nach dem Merge immer
+   direkt auf den Live-Server ausgerollt (`ssh root@192.168.110.20 "/opt/bestandsaufnahme-tool/deploy/update.sh"`
+   bzw. `source deploy/server.local.env && ssh "$BAT_SERVER_SSH" "/opt/bestandsaufnahme-tool/deploy/update.sh"`).
+   Das Ausrollen muss nicht erfragt werden — immer automatisch durchführen und
+   prüfen, ob der neue Stand läuft.
 6. **Bei Fragen zu Feldabhängigkeiten und UX erst besprechen**, nicht direkt
    implementieren. Klare Bugs dürfen direkt gefixt werden.
 
