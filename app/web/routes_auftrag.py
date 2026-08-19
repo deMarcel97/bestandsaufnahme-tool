@@ -59,7 +59,8 @@ def create_auftrag(
     bezeichnung: str = Form(...),
     grundlage: str = Form("Sonstiges"),
     vertraulichkeit_default: str = Form("intern"),
-    aktive_bausteine: list[str] = Form(default=["firewall"])
+    aktive_bausteine: list[str] = Form(default=["firewall"]),
+    start_wizard: str = Form("")
 ):
     all_auftraege = storage.list_auftraege()
     
@@ -99,6 +100,9 @@ def create_auftrag(
         aktive_bausteine=aktive_bausteine
     )
     storage.save_auftrag(auftrag)
+
+    if start_wizard in ("1", "true", "on", "yes"):
+        return RedirectResponse(url=f"/auftrag/{auftrag_id}/wizard", status_code=303)
     return RedirectResponse(url=f"/auftrag/{auftrag_id}", status_code=303)
 
 @router.post("/auftrag/{auftrag_id}/status")

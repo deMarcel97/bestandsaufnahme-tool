@@ -4,6 +4,16 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.33] - 2026-08-19
+
+### Added
+- **Interaktiver Erfassungs-Wizard: Direkteinstieg, Wiederaufnahme-Dialog & Meilenstein-Fortschritt (#361)**:
+  - Checkbox „Direkt mit interaktiver Bestandsaufnahme (Guide) starten“ im Dialog „Neuen Auftrag anlegen“ mit automatischer Weiterleitung in den Wizard.
+  - Strukturierte Wiederaufnahme-Seite (`wizard_resume.html`) bei bestehendem Erfassungsfortschritt mit klarer Wahl zwischen „Bestehenden Erfassungsstand fortsetzen & prüfen“ und „Interaktive Erfassung neu starten (Zurücksetzen)“.
+  - Prominente Prozentanzeige und Meilenstein-Leiste im Header des Erfassungs-Wizards mit Status-Häkchen (✓), aktivem Schritt-Fokus und Prozentbalken.
+  - Prominente Einstiegspunkte für den interaktiven Guide in der Sidebar, auf der Auftragsübersicht und in der Erfassungsansicht.
+  - Reorganisation der Sidebar-Navigation: „Stammdaten“ vor „Erfassung“ platziert (`Übersicht` → `Stammdaten` → `Erfassung`).
+
 ## [2.7.32] - 2026-08-18
 
 ### Added

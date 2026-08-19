@@ -47,7 +47,12 @@ def _get_bausteine_labels() -> dict:
 
 
 @router.get("/auftrag/{auftrag_id}/wizard")
-def wizard_view(request: Request, auftrag_id: str, step: Optional[int] = None):
+def wizard_view(
+    request: Request,
+    auftrag_id: str,
+    step: Optional[int] = None,
+    resume: Optional[str] = None
+):
     """Startet oder setzt den Erfassungs-Wizard fort."""
     auftrag = get_auftrag_or_redirect(auftrag_id)
     if isinstance(auftrag, RedirectResponse):
@@ -71,6 +76,9 @@ def wizard_view(request: Request, auftrag_id: str, step: Optional[int] = None):
     current_step = progress.current_step
     step_type = WIZARD_STEP_TYPES[current_step - 1] if current_step <= len(WIZARD_STEP_TYPES) else "zusammenfassung"
     step_data = progress.steps.get(current_step)
+    data_steps_count = len(WIZARD_STEP_TYPES) - 1
+
+    progress_prozent = int(round((len(progress.completed_steps) / data_steps_count) * 100)) if data_steps_count > 0 else 0
 
     standorte = storage.list_standorte(auftrag_id)
     objekte = storage.list_objekte(auftrag_id)
@@ -89,12 +97,36 @@ def wizard_view(request: Request, auftrag_id: str, step: Optional[int] = None):
         storage.save_standort(new_standort)
         standorte = [new_standort]
 
+    # Wiederaufnahme-Dialog anzeigen, wenn bereits Fortschritt existiert und resume/step nicht explizit gesetzt sind
+    hat_fortschritt = bool(progress.completed_steps or progress.current_step > 1)
+    if hat_fortschritt and resume is None and step is None:
+        return templates.TemplateResponse(
+            request=request,
+            name="auftrag/wizard_resume.html",
+            context={
+                "auftrag": auftrag,
+                "progress": progress,
+                "current_step": current_step,
+                "total_steps": len(WIZARD_STEP_TYPES),
+                "data_steps_count": data_steps_count,
+                "progress_prozent": progress_prozent,
+                "step_type": step_type,
+                "step_label": WIZARD_STEP_LABELS.get(step_type, step_type),
+                "standorte": standorte,
+                "objekte": objekte,
+                "active_tab": "wizard",
+                "active_nav": "auftrag",
+                **sidebar_context,
+            }
+        )
+
     context = {
         "auftrag": auftrag,
         "progress": progress,
         "current_step": current_step,
         "total_steps": len(WIZARD_STEP_TYPES),
-        "data_steps_count": len(WIZARD_STEP_TYPES) - 1,
+        "data_steps_count": data_steps_count,
+        "progress_prozent": progress_prozent,
         "step_type": step_type,
         "step_label": WIZARD_STEP_LABELS.get(step_type, step_type),
         "step_data": step_data.data if step_data else {},
@@ -103,6 +135,7 @@ def wizard_view(request: Request, auftrag_id: str, step: Optional[int] = None):
         "objekte": objekte,
         "bausteine": auftrag.aktive_bausteine,
         "baustein_labels": _get_bausteine_labels(),
+        "active_tab": "wizard",
         "active_nav": "auftrag",
         **sidebar_context,
     }
@@ -135,7 +168,7 @@ def wizard_goto(auftrag_id: str, step: int):
     if progress and 1 <= step <= len(WIZARD_STEP_TYPES):
         progress.current_step = step
         storage.save_wizard_progress(progress)
-    return RedirectResponse(url=f"/auftrag/{auftrag_id}/wizard", status_code=303)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/wizard?resume=1", status_code=303)
 
 
 @router.get("/auftrag/{auftrag_id}/wizard/back")
@@ -145,7 +178,7 @@ def wizard_back(auftrag_id: str):
     if progress:
         progress.current_step = max(1, progress.current_step - 1)
         storage.save_wizard_progress(progress)
-    return RedirectResponse(url=f"/auftrag/{auftrag_id}/wizard", status_code=303)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/wizard?resume=1", status_code=303)
 
 
 @router.post("/auftrag/{auftrag_id}/wizard/step/{step}")
@@ -189,7 +222,7 @@ async def wizard_save_step(
     if progress.current_step >= len(WIZARD_STEP_TYPES):
         return RedirectResponse(url=f"/auftrag/{auftrag_id}/wizard/zusammenfassung", status_code=303)
 
-    return RedirectResponse(url=f"/auftrag/{auftrag_id}/wizard", status_code=303)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/wizard?resume=1", status_code=303)
 
 
 @router.get("/auftrag/{auftrag_id}/wizard/skip")
@@ -219,7 +252,7 @@ def wizard_skip_step(auftrag_id: str):
     if progress.current_step >= len(WIZARD_STEP_TYPES):
         return RedirectResponse(url=f"/auftrag/{auftrag_id}/wizard/zusammenfassung", status_code=303)
 
-    return RedirectResponse(url=f"/auftrag/{auftrag_id}/wizard", status_code=303)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/wizard?resume=1", status_code=303)
 
 
 @router.get("/auftrag/{auftrag_id}/wizard/abbruch")
