@@ -114,3 +114,43 @@ def test_offene_punkte_leerer_zustand():
     response = client.get(f"/auftrag/{auftrag.id}/offene_punkte")
     assert response.status_code == 200
     assert "Keine offenen Punkte" in response.text
+
+
+def test_offene_punkte_respects_sichtbar_wenn():
+    """Prüft, dass Felder mit nicht erfüllter sichtbar_wenn Bedingung keine offenen Punkte erzeugen."""
+    auftrag = Auftrag(
+        id="auf-op-vis",
+        projekt_nummer="P-2026-VIS",
+        kunde="Visible GmbH",
+        bezeichnung="Sichtbarkeitstest",
+        aktive_bausteine=["firewall"]
+    )
+    storage.save_auftrag(auftrag)
+    sto = Standort(id="sto-vis", auftrag_id=auftrag.id, bezeichnung="Zentrale")
+    storage.save_standort(sto)
+
+    # Firewall ohne HA (ha_cluster_eingerichtet = nein)
+    # Felder unter sichtbar_wenn: {feld: ha_cluster_eingerichtet, wert: ja} dürfen NICHT als offene Punkte gemeldet werden
+    fw = TechnikObjekt(
+        id="fw-vis",
+        auftrag_id=auftrag.id,
+        standort_id="sto-vis",
+        typ="firewall",
+        bezeichnung="FortiGate 60F",
+        daten={
+            "hersteller": "Fortinet",
+            "modell": "FortiGate 60F",
+            "ha_cluster_eingerichtet": "nein",
+        }
+    )
+    storage.save_objekt(fw)
+
+    from app.services.progress import progress_service
+    items = progress_service.collect_offene_punkte(auftrag, [sto], [fw], [])
+    field_names = [it.id for it in items]
+
+    # HA-spezifische Felder dürfen nicht in items sein
+    for fid in field_names:
+        assert "ha_sync" not in fid.lower()
+        assert "ha_heartbeat" not in fid.lower()
+

@@ -1,6 +1,6 @@
 from urllib.parse import urlparse
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 from app.config import BASE_DIR, AUTH_ENABLED, SESSION_SECRET_KEY, APP_VERSION
@@ -25,8 +25,12 @@ from app.web import (
 
 app = FastAPI(title="IT-Bestandsaufnahme Tool", version=APP_VERSION)
 
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse(BASE_DIR / "app" / "static" / "favicon.svg", media_type="image/svg+xml")
+
 UNSAFE_METHODS = {"POST", "PUT", "DELETE", "PATCH"}
-PUBLIC_PATH_PREFIXES = ("/auth/", "/static/")
+PUBLIC_PATH_PREFIXES = ("/auth/", "/static/", "/favicon.ico")
 
 @app.middleware("http")
 async def require_entra_login(request: Request, call_next):

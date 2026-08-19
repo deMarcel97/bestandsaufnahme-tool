@@ -83,10 +83,24 @@
         </div>
 
         <div class="subsection">
-          <span class="eyebrow">Aktive Bausteine (Scope-Steuerung)</span>
-          <div class="checkbox-grid">
-            {% for typ in verfuegbare_typen %}
-            <label><input type="checkbox" name="aktive_bausteine" value="{{ typ }}" {% if typ in auftrag.aktive_bausteine %}checked{% endif %}> {{ bausteine_labels.get(typ, typ.capitalize()) }}</label>
+          <span class="eyebrow" style="margin-bottom: 8px; display: block;">Aktive Bausteine (Scope-Steuerung)</span>
+          <div class="baustein-gruppen-container" style="display: flex; flex-direction: column; gap: 10px;">
+            {% for gruppe in baustein_gruppen %}
+            <div class="baustein-gruppe" style="background: var(--bg-surface-elevated, #f9fafb); border: 1px solid var(--border-color, #e5e7eb); border-radius: 6px; padding: 10px 12px;">
+              <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted, #6b7280); margin-bottom: 6px;">
+                {{ gruppe.titel }}
+              </div>
+              <div class="checkbox-grid" style="grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 6px;">
+                {% for typ in gruppe.typen %}
+                {% if typ in verfuegbare_typen %}
+                <label style="margin: 0; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" name="aktive_bausteine" value="{{ typ }}" {% if typ in auftrag.aktive_bausteine %}checked{% endif %}>
+                  <span>{{ bausteine_labels.get(typ, typ.capitalize()) }}</span>
+                </label>
+                {% endif %}
+                {% endfor %}
+              </div>
+            </div>
             {% endfor %}
           </div>
         </div>

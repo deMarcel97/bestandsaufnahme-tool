@@ -23,42 +23,47 @@
       </div>
     </div>
 
-    {# Übersicht aller erfassten Abschnitte #}
+    {# Übersicht aller erfassten Abschnitte mit Key-Facts Vorschau #}
     <div class="section-head" style="margin-bottom: 16px;">
-      <h2>Erfasste IT-Bereiche</h2>
+      <h2>Erfasste IT-Themenbereiche (13 Meilensteine)</h2>
     </div>
 
     <div class="summary-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-bottom: 32px;">
-      {% for step_num, step_data in progress.steps.items() %}
-      {% if step_data.step_type != "zusammenfassung" %}
-      <div class="summary-card" style="border: 1px solid var(--border-color, #e5e7eb); border-radius: 8px; padding: 16px; background: var(--bg-surface, #fff); display: flex; flex-direction: column; justify-content: space-between;">
+      {% for card in step_summaries %}
+      <div class="summary-card" style="border: 1px solid {% if card.status == 'erfasst' %}#bbf7d0; background: var(--bg-surface, #fff);{% elif card.status == 'deaktiviert' %}var(--border-color, #e5e7eb); background: var(--bg-surface, #f9fafb);{% elif card.status == 'uebersprungen' %}#e2e8f0; background: var(--bg-surface, #f8fafc);{% else %}var(--border-color, #e5e7eb); background: var(--bg-surface, #fff);{% endif %}; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between;">
         <div>
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-            <h3 style="margin: 0; font-size: 15px; font-weight: 600; color: #1f2937;">
-              {{ step_num }}. {{ baustein_labels.get(step_data.step_type, step_data.step_type|capitalize) }}
-            </h3>
-            <a href="/auftrag/{{ auftrag.id }}/wizard/goto/{{ step_num }}" class="btn btn-sm btn-outline" style="padding: 2px 8px; font-size: 11px;">Bearbeiten</a>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 8px;">
+            <div>
+              <h3 style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; color: var(--text-color, #1f2937);">
+                {{ card.step_num }}. {{ card.step_label }}
+              </h3>
+              <span class="badge" style="font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: 600; display: inline-block; {% if card.status == 'erfasst' %}background: #dcfce7; color: #166534;{% elif card.status == 'deaktiviert' %}background: #f3f4f6; color: #6b7280;{% elif card.status == 'uebersprungen' %}background: #f1f5f9; color: #64748b;{% else %}background: #fef3c7; color: #92400e;{% endif %}">
+                {% if card.status == 'erfasst' %}✓ {{ card.status_label }}{% elif card.status == 'uebersprungen' %}⊘ {{ card.status_label }}{% else %}{{ card.status_label }}{% endif %}
+              </span>
+            </div>
+            <a href="/auftrag/{{ auftrag.id }}/wizard/goto/{{ card.step_num }}" class="btn btn-sm btn-outline" style="padding: 2px 8px; font-size: 11px; flex-shrink: 0;">Bearbeiten</a>
           </div>
 
-          {% if not step_data.data %}
-          <p style="margin: 0; font-size: 12px; color: #9ca3af; font-style: italic;">Schritt übersprungen</p>
-          {% elif step_data.data.get('hat_' ~ step_data.step_type) == 'nein' %}
-          <p style="margin: 0; font-size: 12px; color: #6b7280;">Nicht im Einsatz / Nicht vorhanden</p>
-          {% else %}
-          <dl style="margin: 0; font-size: 12px;">
-            {% for key, value in step_data.data.items() %}
-            {% if value and not key.startswith('hat_') and key not in ['standort_id'] %}
-            <div style="display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #f3f4f6; gap: 8px;">
-              <dt style="color: #6b7280; font-weight: 500;">{{ key|replace('_', ' ')|capitalize }}:</dt>
-              <dd style="color: #111827; margin: 0; text-align: right; word-break: break-word;">{{ value|replace('_', ' ') }}</dd>
+          {% if card.status == "uebersprungen" %}
+          <p style="margin: 8px 0 0 0; font-size: 12px; color: #64748b; font-style: italic;">Dieser Schritt wurde bei der Erfassung übersprungen.</p>
+          {% elif card.status == "deaktiviert" %}
+          <p style="margin: 8px 0 0 0; font-size: 12px; color: #6b7280;">Wird beim Kunden nicht eingesetzt / Kein Objekt vorhanden.</p>
+          {% elif card.status == "offen" %}
+          <p style="margin: 8px 0 0 0; font-size: 12px; color: #92400e;">Noch keine Angaben hinterlegt.</p>
+          {% elif card.key_facts %}
+          <dl style="margin: 8px 0 0 0; font-size: 12px; display: flex; flex-direction: column; gap: 4px;">
+            {% for fact in card.key_facts %}
+            <div style="display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid var(--border-color, #f3f4f6); gap: 8px;">
+              <dt style="color: var(--text-muted, #6b7280); font-weight: 500; flex-shrink: 0;">{{ fact.label }}:</dt>
+              <dd style="color: var(--text-color, #111827); font-weight: 600; margin: 0; text-align: right; word-break: break-word;">{{ fact.val }}</dd>
             </div>
-            {% endif %}
             {% endfor %}
           </dl>
+          {% else %}
+          <p style="margin: 8px 0 0 0; font-size: 12px; color: #166534;">Erfasst</p>
           {% endif %}
         </div>
       </div>
-      {% endif %}
       {% endfor %}
     </div>
 
@@ -69,12 +74,12 @@
       </p>
     </div>
 
-    <form action="/auftrag/{{ auftrag.id }}/wizard/abschliessen" method="POST" style="margin-bottom: 24px;">
+    <form id="form-wizard-abschliessen" action="/auftrag/{{ auftrag.id }}/wizard/abschliessen" method="POST" style="margin-bottom: 24px;">
       <div class="form-bar" style="display: flex; gap: 12px; justify-content: space-between; align-items: center;">
         <a href="/auftrag/{{ auftrag.id }}/wizard/goto/13" class="btn btn-outline">← Zurück zu Schritt 13</a>
         <div style="display: flex; gap: 12px;">
           <a href="/auftrag/{{ auftrag.id }}/wizard/abbruch" class="btn btn-outline">Erfassung pausieren</a>
-          <button type="submit" class="btn btn-primary" style="font-weight: 600;">
+          <button type="submit" id="btn-submit-wizard-abschliessen" class="btn btn-primary" style="font-weight: 600;">
             Bestandsaufnahme abschließen & Bausteine anlegen →
           </button>
         </div>

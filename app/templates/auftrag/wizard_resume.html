@@ -43,7 +43,7 @@
               </div>
               <div>
                 <span class="eyebrow" style="display:block; font-size:11px; margin-bottom:2px;">Fortschritt</span>
-                <strong>{{ progress_prozent }} % ({{ progress.completed_steps|length }} von {{ data_steps_count }} Schritten)</strong>
+                <strong>{{ progress_prozent }} % erfasst ({{ erfasst_count }} von {{ data_steps_count }} Schritten{% if skipped_count > 0 %}, {{ skipped_count }} übersprungen{% endif %})</strong>
               </div>
               {% if progress.last_updated %}
               <div>

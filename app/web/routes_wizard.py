@@ -7,7 +7,7 @@ Geführter, vollständiger Durchlauf durch alle Kernbereiche der IT-Bestandsaufn
 from datetime import datetime
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse, HTMLResponse
-from typing import Optional
+from typing import Optional, List, Dict, Any
 
 from app.services.storage import storage, KonfliktFehler
 from app.services.schema_loader import schema_loader
@@ -26,6 +26,179 @@ from app.models.wizard import (
 )
 
 router = APIRouter()
+
+SOFTWARE_TITEL_MAP = {
+    "veeam": "Veeam",
+    "synology_active_backup": "Synology Active Backup",
+    "acronis_cyber_protect": "Acronis Cyber Protect",
+    "datto_siris": "Datto SIRIS",
+    "altaro_hornetsecurity": "Hornetsecurity VM Backup",
+    "proxmox_backup_server": "Proxmox Backup Server",
+    "msp360_cloudberry": "MSP360",
+    "commvault": "Commvault",
+    "rubrik": "Rubrik",
+    "cohesity": "Cohesity",
+    "borg_restic": "Borg / Restic",
+    "windows_server_sicherung": "Windows Server Sicherung",
+}
+
+
+def format_field_val(val: Any) -> str:
+    if val is None or val == "":
+        return ""
+    if val == "ja":
+        return "Ja"
+    if val == "nein":
+        return "Nein"
+    if val == "unter_3_jahre":
+        return "< 3 Jahre"
+    if val == "3_bis_5_jahre":
+        return "3–5 Jahre"
+    if val == "ueber_5_jahre":
+        return "> 5 Jahre"
+    if str(val).startswith("ja_"):
+        return str(val).replace("ja_", "Ja (").replace("_", " ") + ")"
+    return str(val).replace("_", " ").title()
+
+
+def format_baustein_bezeichnung(typ_prefix: str, hersteller: str = "", modell: str = "", fallback: str = "") -> str:
+    parts = [typ_prefix]
+    if hersteller:
+        parts.append(hersteller.strip())
+    if modell and modell.strip().lower() != (hersteller or "").strip().lower():
+        parts.append(modell.strip())
+    res = " ".join(p for p in parts if p).strip()
+    return res if len(res) > len(typ_prefix) else (fallback or f"{typ_prefix} Standard")
+
+
+def build_wizard_step_summaries(progress: WizardProgress) -> List[Dict[str, Any]]:
+    cards = []
+    data_step_types = WIZARD_STEP_TYPES[:-1]
+
+    for i, step_type in enumerate(data_step_types):
+        step_num = i + 1
+        step_label = WIZARD_STEP_LABELS.get(step_type, step_type)
+        step_data = progress.steps.get(step_num)
+        d = step_data.data if step_data else {}
+
+        is_skipped = progress.is_step_skipped(step_num) or (step_data and step_data.skipped)
+
+        disabled_keys = [
+            f"hat_{step_type}",
+            "hat_internetanbindung",
+            "hat_server",
+            "hat_m365",
+            "hat_organisation",
+            "hat_firewall",
+            "hat_switch",
+            "hat_access_point",
+            "hat_storage",
+            "hat_backup",
+            "hat_usv",
+            "hat_clients",
+        ]
+        is_disabled = any(d.get(k) == "nein" for k in disabled_keys if k in d)
+
+        if is_skipped:
+            status = "uebersprungen"
+            status_label = "Übersprungen"
+        elif not step_data or not step_data.data:
+            status = "offen"
+            status_label = "Nicht erfasst"
+        elif is_disabled:
+            status = "deaktiviert"
+            status_label = "Nicht im Einsatz / Nicht vorhanden"
+        else:
+            status = "erfasst"
+            status_label = "Erfasst"
+
+        key_facts = []
+        if status == "erfasst":
+            if step_type == "auftragsgrunddaten":
+                if d.get("kunde"): key_facts.append({"label": "Kunde", "val": d["kunde"]})
+                if d.get("projekt_nummer"): key_facts.append({"label": "Projekt-Nr.", "val": d["projekt_nummer"]})
+                if d.get("bezeichnung"): key_facts.append({"label": "Bezeichnung", "val": d["bezeichnung"]})
+                if d.get("abgrenzung"): key_facts.append({"label": "Scope", "val": d["abgrenzung"]})
+            elif step_type == "standort_grunddaten":
+                if d.get("bezeichnung"): key_facts.append({"label": "Standort", "val": d["bezeichnung"]})
+                if d.get("anzahl_user"): key_facts.append({"label": "Benutzer", "val": f"{d['anzahl_user']} User"})
+                adr = f"{d.get('strasse', '')}, {d.get('plz', '')} {d.get('ort', '')}".strip(" ,")
+                if adr: key_facts.append({"label": "Adresse", "val": adr})
+                if d.get("ansprechpartner_vor_ort"): key_facts.append({"label": "Ansprechpartner", "val": d["ansprechpartner_vor_ort"]})
+            elif step_type == "internetanbindungen":
+                if d.get("anbieter"): key_facts.append({"label": "Anbieter", "val": d["anbieter"]})
+                if d.get("art"): key_facts.append({"label": "Anbindung", "val": format_field_val(d["art"])})
+                if d.get("bandbreite_down"): key_facts.append({"label": "Bandbreite", "val": f"{d.get('bandbreite_down')} Down / {d.get('bandbreite_up', '')} Up Mbit/s"})
+                if d.get("feste_ip_vorhanden"): key_facts.append({"label": "Feste IP", "val": format_field_val(d["feste_ip_vorhanden"])})
+                if d.get("redundante_anbindung"): key_facts.append({"label": "Redundanz", "val": format_field_val(d["redundante_anbindung"])})
+            elif step_type == "firewall":
+                ger = f"{d.get('hersteller', '')} {d.get('modell', '')}".strip()
+                if ger: key_facts.append({"label": "Modell", "val": ger})
+                if d.get("hardware_alter"): key_facts.append({"label": "Hardware-Alter", "val": format_field_val(d["hardware_alter"])})
+                if d.get("wartungsvertrag_vorhanden"): key_facts.append({"label": "Wartungsvertrag", "val": format_field_val(d["wartungsvertrag_vorhanden"])})
+                if d.get("ha_cluster_eingerichtet"): key_facts.append({"label": "HA-Cluster", "val": format_field_val(d["ha_cluster_eingerichtet"])})
+                if d.get("ips_ids_aktiv"): key_facts.append({"label": "IPS / IDS", "val": format_field_val(d["ips_ids_aktiv"])})
+            elif step_type == "switch":
+                ger = f"{d.get('hersteller', '')} {d.get('modell', '')}".strip()
+                if ger: key_facts.append({"label": "Modell", "val": ger})
+                if d.get("port_anzahl"): key_facts.append({"label": "Ports", "val": f"{d['port_anzahl']} Ports ({d.get('ports_belegt', '')} belegt)" if d.get('ports_belegt') else f"{d['port_anzahl']} Ports"})
+                if d.get("management_typ"): key_facts.append({"label": "Management", "val": format_field_val(d["management_typ"])})
+                if d.get("netztrennung"): key_facts.append({"label": "VLANs", "val": format_field_val(d["netztrennung"])})
+            elif step_type == "access_point":
+                ger = f"{d.get('hersteller', '')} {d.get('modell', '')}".strip()
+                if ger: key_facts.append({"label": "Modell", "val": ger})
+                if d.get("gast_wlan_vorhanden"): key_facts.append({"label": "Gast-WLAN", "val": format_field_val(d["gast_wlan_vorhanden"])})
+                if d.get("gast_wlan_isoliert"): key_facts.append({"label": "Gast-Isolierung", "val": format_field_val(d["gast_wlan_isoliert"])})
+            elif step_type == "server_virtualisierung":
+                if d.get("wird_virtualisiert"): key_facts.append({"label": "Virtualisierung", "val": format_field_val(d["wird_virtualisiert"])})
+                if d.get("hypervisor_typ"): key_facts.append({"label": "Hypervisor", "val": format_field_val(d["hypervisor_typ"])})
+                ger = f"{d.get('hersteller', '')} {d.get('modell', '')}".strip()
+                if ger: key_facts.append({"label": "Server-Hardware", "val": ger})
+                if d.get("anzahl_vms"): key_facts.append({"label": "VMs", "val": f"{d['anzahl_vms']} virtuelle Server"})
+            elif step_type == "storage":
+                if d.get("bereitstellung"): key_facts.append({"label": "Bereitstellung", "val": format_field_val(d["bereitstellung"])})
+                if d.get("hersteller_shared"): key_facts.append({"label": "Hersteller", "val": d["hersteller_shared"]})
+                if d.get("kapazitaet_netto_tb"): key_facts.append({"label": "Kapazität Netto", "val": f"{d['kapazitaet_netto_tb']} TB ({d.get('fuellgrad_prozent', '')}% belegt)" if d.get('fuellgrad_prozent') else f"{d['kapazitaet_netto_tb']} TB"})
+            elif step_type == "backup":
+                sw_name = SOFTWARE_TITEL_MAP.get(str(d.get("backup_software", "")).lower(), format_field_val(d.get("backup_software")))
+                if sw_name: key_facts.append({"label": "Backup-Software", "val": sw_name})
+                if d.get("backup_ziel"): key_facts.append({"label": "Ziel", "val": format_field_val(d["backup_ziel"])})
+                if d.get("strategie"): key_facts.append({"label": "Strategie", "val": format_field_val(d["strategie"])})
+                if d.get("testwiederherstellung"): key_facts.append({"label": "Restore-Test", "val": format_field_val(d["testwiederherstellung"])})
+            elif step_type == "usv":
+                ger = f"{d.get('hersteller', '')} {d.get('modell', '')}".strip()
+                if ger: key_facts.append({"label": "Modell", "val": ger})
+                if d.get("batterie_alter"): key_facts.append({"label": "Batterie-Alter", "val": format_field_val(d["batterie_alter"])})
+                if d.get("abschaltsignal_an_server"): key_facts.append({"label": "Shutdown-Signal", "val": format_field_val(d["abschaltsignal_an_server"])})
+            elif step_type == "clients":
+                counts = []
+                if d.get("anzahl_windows_clients"): counts.append(f"{d['anzahl_windows_clients']} Windows")
+                if d.get("anzahl_mac_clients"): counts.append(f"{d['anzahl_mac_clients']} Mac")
+                if d.get("anzahl_linux_clients"): counts.append(f"{d['anzahl_linux_clients']} Linux")
+                if counts: key_facts.append({"label": "Clients", "val": ", ".join(counts)})
+                if d.get("haupt_betriebssystem_version"): key_facts.append({"label": "OS", "val": format_field_val(d["haupt_betriebssystem_version"])})
+                if d.get("edr_antivirus_zentral_gemanagt"): key_facts.append({"label": "EDR / AV", "val": format_field_val(d["edr_antivirus_zentral_gemanagt"])})
+                if d.get("zentrales_patchmanagement_aktiv"): key_facts.append({"label": "Patchmanagement", "val": format_field_val(d["zentrales_patchmanagement_aktiv"])})
+            elif step_type == "m365_security":
+                if d.get("tenant_typ"): key_facts.append({"label": "Tenant-Typ", "val": format_field_val(d["tenant_typ"])})
+                if d.get("mfa_fuer_alle_benutzer"): key_facts.append({"label": "MFA Benutzer", "val": format_field_val(d["mfa_fuer_alle_benutzer"])})
+                if d.get("mfa_fuer_administratoren"): key_facts.append({"label": "MFA Admins", "val": format_field_val(d["mfa_fuer_administratoren"])})
+                if d.get("m365_drittanbieter_backup_aktiv"): key_facts.append({"label": "Cloud-Backup", "val": format_field_val(d["m365_drittanbieter_backup_aktiv"])})
+            elif step_type == "organisation_prozesse":
+                if d.get("notfallhandbuch_status"): key_facts.append({"label": "Notfallhandbuch", "val": format_field_val(d["notfallhandbuch_status"])})
+                if d.get("it_dokumentation_status"): key_facts.append({"label": "IT-Doku", "val": format_field_val(d["it_dokumentation_status"])})
+                if d.get("it_sicherheitsrichtlinie_unterschrieben"): key_facts.append({"label": "Sicherheitsrichtlinie", "val": format_field_val(d["it_sicherheitsrichtlinie_unterschrieben"])})
+                if d.get("passwort_manager_einsatz"): key_facts.append({"label": "Passwort-Manager", "val": format_field_val(d["passwort_manager_einsatz"])})
+
+        cards.append({
+            "step_num": step_num,
+            "step_type": step_type,
+            "step_label": step_label,
+            "status": status,
+            "status_label": status_label,
+            "key_facts": key_facts,
+        })
+    return cards
 
 
 def get_auftrag_or_redirect(auftrag_id: str):
@@ -78,7 +251,9 @@ def wizard_view(
     step_data = progress.steps.get(current_step)
     data_steps_count = len(WIZARD_STEP_TYPES) - 1
 
-    progress_prozent = int(round((len(progress.completed_steps) / data_steps_count) * 100)) if data_steps_count > 0 else 0
+    erfasst_count = len([s for s in progress.completed_steps if s not in progress.skipped_steps])
+    skipped_count = len(progress.skipped_steps)
+    progress_prozent = int(round((erfasst_count / data_steps_count) * 100)) if data_steps_count > 0 else 0
 
     standorte = storage.list_standorte(auftrag_id)
     objekte = storage.list_objekte(auftrag_id)
@@ -98,7 +273,7 @@ def wizard_view(
         standorte = [new_standort]
 
     # Wiederaufnahme-Dialog anzeigen, wenn bereits Fortschritt existiert und resume/step nicht explizit gesetzt sind
-    hat_fortschritt = bool(progress.completed_steps or progress.current_step > 1)
+    hat_fortschritt = bool(progress.completed_steps or progress.skipped_steps or progress.current_step > 1)
     if hat_fortschritt and resume is None and step is None:
         return templates.TemplateResponse(
             request=request,
@@ -109,6 +284,8 @@ def wizard_view(
                 "current_step": current_step,
                 "total_steps": len(WIZARD_STEP_TYPES),
                 "data_steps_count": data_steps_count,
+                "erfasst_count": erfasst_count,
+                "skipped_count": skipped_count,
                 "progress_prozent": progress_prozent,
                 "step_type": step_type,
                 "step_label": WIZARD_STEP_LABELS.get(step_type, step_type),
@@ -126,6 +303,8 @@ def wizard_view(
         "current_step": current_step,
         "total_steps": len(WIZARD_STEP_TYPES),
         "data_steps_count": data_steps_count,
+        "erfasst_count": erfasst_count,
+        "skipped_count": skipped_count,
         "progress_prozent": progress_prozent,
         "step_type": step_type,
         "step_label": WIZARD_STEP_LABELS.get(step_type, step_type),
@@ -149,16 +328,14 @@ def wizard_view(
 
 @router.post("/auftrag/{auftrag_id}/wizard/init")
 def wizard_init(auftrag_id: str):
-    """Initialisiert einen neuen Wizard-Fortschritt und startet bei Schritt 1."""
+    """Initialisiert oder setzt den Wizard-Fortschritt für einen Auftrag zurück."""
     auftrag = get_auftrag_or_redirect(auftrag_id)
     if isinstance(auftrag, RedirectResponse):
         return auftrag
 
     storage.delete_wizard_progress(auftrag_id)
-    progress = create_empty_wizard_progress(auftrag_id)
-    storage.save_wizard_progress(progress)
-
-    return RedirectResponse(url=f"/auftrag/{auftrag_id}/wizard", status_code=303)
+    progress = storage.init_wizard_progress(auftrag_id)
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/wizard?resume=1", status_code=303)
 
 
 @router.get("/auftrag/{auftrag_id}/wizard/goto/{step}")
@@ -206,7 +383,10 @@ async def wizard_save_step(
         data=step_data,
         timestamp=datetime.now().isoformat(),
         completed=True,
+        skipped=False,
     )
+    if step in progress.skipped_steps:
+        progress.skipped_steps.remove(step)
     if step not in progress.completed_steps:
         progress.completed_steps.append(step)
     progress.current_step = step + 1
@@ -240,10 +420,13 @@ def wizard_skip_step(auftrag_id: str):
         step_type=step_type,
         data={},
         timestamp=datetime.now().isoformat(),
-        completed=True,
+        completed=False,
+        skipped=True,
     )
-    if current_step not in progress.completed_steps:
-        progress.completed_steps.append(current_step)
+    if current_step in progress.completed_steps:
+        progress.completed_steps.remove(current_step)
+    if current_step not in progress.skipped_steps:
+        progress.skipped_steps.append(current_step)
     progress.current_step = current_step + 1
     progress.last_updated = datetime.now().isoformat()
 
@@ -281,6 +464,8 @@ def wizard_zusammenfassung(request: Request, auftrag_id: str):
     for step_num, step_data in progress.steps.items():
         summary_data[step_data.step_type] = step_data.data
 
+    step_summaries = build_wizard_step_summaries(progress)
+
     return templates.TemplateResponse(
         request=request,
         name="auftrag/wizard_zusammenfassung.html",
@@ -288,6 +473,7 @@ def wizard_zusammenfassung(request: Request, auftrag_id: str):
             "auftrag": auftrag,
             "progress": progress,
             "summary_data": summary_data,
+            "step_summaries": step_summaries,
             "baustein_labels": _get_bausteine_labels(),
             "active_nav": "auftrag",
             **sidebar_context,
@@ -412,8 +598,8 @@ def wizard_abschliessen(auftrag_id: str):
         if "firewall" not in auftrag.aktive_bausteine:
             auftrag.aktive_bausteine.append("firewall")
 
+        fw_bez = format_baustein_bezeichnung("Firewall", d4.get("hersteller", ""), d4.get("modell", ""), "Firewall Security")
         fw_id = generate_slug_id("firewall", d4.get("modell") or d4.get("hersteller") or "Firewall", [o.id for o in existing_objekte])
-        fw_bez = f"Firewall {d4.get('modell', '')}".strip() or f"Firewall {d4.get('hersteller', '')}".strip() or "Firewall"
         fw_objekt = TechnikObjekt(
             schema_version=1,
             id=fw_id,
@@ -454,8 +640,8 @@ def wizard_abschliessen(auftrag_id: str):
             except (ValueError, TypeError):
                 pass
 
+        sw_bez = format_baustein_bezeichnung("Switch", d5.get("hersteller", ""), d5.get("modell", ""), "Zentraler Switch")
         sw_id = generate_slug_id("switch", d5.get("modell") or d5.get("hersteller") or "Switch", [o.id for o in existing_objekte])
-        sw_bez = f"Switch {d5.get('modell', '')}".strip() or f"Switch {d5.get('hersteller', '')}".strip() or "Switch"
         sw_objekt = TechnikObjekt(
             schema_version=1,
             id=sw_id,
@@ -483,8 +669,8 @@ def wizard_abschliessen(auftrag_id: str):
         if "access_point" not in auftrag.aktive_bausteine:
             auftrag.aktive_bausteine.append("access_point")
 
+        ap_bez = format_baustein_bezeichnung("Access Point", d6.get("hersteller", ""), d6.get("modell", ""), "WLAN Access Point")
         ap_id = generate_slug_id("access_point", d6.get("modell") or d6.get("hersteller") or "WLAN AP", [o.id for o in existing_objekte])
-        ap_bez = f"Access Point {d6.get('modell', '')}".strip() or f"Access Point {d6.get('hersteller', '')}".strip() or "Access Point"
         ap_objekt = TechnikObjekt(
             schema_version=1,
             id=ap_id,
@@ -518,8 +704,8 @@ def wizard_abschliessen(auftrag_id: str):
             except (ValueError, TypeError):
                 pass
 
+        srv_bez = format_baustein_bezeichnung("Server", d7.get("hersteller", ""), d7.get("modell", ""), "Server-Infrastruktur")
         srv_id = generate_slug_id("server_virtualisierung", d7.get("modell") or d7.get("hersteller") or "Server", [o.id for o in existing_objekte])
-        srv_bez = f"Server {d7.get('modell', '')}".strip() or f"Server {d7.get('hersteller', '')}".strip() or "Server-Infrastruktur"
         srv_objekt = TechnikObjekt(
             schema_version=1,
             id=srv_id,
@@ -561,8 +747,8 @@ def wizard_abschliessen(auftrag_id: str):
         except (ValueError, TypeError):
             pass
 
+        sto_bez = format_baustein_bezeichnung("Storage", d8.get("hersteller_shared", ""), "", "Zentraler Datenspeicher")
         sto_obj_id = generate_slug_id("storage", d8.get("hersteller_shared") or "Storage", [o.id for o in existing_objekte])
-        sto_bez = f"Storage {d8.get('hersteller_shared', '')}".strip() or "Zentraler Datenspeicher"
         sto_objekt = TechnikObjekt(
             schema_version=1,
             id=sto_obj_id,
@@ -589,8 +775,10 @@ def wizard_abschliessen(auftrag_id: str):
         if "backup" not in auftrag.aktive_bausteine:
             auftrag.aktive_bausteine.append("backup")
 
-        bk_id = generate_slug_id("backup", d9.get("backup_software") or "Backup", [o.id for o in existing_objekte])
-        bk_bez = f"Backup {d9.get('backup_software', '')}".strip() or "Backup & Recovery"
+        sw_raw = d9.get("backup_software", "")
+        sw_title = SOFTWARE_TITEL_MAP.get(sw_raw.lower(), format_field_val(sw_raw))
+        bk_bez = f"Backup {sw_title}".strip() if sw_title else "Backup & Recovery"
+        bk_id = generate_slug_id("backup", sw_title or "Backup", [o.id for o in existing_objekte])
         bk_objekt = TechnikObjekt(
             schema_version=1,
             id=bk_id,
@@ -623,8 +811,8 @@ def wizard_abschliessen(auftrag_id: str):
             except (ValueError, TypeError):
                 pass
 
+        usv_bez = format_baustein_bezeichnung("USV", d10.get("hersteller", ""), d10.get("modell", ""), "USV Stromversorgung")
         usv_id = generate_slug_id("usv", d10.get("modell") or d10.get("hersteller") or "USV", [o.id for o in existing_objekte])
-        usv_bez = f"USV {d10.get('modell', '')}".strip() or f"USV {d10.get('hersteller', '')}".strip() or "USV Stromversorgung"
         usv_objekt = TechnikObjekt(
             schema_version=1,
             id=usv_id,

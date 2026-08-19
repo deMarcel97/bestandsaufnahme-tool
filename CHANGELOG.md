@@ -4,6 +4,18 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.34] - 2026-08-19
+
+### Added
+- **Software-Review Befunde & Wizard UX-Optimierungen (#363, #364-#371)**:
+  - **#364**: Formular-Submit-Zuverlässigkeit in Dialogen und Abschlussformularen optimiert (`#neu-auftrag-modal`, `#form-wizard-abschliessen`).
+  - **#365**: Baustein-Kategorien im Auftrags-Modal und auf der Stammdaten-Seite in 5 thematische Fachbereiche gruppiert (Netzwerk & Perimeter, Server & Rechenzentrum, Speicher & Sicherung, Clients & Workplace, Cloud & Governance).
+  - **#366**: Ausführliche Key-Facts-Datenvorschau auf der Wizard-Zusammenfassungsseite (`wizard_zusammenfassung.html`) für alle 13 Meilensteine.
+  - **#367**: Differenzierte Status-Marker im Wizard: Erfasst (`✓`), Übersprungen (`⊘`) und Ausstehend mit angepasster Prozent- und Zählerberechnung.
+  - **#369**: Sichtbarkeits-Filter (`sichtbar_wenn`) in `progress.py::collect_offene_punkte` integriert, um irrelevante Warnungen bei inaktiven Sub-Feldern zu vermeiden.
+  - **#370**: Konsistente Groß-/Kleinschreibung und Markenbezeichnungen bei auto-generierten Technik-Objekten (z. B. `Backup Veeam`, `Storage Synology`, `USV APC`).
+  - **#371**: SVG-Favicon hinzugefügt und 404-Fehler für `/favicon.ico` behoben.
+
 ## [2.7.33] - 2026-08-19
 
 ### Added
