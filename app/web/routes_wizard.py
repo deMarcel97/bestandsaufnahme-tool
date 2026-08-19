@@ -589,8 +589,8 @@ def wizard_abschliessen(auftrag_id: str):
             art=d3.get("art") or "DSL",
             bandbreite_down_mbit=down,
             bandbreite_up_mbit=up,
-            feste_ip_vorhanden=d3.get("feste_ip_vorhanden") or "unbekannt",
-            redundante_anbindung=d3.get("redundante_anbindung") or "unbekannt",
+            feste_ip=d3.get("feste_ip_vorhanden") or "unbekannt",
+            redundante_anbindung=d3.get("redundante_anbindung") or "nein",
         )
         if not standort.anbindungen:
             standort.anbindungen.append(anbindung)
