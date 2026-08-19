@@ -91,40 +91,40 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
     </div>
-    <form action="/auftrag/neu" method="POST">
+    <form action="/auftrag/neu" method="POST" id="form-neuer-auftrag" novalidate>
       <div class="dialog-body">
         <div class="form-row">
           <div class="form-group">
-            <label>Projektnummer</label>
-            <input type="text" name="projekt_nummer" class="form-control" placeholder="wird generiert, wenn leer">
+            <label for="modal-input-projekt-nummer">Projektnummer</label>
+            <input type="text" id="modal-input-projekt-nummer" name="projekt_nummer" class="form-control" maxlength="100" placeholder="wird generiert, wenn leer">
           </div>
           <div class="form-group">
-            <label>Jira Link</label>
-            <input type="url" name="jira_url" class="form-control" placeholder="https://jira.example.com/browse/PROJ-1">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Kunde <span class="req">*</span></label>
-            <input type="text" name="kunde" class="form-control" required placeholder="Landratsamt Mustercity">
-          </div>
-          <div class="form-group">
-            <label>Auftragsbezeichnung <span class="req">*</span></label>
-            <input type="text" name="bezeichnung" class="form-control" required placeholder="Infrastrukturanalyse 2026">
+            <label for="modal-input-jira-url">Jira Link</label>
+            <input type="url" id="modal-input-jira-url" name="jira_url" class="form-control" maxlength="500" placeholder="https://jira.example.com/browse/PROJ-1">
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Grundlage</label>
-            <select name="grundlage" class="form-control">
+            <label for="modal-input-kunde">Kunde <span class="req">*</span></label>
+            <input type="text" id="modal-input-kunde" name="kunde" class="form-control" required maxlength="200" placeholder="Landratsamt Mustercity">
+          </div>
+          <div class="form-group">
+            <label for="modal-input-bezeichnung">Auftragsbezeichnung <span class="req">*</span></label>
+            <input type="text" id="modal-input-bezeichnung" name="bezeichnung" class="form-control" required maxlength="200" placeholder="Infrastrukturanalyse 2026">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal-select-grundlage">Grundlage</label>
+            <select id="modal-select-grundlage" name="grundlage" class="form-control">
               {% for opt in grundlage_options %}
               <option value="{{ opt }}" {% if opt == 'Sonstiges' %}selected{% endif %}>{{ opt }}</option>
               {% endfor %}
             </select>
           </div>
           <div class="form-group">
-            <label>Default Vertraulichkeit</label>
-            <select name="vertraulichkeit_default" class="form-control">
+            <label for="modal-select-vertraulichkeit">Default Vertraulichkeit</label>
+            <select id="modal-select-vertraulichkeit" name="vertraulichkeit_default" class="form-control">
               {% for opt in vertraulichkeit_options %}
               <option value="{{ opt }}" {% if opt == "intern" %}selected{% endif %}>{{ opt }}</option>
               {% endfor %}
@@ -143,8 +143,8 @@
               <div class="checkbox-grid" style="grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 6px;">
                 {% for typ in gruppe.typen %}
                 {% if typ in verfuegbare_typen %}
-                <label style="margin: 0; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                  <input type="checkbox" name="aktive_bausteine" value="{{ typ }}" checked>
+                <label for="modal-chk-{{ typ }}" style="margin: 0; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" id="modal-chk-{{ typ }}" name="aktive_bausteine" value="{{ typ }}" checked>
                   <span>{{ bausteine_labels.get(typ, typ.capitalize()) }}</span>
                 </label>
                 {% endif %}
@@ -156,8 +156,8 @@
         </div>
 
         <div class="subsection" style="margin-top:14px; padding:12px; background:var(--bg-surface, rgba(255,255,255,0.03)); border:1px solid var(--border-color, #e5e7eb); border-radius:6px;">
-          <label style="display:flex; align-items:center; gap:8px; font-weight:500; cursor:pointer; margin-bottom:0;">
-            <input type="checkbox" name="start_wizard" value="1" checked>
+          <label for="modal-chk-start-wizard" style="display:flex; align-items:center; gap:8px; font-weight:500; cursor:pointer; margin-bottom:0;">
+            <input type="checkbox" id="modal-chk-start-wizard" name="start_wizard" value="1" checked>
             <span>Direkt mit interaktiver Bestandsaufnahme (Guide) starten</span>
           </label>
         </div>

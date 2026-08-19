@@ -69,21 +69,21 @@
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Kunde *</label>
-            <input type="text" name="kunde" value="{{ step_data.get('kunde', auftrag.kunde) }}" class="form-control" required>
+            <label for="wz-kunde">Kunde <span class="req">*</span></label>
+            <input type="text" id="wz-kunde" name="kunde" value="{{ step_data.get('kunde', auftrag.kunde) }}" maxlength="200" class="form-control" required>
           </div>
           <div class="form-group">
-            <label>Projektnummer</label>
-            <input type="text" name="projekt_nummer" value="{{ step_data.get('projekt_nummer', auftrag.projekt_nummer or '') }}" class="form-control">
+            <label for="wz-projekt-nummer">Projektnummer</label>
+            <input type="text" id="wz-projekt-nummer" name="projekt_nummer" value="{{ step_data.get('projekt_nummer', auftrag.projekt_nummer or '') }}" maxlength="100" class="form-control">
           </div>
         </div>
         <div class="form-group">
-          <label>Bezeichnung des Auftrags *</label>
-          <input type="text" name="bezeichnung" value="{{ step_data.get('bezeichnung', auftrag.bezeichnung) }}" class="form-control" required>
+          <label for="wz-bezeichnung">Bezeichnung des Auftrags <span class="req">*</span></label>
+          <input type="text" id="wz-bezeichnung" name="bezeichnung" value="{{ step_data.get('bezeichnung', auftrag.bezeichnung) }}" maxlength="200" class="form-control" required>
         </div>
         <div class="form-group">
-          <label>Scope / Abgrenzung (optional)</label>
-          <textarea name="abgrenzung" class="form-control" rows="3" placeholder="z. B. Nur Hauptstandort und Serverinfrastruktur...">{{ step_data.get('abgrenzung', auftrag.abgrenzung or '') }}</textarea>
+          <label for="wz-abgrenzung">Scope / Abgrenzung (optional)</label>
+          <textarea id="wz-abgrenzung" name="abgrenzung" maxlength="5000" class="form-control" rows="3" placeholder="z. B. Nur Hauptstandort und Serverinfrastruktur...">{{ step_data.get('abgrenzung', auftrag.abgrenzung or '') }}</textarea>
         </div>
       </fieldset>
       
@@ -96,8 +96,8 @@
         </div>
         {% if standorte and standorte|length > 1 %}
         <div class="form-group">
-          <label>Bestehenden Standort auswählen</label>
-          <select name="standort_id" class="form-control">
+          <label for="wz-select-standort-id">Bestehenden Standort auswählen</label>
+          <select id="wz-select-standort-id" name="standort_id" class="form-control">
             {% for sto in standorte %}
             <option value="{{ sto.id }}" {% if step_data.get('standort_id') == sto.id or (not step_data.get('standort_id') and loop.first) %}selected{% endif %}>{{ sto.bezeichnung }}</option>
             {% endfor %}
@@ -106,36 +106,36 @@
         {% endif %}
         <div class="form-row">
           <div class="form-group">
-            <label>Standort-Bezeichnung *</label>
-            <input type="text" name="bezeichnung" value="{{ step_data.get('bezeichnung', standort.bezeichnung if standort else 'Hauptsitz') }}" class="form-control" required>
+            <label for="wz-standort-bezeichnung">Standort-Bezeichnung <span class="req">*</span></label>
+            <input type="text" id="wz-standort-bezeichnung" name="bezeichnung" value="{{ step_data.get('bezeichnung', standort.bezeichnung if standort else 'Hauptsitz') }}" maxlength="200" class="form-control" required>
           </div>
           <div class="form-group">
-            <label>Anzahl User / Mitarbeiter vor Ort</label>
-            <input type="number" name="anzahl_user" value="{{ step_data.get('anzahl_user', standort.anzahl_user if standort else 10) }}" class="form-control" min="1">
+            <label for="wz-anzahl-user">Anzahl User / Mitarbeiter vor Ort</label>
+            <input type="number" id="wz-anzahl-user" name="anzahl_user" value="{{ step_data.get('anzahl_user', standort.anzahl_user if standort else 10) }}" class="form-control" min="1">
           </div>
         </div>
         <div class="form-group">
-          <label>Straße & Hausnummer</label>
-          <input type="text" name="strasse" value="{{ step_data.get('strasse', standort.strasse if standort else '') }}" class="form-control">
+          <label for="wz-strasse">Straße &amp; Hausnummer</label>
+          <input type="text" id="wz-strasse" name="strasse" value="{{ step_data.get('strasse', standort.strasse if standort else '') }}" maxlength="200" class="form-control">
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>PLZ</label>
-            <input type="text" name="plz" value="{{ step_data.get('plz', standort.plz if standort else '') }}" class="form-control">
+            <label for="wz-plz">PLZ</label>
+            <input type="text" id="wz-plz" name="plz" value="{{ step_data.get('plz', standort.plz if standort else '') }}" maxlength="20" class="form-control">
           </div>
           <div class="form-group">
-            <label>Ort</label>
-            <input type="text" name="ort" value="{{ step_data.get('ort', standort.ort if standort else '') }}" class="form-control">
+            <label for="wz-ort">Ort</label>
+            <input type="text" id="wz-ort" name="ort" value="{{ step_data.get('ort', standort.ort if standort else '') }}" maxlength="100" class="form-control">
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Ansprechpartner vor Ort</label>
-            <input type="text" name="ansprechpartner_vor_ort" value="{{ step_data.get('ansprechpartner_vor_ort', standort.ansprechpartner_vor_ort if standort else '') }}" class="form-control">
+            <label for="wz-ansprechpartner">Ansprechpartner vor Ort</label>
+            <input type="text" id="wz-ansprechpartner" name="ansprechpartner_vor_ort" value="{{ step_data.get('ansprechpartner_vor_ort', standort.ansprechpartner_vor_ort if standort else '') }}" maxlength="200" class="form-control">
           </div>
           <div class="form-group">
-            <label>Funktion / Rolle</label>
-            <input type="text" name="funktion" value="{{ step_data.get('funktion', standort.funktion if standort else '') }}" class="form-control" placeholder="z. B. Geschäftsführer, IT-Leiter">
+            <label for="wz-funktion">Funktion / Rolle</label>
+            <input type="text" id="wz-funktion" name="funktion" value="{{ step_data.get('funktion', standort.funktion if standort else '') }}" maxlength="200" class="form-control" placeholder="z. B. Geschäftsführer, IT-Leiter">
           </div>
         </div>
       </fieldset>

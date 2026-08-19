@@ -4,6 +4,30 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.35] - 2026-08-19
+
+### Added
+- **Security & Due-Diligence Standards (#373)**:
+  - Globale Security-Headers Middleware hinzugefügt (`X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `X-XSS-Protection: 1; mode=block`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`, `Content-Security-Policy`).
+- **Offline-Fähigkeit für Mermaid.js (#372)**:
+  - `mermaid.min.js` als lokales Asset unter `/static/js/mermaid.min.js` gebündelt — vollständige Visualisierung der Netzwerktopologie ohne externe Internetverbindung vor Ort beim Kunden.
+- **Custom HTML-Fehlerseiten & Print-Stylesheet (#375)**:
+  - Benutzerfreundliche HTML-Fehlerseiten `errors/404.html` und `errors/500.html` für Web-Browser.
+  - Print-Stylesheet (`@media print`) für sauberen Ausdruck und PDF-Export ohne Navigationselemente.
+  - `maxlength`-Attribute für Textfelder zum Schutz vor Layout-Brüchen.
+- **Accessibility / Barrierefreiheit (#374)**:
+  - Formular-Labels (`<label for="...">`) durchgängig mit Eingabefeldern (`<input id="...">`) verknüpft (Screen-Reader-Konformität).
+- **Priorisiertes Dashboard für Offene Punkte (#369)**:
+  - 3-stufige Priorisierung (Kritisch, Wichtig, Hinweise) mit Dashboard-Kennzahlen und interaktiven Filter-Tabs.
+
+### Fixed
+- **Form-Submit im Modal-Dialog (#364)**:
+  - `novalidate`-Attribut auf Dialog-Formularen und serverseitige Validierung mit klarem Feedback zur Vermeidung stiller Blockaden unter Browser-Automation.
+- **Baustein-Modellnamen im Wizard (#376)**:
+  - `format_baustein_bezeichnung` priorisiert das Modell, um präzise Baustein-Namen zu generieren (z. B. `Firewall FortiGate 60F`, `Switch Catalyst 9200-24T`, `Server PowerEdge R740`).
+- **Wizard-Zusammenfassung Key-Facts Datenvorschau (#366)**:
+  - Vollständiger Key-Facts-Extraktor mit automatischem Fallback für alle 13 Meilensteine.
+
 ## [2.7.34] - 2026-08-19
 
 ### Added
