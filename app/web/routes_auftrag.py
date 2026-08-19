@@ -80,13 +80,18 @@ def list_auftraege(request: Request):
 def create_auftrag(
     projekt_nummer: str = Form(""),
     jira_url: str = Form(""),
-    kunde: str = Form(...),
-    bezeichnung: str = Form(...),
+    kunde: str = Form(""),
+    bezeichnung: str = Form(""),
     grundlage: str = Form("Sonstiges"),
     vertraulichkeit_default: str = Form("intern"),
     aktive_bausteine: list[str] = Form(default=["firewall"]),
     start_wizard: str = Form("")
 ):
+    kunde_clean = (kunde or "").strip()
+    bezeichnung_clean = (bezeichnung or "").strip()
+    if not kunde_clean or not bezeichnung_clean:
+        return HTMLResponse(content="<script>alert('Bitte Kunde und Auftragsbezeichnung angeben.'); window.history.back();</script>", status_code=400)
+
     all_auftraege = storage.list_auftraege()
     
     # Auto-generate projekt_nummer if empty
@@ -106,15 +111,15 @@ def create_auftrag(
         return HTMLResponse(content=f"<script>alert('Fehler: Projektnummer {safe_projekt_nummer} existiert bereits. Ist dies ein weiterer Standort? Bitte erstelle im bestehenden Projekt einen neuen Standort.'); window.history.back();</script>", status_code=400)
 
     existing_ids = [a.id for a in all_auftraege]
-    auftrag_id = generate_slug_id("auftrag", bezeichnung, existing_ids)
+    auftrag_id = generate_slug_id("auftrag", bezeichnung_clean, existing_ids)
 
     auftrag = Auftrag(
         schema_version=1,
         id=auftrag_id,
         projekt_nummer=projekt_nummer,
-        jira_url=jira_url if jira_url else None,
-        kunde=kunde,
-        bezeichnung=bezeichnung,
+        jira_url=jira_url.strip() if jira_url else None,
+        kunde=kunde_clean,
+        bezeichnung=bezeichnung_clean,
         # Beim Neuanlegen gibt es noch keinen Wert zu bewahren — hier ist der
         # Vorgabewert des Formulars der richtige Rückfall. Bei der
         # Vertraulichkeit ist das "intern", also die schützende Stufe (#310).

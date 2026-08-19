@@ -1130,3 +1130,73 @@ td.top { vertical-align: top; }
   transition: transform 0.1s ease-out;
 }
 
+/* Prioritäts-Badges (#369) */
+.badge-priority-kritisch {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+  font-weight: 700;
+}
+.badge-priority-wichtig {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  font-weight: 600;
+}
+.badge-priority-hinweis {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+/* Print Stylesheet (#375) */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 11pt;
+  }
+
+  header,
+  .sidebar,
+  .btn,
+  .dialog-backdrop,
+  .form-bar,
+  .linkact form,
+  .subtle,
+  .nav-tabs,
+  .section-head button,
+  .page-head button,
+  .page-head a.btn {
+    display: none !important;
+  }
+
+  .layout-sidebar {
+    display: block !important;
+  }
+
+  .workspace,
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  table {
+    page-break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  .card, .summary-card {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+}
+
+

@@ -95,6 +95,7 @@ class ProgressService:
                 text="Standort fehlt — noch kein Standort erfasst",
                 status="offen",
                 quelle="struktur_fehlt",
+                prioritaet="kritisch",
                 ziel_url=f"/auftrag/{auftrag.id}/standort/neu"
             ))
 
@@ -109,9 +110,21 @@ class ProgressService:
                 text=f"{label} fehlt — noch kein Objekt erfasst",
                 status="offen",
                 quelle="struktur_fehlt",
+                prioritaet="kritisch",
                 ziel_url=f"/auftrag/{auftrag.id}/objekt/neu?typ={typ}",
                 objekt_typ=typ
             ))
+
+        # Kernfelder mit kritischer Auswirkung bei Fehlen
+        KRITISCHE_FELDER = {
+            "wartungsvertrag_vorhanden", "wartungsvertrag_status", "strategie",
+            "mfa_fuer_alle_benutzer", "mfa_fuer_administratoren",
+            "notfallhandbuch_status", "it_dokumentation_status",
+            "edr_antivirus_zentral_gemanagt", "ips_ids_aktiv",
+            "unveraenderliches_backup", "testwiederherstellung",
+            "zentrales_patchmanagement_aktiv", "lokale_adminrechte_eingeschraenkt",
+            "gast_wlan_isoliert", "netztrennung"
+        }
 
         # 1. Rueckfrage & Rule-relevant empty fields from objects
         for obj in objekte:
@@ -135,16 +148,19 @@ class ProgressService:
                             text=f"Rückfrage erforderlich bei '{flabel}' für Objekt '{obj.bezeichnung}'",
                             status="offen",
                             quelle="rueckfrage",
+                            prioritaet="kritisch",
                             ziel_url=f"/auftrag/{auftrag.id}/objekt/{obj.typ}/{obj.id}#field_{fname}",
                             standort_id=obj.standort_id,
                             objekt_typ=obj.typ
                         ))
                     elif feldef.get("regelrelevant", False) and (val is None or val == "" or val == "unbekannt"):
+                        prio = "kritisch" if fname in KRITISCHE_FELDER else "wichtig"
                         consolidated.append(OffenerPunktItem(
                             id=f"op-rr-{obj.id}-{fname}",
                             text=f"Regelrelevantes Feld '{flabel}' ist unvollständig/unbekannt bei Objekt '{obj.bezeichnung}'",
                             status="offen",
                             quelle="regelrelevant_leer",
+                            prioritaet=prio,
                             ziel_url=f"/auftrag/{auftrag.id}/objekt/{obj.typ}/{obj.id}#field_{fname}",
                             standort_id=obj.standort_id,
                             objekt_typ=obj.typ
@@ -158,15 +174,17 @@ class ProgressService:
                     item.standort_id = obj.standort_id
                 if not item.objekt_typ:
                     item.objekt_typ = obj.typ
+                if not item.prioritaet:
+                    item.prioritaet = "wichtig"
                 consolidated.append(item)
 
         # 2. Open points from Rule Engine
-        consolidated.extend(rule_open_points)
+        for r_item in rule_open_points:
+            if not getattr(r_item, "prioritaet", None):
+                r_item.prioritaet = "kritisch"
+            consolidated.append(r_item)
 
-        # 3. Document requests. Lief bisher immer über eine leere Liste — es gab
-        # kein Formular, das `dokumentenanforderung` füllen konnte (Karte #316).
-        # Das Ziel ist die eigene Unterlagen-Seite, nicht die Stammdaten: dort
-        # steht das Feld gar nicht.
+        # 3. Document requests
         for doc in auftrag.dokumentenanforderung:
             if doc.status in ("angefordert", "offen"):
                 consolidated.append(OffenerPunktItem(
@@ -174,6 +192,7 @@ class ProgressService:
                     text=f"Ausstehendes Dokument: '{doc.bezeichnung}' (Status: {doc.status})",
                     status="offen",
                     quelle="dokument",
+                    prioritaet="wichtig",
                     ziel_url=f"/auftrag/{auftrag.id}/unterlagen"
                 ))
 

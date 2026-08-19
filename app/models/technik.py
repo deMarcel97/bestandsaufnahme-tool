@@ -5,7 +5,8 @@ class OffenerPunktItem(BaseModel):
     id: str = ""
     text: str = ""
     status: str = "offen"  # offen, erledigt
-    quelle: str = "manuell"  # manuell, rueckfrage, regelrelevant_leer, dokument
+    quelle: str = "manuell"  # manuell, rueckfrage, regelrelevant_leer, dokument, pflichtfeld
+    prioritaet: str = "wichtig"  # kritisch, wichtig, hinweis
     ziel_url: str = ""
     standort_id: Optional[str] = None
     objekt_typ: str = ""

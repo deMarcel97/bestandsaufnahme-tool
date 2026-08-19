@@ -33,16 +33,16 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label>Bezeichnung <span class="req">*</span></label>
-          <input type="text" name="bezeichnung" id="input_bezeichnung" value="{{ obj.bezeichnung if obj else default_bezeichnung }}" class="form-control" required>
+          <label for="input_bezeichnung">Bezeichnung <span class="req">*</span></label>
+          <input type="text" name="bezeichnung" id="input_bezeichnung" value="{{ obj.bezeichnung if obj else default_bezeichnung }}" maxlength="200" class="form-control" required>
         </div>
         <div class="form-group">
-          <label>Standort{% if schema.standortbezug is not false and schema.get('standortbezug') is not false %} <span class="req">*</span>{% endif %}</label>
+          <label for="input_standort_id">Standort{% if schema.standortbezug is not false and schema.get('standortbezug') is not false %} <span class="req">*</span>{% endif %}</label>
           {% if schema.standortbezug is false or schema.get('standortbezug') is false %}
-          <input type="text" class="form-control" value="Standortübergreifend (Cloud)" disabled>
+          <input type="text" id="input_standort_id" class="form-control" value="Standortübergreifend (Cloud)" disabled>
           <input type="hidden" name="standort_id" value="">
           {% else %}
-          <select name="standort_id" class="form-control" required>
+          <select name="standort_id" id="input_standort_id" class="form-control" required>
             {% for s in standorte %}
             <option value="{{ s.id }}" {% if (obj and obj.standort_id == s.id) or (selected_standort_id == s.id) %}selected{% endif %}>{{ s.bezeichnung }} ({{ s.ort }})</option>
             {% endfor %}
@@ -53,27 +53,27 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label>Betreut durch</label>
-          <select name="betreut_durch" class="form-control">
+          <label for="input_betreut_durch">Betreut durch</label>
+          <select name="betreut_durch" id="input_betreut_durch" class="form-control">
             <option value="wir" {% if obj and obj.betreut_durch == 'wir' %}selected{% endif %}>wir (Systemhaus)</option>
             <option value="Kunde" {% if not obj or obj.betreut_durch == 'Kunde' %}selected{% endif %}>Kunde (Eigenbetrieb)</option>
             <option value="Dritter" {% if obj and obj.betreut_durch == 'Dritter' %}selected{% endif %}>Dritter Dienstleister</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Dienstleister Name</label>
-          <input type="text" name="dienstleister_name" value="{{ obj.dienstleister_name if obj else '' }}" class="form-control">
+          <label for="input_dienstleister_name">Dienstleister Name</label>
+          <input type="text" name="dienstleister_name" id="input_dienstleister_name" value="{{ obj.dienstleister_name if obj else '' }}" maxlength="200" class="form-control">
         </div>
         <div class="form-group">
-          <label>Vertraulichkeitsstufe</label>
-          <select name="vertraulichkeit" class="form-control">
+          <label for="input_vertraulichkeit">Vertraulichkeitsstufe</label>
+          <select name="vertraulichkeit" id="input_vertraulichkeit" class="form-control">
             {% for opt in vertraulichkeit_options %}
             <option value="{{ opt }}" {% if (obj and obj.vertraulichkeit == opt) or (not obj and auftrag.vertraulichkeit_default == opt) %}selected{% endif %}>{{ opt }}</option>
             {% endfor %}
           </select>
         </div>
         <div class="form-group">
-          <label>Erfassungsstatus</label>
+          <label for="input_erfassungsstatus">Erfassungsstatus</label>
           <select name="erfassungsstatus" id="input_erfassungsstatus" class="form-control" style="pointer-events:none; opacity:0.75;" tabindex="-1">
             <option value="vollstaendig" {% if obj and obj.erfassungsstatus == 'vollstaendig' %}selected{% endif %}>vollständig</option>
             <option value="teilweise" {% if obj and obj.erfassungsstatus == 'teilweise' %}selected{% endif %}>teilweise</option>
@@ -95,17 +95,17 @@
         {% for field in abschnitt.felder %}
         {% set current_val = obj.daten.get(field.name) if obj and obj.daten else None %}
         <div class="form-group" id="field_{{ field.name }}" {% if field.sichtbar_wenn %}data-sw-feld="{{ field.sichtbar_wenn.feld }}" data-sw-operator="{{ field.sichtbar_wenn.operator }}" data-sw-wert="{{ field.sichtbar_wenn.wert }}"{% endif %}>
-          <label>
+          <label for="input_{{ field.name }}">
             {{ field.label if field.label else field.name.replace('_', ' ').capitalize() }}
             {% if field.pflicht %}<span class="req">*</span>{% endif %}
             {% if field.vertraulichkeit == 'intern' %}<span class="badge" style="margin-left:6px; font-size:9.5px; padding:2px 5px;">intern</span>{% endif %}
           </label>
 
           {% if field.typ == 'text' %}
-          <input type="text" name="{{ field.name }}" id="input_{{ field.name }}" value="{{ current_val if current_val else '' }}" class="form-control" {% if field.pflicht %}required{% endif %}>
+          <input type="text" name="{{ field.name }}" id="input_{{ field.name }}" value="{{ current_val if current_val else '' }}" maxlength="500" class="form-control" {% if field.pflicht %}required{% endif %}>
 
           {% elif field.typ == 'mehrzeiliger_text' %}
-          <textarea name="{{ field.name }}" id="input_{{ field.name }}" class="form-control">{{ current_val if current_val else '' }}</textarea>
+          <textarea name="{{ field.name }}" id="input_{{ field.name }}" maxlength="5000" class="form-control">{{ current_val if current_val else '' }}</textarea>
 
           {% elif field.typ == 'zahl' %}
           <input type="number" name="{{ field.name }}" id="input_{{ field.name }}" value="{{ current_val if current_val is not none else '' }}" class="form-control">

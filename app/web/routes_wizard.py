@@ -62,13 +62,17 @@ def format_field_val(val: Any) -> str:
 
 
 def format_baustein_bezeichnung(typ_prefix: str, hersteller: str = "", modell: str = "", fallback: str = "") -> str:
-    parts = [typ_prefix]
-    if hersteller:
-        parts.append(hersteller.strip())
-    if modell and modell.strip().lower() != (hersteller or "").strip().lower():
-        parts.append(modell.strip())
-    res = " ".join(p for p in parts if p).strip()
-    return res if len(res) > len(typ_prefix) else (fallback or f"{typ_prefix} Standard")
+    h = (hersteller or "").strip().replace("_", " ")
+    m = (modell or "").strip()
+    if m:
+        if m.lower().startswith(typ_prefix.lower()):
+            return m
+        return f"{typ_prefix} {m}"
+    if h:
+        if h.lower().startswith(typ_prefix.lower()):
+            return h
+        return f"{typ_prefix} {h}"
+    return fallback or f"{typ_prefix} Standard"
 
 
 def build_wizard_step_summaries(progress: WizardProgress) -> List[Dict[str, Any]]:
@@ -189,6 +193,12 @@ def build_wizard_step_summaries(progress: WizardProgress) -> List[Dict[str, Any]
                 if d.get("it_dokumentation_status"): key_facts.append({"label": "IT-Doku", "val": format_field_val(d["it_dokumentation_status"])})
                 if d.get("it_sicherheitsrichtlinie_unterschrieben"): key_facts.append({"label": "Sicherheitsrichtlinie", "val": format_field_val(d["it_sicherheitsrichtlinie_unterschrieben"])})
                 if d.get("passwort_manager_einsatz"): key_facts.append({"label": "Passwort-Manager", "val": format_field_val(d["passwort_manager_einsatz"])})
+
+            # Fallback falls spezielle Felder nicht griffen, aber Formulardaten vorhanden sind
+            if not key_facts:
+                for k, v in d.items():
+                    if v and not k.startswith("hat_") and k not in ("standort_id", "csrf_token"):
+                        key_facts.append({"label": k.replace("_", " ").title(), "val": format_field_val(v)})
 
         cards.append({
             "step_num": step_num,

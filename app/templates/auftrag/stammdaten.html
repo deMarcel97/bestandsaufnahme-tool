@@ -29,25 +29,25 @@
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Projektnummer</label>
-            <input type="text" name="projekt_nummer" value="{{ auftrag.projekt_nummer }}" class="form-control">
+            <label for="input-projekt-nummer">Projektnummer</label>
+            <input type="text" id="input-projekt-nummer" name="projekt_nummer" value="{{ auftrag.projekt_nummer }}" maxlength="100" class="form-control">
           </div>
           <div class="form-group">
-            <label>Jira Link</label>
-            <input type="url" name="jira_url" value="{{ auftrag.jira_url if auftrag.jira_url else '' }}" class="form-control">
+            <label for="input-jira-url">Jira Link</label>
+            <input type="url" id="input-jira-url" name="jira_url" value="{{ auftrag.jira_url if auftrag.jira_url else '' }}" maxlength="500" class="form-control">
           </div>
           <div class="form-group">
-            <label>Kunde</label>
-            <input type="text" name="kunde" value="{{ auftrag.kunde }}" class="form-control">
+            <label for="input-kunde">Kunde</label>
+            <input type="text" id="input-kunde" name="kunde" value="{{ auftrag.kunde }}" maxlength="200" class="form-control">
           </div>
           <div class="form-group">
-            <label>Auftraggeber</label>
-            <input type="text" name="auftraggeber" value="{{ auftrag.auftraggeber }}" class="form-control">
+            <label for="input-auftraggeber">Auftraggeber</label>
+            <input type="text" id="input-auftraggeber" name="auftraggeber" value="{{ auftrag.auftraggeber }}" maxlength="200" class="form-control">
           </div>
         </div>
         <div class="form-group">
-          <label>Bezeichnung</label>
-          <input type="text" name="bezeichnung" value="{{ auftrag.bezeichnung }}" class="form-control">
+          <label for="input-bezeichnung">Bezeichnung</label>
+          <input type="text" id="input-bezeichnung" name="bezeichnung" value="{{ auftrag.bezeichnung }}" maxlength="200" class="form-control">
         </div>
       </fieldset>
 
@@ -57,24 +57,24 @@
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Grundlage</label>
-            <select name="grundlage" class="form-control">
+            <label for="select-grundlage">Grundlage</label>
+            <select id="select-grundlage" name="grundlage" class="form-control">
               {% for opt in grundlage_options %}
               <option value="{{ opt }}" {% if auftrag.grundlage == opt %}selected{% endif %}>{{ opt }}</option>
               {% endfor %}
             </select>
           </div>
           <div class="form-group">
-            <label>Status</label>
-            <select name="status" class="form-control">
+            <label for="select-status">Status</label>
+            <select id="select-status" name="status" class="form-control">
               {% for opt in ["Vorbereitung", "Erfassung", "Konsolidierung", "Bewertung", "Abgabe"] %}
               <option value="{{ opt }}" {% if auftrag.status == opt %}selected{% endif %}>{{ opt }}</option>
               {% endfor %}
             </select>
           </div>
           <div class="form-group">
-            <label>Vertraulichkeit Default</label>
-            <select name="vertraulichkeit_default" class="form-control">
+            <label for="select-vertraulichkeit">Vertraulichkeit Default</label>
+            <select id="select-vertraulichkeit" name="vertraulichkeit_default" class="form-control">
               {% for opt in vertraulichkeit_options %}
               <option value="{{ opt }}" {% if auftrag.vertraulichkeit_default == opt %}selected{% endif %}>{{ opt }}</option>
               {% endfor %}
@@ -93,8 +93,8 @@
               <div class="checkbox-grid" style="grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 6px;">
                 {% for typ in gruppe.typen %}
                 {% if typ in verfuegbare_typen %}
-                <label style="margin: 0; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                  <input type="checkbox" name="aktive_bausteine" value="{{ typ }}" {% if typ in auftrag.aktive_bausteine %}checked{% endif %}>
+                <label for="chk-baustein-{{ typ }}" style="margin: 0; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" id="chk-baustein-{{ typ }}" name="aktive_bausteine" value="{{ typ }}" {% if typ in auftrag.aktive_bausteine %}checked{% endif %}>
                   <span>{{ bausteine_labels.get(typ, typ.capitalize()) }}</span>
                 </label>
                 {% endif %}
@@ -109,24 +109,24 @@
           <span class="eyebrow">Zweck der Erfassung</span>
           <div class="checkbox-grid">
             {% for opt in zweck_options %}
-            <label><input type="checkbox" name="zweck" value="{{ opt }}" {% if opt in auftrag.zweck %}checked{% endif %}> {{ opt }}</label>
+            <label for="chk-zweck-{{ loop.index }}"><input type="checkbox" id="chk-zweck-{{ loop.index }}" name="zweck" value="{{ opt }}" {% if opt in auftrag.zweck %}checked{% endif %}> {{ opt }}</label>
             {% endfor %}
           </div>
         </div>
 
         <div class="form-group">
-          <label>Abgrenzung</label>
-          <textarea name="abgrenzung" class="form-control">{{ auftrag.abgrenzung }}</textarea>
+          <label for="textarea-abgrenzung">Abgrenzung</label>
+          <textarea id="textarea-abgrenzung" name="abgrenzung" maxlength="5000" class="form-control">{{ auftrag.abgrenzung }}</textarea>
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label>Aufwand geplant (Stunden)</label>
-            <input type="number" step="0.5" name="aufwand_geplant" value="{{ auftrag.aufwand_geplant }}" class="form-control">
+            <label for="input-aufwand-geplant">Aufwand geplant (Stunden)</label>
+            <input type="number" step="0.5" id="input-aufwand-geplant" name="aufwand_geplant" value="{{ auftrag.aufwand_geplant }}" class="form-control">
           </div>
           <div class="form-group">
-            <label>Aufwand Ist (Stunden)</label>
-            <input type="number" step="0.5" name="aufwand_ist" value="{{ auftrag.aufwand_ist }}" class="form-control">
+            <label for="input-aufwand-ist">Aufwand Ist (Stunden)</label>
+            <input type="number" step="0.5" id="input-aufwand-ist" name="aufwand_ist" value="{{ auftrag.aufwand_ist }}" class="form-control">
           </div>
         </div>
       </fieldset>
@@ -137,20 +137,20 @@
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Beauftragung</label>
-            <input type="date" name="beauftragung" value="{{ auftrag.termine.beauftragung or '' }}" class="form-control" lang="de">
+            <label for="input-date-beauftragung">Beauftragung</label>
+            <input type="date" id="input-date-beauftragung" name="beauftragung" value="{{ auftrag.termine.beauftragung or '' }}" class="form-control" lang="de">
           </div>
           <div class="form-group">
-            <label>Kickoff</label>
-            <input type="date" name="kickoff" value="{{ auftrag.termine.kickoff or '' }}" class="form-control" lang="de">
+            <label for="input-date-kickoff">Kickoff</label>
+            <input type="date" id="input-date-kickoff" name="kickoff" value="{{ auftrag.termine.kickoff or '' }}" class="form-control" lang="de">
           </div>
           <div class="form-group">
-            <label>Entwurf Vorlage</label>
-            <input type="date" name="entwurf_vorlage" value="{{ auftrag.termine.entwurf_vorlage or '' }}" class="form-control" lang="de">
+            <label for="input-date-entwurf-vorlage">Entwurf Vorlage</label>
+            <input type="date" id="input-date-entwurf-vorlage" name="entwurf_vorlage" value="{{ auftrag.termine.entwurf_vorlage or '' }}" class="form-control" lang="de">
           </div>
           <div class="form-group">
-            <label>Abgabe</label>
-            <input type="date" name="abgabe" value="{{ auftrag.termine.abgabe or '' }}" class="form-control" lang="de">
+            <label for="input-date-abgabe">Abgabe</label>
+            <input type="date" id="input-date-abgabe" name="abgabe" value="{{ auftrag.termine.abgabe or '' }}" class="form-control" lang="de">
           </div>
         </div>
       </fieldset>

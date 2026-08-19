@@ -15,3 +15,4 @@ dist/
 
 # Temporäre Entwicklerskripte und Arbeitsdateien
 scratch/
+.vibe/

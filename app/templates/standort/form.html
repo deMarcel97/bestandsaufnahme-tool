@@ -33,46 +33,46 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label>Bezeichnung <span class="req">*</span></label>
-          <input type="text" name="bezeichnung" value="{{ standort.bezeichnung if standort else '' }}" class="form-control" required placeholder="Zentrale München">
+          <label for="sto-input-bezeichnung">Bezeichnung <span class="req">*</span></label>
+          <input type="text" id="sto-input-bezeichnung" name="bezeichnung" value="{{ standort.bezeichnung if standort else '' }}" class="form-control" required maxlength="200" placeholder="Zentrale München">
         </div>
         <div class="form-group">
-          <label>Anzahl User</label>
-          <input type="number" name="anzahl_user" value="{{ standort.anzahl_user if standort else 10 }}" class="form-control">
+          <label for="sto-input-anzahl-user">Anzahl User</label>
+          <input type="number" id="sto-input-anzahl-user" name="anzahl_user" value="{{ standort.anzahl_user if standort else 10 }}" class="form-control">
         </div>
         <div class="form-group">
-          <label>Begehung am</label>
-          <input type="date" name="begehung_am" value="{{ standort.begehung_am if standort else heutiges_datum }}" class="form-control">
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>Straße</label>
-          <input type="text" name="strasse" value="{{ standort.strasse if standort else '' }}" class="form-control">
-        </div>
-        <div class="form-group">
-          <label>PLZ</label>
-          <input type="text" name="plz" value="{{ standort.plz if standort else '' }}" class="form-control">
-        </div>
-        <div class="form-group">
-          <label>Ort</label>
-          <input type="text" name="ort" value="{{ standort.ort if standort else '' }}" class="form-control">
+          <label for="sto-input-begehung-am">Begehung am</label>
+          <input type="date" id="sto-input-begehung-am" name="begehung_am" value="{{ standort.begehung_am if standort else heutiges_datum }}" class="form-control">
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label>Funktion / Nutzung</label>
-          <input type="text" name="funktion" value="{{ standort.funktion if standort else '' }}" class="form-control" placeholder="Hauptverwaltung, Produktion, etc.">
+          <label for="sto-input-strasse">Straße</label>
+          <input type="text" id="sto-input-strasse" name="strasse" value="{{ standort.strasse if standort else '' }}" maxlength="200" class="form-control">
         </div>
         <div class="form-group">
-          <label>Ansprechpartner vor Ort</label>
-          <input type="text" name="ansprechpartner_vor_ort" value="{{ standort.ansprechpartner_vor_ort if standort else '' }}" class="form-control" placeholder="Max Mustermann (IT-Leitung)">
+          <label for="sto-input-plz">PLZ</label>
+          <input type="text" id="sto-input-plz" name="plz" value="{{ standort.plz if standort else '' }}" maxlength="20" class="form-control">
         </div>
         <div class="form-group">
-          <label>Vertraulichkeitsstufe</label>
-          <select name="vertraulichkeit" class="form-control">
+          <label for="sto-input-ort">Ort</label>
+          <input type="text" id="sto-input-ort" name="ort" value="{{ standort.ort if standort else '' }}" maxlength="100" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="sto-input-funktion">Funktion / Nutzung</label>
+          <input type="text" id="sto-input-funktion" name="funktion" value="{{ standort.funktion if standort else '' }}" maxlength="200" class="form-control" placeholder="Hauptverwaltung, Produktion, etc.">
+        </div>
+        <div class="form-group">
+          <label for="sto-input-ansprechpartner">Ansprechpartner vor Ort</label>
+          <input type="text" id="sto-input-ansprechpartner" name="ansprechpartner_vor_ort" value="{{ standort.ansprechpartner_vor_ort if standort else '' }}" maxlength="200" class="form-control" placeholder="Max Mustermann (IT-Leitung)">
+        </div>
+        <div class="form-group">
+          <label for="sto-select-vertraulichkeit">Vertraulichkeitsstufe</label>
+          <select id="sto-select-vertraulichkeit" name="vertraulichkeit" class="form-control">
             {% for opt in vertraulichkeit_options %}
             <option value="{{ opt }}" {% if (standort and standort.vertraulichkeit == opt) or (not standort and auftrag.vertraulichkeit_default == opt) %}selected{% endif %}>{{ opt }}</option>
             {% endfor %}

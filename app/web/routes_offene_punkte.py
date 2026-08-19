@@ -115,6 +115,12 @@ def offene_punkte_page(request: Request, auftrag_id: str):
     for g in grouped_standorte:
         grouped_punkte[g["name"]] = {t["name"]: t["punkte"] for t in g["themen_list"]}
 
+    prio_counts = {
+        "kritisch": sum(1 for op in offene_punkte if getattr(op, "prioritaet", "wichtig") == "kritisch"),
+        "wichtig": sum(1 for op in offene_punkte if getattr(op, "prioritaet", "wichtig") == "wichtig"),
+        "hinweis": sum(1 for op in offene_punkte if getattr(op, "prioritaet", "wichtig") == "hinweis"),
+    }
+
     sidebar_context = build_sidebar_context(auftrag)
     return templates.TemplateResponse(
         request=request,
@@ -124,6 +130,7 @@ def offene_punkte_page(request: Request, auftrag_id: str):
             "offene_punkte": offene_punkte,
             "grouped_standorte": grouped_standorte,
             "grouped_punkte": grouped_punkte,
+            "prio_counts": prio_counts,
             "active_tab": "offene_punkte",
             "active_nav": "auftrag",
             **sidebar_context

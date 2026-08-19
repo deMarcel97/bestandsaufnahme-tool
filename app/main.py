@@ -29,6 +29,9 @@ app = FastAPI(title="IT-Bestandsaufnahme Tool", version=APP_VERSION)
 async def favicon():
     return FileResponse(BASE_DIR / "app" / "static" / "favicon.svg", media_type="image/svg+xml")
 
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from app.web.templates import templates
+
 UNSAFE_METHODS = {"POST", "PUT", "DELETE", "PATCH"}
 PUBLIC_PATH_PREFIXES = ("/auth/", "/static/", "/favicon.ico")
 
@@ -46,9 +49,7 @@ async def require_entra_login(request: Request, call_next):
 @app.middleware("http")
 async def block_cross_site_writes(request: Request, call_next):
     """Leichtgewichtiger CSRF-Schutz: state-changing Requests werden anhand
-    von Sec-Fetch-Site bzw. Origin/Referer gegen den Host geprüft, statt ein
-    volles Token-basiertes CSRF-System einzuführen. Fehlen alle drei Header
-    (z.B. curl, Testclients), wird durchgelassen."""
+    von Sec-Fetch-Site bzw. Origin/Referer gegen den Host geprüft."""
     if request.method in UNSAFE_METHODS:
         sec_fetch_site = request.headers.get("sec-fetch-site")
         if sec_fetch_site is not None:
@@ -62,6 +63,52 @@ async def block_cross_site_writes(request: Request, call_next):
                 if candidate_host and candidate_host != host:
                     return PlainTextResponse("Cross-site request blocked", status_code=403)
     return await call_next(request)
+
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    """Setzt restriktive HTTP Security-Headers für alle Requests (#373)."""
+    response = await call_next(request)
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' data: https://fonts.gstatic.com; "
+        "img-src 'self' data: https: blob:; "
+        "connect-src 'self';"
+    )
+    return response
+
+@app.exception_handler(StarletteHTTPException)
+async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
+    """Liefert für 404-Fehler im Browser eine ansprechende HTML-Fehlerseite (#375)."""
+    if exc.status_code == 404:
+        accept = request.headers.get("accept", "")
+        if "text/html" in accept or "*/*" in accept:
+            return templates.TemplateResponse(
+                request=request,
+                name="errors/404.html",
+                context={"request": request, "status_code": 404, "detail": exc.detail},
+                status_code=404
+            )
+    return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
+
+@app.exception_handler(500)
+async def custom_500_handler(request: Request, exc: Exception):
+    """Liefert für 500-Fehler im Browser eine HTML-Fehlerseite (#375)."""
+    accept = request.headers.get("accept", "")
+    if "text/html" in accept or "*/*" in accept:
+        return templates.TemplateResponse(
+            request=request,
+            name="errors/500.html",
+            context={"request": request, "status_code": 500, "detail": "Interner Serverfehler"},
+            status_code=500
+        )
+    return PlainTextResponse("Interner Serverfehler", status_code=500)
 
 @app.exception_handler(KonfliktFehler)
 async def konflikt_handler(request: Request, exc: KonfliktFehler):
