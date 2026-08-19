@@ -447,3 +447,60 @@ def test_wizard_resumption_dialog_and_reset(client, tmp_path):
     assert prog.current_step == 1
     assert len(prog.completed_steps) == 0
 
+
+def test_wizard_skip_vs_completed_tracking(client, tmp_path):
+    """Prüft, dass übersprungene Schritte in skipped_steps landen und differenziert gerendert werden."""
+    auftrag = Auftrag(
+        id="proj-skip-test",
+        kunde="Skip Kunde",
+        bezeichnung="Test Skip Status",
+        aktive_bausteine=[],
+    )
+    storage.save_auftrag(auftrag)
+
+    # 1. Init
+    client.post("/auftrag/proj-skip-test/wizard/init", follow_redirects=True)
+
+    # 2. Schritt 1 ausfüllen & speichern
+    client.post(
+        "/auftrag/proj-skip-test/wizard/step/1",
+        data={"kunde": "Skip Kunde", "bezeichnung": "Test Skip Status"},
+        follow_redirects=True,
+    )
+    prog = storage.load_wizard_progress("proj-skip-test")
+    assert 1 in prog.completed_steps
+    assert 1 not in prog.skipped_steps
+    assert prog.is_step_completed(1)
+    assert not prog.is_step_skipped(1)
+
+    # 3. Schritt 2 überspringen
+    client.get("/auftrag/proj-skip-test/wizard/skip", follow_redirects=True)
+    prog = storage.load_wizard_progress("proj-skip-test")
+    assert 2 in prog.skipped_steps
+    assert not prog.is_step_completed(2)
+    assert prog.is_step_skipped(2)
+
+    # 4. Wizard UI prüfen: Schritt 1 hat ✓, Schritt 2 hat ⊘
+    resp = client.get("/auftrag/proj-skip-test/wizard?resume=1")
+    assert resp.status_code == 200
+    assert "✓" in resp.text
+    assert "⊘" in resp.text
+
+
+def test_favicon_and_modal_groups(client, tmp_path):
+    """Prüft, dass das Favicon erreichbar ist und das Auftrags-Modal nach Gruppen strukturiert ist."""
+    # Favicon
+    resp = client.get("/favicon.ico")
+    assert resp.status_code == 200
+    assert "<svg" in resp.text
+
+    # Auftrags-Liste mit Modal-Gruppen
+    resp_list = client.get("/auftrag")
+    assert resp_list.status_code == 200
+    assert "Netzwerk &amp; Perimeter" in resp_list.text or "Netzwerk & Perimeter" in resp_list.text
+    assert "Server &amp; Rechenzentrum" in resp_list.text or "Server & Rechenzentrum" in resp_list.text
+    assert "Speicher &amp; Sicherung" in resp_list.text or "Speicher & Sicherung" in resp_list.text
+    assert "Clients &amp; Workplace" in resp_list.text or "Clients & Workplace" in resp_list.text
+    assert "Cloud &amp; Governance" in resp_list.text or "Cloud & Governance" in resp_list.text
+
+

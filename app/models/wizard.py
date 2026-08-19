@@ -46,6 +46,7 @@ class WizardStepData(BaseModel):
     data: Dict[str, Any] = Field(default_factory=dict)
     timestamp: str = ""
     completed: bool = False
+    skipped: bool = False
 
 
 class WizardProgress(BaseModel):
@@ -54,6 +55,7 @@ class WizardProgress(BaseModel):
     auftrag_id: str
     current_step: int = 1
     completed_steps: List[int] = Field(default_factory=list)
+    skipped_steps: List[int] = Field(default_factory=list)
     steps: Dict[int, WizardStepData] = Field(default_factory=dict)
     started_at: str = ""
     last_updated: str = ""
@@ -63,7 +65,10 @@ class WizardProgress(BaseModel):
         return self.steps.get(self.current_step)
 
     def is_step_completed(self, step: int) -> bool:
-        return step in self.completed_steps
+        return step in self.completed_steps and step not in self.skipped_steps
+
+    def is_step_skipped(self, step: int) -> bool:
+        return step in self.skipped_steps
 
     def is_complete(self) -> bool:
         """Prüft, ob alle Datenerfassungs-Schritte abgeschlossen sind."""

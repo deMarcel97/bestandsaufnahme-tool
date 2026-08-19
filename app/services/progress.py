@@ -4,10 +4,29 @@ from app.models.standort import Standort
 from app.models.technik import TechnikObjekt, OffenerPunktItem
 from app.services.schema_loader import schema_loader
 
+def _is_field_visible(sichtbar_cond: Any, data_dict: Dict[str, Any]) -> bool:
+    if not sichtbar_cond or not isinstance(sichtbar_cond, dict):
+        return True
+    cond_field = sichtbar_cond.get("feld")
+    cond_op = sichtbar_cond.get("operator", "gleich")
+    cond_val = sichtbar_cond.get("wert")
+    parent_val = data_dict.get(cond_field)
+
+    p_str = "ja" if parent_val is True or str(parent_val).lower() == "ja" else ("nein" if parent_val is False or str(parent_val).lower() in ("nein", "false") else str(parent_val).lower())
+    c_str = "ja" if cond_val is True or str(cond_val).lower() == "ja" else ("nein" if cond_val is False or str(cond_val).lower() in ("nein", "false") else str(cond_val).lower())
+
+    if cond_op == "gleich" and p_str != c_str:
+        return False
+    if cond_op == "ungleich" and p_str == c_str:
+        return False
+    return True
+
+
 class ProgressService:
     def calculate_progress(self, aktive_bausteine: List[str], objekte: List[TechnikObjekt]) -> Dict[str, Dict[str, Any]]:
         """
-        Calculates completion progress (% of filled mandatory fields) per active block type.
+        Calculates completion progress (% of filled mandatory fields) per active block type,
+        taking section and field visibility into account.
         """
         result = {}
         for typ in aktive_bausteine:
@@ -16,33 +35,33 @@ class ProgressService:
                 result[typ] = {"titel": typ.capitalize(), "prozent": 0.0, "ausgefuellt": 0, "gesamt": 0}
                 continue
 
-            # Identify mandatory fields
-            mandatory_fields = []
-            for abschnitt in schema.get("abschnitte", []):
-                for feldef in abschnitt.get("felder", []):
-                    if feldef.get("pflicht", False):
-                        mandatory_fields.append(feldef.get("name"))
-
             typ_objekte = [o for o in objekte if o.typ == typ]
-            if not typ_objekte or not mandatory_fields:
+            if not typ_objekte:
                 result[typ] = {
                     "titel": schema.get("bezeichnung_anzeige", typ.capitalize()),
-                    "prozent": 100.0 if typ_objekte else 0.0,
+                    "prozent": 0.0,
                     "ausgefuellt": 0,
-                    "gesamt": len(mandatory_fields) * max(1, len(typ_objekte))
+                    "gesamt": 0
                 }
                 continue
 
-            total_mand = len(mandatory_fields) * len(typ_objekte)
+            total_mand = 0
             filled_count = 0
 
             for obj in typ_objekte:
-                for fname in mandatory_fields:
-                    val = obj.daten.get(fname)
-                    if val is not None and val != "" and val != "unbekannt" and val != "rueckfrage":
-                        filled_count += 1
+                for abschnitt in schema.get("abschnitte", []):
+                    if not _is_field_visible(abschnitt.get("sichtbar_wenn"), obj.daten):
+                        continue
+                    for feldef in abschnitt.get("felder", []):
+                        if not _is_field_visible(feldef.get("sichtbar_wenn"), obj.daten):
+                            continue
+                        if feldef.get("pflicht", False):
+                            total_mand += 1
+                            val = obj.daten.get(feldef.get("name"))
+                            if val is not None and val != "" and val != "unbekannt" and val != "rueckfrage":
+                                filled_count += 1
 
-            pct = (filled_count / total_mand * 100.0) if total_mand > 0 else 0.0
+            pct = (filled_count / total_mand * 100.0) if total_mand > 0 else 100.0
             result[typ] = {
                 "titel": schema.get("bezeichnung_anzeige", typ.capitalize()),
                 "prozent": round(pct, 1),
@@ -63,7 +82,7 @@ class ProgressService:
         Consolidates open points across order:
         - fehlende Standorte / komplett fehlende aktive Bausteine
         - "rueckfrage" fields
-        - empty rule-relevant fields
+        - empty rule-relevant fields (only when field and section are visible)
         - manual object offene_punkte
         - undelivered document requests
         """
@@ -101,7 +120,11 @@ class ProgressService:
                 continue
 
             for abschnitt in schema.get("abschnitte", []):
+                if not _is_field_visible(abschnitt.get("sichtbar_wenn"), obj.daten):
+                    continue
                 for feldef in abschnitt.get("felder", []):
+                    if not _is_field_visible(feldef.get("sichtbar_wenn"), obj.daten):
+                        continue
                     fname = feldef.get("name")
                     flabel = feldef.get("label", fname)
                     val = obj.daten.get(fname)

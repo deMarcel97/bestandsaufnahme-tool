@@ -23,6 +23,29 @@ from app.web.optionen import (
 
 router = APIRouter()
 
+BAUSTEIN_GRUPPEN = [
+    {
+        "titel": "Netzwerk & Perimeter",
+        "typen": ["firewall", "switch", "access_point", "netzwerkschrank"]
+    },
+    {
+        "titel": "Server & Rechenzentrum",
+        "typen": ["server_virtualisierung", "vm", "server_cluster", "serverraum", "usv"]
+    },
+    {
+        "titel": "Speicher & Sicherung",
+        "typen": ["storage", "backup"]
+    },
+    {
+        "titel": "Clients & Workplace",
+        "typen": ["clients", "software"]
+    },
+    {
+        "titel": "Cloud & Governance",
+        "typen": ["m365_security", "organisation_prozesse"]
+    },
+]
+
 def get_bausteine_labels() -> dict:
     labels = {}
     for typ in schema_loader.get_all_types():
@@ -46,7 +69,9 @@ def list_auftraege(request: Request):
             "auftraege": auftraege,
             "verfuegbare_typen": verfuegbare_typen,
             "bausteine_labels": bausteine_labels,
+            "baustein_gruppen": BAUSTEIN_GRUPPEN,
             "grundlage_options": GRUNDLAGE_OPTIONS,
+            "vertraulichkeit_options": VERTRAULICHKEIT_OPTIONS,
             "active_nav": "auftrag"
         }
     )
@@ -240,8 +265,10 @@ def stammdaten_form(request: Request, auftrag_id: str):
             "auftrag": auftrag,
             "verfuegbare_typen": verfuegbare_typen,
             "bausteine_labels": bausteine_labels,
+            "baustein_gruppen": BAUSTEIN_GRUPPEN,
             "grundlage_options": GRUNDLAGE_OPTIONS,
             "zweck_options": ZWECK_OPTIONS,
+            "vertraulichkeit_options": VERTRAULICHKEIT_OPTIONS,
             "active_tab": "stammdaten",
             "active_nav": "auftrag",
             **sidebar_context
