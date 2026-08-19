@@ -111,6 +111,11 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
     usv_objs = [o for o in objekte if o.typ == "usv"]
 
     anbindungen = standort.anbindungen if (standort and standort.anbindungen) else []
+    # Phantom-Backup-ISP vermeiden: wenn redundante_anbindung != ja, Backup-Leitungen nicht rendern
+    if anbindungen:
+        hat_redundanz = any(getattr(a, "redundante_anbindung", "nein") == "ja" for a in anbindungen)
+        if not hat_redundanz:
+            anbindungen = [a for a in anbindungen if a.ist_backup_leitung != "ja"]
 
     # Prüfen, ob überhaupt Netzwerk- oder Infrastrukturkomponenten vorliegen
     has_any_data = bool(anbindungen or firewalls or switches or servers or storages or vms or aps or client_objs or (standort and standort.anzahl_user > 0))
@@ -436,7 +441,7 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
         if sw_targets:
             for fw_nid in fw_nodes:
                 for sw_nid in sw_targets:
-                    lines.append(f'    {fw_nid} ==>|"Trunk / LAG 10G"| {sw_nid}')
+                    lines.append(f'    {fw_nid} ==>|"Uplink"| {sw_nid}')
         elif server_nodes:
             for fw_nid in fw_nodes:
                 for srv_nid in server_nodes.values():
@@ -450,14 +455,14 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
     if core_nodes and access_nodes:
         for c_nid in core_nodes:
             for a_nid in access_nodes:
-                lines.append(f'    {c_nid} ==>|"Trunk Uplink"| {a_nid}')
+                lines.append(f'    {c_nid} ==>|"Uplink"| {a_nid}')
 
     # Switching -> Server
     active_switch_nodes = core_nodes or access_nodes or fw_nodes
     if active_switch_nodes and server_nodes:
         sw_primary = active_switch_nodes[0]
         for srv_nid in server_nodes.values():
-            lines.append(f'    {sw_primary} ==>|"Server Uplink (10G/LAG)"| {srv_nid}')
+            lines.append(f'    {sw_primary} ==>|"Uplink"| {srv_nid}')
 
     # Server -> Storage
     if server_nodes and storage_nodes:
@@ -488,7 +493,7 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
     if ap_parent_switches and ap_nodes:
         ap_parent = ap_parent_switches[0]
         for ap_nid, has_gast in ap_nodes:
-            lines.append(f'    {ap_parent} -->|"PoE+ / 1G"| {ap_nid}')
+            lines.append(f'    {ap_parent} -->|"Uplink"| {ap_nid}')
             if has_gast:
                 lines.append(f'    {ap_nid} -.->|"WLAN Gast-SSID"| gast_clients')
 

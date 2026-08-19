@@ -54,6 +54,7 @@ def test_full_hierarchy_topology():
                 bandbreite_down_mbit=1000.0,
                 bandbreite_up_mbit=1000.0,
                 ist_backup_leitung="nein",
+                redundante_anbindung="ja",
             ),
             Internetanbindung(
                 anbieter="Vodafone",
@@ -61,6 +62,7 @@ def test_full_hierarchy_topology():
                 bandbreite_down_mbit=100.0,
                 bandbreite_up_mbit=40.0,
                 ist_backup_leitung="ja",
+                redundante_anbindung="ja",
             ),
         ],
     )
@@ -208,12 +210,9 @@ def test_full_hierarchy_topology():
 
     # Connections check
     assert "Backup WAN" in mermaid
-    assert "Trunk / LAG 10G" in mermaid
-    assert "Trunk Uplink" in mermaid
-    assert "Server Uplink" in mermaid
+    assert "Uplink" in mermaid
     assert "SAN / iSCSI / NFS" in mermaid
     assert "Hypervisor Host" in mermaid
-    assert "PoE+ / 1G" in mermaid
     assert "LAN 1G" in mermaid
     assert "USV-Schutz" in mermaid
 

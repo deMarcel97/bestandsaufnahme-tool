@@ -13,6 +13,7 @@ class Internetanbindung(BaseModel):
     sla_entstoerzeit: float = 0.0  # Stunden
     ist_backup_leitung: str = "nein"  # ja / nein
     failover_verfahren: str = ""
+    redundante_anbindung: str = "nein"  # ja / nein – steuert, ob eine Backup-Leitung existiert
 
     @field_validator("sla_entstoerzeit", mode="before")
     @classmethod

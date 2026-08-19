@@ -4,6 +4,19 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.36] - 2026-08-19
+
+### Fixed
+- **Netzwerktopologie: Phantom-Backup-ISP entfernt (#362)**:
+  - Backup-Leitungen werden nur noch gerendert, wenn `redundante_anbindung` = "ja" gesetzt ist. Verhindert Phantom-ISP-Knoten in der Topologie bei Kunden ohne redundante Anbindung.
+  - `redundante_anbindung`-Feld zum `Internetanbindung`-Modell hinzugefügt (wurde zuvor vom Wizard uebergeben aber vom Modell ignoriert).
+  - Standard-Uplink-Labels ("Trunk / LAG 10G", "Server Uplink (10G/LAG)", "PoE+ / 1G", "Trunk Uplink") durch generisches "Uplink" ersetzt - keine erfundenen Verbindungstypen mehr.
+
+### Added
+- **Warnung bei ungespeicherten Aenderungen (#357)**:
+  - `beforeunload`-Event auf allen POST-Formularen. Nutzer wird beim Verlassen der Seite mit ungespeicherten Aenderungen gewarnt.
+  - Neue `static/js/unsaved-changes.js`, in `base.html` eingebunden.
+
 ## [2.7.35] - 2026-08-19
 
 ### Added
