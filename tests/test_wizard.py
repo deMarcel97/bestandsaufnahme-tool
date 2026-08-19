@@ -367,3 +367,83 @@ def test_wizard_navigation_helpers(client, tmp_path):
     assert resp.headers["location"] == "/auftrag/proj-nav-test"
     assert storage.load_wizard_progress("proj-nav-test") is not None
 
+
+def test_auftrag_creation_with_start_wizard(client, tmp_path):
+    """Prüft, dass start_wizard=1 direkt in den Wizard weiterleitet und start_wizard='' zur Übersicht."""
+    # 1. Mit start_wizard="1"
+    resp = client.post(
+        "/auftrag/neu",
+        data={
+            "kunde": "Neukunde Direktstart",
+            "bezeichnung": "Direktstart Projekt",
+            "start_wizard": "1",
+            "aktive_bausteine": ["firewall", "switch"],
+        },
+        follow_redirects=False,
+    )
+    assert resp.status_code == 303
+    loc = resp.headers["location"]
+    assert loc.endswith("/wizard")
+    auftrag_id = loc.split("/")[2]
+
+    # 2. Ohne start_wizard
+    resp2 = client.post(
+        "/auftrag/neu",
+        data={
+            "kunde": "Neukunde Standard",
+            "bezeichnung": "Standard Projekt",
+            "start_wizard": "",
+            "aktive_bausteine": ["firewall"],
+        },
+        follow_redirects=False,
+    )
+    assert resp2.status_code == 303
+    assert not resp2.headers["location"].endswith("/wizard")
+
+
+def test_wizard_resumption_dialog_and_reset(client, tmp_path):
+    """Prüft den Wiederaufnahme-Dialog bei bestehendem Fortschritt und die Fortsetzen/Neu-Starten-Aktionen."""
+    auftrag = Auftrag(
+        id="proj-resume-test",
+        kunde="Resume Kunde",
+        bezeichnung="Test Wiederaufnahme",
+        aktive_bausteine=["firewall"],
+    )
+    storage.save_auftrag(auftrag)
+
+    # 1. Frischer Wizard (kein Fortschritt): Soll direkt Schritt 1 zeigen
+    resp = client.get("/auftrag/proj-resume-test/wizard")
+    assert resp.status_code == 200
+    assert "Auftragsgrunddaten" in resp.text
+    assert "Gespeicherter Erfassungsstand vorhanden" not in resp.text
+
+    # 2. Schritt 1 speichern
+    client.post(
+        "/auftrag/proj-resume-test/wizard/step/1",
+        data={
+            "kunde": "Resume Kunde",
+            "bezeichnung": "Test Wiederaufnahme",
+        },
+        follow_redirects=True,
+    )
+
+    # 3. Wizard erneut aufrufen ohne resume-Parameter -> Wiederaufnahme-Dialog anzeigen
+    resp_dialog = client.get("/auftrag/proj-resume-test/wizard")
+    assert resp_dialog.status_code == 200
+    assert "Gespeicherter Erfassungsstand vorhanden" in resp_dialog.text
+    assert "Erfassung fortsetzen & prüfen" in resp_dialog.text
+    assert "Erfassung neu starten" in resp_dialog.text
+
+    # 4. Fortsetzen mit resume=1 -> Schritt 2 Formular zeigen
+    resp_resume = client.get("/auftrag/proj-resume-test/wizard?resume=1")
+    assert resp_resume.status_code == 200
+    assert "Standort-Grunddaten" in resp_resume.text
+    assert "Gespeicherter Erfassungsstand vorhanden" not in resp_resume.text
+
+    # 5. Neu starten via POST init -> Reset auf Schritt 1
+    resp_init = client.post("/auftrag/proj-resume-test/wizard/init", follow_redirects=False)
+    assert resp_init.status_code == 303
+    prog = storage.load_wizard_progress("proj-resume-test")
+    assert prog.current_step == 1
+    assert len(prog.completed_steps) == 0
+

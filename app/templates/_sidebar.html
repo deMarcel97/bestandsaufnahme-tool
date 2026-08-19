@@ -3,8 +3,9 @@
   <h3>Auftrag</h3>
   <ul>
     <li><a href="/auftrag/{{ auftrag.id }}" {% if active_tab == 'uebersicht' %}class="active"{% endif %}>Übersicht</a></li>
-    <li><a href="/auftrag/{{ auftrag.id }}/erfassung" {% if active_tab == 'erfassung' %}class="active"{% endif %}>Erfassung</a></li>
     <li><a href="/auftrag/{{ auftrag.id }}/stammdaten" {% if active_tab == 'stammdaten' %}class="active"{% endif %}>Stammdaten</a></li>
+    <li><a href="/auftrag/{{ auftrag.id }}/erfassung" {% if active_tab == 'erfassung' %}class="active"{% endif %}>Erfassung</a></li>
+    <li><a href="/auftrag/{{ auftrag.id }}/wizard" {% if active_tab == 'wizard' %}class="active"{% endif %} style="font-weight: 500;">⚡ Interaktive Erfassung</a></li>
     <li><a href="/auftrag/{{ auftrag.id }}/unternehmenskontext" {% if active_tab == 'unternehmenskontext' %}class="active"{% endif %}>Unternehmenskontext</a></li>
     <li><a href="/auftrag/{{ auftrag.id }}/beteiligte" {% if active_tab == 'beteiligte' %}class="active"{% endif %}>Beteiligte {% if auftrag.beteiligte %}<span class="count">{{ auftrag.beteiligte|length }}</span>{% endif %}</a></li>
     <li><a href="/auftrag/{{ auftrag.id }}/vertraege" {% if active_tab == 'vertraege' %}class="active"{% endif %}>Verträge {% if auftrag.vertraege %}<span class="count">{{ auftrag.vertraege|length }}</span>{% endif %}</a></li>

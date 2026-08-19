@@ -85,9 +85,12 @@
 
     <div class="section-head">
       <div style="display:flex; align-items:baseline; gap:12px;">
-        <h2>Erfassung fortsetzen</h2>
+        <h2>Erfassung</h2>
       </div>
-      <a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn btn-outline">Zur Erfassung</a>
+      <div style="display:flex; gap:8px;">
+        <a href="/auftrag/{{ auftrag.id }}/wizard" class="btn btn-primary">⚡ Interaktive Erfassung (Guide)</a>
+        <a href="/auftrag/{{ auftrag.id }}/erfassung" class="btn btn-outline">Manuelle Erfassung</a>
+      </div>
     </div>
 
     <div class="section-head" style="margin-top:36px;">

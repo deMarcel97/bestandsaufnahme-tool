@@ -22,7 +22,10 @@
           <span>Standorte anlegen, Bausteine wählen und Objekte erfassen.</span>
         </div>
       </div>
-      <a href="/auftrag/{{ auftrag.id }}" class="btn" style="flex:none;">Zur Übersicht</a>
+      <div style="display:flex; gap:8px; flex:none;">
+        <a href="/auftrag/{{ auftrag.id }}/wizard" class="btn btn-primary">⚡ Interaktiver Guide</a>
+        <a href="/auftrag/{{ auftrag.id }}" class="btn">Zur Übersicht</a>
+      </div>
     </div>
 
     <div class="section-head">
