@@ -136,8 +136,8 @@
           <span class="eyebrow" style="margin-bottom: 8px; display: block;">Aktive Bausteine (Scope-Steuerung)</span>
           <div class="baustein-gruppen-container" style="display: flex; flex-direction: column; gap: 10px;">
             {% for gruppe in baustein_gruppen %}
-            <div class="baustein-gruppe" style="background: var(--bg-surface-elevated, #f9fafb); border: 1px solid var(--border-color, #e5e7eb); border-radius: 6px; padding: 10px 12px;">
-              <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted, #6b7280); margin-bottom: 6px;">
+            <div class="baustein-gruppe" style="background: var(--bg-surface-elevated); border: 1px solid var(--border-color, #e5e7eb); border-radius: 6px; padding: 10px 12px;">
+              <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 6px;">
                 {{ gruppe.titel }}
               </div>
               <div class="checkbox-grid" style="grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 6px;">
@@ -155,7 +155,7 @@
           </div>
         </div>
 
-        <div class="subsection" style="margin-top:14px; padding:12px; background:var(--bg-surface, rgba(255,255,255,0.03)); border:1px solid var(--border-color, #e5e7eb); border-radius:6px;">
+        <div class="subsection" style="margin-top:14px; padding:12px; background:var(--bg-surface); border:1px solid var(--border-color, #e5e7eb); border-radius:6px;">
           <label for="modal-chk-start-wizard" style="display:flex; align-items:center; gap:8px; font-weight:500; cursor:pointer; margin-bottom:0;">
             <input type="checkbox" id="modal-chk-start-wizard" name="start_wizard" value="1" checked>
             <span>Direkt mit interaktiver Bestandsaufnahme (Guide) starten</span>

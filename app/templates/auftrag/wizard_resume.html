@@ -24,18 +24,18 @@
       <a href="/auftrag/{{ auftrag.id }}" class="btn" style="flex:none;">Zur Auftragsübersicht</a>
     </div>
 
-    <div class="card" style="margin-top:20px; padding:24px; background:var(--bg-surface, #fff); border:1px solid var(--border-color, #e5e7eb); border-radius:8px;">
+    <div class="card" style="margin-top:20px; padding:24px; background:var(--bg-surface); border:1px solid var(--border-color, #e5e7eb); border-radius:8px;">
       <div style="display:flex; align-items:flex-start; gap:16px;">
         <div style="flex-shrink:0; width:44px; height:44px; border-radius:50%; background:rgba(59,130,246,0.15); display:flex; align-items:center; justify-content:center; color:#2563eb;">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m4.93 4.93 2.83 2.83"/><path d="M2 12h4"/><path d="m4.93 19.07 2.83-2.83"/><path d="M12 18v4"/><path d="m19.07 19.07-2.83-2.83"/><path d="M20 12h4"/><path d="m19.07 4.93-2.83 2.83"/></svg>
         </div>
         <div style="flex:1;">
           <h2 style="margin:0 0 8px 0; font-size:18px;">Gespeicherter Erfassungsstand vorhanden</h2>
-          <p style="margin:0 0 16px 0; color:var(--text-muted, #6b7280); font-size:14px; line-height:1.5;">
+          <p style="margin:0 0 16px 0; color:var(--muted); font-size:14px; line-height:1.5;">
             Für diesen Auftrag existiert bereits ein aktiver Erfassungsfortschritt. Sie können die Erfassung an der zuletzt bearbeiteten Position fortsetzen und alle Angaben schrittweise prüfen oder den Wizard neu starten.
           </p>
 
-          <div style="padding:14px 16px; background:var(--bg-card, rgba(0,0,0,0.03)); border:1px solid var(--border-color, #e5e7eb); border-radius:6px; margin-bottom:24px;">
+          <div style="padding:14px 16px; background:var(--panel); border:1px solid var(--border-color, #e5e7eb); border-radius:6px; margin-bottom:24px;">
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
               <div>
                 <span class="eyebrow" style="display:block; font-size:11px; margin-bottom:2px;">Aktuelle Position</span>
@@ -53,7 +53,7 @@
               {% endif %}
             </div>
 
-            <div class="progress-container" style="margin-top:12px; height:6px; background:var(--border-color, #e5e7eb); border-radius:3px; overflow:hidden;">
+            <div class="progress-container" style="margin-top:12px; height:6px; background:var(--line); border-radius:3px; overflow:hidden;">
               <div class="progress-bar" style="width: {{ progress_prozent }}%; height:100%; background:#2563eb; border-radius:3px;"></div>
             </div>
           </div>
@@ -65,7 +65,7 @@
                   <span class="badge" style="background:#2563eb; color:#fff; font-size:11px; padding:2px 6px; border-radius:4px;">Empfohlen</span>
                   <strong style="font-size:15px;">Erfassung fortsetzen & prüfen</strong>
                 </div>
-                <p style="margin:0 0 16px 0; color:var(--text-muted, #6b7280); font-size:13px; line-height:1.4;">
+                <p style="margin:0 0 16px 0; color:var(--muted); font-size:13px; line-height:1.4;">
                   Führt die Erfassung an Schritt {{ current_step }} ({{ step_label }}) fort. Alle bisher gespeicherten Formulardaten bleiben erhalten und können überprüft werden.
                 </p>
               </div>
@@ -74,12 +74,12 @@
               </a>
             </div>
 
-            <div style="padding:18px; border:1px solid var(--border-color, #e5e7eb); border-radius:6px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div style="padding:18px; border:1px solid var(--border-color); border-radius:6px; display:flex; flex-direction:column; justify-content:space-between;">
               <div>
                 <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
                   <strong style="font-size:15px;">Erfassung neu starten</strong>
                 </div>
-                <p style="margin:0 0 16px 0; color:var(--text-muted, #6b7280); font-size:13px; line-height:1.4;">
+                <p style="margin:0 0 16px 0; color:var(--muted); font-size:13px; line-height:1.4;">
                   Setzt den gespeicherten Wizard-Fortschritt zurück und beginnt die interaktive Bestandsaufnahme bei Schritt 1 (Auftragsgrunddaten) von vorn.
                 </p>
               </div>

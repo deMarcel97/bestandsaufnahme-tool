@@ -38,7 +38,10 @@
   --input-bg: var(--panel);
   --table-header-bg: transparent;
   --font-family: var(--font);
-}
+
+  /* Surface-Variablen für Card/Dialog-Hintergründe */
+  --bg-surface: rgba(255, 255, 255, 0.5);
+  --bg-surface-elevated: #f9fafb;
 
 html[data-theme="dark"] {
   color-scheme: dark;
@@ -56,6 +59,10 @@ html[data-theme="dark"] {
   --warn-soft: #382c12;
   --ok: #5fa87c;
   --hover: rgba(255, 255, 255, 0.06);
+
+  /* Surface-Variablen für Card/Dialog-Hintergründe */
+  --bg-surface: rgba(0, 0, 0, 0.2);
+  --bg-surface-elevated: #3a3636;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
