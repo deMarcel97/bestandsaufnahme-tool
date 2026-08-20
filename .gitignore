@@ -16,3 +16,6 @@ dist/
 # Temporäre Entwicklerskripte und Arbeitsdateien
 scratch/
 .vibe/
+
+# Lokale Modell-Routing-Konfiguration (siehe CLAUDE.md/RESUME.md-Notizen) - bewusst nicht im Repo
+MODELL_ROUTING.md
