@@ -2,7 +2,7 @@ import pytest
 from starlette.testclient import TestClient
 from app.main import app
 from app.models.auftrag import Auftrag
-from app.models.standort import Standort
+from app.models.standort import Standort, Internetanbindung
 from app.services.storage import storage
 
 
@@ -503,4 +503,159 @@ def test_favicon_and_modal_groups(client, tmp_path):
     assert "Clients &amp; Workplace" in resp_list.text or "Clients & Workplace" in resp_list.text
     assert "Cloud &amp; Governance" in resp_list.text or "Cloud & Governance" in resp_list.text
 
+
+def test_wizard_redundante_internetanbindung(client, tmp_path):
+    """Prüft Erfassung einer redundanten 2. Internetleitung im Wizard (ISSUE-003)."""
+    auftrag = Auftrag(
+        id="proj-backup-wan-test",
+        kunde="Backup WAN Kunde",
+        bezeichnung="Test Backup WAN",
+        aktive_bausteine=[],
+    )
+    storage.save_auftrag(auftrag)
+
+    # 1. Wizard initialisieren
+    client.post("/auftrag/proj-backup-wan-test/wizard/init", follow_redirects=True)
+
+    # 2. Schritt 1: Auftragsgrunddaten
+    client.post(
+        "/auftrag/proj-backup-wan-test/wizard/step/1",
+        data={"kunde": "Backup WAN Kunde", "bezeichnung": "Test Backup WAN"},
+        follow_redirects=True,
+    )
+
+    # 3. Schritt 2: Standort-Grunddaten
+    client.post(
+        "/auftrag/proj-backup-wan-test/wizard/step/2",
+        data={"bezeichnung": "Hauptsitz Köln", "anzahl_user": "30"},
+        follow_redirects=True,
+    )
+
+    # 4. Schritt 3: Internetanbindung mit redundanter 2. Leitung
+    resp_step3 = client.post(
+        "/auftrag/proj-backup-wan-test/wizard/step/3",
+        data={
+            "hat_internetanbindung": "ja",
+            "anbieter": "Deutsche Telekom",
+            "art": "Glasfaser_FTTH",
+            "bandbreite_down": "500",
+            "bandbreite_up": "200",
+            "feste_ip_vorhanden": "ja",
+            "redundante_anbindung": "ja",
+            "anbieter_backup": "Vodafone LTE",
+            "art_backup": "Mobilfunk_LTE",
+            "bandbreite_down_backup": "50",
+            "bandbreite_up_backup": "10",
+            "failover_verfahren": "Automatisch",
+        },
+        follow_redirects=True,
+    )
+    assert resp_step3.status_code == 200
+
+    # 5. Zusammenfassung prüfen: Key Facts zeigen Backup-Leitung
+    resp_zusammenfassung = client.get("/auftrag/proj-backup-wan-test/wizard/zusammenfassung")
+    assert resp_zusammenfassung.status_code == 200
+    assert "Vodafone LTE" in resp_zusammenfassung.text
+    assert "Backup-Leitung" in resp_zusammenfassung.text
+
+    # 6. Wizard abschließen
+    resp_abschliessen = client.post("/auftrag/proj-backup-wan-test/wizard/abschliessen", follow_redirects=False)
+    assert resp_abschliessen.status_code == 303
+
+    # 7. Standort & Anbindungen prüfen
+    standorte = storage.list_standorte("proj-backup-wan-test")
+    assert len(standorte) == 1
+    assert len(standorte[0].anbindungen) == 2
+
+    primary = standorte[0].anbindungen[0]
+    assert primary.anbieter == "Deutsche Telekom"
+    assert primary.art == "Glasfaser_FTTH"
+    assert primary.ist_backup_leitung == "nein"
+    assert primary.redundante_anbindung == "ja"
+
+    backup = standorte[0].anbindungen[1]
+    assert backup.anbieter == "Vodafone LTE"
+    assert backup.art == "Mobilfunk_LTE"
+    assert backup.bandbreite_down_mbit == 50.0
+    assert backup.bandbreite_up_mbit == 10.0
+    assert backup.ist_backup_leitung == "ja"
+    assert backup.failover_verfahren == "Automatisch"
+
+    # 8. Topologie prüfen
+    from app.services.topology_generator import generate_network_topology_mermaid
+    from app.models.technik import TechnikObjekt
+    fw = TechnikObjekt(id="fw-1", typ="firewall", bezeichnung="Firewall", auftrag_id="proj-backup-wan-test", standort_id=standorte[0].id)
+    mermaid = generate_network_topology_mermaid(standorte[0], [fw])
+    assert "Deutsche Telekom" in mermaid
+    assert "Vodafone LTE" in mermaid
+    assert "[Backup-Leitung]" in mermaid
+    assert "Backup WAN" in mermaid
+
+
+def test_wizard_backup_anbindung_ueberschreibt_keine_echte_zweite_leitung(client, tmp_path):
+    """Regression: eine bereits vorhandene, echte 2. Anbindung (z. B. per Standort-
+    Formular bei einem Großkunden angelegt, unabhängig vom Wizard-Backup-Konzept)
+    darf beim erneuten Speichern der Wizard-Backup-Leitung nicht per Index
+    überschrieben werden (nur per ist_backup_leitung-Flag identifizieren)."""
+    auftrag = Auftrag(
+        id="proj-multi-anbindung",
+        kunde="Großkunde Mehrere Leitungen",
+        bezeichnung="Test Mehrfachanbindung",
+        aktive_bausteine=[],
+    )
+    storage.save_auftrag(auftrag)
+
+    standort = Standort(
+        id="standort-multi",
+        auftrag_id="proj-multi-anbindung",
+        bezeichnung="Hauptsitz",
+        anzahl_user=200,
+        anbindungen=[
+            Internetanbindung(anbieter="Telekom Standleitung A", art="Standleitung_MPLS", ist_backup_leitung="nein"),
+            Internetanbindung(anbieter="Vodafone Standleitung B", art="Standleitung_MPLS", ist_backup_leitung="nein"),
+        ],
+    )
+    storage.save_standort(standort)
+
+    client.post("/auftrag/proj-multi-anbindung/wizard/init", follow_redirects=True)
+    client.post(
+        "/auftrag/proj-multi-anbindung/wizard/step/1",
+        data={"kunde": "Großkunde Mehrere Leitungen", "bezeichnung": "Test Mehrfachanbindung"},
+        follow_redirects=True,
+    )
+    client.post(
+        "/auftrag/proj-multi-anbindung/wizard/step/2",
+        data={"bezeichnung": "Hauptsitz", "anzahl_user": "200"},
+        follow_redirects=True,
+    )
+    client.post(
+        "/auftrag/proj-multi-anbindung/wizard/step/3",
+        data={
+            "hat_internetanbindung": "ja",
+            "anbieter": "Telekom Standleitung A",
+            "art": "Standleitung_MPLS",
+            "redundante_anbindung": "ja",
+            "anbieter_backup": "LTE Failover",
+            "art_backup": "Mobilfunk_LTE",
+            "bandbreite_down_backup": "50",
+            "bandbreite_up_backup": "10",
+            "failover_verfahren": "Automatisch",
+        },
+        follow_redirects=True,
+    )
+    resp = client.post("/auftrag/proj-multi-anbindung/wizard/abschliessen", follow_redirects=False)
+    assert resp.status_code == 303
+
+    standorte = storage.list_standorte("proj-multi-anbindung")
+    anbindungen = standorte[0].anbindungen
+    anbieter = {a.anbieter for a in anbindungen}
+
+    # Die echte zweite Leitung (Vodafone Standleitung B) darf nicht durch die
+    # Wizard-Backup-Leitung verdrängt worden sein.
+    assert "Vodafone Standleitung B" in anbieter
+    assert "LTE Failover" in anbieter
+
+    backup_leitungen = [a for a in anbindungen if a.ist_backup_leitung == "ja"]
+    assert len(backup_leitungen) == 1
+    assert backup_leitungen[0].anbieter == "LTE Failover"
 

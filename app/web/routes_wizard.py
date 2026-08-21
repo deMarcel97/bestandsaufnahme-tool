@@ -135,6 +135,8 @@ def build_wizard_step_summaries(progress: WizardProgress) -> List[Dict[str, Any]
                 if d.get("bandbreite_down"): key_facts.append({"label": "Bandbreite", "val": f"{d.get('bandbreite_down')} Down / {d.get('bandbreite_up', '')} Up Mbit/s"})
                 if d.get("feste_ip_vorhanden"): key_facts.append({"label": "Feste IP", "val": format_field_val(d["feste_ip_vorhanden"])})
                 if d.get("redundante_anbindung"): key_facts.append({"label": "Redundanz", "val": format_field_val(d["redundante_anbindung"])})
+                if d.get("redundante_anbindung") == "ja" and d.get("anbieter_backup"):
+                    key_facts.append({"label": "Backup-Leitung", "val": f"{d['anbieter_backup']} ({format_field_val(d.get('art_backup', ''))})"})
             elif step_type == "firewall":
                 ger = f"{d.get('hersteller', '')} {d.get('modell', '')}".strip()
                 if ger: key_facts.append({"label": "Modell", "val": ger})
@@ -590,12 +592,49 @@ def wizard_abschliessen(auftrag_id: str):
             bandbreite_down_mbit=down,
             bandbreite_up_mbit=up,
             feste_ip=d3.get("feste_ip_vorhanden") or "unbekannt",
+            ist_backup_leitung="nein",
             redundante_anbindung=d3.get("redundante_anbindung") or "nein",
         )
         if not standort.anbindungen:
             standort.anbindungen.append(anbindung)
         else:
             standort.anbindungen[0] = anbindung
+
+        # Backup-Leitung erfassen / aktualisieren oder entfernen
+        if d3.get("redundante_anbindung") == "ja":
+            down_b = 0.0
+            up_b = 0.0
+            try:
+                if d3.get("bandbreite_down_backup"):
+                    down_b = float(str(d3["bandbreite_down_backup"]).replace(",", "."))
+            except ValueError:
+                pass
+            try:
+                if d3.get("bandbreite_up_backup"):
+                    up_b = float(str(d3["bandbreite_up_backup"]).replace(",", "."))
+            except ValueError:
+                pass
+
+            backup_anbindung = Internetanbindung(
+                anbieter=d3.get("anbieter_backup", "").strip(),
+                art=d3.get("art_backup") or "Mobilfunk_LTE",
+                bandbreite_down_mbit=down_b,
+                bandbreite_up_mbit=up_b,
+                feste_ip="unbekannt",
+                ist_backup_leitung="ja",
+                failover_verfahren=d3.get("failover_verfahren") or "Automatisch",
+                redundante_anbindung="ja",
+            )
+            existing_backup_idx = next(
+                (i for i, a in enumerate(standort.anbindungen) if a.ist_backup_leitung == "ja"),
+                None,
+            )
+            if existing_backup_idx is not None:
+                standort.anbindungen[existing_backup_idx] = backup_anbindung
+            else:
+                standort.anbindungen.append(backup_anbindung)
+        else:
+            standort.anbindungen = [a for a in standort.anbindungen if a.ist_backup_leitung != "ja"]
 
     # Standort speichern
     storage.save_standort(standort)

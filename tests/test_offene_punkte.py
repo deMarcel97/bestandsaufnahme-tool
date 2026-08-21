@@ -154,3 +154,41 @@ def test_offene_punkte_respects_sichtbar_wenn():
         assert "ha_sync" not in fid.lower()
         assert "ha_heartbeat" not in fid.lower()
 
+
+def test_calculate_progress_counts_all_visible_fields():
+    """Prüft, dass calculate_progress alle sichtbaren Felder zählt und nicht nur Pflichtfelder (ISSUE-004)."""
+    from app.services.progress import progress_service
+
+    # 1. Wizard-Teilerfassung: Firewall mit nur wenigen Feldern
+    fw_wizard = TechnikObjekt(
+        id="fw-wiz-1",
+        auftrag_id="auf-1",
+        typ="firewall",
+        bezeichnung="FortiGate 60F",
+        erfassungsstatus="teilweise",
+        daten={
+            "hersteller": "Fortinet",
+            "modell_fortinet": "FortiGate 60F",
+            "hardware_alter": "unter_3_jahre",
+            "wartungsvertrag_vorhanden": "ja",
+            "ips_aktiv": "ja",
+        },
+    )
+
+    prog = progress_service.calculate_progress(["firewall"], [fw_wizard])
+    assert "firewall" in prog
+    fw_prog = prog["firewall"]
+
+    # Gesamt darf nicht nur 1 sein (Pflichtfeld), sondern muss alle sichtbaren Felder umfassen
+    assert fw_prog["gesamt"] >= 20
+    assert fw_prog["ausgefuellt"] == 5
+    # Prozentsatz muss realistisch unter 100% liegen (z. B. 16.1%)
+    assert 0.0 < fw_prog["prozent"] < 100.0
+
+    # 2. Leerzustand
+    fw_empty = TechnikObjekt(id="fw-empty", auftrag_id="auf-1", typ="firewall", bezeichnung="FW", daten={})
+    prog_empty = progress_service.calculate_progress(["firewall"], [fw_empty])
+    assert prog_empty["firewall"]["prozent"] == 0.0
+    assert prog_empty["firewall"]["ausgefuellt"] == 0
+
+
