@@ -1,0 +1,115 @@
+schema_version: 1
+regeln:
+  # --- Feature: Conditional Access ---
+  - id: m365-lizenz-conditional-access-fehlt
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: m365_lizenzen
+          operator: nicht_in_liste
+          wert: [bp, me3, me5, entp1, entp2]
+    schweregrad: hoch
+    befund: Aktuelle M365-Lizenzierung bietet keinen bedingten Zugriff (Conditional Access)
+    risiko: Kunde benötigt bedingten Zugriff (z. B. MFA nur bei Risiko-Login, Geo-Blocking, Geräte-Compliance als Voraussetzung), der aktuelle Lizenzplan enthält aber nur Entra ID Free.
+    empfehlung: Lizenz-Upgrade auf einen Plan mit Entra ID P1 prüfen (Business Premium, Microsoft 365 E3, Microsoft 365 E5, oder Entra ID P1 Standalone).
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Lizenz-Upgrade für Conditional-Access-Fähigkeit
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
+
+  - id: m365-conditional-access-fehlt
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: m365_lizenzen
+          operator: in_liste
+          wert: [bp, me3, me5, entp1, entp2]
+        - feld: conditional_access_regelwerke
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Keine Richtlinien für bedingten Zugriff (Conditional Access) konfiguriert
+    risiko: Entra ID P1/P2 ist lizenziert, aber keine Conditional-Access-Richtlinien sind aktiv bzw. konfiguriert (nur Security Defaults aktiv). Zugriffe aus beliebigen Ländern oder von unsicheren Geräten werden nicht eingeschränkt oder geprüft.
+    empfehlung: Conditional Access Richtlinien (z. B. Geo-Blocking, Compliance-Geräte-Pflicht) im Entra ID Admin Center definieren.
+    referenz: "BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Konfiguration von Conditional Access Richtlinien im Entra ID Admin Center
+      kosten_richtwert: 0
+      aufwand_richtwert: 6
+
+  # --- Feature: Defender for Office 365 (Plan 1) ---
+  - id: m365-lizenz-defender-o365-fehlt
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: m365_lizenzen
+          operator: nicht_in_liste
+          wert: [bp, oe3, me3, oe5, me5]
+    schweregrad: hoch
+    befund: Aktuelle M365-Lizenzierung bietet keinen erweiterten E-Mail-Schutz (Defender for Office 365)
+    risiko: Schutz vor Phishing-Links und schädlichen Anhängen ist gefordert, der aktuelle Plan bietet aber nur den Exchange-Online-Protection-Basisschutz.
+    empfehlung: Lizenz-Upgrade auf Business Premium bzw. (Office 365/Microsoft 365) E3 oder höher prüfen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Lizenz-Upgrade für Defender for Office 365
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
+
+  - id: m365-defender-o365-fehlt
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: m365_lizenzen
+          operator: in_liste
+          wert: [bp, oe3, me3, oe5, me5]
+        - feld: defender_for_office365_aktiv
+          operator: gleich
+          wert: "nein"
+    schweregrad: hoch
+    befund: Microsoft Defender for Office 365 (Safe Links / Safe Attachments) ist nicht konfiguriert
+    risiko: Defender for Office 365 Plan 1 ist lizenziert, Safe Links/Safe Attachments Policies sind aber nicht aktiv bzw. nicht auf alle Nutzer angewendet. Schadhafte Phishing-Links und bösartige E-Mail-Anhänge werden nicht dynamisch geprüft.
+    empfehlung: Anti-Phishing- und Safe-Links-/Safe-Attachments-Policies aktivieren.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Einrichtung von Defender for Office 365 Safe Links & Safe Attachments Policies
+      kosten_richtwert: 0
+      aufwand_richtwert: 3
+
+  # --- Feature: Purview Audit (Standard) ---
+  - id: m365-lizenz-audit-fehlt
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: m365_lizenzen
+          operator: nicht_in_liste
+          wert: [bp, me1, oe3, me3, oe5, me5]
+    schweregrad: mittel
+    befund: Aktuelle M365-Lizenzierung bietet keinen Zugriff auf Audit-Logging (Purview Compliance Center)
+    risiko: Nachvollziehbarkeit von Admin-/Nutzeraktivitäten ist gefordert (z. B. für Incident-Response), aber Business Basic/Standard haben keinen Zugriff auf das Purview Compliance Center und damit faktisch keine durchsuchbare Audit-Log-Oberfläche.
+    empfehlung: Lizenz-Upgrade auf Business Premium bzw. Microsoft 365 E1 oder höher prüfen.
+    referenz: ""
+    massnahme_vorschlag:
+      bezeichnung: Lizenz-Upgrade für Audit-Logging-Zugriff
+      kosten_richtwert: 0
+      aufwand_richtwert: 2
+
+  - id: m365-audit-log-deaktiviert
+    gilt_fuer: m365_security
+    bedingung:
+      alle:
+        - feld: m365_lizenzen
+          operator: in_liste
+          wert: [bp, me1, oe3, me3, oe5, me5]
+        - feld: audit_logging_aktiv
+          operator: gleich
+          wert: "nein"
+    schweregrad: mittel
+    befund: M365 Unified Audit Logging ist nicht aktiviert
+    risiko: Audit Standard ist lizenziert, Suche/Auswertung erfolgt aber nicht regelmäßig bzw. es sind keine Alerting-Policies eingerichtet. Im Falle eines Sicherheitsvorfalls sind forensische Untersuchungen und Nachweise erschwert.
+    empfehlung: Unified Audit Logging aktivieren und Aufbewahrungsfristen prüfen.
+    referenz: "DSGVO / BSI IT-Grundschutz"
+    massnahme_vorschlag:
+      bezeichnung: Aktivierung des Unified Audit Loggings im Microsoft Purview Compliance Portal
+      kosten_richtwert: 0
+      aufwand_richtwert: 2

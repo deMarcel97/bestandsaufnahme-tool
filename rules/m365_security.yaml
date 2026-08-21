@@ -68,40 +68,6 @@ regeln:
       kosten_richtwert: 1500
       aufwand_richtwert: 6
 
-  - id: m365-conditional-access-fehlt
-    gilt_fuer: m365_security
-    bedingung:
-      alle:
-        - feld: conditional_access_regelwerke
-          operator: gleich
-          wert: "nein"
-    schweregrad: mittel
-    befund: Keine Richtlinien für bedingten Zugriff (Conditional Access) konfiguriert
-    risiko: Zugriffe aus beliebigen Ländern oder von unsicheren Geräten werden nicht eingeschränkt oder geprüft.
-    empfehlung: Conditional Access Richtlinien (z.B. Geo-Blocking, Compliance-Geraete-Pflicht) definieren.
-    referenz: "BSI IT-Grundschutz"
-    massnahme_vorschlag:
-      bezeichnung: Konfiguration von Conditional Access Richtlinien im Entra ID Admin Center
-      kosten_richtwert: 0
-      aufwand_richtwert: 6
-
-  - id: m365-defender-o365-fehlt
-    gilt_fuer: m365_security
-    bedingung:
-      alle:
-        - feld: defender_for_office365_aktiv
-          operator: gleich
-          wert: "nein"
-    schweregrad: mittel
-    befund: Microsoft Defender for Office 365 (Safe Links / Safe Attachments) ist nicht konfiguriert
-    risiko: Schadaktive Phishing-Links und bösartige E-Mail-Anhänge werden nicht dynamisch gecrawlt/geprüft.
-    empfehlung: Anti-Phishing und Safe Links / Safe Attachments Policies aktivieren.
-    referenz: ""
-    massnahme_vorschlag:
-      bezeichnung: Einrichtung von Defender for Office 365 Safe Links & Safe Attachments Policies
-      kosten_richtwert: 0
-      aufwand_richtwert: 3
-
   - id: m365-too-many-global-admins
     gilt_fuer: m365_security
     bedingung:
@@ -118,23 +84,6 @@ regeln:
       bezeichnung: Bereinigung der Administratorrechte und Umstellung auf RBAC im Tenant
       kosten_richtwert: 0
       aufwand_richtwert: 4
-
-  - id: m365-audit-log-deaktiviert
-    gilt_fuer: m365_security
-    bedingung:
-      alle:
-        - feld: audit_logging_aktiv
-          operator: gleich
-          wert: "nein"
-    schweregrad: mittel
-    befund: M365 Unified Audit Logging ist nicht aktiviert
-    risiko: Im Falle eines Sicherheitsvorfalls sind forensische Untersuchungen und Nachweise unmöglich.
-    empfehlung: Unified Audit Logging aktivieren und Aufbewahrungsfristen prüfen.
-    referenz: "DSGVO / BSI IT-Grundschutz"
-    massnahme_vorschlag:
-      bezeichnung: Aktivierung des Unified Audit Loggings im Microsoft Purview Compliance Portal
-      kosten_richtwert: 0
-      aufwand_richtwert: 2
 
   - id: m365-dokumentation-fehlt
     gilt_fuer: m365_security
