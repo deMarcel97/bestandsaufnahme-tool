@@ -152,7 +152,7 @@ class ProgressService:
                             standort_id=obj.standort_id,
                             objekt_typ=obj.typ
                         ))
-                    elif feldef.get("regelrelevant", False) and (val is None or val == "" or val == "unbekannt"):
+                    elif feldef.get("regelrelevant", False) and (val is None or val == "" or val == [] or val == "unbekannt"):
                         prio = "kritisch" if fname in KRITISCHE_FELDER else "wichtig"
                         consolidated.append(OffenerPunktItem(
                             id=f"op-rr-{obj.id}-{fname}",

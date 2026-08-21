@@ -43,6 +43,43 @@ abschnitte:
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
+      - name: m365_lizenzen
+        label: Eingesetzte M365-Lizenzen (Mehrfachauswahl, alle im Tenant aktiven SKUs)
+        typ: mehrfachauswahl
+        pflicht: false
+        regelrelevant: true
+        vertraulichkeit: kundentauglich
+        werte:
+          - wert: bb
+            label: Microsoft 365 Business Basic
+          - wert: bs
+            label: Microsoft 365 Business Standard
+          - wert: bp
+            label: Microsoft 365 Business Premium
+          - wert: me1
+            label: Microsoft 365 E1
+          - wert: oe3
+            label: Office 365 E3
+          - wert: me3
+            label: Microsoft 365 E3
+          - wert: oe5
+            label: Office 365 E5
+          - wert: me5
+            label: Microsoft 365 E5
+          - wert: exop1
+            label: Exchange Online Plan 1 (Standalone)
+          - wert: exop2
+            label: Exchange Online Plan 2 (Standalone)
+          - wert: entp1
+            label: Microsoft Entra ID P1 (Standalone)
+          - wert: entp2
+            label: Microsoft Entra ID P2 (Standalone)
+          - wert: dfb
+            label: Microsoft Defender for Business (Standalone)
+          - wert: dfep1
+            label: Microsoft Defender for Endpoint Plan 1 (Standalone)
+          - wert: dfep2
+            label: Microsoft Defender for Endpoint Plan 2 (Standalone)
       - name: hybrid_setup
         label: Hybrid-Einrichtung (Entra ID Connect mit lokalem Active 
           Directory)

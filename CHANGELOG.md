@@ -4,6 +4,19 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.38] - 2026-08-21
+
+### Added
+- **M365-Lizenzmatrix: Fundament (Lizenzfeld, Regel-Generator, Fix Tier-Blindheit) (#408)**:
+  - Neues Mehrfachauswahl-Feld `m365_lizenzen` im Schema `m365_security` mit allen 15 gängigen M365/O365- und Standalone-Lizenz-SKUs.
+  - Lizenz-bewusste Regeln in `rules/m365_lizenzmatrix.yaml` für die 3 Pilot-Features: Conditional Access (`conditional_access`), Defender for Office 365 (`defender_o365_p1`) und Purview Audit Standard (`audit_standard`).
+  - Trennung in Lizenz-Fehlt-Trigger (Advisory/Upgrade) und Fehlkonfigurations-Trigger (lizenziert, aber nicht aktiv/konfiguriert).
+  - Veraltete tier-blinde Regeln in `rules/m365_security.yaml` entfernt.
+  - Schweregrad von Defender for Office 365 bei Fehlkonfiguration von "mittel" auf "hoch" angehoben.
+
+### Fixed
+- **Unbeantwortete Mehrfachauswahl-Felder erzeugten falsche Findings (#408)**: Ein nie beantwortetes `m365_lizenzen`-Feld wird als leere Liste gespeichert. Die Regel-Engine wertete das als "Lizenz nachweislich nicht vorhanden" und meldete eine bestätigte Unterlizenzierung, statt die fehlende Angabe als offenen Punkt zu führen. Leere Listen gelten jetzt in `ConditionEvaluator` und `ProgressService` als unbeantwortet.
+
 ## [2.7.37] - 2026-08-21
 
 ### Fixed
