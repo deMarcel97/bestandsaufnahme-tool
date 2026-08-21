@@ -1,0 +1,14 @@
+{# Erwartet `bewertung` im Kontext. Gemeinsame Gesamtbewertung-Kachel für
+   bewertung/index.html, auftrag/uebersicht.html und auftrag/detail.html —
+   ein Ort für die "Vorläufig"-Kennzeichnung, damit sie auf allen Seiten
+   konsistent erscheint (#403). #}
+<div class="kpi">
+  <div class="eyebrow">Gesamtbewertung</div>
+  <div class="kpi-value is-word">{% if bewertung.unter_50_prozent_warnung %}Vorläufig: {% endif %}{{ bewertung.gesamt_stufe_bezeichnung }}</div>
+  {% if bewertung.unter_50_prozent_warnung %}
+  <div style="margin-top:6px; margin-bottom:4px;">
+    <span class="badge badge-warning">Erfassungsstand: {{ [bewertung.feldabdeckung_prozent, bewertung.bausteinabdeckung_prozent] | min }} %</span>
+  </div>
+  {% endif %}
+  <div class="kpi-sub tnum">{{ bewertung.gesamt_prozent }} % von 100</div>
+</div>
