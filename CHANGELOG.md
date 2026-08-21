@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.40] - 2026-08-21
+
+### Removed
+- **`HANDOFF_antigravity.md` und `HANDOFF_claude_code.md` aus dem Git-Tracking entfernt (#415)**: Beide dupliziert den bereits etablierten privaten Handoff-Mechanismus im Geschwisterordner `001_bestandsaufnahme_tool-notizen/` (`RESUME.md`, `TODO.md`, `ARBEITSPROTOKOLL.md`) — gleiches Muster wie beim historischen Verweis auf `TODO.md`/`ARBEITSPROTOKOLL.md` (#327). Beide Dateien waren zudem bereits veraltet (nannten längst erledigte Karten als offen). Bleiben nur noch in der Git-Historie sichtbar, unkritisch (kein Secret-Inhalt), gleiche Begründung wie bei #398.
+
 ## [2.7.39] - 2026-08-21
 
 ### Fixed
