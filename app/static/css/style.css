@@ -42,6 +42,7 @@
   /* Surface-Variablen für Card/Dialog-Hintergründe */
   --bg-surface: rgba(255, 255, 255, 0.5);
   --bg-surface-elevated: #f9fafb;
+}
 
 html[data-theme="dark"] {
   color-scheme: dark;

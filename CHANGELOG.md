@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.39] - 2026-08-21
+
+### Fixed
+- **Dark Mode global wirkungslos (#413)**: In `app/static/css/style.css` fehlte seit dem card-379-Fix die schließende `}` des `:root`-Blocks. Der komplette `html[data-theme="dark"]`-Block wurde dadurch vom CSS-Parser als eine einzige ungültige Deklaration verschluckt — Dark Mode ließ sich umschalten, hatte aber keine Wirkung mehr. Einzelne spätere Dialog-Sonderregeln griffen weiterhin isoliert, was im "Neuen Auftrag anlegen"-Dialog zu einem inkonsistenten Hell/Dunkel-Mischbild führte. Eine Zeile ergänzt, damit `:root` korrekt schließt und `html[data-theme="dark"]` wieder als eigene Regel geparst wird.
+
 ## [2.7.38] - 2026-08-21
 
 ### Added
