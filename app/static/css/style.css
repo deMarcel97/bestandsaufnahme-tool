@@ -770,9 +770,20 @@ input[type="checkbox"], input[type="radio"] {
 .dialog {
   width: 100%;
   max-width: 760px;
+  max-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
   background: var(--panel);
   border: 1px solid var(--rule);
   box-shadow: 0 12px 32px rgba(45, 43, 43, 0.28);
+  overflow: hidden;
+}
+.dialog form {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
 }
 .dialog-title {
   display: flex;
@@ -784,9 +795,22 @@ input[type="checkbox"], input[type="radio"] {
   font-size: 20px;
   font-weight: 800;
   letter-spacing: -0.01em;
+  flex-shrink: 0;
 }
-.dialog-body { padding: 24px; }
-.dialog-actions { display: flex; gap: 10px; padding: 16px 24px; border-top: 1px solid var(--line); }
+.dialog-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.dialog-actions {
+  display: flex;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--line);
+  flex-shrink: 0;
+  background: var(--panel);
+}
 .btn-icon { padding: 7px 10px; }
 
 /* ── Bewertungsskala ─────────────────────────────────────────────────── */
@@ -1057,6 +1081,8 @@ td.top { vertical-align: top; }
   h1 { font-size: 30px; }
   header { padding: 0 16px; }
   .workspace { padding: 20px 16px 60px; }
+  .dialog-backdrop { padding: 20px 12px; }
+  .dialog { max-height: calc(100vh - 40px); }
 }
 
 /* ── Netzwerktopologie & Visualisierung (#324) ── */

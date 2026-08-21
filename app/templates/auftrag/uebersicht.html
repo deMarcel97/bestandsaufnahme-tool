@@ -60,11 +60,7 @@
 
     <div class="kpi-band">
       <div class="kpi-grid">
-        <div class="kpi">
-          <div class="eyebrow">Gesamtbewertung</div>
-          <div class="kpi-value is-word">{{ bewertung.gesamt_stufe_bezeichnung }}</div>
-          <div class="kpi-sub tnum">{{ bewertung.gesamt_prozent }} % von 100</div>
-        </div>
+        {% include "_gesamtbewertung_kpi.html" %}
         <div class="kpi">
           <div class="eyebrow">Feldabdeckung</div>
           <div class="kpi-value">{{ bewertung.feldabdeckung_prozent }} %</div>
