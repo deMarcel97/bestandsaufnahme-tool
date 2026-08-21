@@ -4,6 +4,18 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.37] - 2026-08-21
+
+### Fixed
+- **Netzwerktopologie: Platzhalter-Werte in Labels bereinigt, echte Anbindungsdaten auf Kanten (#402)**:
+  - Platzhalter wie "sonstige"/"unbekannt"/"diverse" werden aus Hersteller-/Modell-Labels gefiltert (`clean_brand_model`), keine redundanten Label-Zeilen mehr im Netzplan.
+  - WAN-/Firewall-/Switch-Kanten zeigen echte erfasste Anbindungsdaten (Anschlussart, LAG-Typ, Geschwindigkeit) statt hartcodierter Platzhaltertexte ("Uplink"/"Server LAN"/"LAN").
+- **Wizard: redundante 2. Internetleitung erfassbar (#402)**:
+  - Schritt 3 ("Internetanbindung") erfasst jetzt Anbieter, Anschlussart, Bandbreite und Failover-Verfahren einer redundanten Backup-Leitung, sobald "Ja (Fallback vorhanden)" gewählt wird. Fließt als eigenes Anbindungs-Objekt in Standort und Topologie ein.
+- **Fortschrittsanzeige widersprach sich (#402)**: Sidebar-Prozentanzeige zählte bisher nur Pflichtfelder und stand nach einem Wizard-Durchlauf sofort auf 100 %, obwohl die Objekttabelle "teilweise" zeigte. Zählt jetzt alle sichtbaren Schema-Felder, Anzeige ist realistisch (~40-50 % nach einem schnellen Durchlauf).
+- **Bewertungskachel: Vorläufig-Hinweis bei unvollständiger Erfassung (#403)**: Die KPI-Kachel "Gesamtbewertung" zeigt bei niedrigem Erfassungsstand jetzt "Vorläufig: <Stufe>" mit Badge "Erfassungsstand: X %" direkt in der Kachel statt nur in einer kleinen Box darunter — konsistent auf allen drei Seiten (Bewertung, Auftrag-Übersicht, Auftrag-Detail).
+- **Dialog-Buttons außerhalb Viewport (#403)**: Lange Dialoge (z. B. "Neuen Auftrag anlegen") begrenzen jetzt ihre Höhe, der Dialog-Body scrollt intern, Titel und Aktions-Buttons bleiben immer sichtbar.
+
 ## [2.7.36] - 2026-08-19
 
 ### Fixed
