@@ -197,11 +197,55 @@
             </div>
             <div class="form-group">
               <label>Redundante 2. Anbindung vorhanden?</label>
-              <select name="redundante_anbindung" class="form-control">
+              <select name="redundante_anbindung" class="form-control" id="hat-redundante-anbindung">
                 <option value="nein" {% if step_data.get('redundante_anbindung') == 'nein' or not step_data.get('redundante_anbindung') %}selected{% endif %}>Nein</option>
                 <option value="ja" {% if step_data.get('redundante_anbindung') == 'ja' %}selected{% endif %}>Ja (Fallback vorhanden)</option>
                 <option value="unbekannt" {% if step_data.get('redundante_anbindung') == 'unbekannt' %}selected{% endif %}>Unbekannt</option>
               </select>
+            </div>
+          </div>
+          <div id="redundante-anbindung-details" style="{% if step_data.get('redundante_anbindung') != 'ja' %}display: none;{% endif %} margin-top: 16px; padding: 16px; border: 1px dashed #cbd5e1; border-radius: 6px; background-color: var(--bg-surface-elevated, #f8fafc);">
+            <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">Redundante 2. Internetanbindung (Backup / Fallback)</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Internetanbieter Backup (ISP)</label>
+                <input type="text" name="anbieter_backup" value="{{ step_data.get('anbieter_backup', '') }}" class="form-control" placeholder="z. B. Vodafone, Telekom, Starlink">
+              </div>
+              <div class="form-group">
+                <label>Anschlussart Backup</label>
+                <select name="art_backup" class="form-control">
+                  <option value="Mobilfunk_LTE" {% if step_data.get('art_backup') == 'Mobilfunk_LTE' or not step_data.get('art_backup') %}selected{% endif %}>Mobilfunk (LTE/4G)</option>
+                  <option value="Mobilfunk_5G" {% if step_data.get('art_backup') == 'Mobilfunk_5G' %}selected{% endif %}>Mobilfunk (5G)</option>
+                  <option value="DSL" {% if step_data.get('art_backup') == 'DSL' %}selected{% endif %}>VDSL / DSL</option>
+                  <option value="Glasfaser_FTTH" {% if step_data.get('art_backup') == 'Glasfaser_FTTH' %}selected{% endif %}>Glasfaser (FTTH)</option>
+                  <option value="Glasfaser_FTTB" {% if step_data.get('art_backup') == 'Glasfaser_FTTB' %}selected{% endif %}>Glasfaser (FTTB)</option>
+                  <option value="Kabel" {% if step_data.get('art_backup') == 'Kabel' %}selected{% endif %}>Kabel (DOCSIS)</option>
+                  <option value="Standleitung_MPLS" {% if step_data.get('art_backup') == 'Standleitung_MPLS' %}selected{% endif %}>Standleitung / MPLS</option>
+                  <option value="Starlink_Satellit" {% if step_data.get('art_backup') == 'Starlink_Satellit' %}selected{% endif %}>Starlink / Satellit</option>
+                  <option value="Richtfunk" {% if step_data.get('art_backup') == 'Richtfunk' %}selected{% endif %}>Richtfunk</option>
+                  <option value="Sonstige" {% if step_data.get('art_backup') == 'Sonstige' %}selected{% endif %}>Sonstige</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Bandbreite Downstream Backup (Mbit/s)</label>
+                <input type="number" name="bandbreite_down_backup" value="{{ step_data.get('bandbreite_down_backup', '') }}" class="form-control" placeholder="z. B. 50">
+              </div>
+              <div class="form-group">
+                <label>Bandbreite Upstream Backup (Mbit/s)</label>
+                <input type="number" name="bandbreite_up_backup" value="{{ step_data.get('bandbreite_up_backup', '') }}" class="form-control" placeholder="z. B. 10">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Failover-Verfahren</label>
+                <select name="failover_verfahren" class="form-control">
+                  <option value="Automatisch" {% if step_data.get('failover_verfahren') == 'Automatisch' or not step_data.get('failover_verfahren') %}selected{% endif %}>Automatisch (Failover / SD-WAN)</option>
+                  <option value="Manuell" {% if step_data.get('failover_verfahren') == 'Manuell' %}selected{% endif %}>Manuell (Umstecken / Router-Tausch)</option>
+                  <option value="Unbekannt" {% if step_data.get('failover_verfahren') == 'Unbekannt' %}selected{% endif %}>Unbekannt</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -810,6 +854,7 @@
 // Dynamische Detail-Umschaltung
 const toggleConfig = [
   { selectId: 'hat-internet', containerId: 'internet-details' },
+  { selectId: 'hat-redundante-anbindung', containerId: 'redundante-anbindung-details' },
   { selectId: 'hat-firewall', containerId: 'firewall-details' },
   { selectId: 'hat-switch', containerId: 'switch-details' },
   { selectId: 'hat-ap', containerId: 'ap-details' },

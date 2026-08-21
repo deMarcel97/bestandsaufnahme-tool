@@ -25,7 +25,7 @@ def _is_field_visible(sichtbar_cond: Any, data_dict: Dict[str, Any]) -> bool:
 class ProgressService:
     def calculate_progress(self, aktive_bausteine: List[str], objekte: List[TechnikObjekt]) -> Dict[str, Dict[str, Any]]:
         """
-        Calculates completion progress (% of filled mandatory fields) per active block type,
+        Calculates completion progress (% of filled visible fields) per active block type,
         taking section and field visibility into account.
         """
         result = {}
@@ -45,7 +45,7 @@ class ProgressService:
                 }
                 continue
 
-            total_mand = 0
+            total_fields = 0
             filled_count = 0
 
             for obj in typ_objekte:
@@ -55,18 +55,17 @@ class ProgressService:
                     for feldef in abschnitt.get("felder", []):
                         if not _is_field_visible(feldef.get("sichtbar_wenn"), obj.daten):
                             continue
-                        if feldef.get("pflicht", False):
-                            total_mand += 1
-                            val = obj.daten.get(feldef.get("name"))
-                            if val is not None and val != "" and val != "unbekannt" and val != "rueckfrage":
-                                filled_count += 1
+                        total_fields += 1
+                        val = obj.daten.get(feldef.get("name"))
+                        if val is not None and val != "" and val != "unbekannt" and val != "rueckfrage":
+                            filled_count += 1
 
-            pct = (filled_count / total_mand * 100.0) if total_mand > 0 else 100.0
+            pct = (filled_count / total_fields * 100.0) if total_fields > 0 else 100.0
             result[typ] = {
                 "titel": schema.get("bezeichnung_anzeige", typ.capitalize()),
                 "prozent": round(pct, 1),
                 "ausgefuellt": filled_count,
-                "gesamt": total_mand
+                "gesamt": total_fields
             }
 
         return result

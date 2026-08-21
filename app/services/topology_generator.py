@@ -18,6 +18,38 @@ from app.models.standort import Standort
 from app.models.technik import TechnikObjekt
 
 
+_PLACEHOLDERS = {"sonstige", "sonstiges", "unbekannt", "diverse", "n/a", "none", "-", ""}
+
+
+def _is_placeholder(val: Any) -> bool:
+    """Prüft, ob ein Feldwert ein Platzhalter oder leer ist."""
+    if val is None:
+        return True
+    s = str(val).strip()
+    return not s or s.lower() in _PLACEHOLDERS
+
+
+def clean_brand_model(hersteller: Optional[str], modell: Optional[str]) -> str:
+    """
+    Bereinigt Hersteller- und Modellangaben für Diagramm-Labels.
+    Filtert Platzhalter wie 'sonstige', 'unbekannt', 'diverse', 'n/a' heraus.
+    Gibt z. B. 'Fortinet 100F', 'FortiGate 100F' (wenn hersteller 'sonstige'), oder '' zurück.
+    """
+    h = "" if _is_placeholder(hersteller) else str(hersteller).strip()
+    m = "" if _is_placeholder(modell) else str(modell).strip()
+
+    if h and m:
+        # Falls Modell bereits den Herstellernamen enthält (mit oder ohne Leerzeichen dazwischen)
+        if m.lower().startswith(h.lower()):
+            return m
+        return f"{h} {m}".strip()
+    elif h:
+        return h
+    elif m:
+        return m
+    return ""
+
+
 def sanitize_mermaid_id(raw_id: str) -> str:
     """Bereinigt einen Bezeichner für gültige Mermaid-Knoten-IDs."""
     if not raw_id:
@@ -111,11 +143,12 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
     usv_objs = [o for o in objekte if o.typ == "usv"]
 
     anbindungen = standort.anbindungen if (standort and standort.anbindungen) else []
-    # Phantom-Backup-ISP vermeiden: wenn redundante_anbindung != ja, Backup-Leitungen nicht rendern
+    # Phantom-Backup-ISP vermeiden: Backup-Leitungen nur rendern, wenn sie auch als redundant markiert sind
     if anbindungen:
-        hat_redundanz = any(getattr(a, "redundante_anbindung", "nein") == "ja" for a in anbindungen)
-        if not hat_redundanz:
-            anbindungen = [a for a in anbindungen if a.ist_backup_leitung != "ja"]
+        anbindungen = [
+            a for a in anbindungen
+            if not (a.redundante_anbindung == "nein" and a.ist_backup_leitung == "ja")
+        ]
 
     # Prüfen, ob überhaupt Netzwerk- oder Infrastrukturkomponenten vorliegen
     has_any_data = bool(anbindungen or firewalls or switches or servers or storages or vms or aps or client_objs or (standort and standort.anzahl_user > 0))
@@ -150,6 +183,9 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
         wan_nodes.append((nid, False))
     lines.append("    end")
 
+    # Lookup-Map für Node-ID -> TechnikObjekt
+    node_to_obj: Dict[str, TechnikObjekt] = {}
+
     # 2. Perimeter (Firewall)
     fw_nodes: List[str] = []
     if firewalls:
@@ -157,14 +193,16 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
         for fw in firewalls:
             nid = sanitize_mermaid_id(f"fw_{fw.id}")
             fw_nodes.append(nid)
+            node_to_obj[nid] = fw
             hersteller = fw.daten.get("hersteller") or ""
             modell = fw.daten.get("modell") or ""
             aufbau = fw.daten.get("aufbau") or ""
             
             lbl_parts = [f"<b>{sanitize_mermaid_label(fw.bezeichnung or 'Firewall')}</b>"]
-            if hersteller or modell:
-                lbl_parts.append(sanitize_mermaid_label(f"{hersteller} {modell}".strip()))
-            if aufbau and aufbau != "unbekannt":
+            bm = clean_brand_model(hersteller, modell)
+            if bm:
+                lbl_parts.append(sanitize_mermaid_label(bm))
+            if aufbau and not _is_placeholder(aufbau):
                 aufbau_txt = "HA-Cluster (Aktiv/Passiv)" if aufbau == "Cluster_aktiv_passiv" else "HA-Cluster (Aktiv/Aktiv)" if aufbau == "Cluster_aktiv_aktiv" else aufbau
                 lbl_parts.append(f"<i>{sanitize_mermaid_label(aufbau_txt)}</i>")
             
@@ -186,6 +224,7 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
         for sw in core_switches:
             nid = sanitize_mermaid_id(f"sw_core_{sw.id}")
             core_nodes.append(nid)
+            node_to_obj[nid] = sw
             hersteller = sw.daten.get("hersteller") or ""
             modell = sw.daten.get("modell") or ""
             speed = sw.daten.get("geschwindigkeit") or ""
@@ -193,12 +232,13 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
             cluster = sw.daten.get("cluster_verbund") == "ja"
             
             lbl_parts = [f"<b>{sanitize_mermaid_label(sw.bezeichnung or 'Core Switch')}</b>"]
-            details = f"{hersteller} {modell}".strip()
+            bm = clean_brand_model(hersteller, modell)
+            details = bm
             if ports:
-                details += f" ({ports} Ports)"
+                details = f"{details} ({ports} Ports)".strip() if details else f"({ports} Ports)"
             if details:
                 lbl_parts.append(sanitize_mermaid_label(details))
-            if speed and speed != "unbekannt":
+            if speed and not _is_placeholder(speed):
                 lbl_parts.append(f"Speed: {sanitize_mermaid_label(speed)}")
             if cluster:
                 lbl_parts.append("<i>Stack / Cluster-Verbund</i>")
@@ -213,6 +253,7 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
         for sw in access_switches:
             nid = sanitize_mermaid_id(f"sw_acc_{sw.id}")
             access_nodes.append(nid)
+            node_to_obj[nid] = sw
             hersteller = sw.daten.get("hersteller") or ""
             modell = sw.daten.get("modell") or ""
             speed = sw.daten.get("geschwindigkeit") or ""
@@ -220,9 +261,10 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
             poe = sw.daten.get("poe_vorhanden") == "ja"
             
             lbl_parts = [f"<b>{sanitize_mermaid_label(sw.bezeichnung or 'Access Switch')}</b>"]
-            details = f"{hersteller} {modell}".strip()
+            bm = clean_brand_model(hersteller, modell)
+            details = bm
             if ports:
-                details += f" ({ports} Ports)"
+                details = f"{details} ({ports} Ports)".strip() if details else f"({ports} Ports)"
             if details:
                 lbl_parts.append(sanitize_mermaid_label(details))
             if poe:
@@ -240,6 +282,7 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
         for srv in servers:
             nid = sanitize_mermaid_id(f"srv_{srv.id}")
             server_nodes[srv.id] = nid
+            node_to_obj[nid] = srv
             hersteller = srv.daten.get("hersteller") or ""
             modell = srv.daten.get("modell") or ""
             typ_label = "Server-Cluster" if srv.typ == "server_cluster" else "Host Server"
@@ -250,20 +293,27 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
                 if knoten:
                     lbl_parts.append(f"{knoten} Knoten")
                 storage_t = srv.daten.get("shared_storage_typ")
-                if storage_t and storage_t != "unbekannt":
+                if storage_t and not _is_placeholder(storage_t):
                     lbl_parts.append(f"Shared Storage: {sanitize_mermaid_label(storage_t.upper())}")
             else:
                 is_virt = srv.daten.get("wird_virtualisiert") == "ja"
                 hyp = srv.daten.get("hypervisor_typ") or ""
                 hyp_ver = srv.daten.get("hypervisor_version") or ""
                 hosts_anz = srv.daten.get("anzahl_host_server")
+                bm = clean_brand_model(hersteller, modell)
                 if hosts_anz and int(hosts_anz) > 1:
-                    lbl_parts.append(f"{hosts_anz}x Hosts ({hersteller} {modell})".strip())
-                elif hersteller or modell:
-                    lbl_parts.append(sanitize_mermaid_label(f"{hersteller} {modell}".strip()))
-                if is_virt and hyp and hyp != "unbekannt":
+                    if bm:
+                        lbl_parts.append(f"{hosts_anz}x Hosts ({sanitize_mermaid_label(bm)})")
+                    else:
+                        lbl_parts.append(f"{hosts_anz}x Hosts")
+                elif bm:
+                    lbl_parts.append(sanitize_mermaid_label(bm))
+                if is_virt and hyp and not _is_placeholder(hyp):
                     hyp_name = hyp.replace("_", " ").title()
-                    lbl_parts.append(f"Hypervisor: {sanitize_mermaid_label(hyp_name)} {sanitize_mermaid_label(hyp_ver)}".strip())
+                    hyp_txt = hyp_name
+                    if hyp_ver and not _is_placeholder(hyp_ver):
+                        hyp_txt = f"{hyp_name} {hyp_ver}".strip()
+                    lbl_parts.append(f"Hypervisor: {sanitize_mermaid_label(hyp_txt)}")
             
             node_label = "<br/>".join(lbl_parts)
             lines.append(f'        {nid}["{node_label}"]:::serverNode')
@@ -271,13 +321,14 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
         for sto in storages:
             nid = sanitize_mermaid_id(f"sto_{sto.id}")
             storage_nodes.append(nid)
+            node_to_obj[nid] = sto
             hersteller = sto.daten.get("hersteller_shared") or sto.daten.get("hersteller") or ""
             protokoll = sto.daten.get("protokoll_anbindung") or ""
             netto = sto.daten.get("kapazitaet_netto_tb") or sto.daten.get("speicherkapazitaet_tb")
             
             lbl_parts = [f"<b>{sanitize_mermaid_label(sto.bezeichnung or 'Storage')}</b>"]
-            details = [hersteller.replace("_", " ").title()] if hersteller and hersteller != "unbekannt" else []
-            if protokoll and protokoll != "unbekannt":
+            details = [hersteller.replace("_", " ").title()] if hersteller and not _is_placeholder(hersteller) else []
+            if protokoll and not _is_placeholder(protokoll):
                 details.append(protokoll.upper())
             if netto:
                 details.append(f"{netto} TB")
@@ -296,6 +347,7 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
             nid = sanitize_mermaid_id(f"vm_{vm.id}")
             host_ref = vm.daten.get("host_referenz")
             vm_nodes.append((nid, host_ref))
+            node_to_obj[nid] = vm
             
             vm_name = vm.daten.get("name") or vm.bezeichnung or "VM"
             os_name = vm.daten.get("betriebssystem") or ""
@@ -312,9 +364,9 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
                 specs.append(f"{ram} GB RAM")
             if specs:
                 lbl_parts.append(", ".join(specs))
-            if os_name and os_name != "n/a":
+            if os_name and not _is_placeholder(os_name):
                 lbl_parts.append(sanitize_mermaid_label(os_name))
-            if funktion and funktion != "n/a":
+            if funktion and not _is_placeholder(funktion):
                 lbl_parts.append(f"<i>Role: {sanitize_mermaid_label(funktion)}</i>")
             if ha:
                 lbl_parts.append("<b>[HA Aktiv]</b>")
@@ -331,6 +383,7 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
             nid = sanitize_mermaid_id(f"ap_{ap.id}")
             has_gast = ap.daten.get("gast_wlan_vorhanden") == "ja"
             ap_nodes.append((nid, has_gast))
+            node_to_obj[nid] = ap
             
             hersteller = ap.daten.get("hersteller") or ""
             modell = ap.daten.get("modell") or ""
@@ -338,13 +391,14 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
             mgmt = ap.daten.get("management") or ""
             
             lbl_parts = [f"<b>{sanitize_mermaid_label(ap.bezeichnung or 'Access Point')}</b>"]
-            details = f"{hersteller} {modell}".strip()
-            if standard and standard != "unbekannt":
+            bm = clean_brand_model(hersteller, modell)
+            details = bm
+            if standard and not _is_placeholder(standard):
                 std_txt = standard.replace("wifi", "Wi-Fi ").upper()
-                details += f" ({std_txt})"
+                details = f"{details} ({std_txt})".strip() if details else f"({std_txt})"
             if details:
                 lbl_parts.append(sanitize_mermaid_label(details))
-            if mgmt and mgmt != "unbekannt":
+            if mgmt and not _is_placeholder(mgmt):
                 mgmt_txt = "Cloud Mgmt" if mgmt == "cloud_controller" else "Controller" if mgmt == "onprem_controller" else "Standalone"
                 lbl_parts.append(f"<i>{sanitize_mermaid_label(mgmt_txt)}</i>")
             
@@ -361,6 +415,7 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
             for cli in client_objs:
                 nid = sanitize_mermaid_id(f"cli_{cli.id}")
                 client_nodes.append(nid)
+                node_to_obj[nid] = cli
                 win = cli.daten.get("anzahl_windows_clients") or 0
                 mac = cli.daten.get("anzahl_mac_clients") or 0
                 linux = cli.daten.get("anzahl_linux_clients") or 0
@@ -376,7 +431,7 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
                     dev_counts.append(f"{linux}x Linux")
                 if dev_counts:
                     lbl_parts.append(" · ".join(dev_counts))
-                if einsatz and einsatz != "unbekannt":
+                if einsatz and not _is_placeholder(einsatz):
                     einsatz_txt = einsatz.replace("_", " ").title()
                     lbl_parts.append(f"<i>{sanitize_mermaid_label(einsatz_txt)}</i>")
                 
@@ -398,12 +453,13 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
         for u in usv_objs:
             nid = sanitize_mermaid_id(f"usv_{u.id}")
             usv_nodes.append(nid)
+            node_to_obj[nid] = u
             hersteller = u.daten.get("hersteller") or ""
             va = u.daten.get("leistung_va")
             minuten = u.daten.get("autonomiezeit_min")
             
             lbl_parts = [f"<b>{sanitize_mermaid_label(u.bezeichnung or 'USV')}</b>"]
-            details = [hersteller] if hersteller and hersteller != "unbekannt" else []
+            details = [hersteller] if hersteller and not _is_placeholder(hersteller) else []
             if va:
                 details.append(f"{va} VA")
             if minuten:
@@ -429,19 +485,29 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
     top_targets = fw_nodes if fw_nodes else get_top_switching_nodes()
     if top_targets:
         primary_target = top_targets[0]
-        for wan_nid, is_backup in wan_nodes:
+        for idx, (wan_nid, is_backup) in enumerate(wan_nodes):
+            anb = anbindungen[idx] if idx < len(anbindungen) else None
+            art = anb.art if (anb and anb.art and not _is_placeholder(anb.art)) else ""
             if is_backup:
                 lines.append(f'    {wan_nid} -.->|"Backup WAN"| {primary_target}')
             else:
-                lines.append(f'    {wan_nid} ==>|"WAN Uplink"| {primary_target}')
+                edge_label = art.replace("_", " ") if art else "WAN Uplink"
+                lines.append(f'    {wan_nid} ==>|"{sanitize_edge_label(edge_label)}"| {primary_target}')
 
     # Firewall -> Core-Switches / Access-Switches
     if fw_nodes:
         sw_targets = get_top_switching_nodes()
         if sw_targets:
+            # anbindung_firewall_typ/_geschwindigkeit_gbit stehen im Switch-Schema
+            # (der Switch beschreibt seine eigene Anbindung zur Firewall), nicht im Firewall-Schema.
             for fw_nid in fw_nodes:
                 for sw_nid in sw_targets:
-                    lines.append(f'    {fw_nid} ==>|"Uplink"| {sw_nid}')
+                    sw_obj = node_to_obj.get(sw_nid)
+                    sw_daten = sw_obj.daten if sw_obj else {}
+                    anbindung_typ = sw_daten.get("anbindung_firewall_typ") or "Uplink"
+                    geschwindigkeit = sw_daten.get("anbindung_firewall_geschwindigkeit_gbit")
+                    edge_label = anbindung_typ.replace("_", " ") + (f" {geschwindigkeit}G" if geschwindigkeit else "")
+                    lines.append(f'    {fw_nid} ==>|"{sanitize_edge_label(edge_label)}"| {sw_nid}')
         elif server_nodes:
             for fw_nid in fw_nodes:
                 for srv_nid in server_nodes.values():
@@ -449,20 +515,28 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
         elif client_nodes:
             for fw_nid in fw_nodes:
                 for cli_nid in client_nodes:
-                    lines.append(f'    {fw_nid} -->|"LAN 1G"| {cli_nid}')
+                    lines.append(f'    {fw_nid} -->|"LAN"| {cli_nid}')
 
     # Core-Switches -> Access-Switches
     if core_nodes and access_nodes:
         for c_nid in core_nodes:
+            c_obj = node_to_obj.get(c_nid)
+            c_daten = c_obj.daten if c_obj else {}
+            c_geschwindigkeit = c_daten.get("geschwindigkeit", "Uplink")
             for a_nid in access_nodes:
-                lines.append(f'    {c_nid} ==>|"Uplink"| {a_nid}')
+                lines.append(f'    {c_nid} ==>|"{sanitize_edge_label(c_geschwindigkeit)}"| {a_nid}')
 
     # Switching -> Server
     active_switch_nodes = core_nodes or access_nodes or fw_nodes
     if active_switch_nodes and server_nodes:
         sw_primary = active_switch_nodes[0]
+        sw_obj = node_to_obj.get(sw_primary)
+        server_anbindung = "Uplink"
+        if sw_obj and sw_obj.daten:
+            server_anbindung = sw_obj.daten.get("geschwindigkeit", "Uplink")
+        
         for srv_nid in server_nodes.values():
-            lines.append(f'    {sw_primary} ==>|"Uplink"| {srv_nid}')
+            lines.append(f'    {sw_primary} ==>|"{sanitize_edge_label(server_anbindung)}"| {srv_nid}')
 
     # Server -> Storage
     if server_nodes and storage_nodes:
@@ -492,8 +566,13 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
     ap_parent_switches = access_nodes or core_nodes or fw_nodes
     if ap_parent_switches and ap_nodes:
         ap_parent = ap_parent_switches[0]
+        sw_obj = node_to_obj.get(ap_parent)
+        ap_anbindung = "Uplink"
+        if sw_obj and sw_obj.daten:
+            ap_anbindung = sw_obj.daten.get("geschwindigkeit", "Uplink")
+        
         for ap_nid, has_gast in ap_nodes:
-            lines.append(f'    {ap_parent} -->|"Uplink"| {ap_nid}')
+            lines.append(f'    {ap_parent} -->|"{sanitize_edge_label(ap_anbindung)}"| {ap_nid}')
             if has_gast:
                 lines.append(f'    {ap_nid} -.->|"WLAN Gast-SSID"| gast_clients')
 
@@ -501,8 +580,15 @@ def generate_network_topology_mermaid(standort: Optional[Standort], objekte: Lis
     cli_parent_switches = access_nodes or core_nodes or fw_nodes
     if cli_parent_switches and client_nodes:
         cli_parent = cli_parent_switches[0]
+        sw_obj = node_to_obj.get(cli_parent)
+        client_anbindung = "LAN"
+        if sw_obj and sw_obj.daten:
+            speed = sw_obj.daten.get("geschwindigkeit")
+            if speed and not _is_placeholder(speed):
+                client_anbindung = f"LAN {speed}"
+        
         for cli_nid in client_nodes:
-            lines.append(f'    {cli_parent} -->|"LAN 1G"| {cli_nid}')
+            lines.append(f'    {cli_parent} -->|"{sanitize_edge_label(client_anbindung)}"| {cli_nid}')
 
     # USV -> Infrastructure
     if usv_nodes:
@@ -540,8 +626,10 @@ def generate_network_topology_summary_text(standort: Optional[Standort], objekte
             hersteller = fw.daten.get("hersteller", "")
             modell = fw.daten.get("modell", "")
             aufbau = fw.daten.get("aufbau", "")
-            aufbau_str = f" [{aufbau.replace('_', ' ')}]" if aufbau and aufbau != "unbekannt" else ""
-            lines.append(f"  • {fw.bezeichnung} ({hersteller} {modell}){aufbau_str}")
+            aufbau_str = f" [{aufbau.replace('_', ' ')}]" if aufbau and not _is_placeholder(aufbau) else ""
+            bm = clean_brand_model(hersteller, modell)
+            bm_str = f" ({bm})" if bm else ""
+            lines.append(f"  • {fw.bezeichnung}{bm_str}{aufbau_str}")
 
     # 3. Switching
     switches = [o for o in objekte if o.typ == "switch"]
@@ -554,7 +642,9 @@ def generate_network_topology_summary_text(standort: Optional[Standort], objekte
             ports = sw.daten.get("port_anzahl", "")
             ports_str = f", {ports} Ports" if ports else ""
             poe_str = ", PoE" if sw.daten.get("poe_vorhanden") == "ja" else ""
-            lines.append(f"  • {sw.bezeichnung} ({role}: {hersteller} {modell}{ports_str}{poe_str})")
+            bm = clean_brand_model(hersteller, modell)
+            bm_prefix = f": {bm}" if bm else ""
+            lines.append(f"  • {sw.bezeichnung} ({role}{bm_prefix}{ports_str}{poe_str})")
 
     # 4. Server & Storage
     servers = [o for o in objekte if o.typ in ("server_virtualisierung", "server_cluster")]
@@ -563,13 +653,14 @@ def generate_network_topology_summary_text(standort: Optional[Standort], objekte
         lines.append("- **Server, Storage & Virtualisierung:**")
         for srv in servers:
             hyp = srv.daten.get("hypervisor_typ", "")
-            hyp_str = f" [Hypervisor: {hyp}]" if hyp and hyp != "unbekannt" else ""
+            hyp_str = f" [Hypervisor: {hyp}]" if hyp and not _is_placeholder(hyp) else ""
             lines.append(f"  • {srv.bezeichnung}{hyp_str}")
         for sto in storages:
             hersteller = sto.daten.get("hersteller_shared") or sto.daten.get("hersteller") or ""
             protokoll = sto.daten.get("protokoll_anbindung", "")
-            proto_str = f" ({protokoll.upper()})" if protokoll and protokoll != "unbekannt" else ""
-            lines.append(f"  • Storage: {sto.bezeichnung} - {hersteller}{proto_str}")
+            proto_str = f" ({protokoll.upper()})" if protokoll and not _is_placeholder(protokoll) else ""
+            sto_h = f" - {hersteller}" if hersteller and not _is_placeholder(hersteller) else ""
+            lines.append(f"  • Storage: {sto.bezeichnung}{sto_h}{proto_str}")
 
     # 5. VMs
     vms = [o for o in objekte if o.typ == "vm"]
@@ -579,8 +670,9 @@ def generate_network_topology_summary_text(standort: Optional[Standort], objekte
             vm_name = vm.daten.get("name") or vm.bezeichnung
             os_name = vm.daten.get("betriebssystem", "")
             funktion = vm.daten.get("funktion_dienst", "")
-            fn_str = f" - {funktion}" if funktion else ""
-            lines.append(f"  • {vm_name} ({os_name}){fn_str}")
+            os_str = f" ({os_name})" if os_name and not _is_placeholder(os_name) else ""
+            fn_str = f" - {funktion}" if funktion and not _is_placeholder(funktion) else ""
+            lines.append(f"  • {vm_name}{os_str}{fn_str}")
 
     # 6. WLAN & Clients
     aps = [o for o in objekte if o.typ == "access_point"]
@@ -589,7 +681,8 @@ def generate_network_topology_summary_text(standort: Optional[Standort], objekte
         lines.append(f"- **WLAN-Infrastruktur ({len(aps)} Access Points):**")
         for ap in aps:
             std = ap.daten.get("wlan_standard", "")
-            lines.append(f"  • {ap.bezeichnung} ({std})")
+            std_str = f" ({std})" if std and not _is_placeholder(std) else ""
+            lines.append(f"  • {ap.bezeichnung}{std_str}")
     if client_objs:
         lines.append("- **Clients & Endgeräte:**")
         for cli in client_objs:

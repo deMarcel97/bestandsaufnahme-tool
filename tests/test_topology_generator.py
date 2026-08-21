@@ -10,6 +10,7 @@ from app.services.topology_generator import (
     sanitize_mermaid_id,
     sanitize_mermaid_label,
     sanitize_edge_label,
+    clean_brand_model,
 )
 from app.services.report_builder import report_builder
 from app.services.exporter import exporter_service
@@ -32,6 +33,43 @@ def test_sanitize_helpers():
     assert sanitize_mermaid_id("sw_core_1") == "sw_core_1"
     assert sanitize_mermaid_label('Switch "Core" [Rack 1]') == "Switch 'Core' (Rack 1)"
     assert sanitize_edge_label("Trunk | VLAN 10,20") == "Trunk / VLAN 10,20"
+
+
+def test_clean_brand_model():
+    assert clean_brand_model("Fortinet", "100F") == "Fortinet 100F"
+    assert clean_brand_model("sonstige", "FortiGate 100F") == "FortiGate 100F"
+    assert clean_brand_model("Sonstiges", "Custom Router") == "Custom Router"
+    assert clean_brand_model("Cisco", "Cisco Catalyst 9300") == "Cisco Catalyst 9300"
+    assert clean_brand_model("unbekannt", "unbekannt") == ""
+    assert clean_brand_model("diverse", "") == ""
+    assert clean_brand_model("", "n/a") == ""
+    assert clean_brand_model("Ubiquiti", "") == "Ubiquiti"
+    assert clean_brand_model(None, "XGS 126") == "XGS 126"
+
+
+def test_topology_placeholder_suppression():
+    standort = Standort(id="sto-1", auftrag_id="auf-1", bezeichnung="Test Standort")
+    fw = TechnikObjekt(
+        id="fw-1",
+        typ="firewall",
+        bezeichnung="Haupt-Firewall",
+        auftrag_id="auf-1",
+        standort_id="sto-1",
+        daten={"hersteller": "sonstige", "modell": "FortiGate 100F", "aufbau": "unbekannt"},
+    )
+    sw = TechnikObjekt(
+        id="sw-1",
+        typ="switch",
+        bezeichnung="Switch 1",
+        auftrag_id="auf-1",
+        standort_id="sto-1",
+        daten={"hersteller": "Sonstiges", "modell": "", "geschwindigkeit": "unbekannt"},
+    )
+    mermaid = generate_network_topology_mermaid(standort, [fw, sw])
+    assert "sonstige" not in mermaid.lower()
+    assert "unbekannt" not in mermaid.lower()
+    assert "FortiGate 100F" in mermaid
+    assert "Switch 1" in mermaid
 
 
 def test_empty_topology():
@@ -210,7 +248,7 @@ def test_full_hierarchy_topology():
 
     # Connections check
     assert "Backup WAN" in mermaid
-    assert "Uplink" in mermaid
+    assert "lag" in mermaid  # anbindung_firewall_typ des Core-Switches
     assert "SAN / iSCSI / NFS" in mermaid
     assert "Hypervisor Host" in mermaid
     assert "LAN 1G" in mermaid
