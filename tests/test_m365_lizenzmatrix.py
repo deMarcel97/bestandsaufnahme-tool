@@ -150,6 +150,38 @@ def test_conditional_access_tier_blindness_fix():
     assert "m365-lizenz-conditional-access-fehlt" not in active
 
 
+def test_unanswered_m365_lizenzen_is_offener_punkt_not_finding():
+    """
+    Ein Objekt, bei dem m365_lizenzen nie beantwortet wurde (leere Liste, wie sie
+    routes_objekt.py für ein unangetastetes mehrfachauswahl-Feld speichert), darf
+    KEIN 'Lizenz fehlt'-Finding auslösen — das würde eine bestätigte Unterlizenzierung
+    vortäuschen, obwohl schlicht die Angabe fehlt. Stattdessen muss ein Offener Punkt
+    (regelrelevant_leer) entstehen, der zum Nachtragen auffordert.
+    """
+    engine = RuleEngine()
+
+    obj_unanswered = TechnikObjekt(
+        id="obj-m365-lizenzen-leer",
+        typ="m365_security",
+        bezeichnung="M365 Tenant ohne Lizenzangabe",
+        auftrag_id="auf-test-leer",
+        daten={
+            "m365_lizenzen": [],
+            "conditional_access_regelwerke": "nein",
+        }
+    )
+    findings, open_points = engine.evaluate_all("auf-test-leer", [], [obj_unanswered], [])
+    active = {f.quelle: f for f in findings if f.status == "offen" and f.objekt_id == "obj-m365-lizenzen-leer"}
+
+    assert "m365-lizenz-conditional-access-fehlt" not in active
+    assert "m365-conditional-access-fehlt" not in active
+
+    op_ids = [op.id for op in open_points]
+    assert any("m365-lizenz-conditional-access-fehlt-obj-m365-lizenzen-leer" in oid for oid in op_ids)
+    matching_op = next(op for op in open_points if "m365-lizenz-conditional-access-fehlt" in op.id)
+    assert matching_op.quelle == "regelrelevant_leer"
+
+
 def test_defender_o365_rules():
     """Prüft Lizenz vs. Konfigurations-Finding für Defender for Office 365 (Plan 1)."""
     engine = RuleEngine()

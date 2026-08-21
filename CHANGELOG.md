@@ -14,6 +14,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionieru
   - Veraltete tier-blinde Regeln in `rules/m365_security.yaml` entfernt.
   - Schweregrad von Defender for Office 365 bei Fehlkonfiguration von "mittel" auf "hoch" angehoben.
 
+### Fixed
+- **Unbeantwortete Mehrfachauswahl-Felder erzeugten falsche Findings (#408)**: Ein nie beantwortetes `m365_lizenzen`-Feld wird als leere Liste gespeichert. Die Regel-Engine wertete das als "Lizenz nachweislich nicht vorhanden" und meldete eine bestätigte Unterlizenzierung, statt die fehlende Angabe als offenen Punkt zu führen. Leere Listen gelten jetzt in `ConditionEvaluator` und `ProgressService` als unbeantwortet.
+
 ## [2.7.37] - 2026-08-21
 
 ### Fixed

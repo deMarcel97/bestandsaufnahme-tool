@@ -57,7 +57,9 @@ class ConditionEvaluator:
             val = data_dict.get(field_name)
 
             # Rule Section 8.2: missing, empty, "unbekannt", "rueckfrage"
-            if val is None or val == "" or val == "unbekannt" or val == "rueckfrage":
+            # val == [] covers untouched mehrfachauswahl fields (routes_objekt.py
+            # stores form_data.getlist() unconditionally, never None for these).
+            if val is None or val == "" or val == [] or val == "unbekannt" or val == "rueckfrage":
                 return (False, True)
 
             # Compare operators
