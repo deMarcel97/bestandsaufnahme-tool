@@ -22,6 +22,17 @@ def _is_field_visible(sichtbar_cond: Any, data_dict: Dict[str, Any]) -> bool:
     return True
 
 
+# Bausteine, deren komplettes Fehlen als "kritisch" gilt (Karte #423): Kernkomponenten,
+# die den Betrieb oder die Sicherheit direkt tragen. Alle anderen aktiven Bausteine werden
+# bei komplettem Fehlen nur als "wichtig" eingestuft — sonst ist am Anfang jedes Auftrags
+# alles kritisch und die Priorisierung verliert ihren Wert. Gilt nur fuer die
+# "Baustein fehlt komplett"-Meldung; einzelne Felder innerhalb eines erfassten Objekts
+# laufen weiter ueber KRITISCHE_FELDER, unabhaengig vom Baustein-Typ.
+BAUSTEIN_KRITISCH = {
+    "firewall", "switch", "server_virtualisierung", "vm", "server_cluster",
+    "storage", "backup", "m365_security",
+}
+
 class ProgressService:
     def calculate_progress(self, aktive_bausteine: List[str], objekte: List[TechnikObjekt]) -> Dict[str, Dict[str, Any]]:
         """
@@ -109,7 +120,7 @@ class ProgressService:
                 text=f"{label} fehlt — noch kein Objekt erfasst",
                 status="offen",
                 quelle="struktur_fehlt",
-                prioritaet="kritisch",
+                prioritaet="kritisch" if typ in BAUSTEIN_KRITISCH else "wichtig",
                 ziel_url=f"/auftrag/{auftrag.id}/objekt/neu?typ={typ}",
                 objekt_typ=typ
             ))

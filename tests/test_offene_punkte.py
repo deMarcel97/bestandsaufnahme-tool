@@ -155,6 +155,31 @@ def test_offene_punkte_respects_sichtbar_wenn():
         assert "ha_heartbeat" not in fid.lower()
 
 
+def test_fehlender_baustein_differenziert_kritisch_wichtig():
+    """Karte #423: ein komplett fehlender Baustein ist nicht mehr pauschal
+    'kritisch' — Kernkomponenten (Firewall, ...) bleiben kritisch, periphere
+    Bausteine (Access Point, ...) werden auf 'wichtig' runtergestuft."""
+    auftrag = Auftrag(
+        id="auf-op-krit",
+        projekt_nummer="P-2026-KRIT",
+        kunde="Kritikalitaet GmbH",
+        bezeichnung="Kritikalitaetstest",
+        aktive_bausteine=["firewall", "access_point"]
+    )
+    storage.save_auftrag(auftrag)
+    sto = Standort(id="sto-krit", auftrag_id=auftrag.id, bezeichnung="Zentrale")
+    storage.save_standort(sto)
+
+    from app.services.progress import progress_service
+    items = progress_service.collect_offene_punkte(auftrag, [sto], [], [])
+
+    fehlt_firewall = next(it for it in items if it.id == "op-struktur-fehlt-firewall")
+    fehlt_access_point = next(it for it in items if it.id == "op-struktur-fehlt-access_point")
+
+    assert fehlt_firewall.prioritaet == "kritisch"
+    assert fehlt_access_point.prioritaet == "wichtig"
+
+
 def test_calculate_progress_counts_all_visible_fields():
     """Prüft, dass calculate_progress alle sichtbaren Felder zählt und nicht nur Pflichtfelder (ISSUE-004)."""
     from app.services.progress import progress_service

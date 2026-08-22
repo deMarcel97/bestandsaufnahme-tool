@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.45] - 2026-08-22
+
+### Fixed
+- **Kritikalität bei komplett fehlendem Baustein differenziert (#423)**: Bisher wurde jeder aktive, aber komplett unerfasste Baustein ("X fehlt — noch kein Objekt erfasst") pauschal als `kritisch` eingestuft — bei einem neuen Auftrag mit allen 15 Standard-Bausteinen war damit alles kritisch, die Priorisierung verlor ihren Wert. Neue Konstante `BAUSTEIN_KRITISCH` in `app/services/progress.py` unterscheidet jetzt Kernkomponenten (Firewall, Switch, Server-Virtualisierung, VM, Server-Cluster, Storage, Backup, M365 Security bleiben `kritisch`) von peripheren/dokumentierenden Bausteinen (Access Point, Netzwerkschrank, Serverraum, USV, Clients, Software, Organisation & Prozesse werden `wichtig`). Betrifft nur die "Baustein fehlt komplett"-Meldung — die bestehende `KRITISCHE_FELDER`-Differenzierung für einzelne Felder innerhalb erfasster Objekte bleibt unverändert.
+
 ## [2.7.44] - 2026-08-22
 
 ### Added

@@ -7,6 +7,7 @@ Hierarchische Gliederung offener Punkte nach Standort und Thema, mit Priorisieru
 - #287: Offene Punkte nach Baustein gruppieren
 - #314: Offene Punkte nach Standort und Thema gliedern (mit Toggles)
 - #369: 3-stufige Priorisierung mit Dashboard-Kennzahlen
+- #423: Kritikalität bei komplett fehlendem Baustein differenziert statt pauschal "kritisch"
 
 ## Beteiligte Dateien
 
@@ -58,3 +59,22 @@ Standortübergreifend
 
 - `sichtbar_wenn` in `collect_offene_punkte` integriert.
 - Irrelevante Warnungen bei inaktiven Sub-Feldern werden unterdrückt.
+
+### Kritikalität bei komplett fehlendem Baustein (#423)
+
+Ist ein aktiver Baustein komplett unerfasst (kein einziges Objekt), war die
+Meldung "X fehlt — noch kein Objekt erfasst" bisher immer `kritisch`. Am
+Anfang eines Auftrags waren damit pauschal alle 15 Bausteine kritisch — die
+Priorisierung verlor ihren Wert.
+
+`BAUSTEIN_KRITISCH` in `app/services/progress.py` legt jetzt fest, welche
+Bausteine bei komplettem Fehlen `kritisch` bleiben (Kernkomponenten, die
+Betrieb oder Sicherheit direkt tragen: Firewall, Switch,
+Server-Virtualisierung, VM, Server-Cluster, Storage, Backup, M365 Security)
+und welche auf `wichtig` runtergestuft werden (periphere/dokumentierende
+Bausteine: Access Point, Netzwerkschrank, Serverraum, USV, Clients,
+Software, Organisation & Prozesse).
+
+Betrifft nur die "Baustein fehlt komplett"-Meldung. Einzelne Felder
+innerhalb eines bereits erfassten Objekts laufen weiter über
+`KRITISCHE_FELDER`, unabhängig vom Baustein-Typ.
