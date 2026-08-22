@@ -4,6 +4,15 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.44] - 2026-08-22
+
+### Added
+- **Speicher-Feedback nach Objekt-Speicherung (#427)**: Toast-Meldung ("Firewall „Name" wurde gespeichert.") nach dem Anlegen/Bearbeiten eines Technik-Objekts, statt der bisherigen stillen Weiterleitung. Als Query-Param am Redirect-Ziel übergeben (`?gespeichert=...`), global in `base.html` ausgewertet und aus der URL entfernt — kein neuer Session-/Flash-Mechanismus nötig.
+- **Eigenes Validierungsfeedback beim Auftrag-Anlegen (#433)**: Client-seitige Prüfung der Pflichtfelder (Kunde, Auftragsbezeichnung) vor dem Absenden, mit Fehlerbanner im Dialog und rotem Rahmen um die betroffenen Felder — statt der bisherigen, unter Browser-Automation bewusst deaktivierten (`novalidate`, #364) nativen Tooltip-Validierung.
+
+### Fixed
+- **Formularfelder ohne Label auf der Unternehmenskontext-Seite (#431)**: Alle Felder hatten sichtbaren Label-Text, aber ohne `for`/`id`-Zuordnung — für Screenreader nicht auffindbar. `for`/`id` durchgängig ergänzt, auch in den dynamisch nachladbaren Zeilen (Geschäftskritische Systeme, Geplante Änderungen) inkl. der JS-generierten Varianten.
+
 ## [2.7.43] - 2026-08-22
 
 ### Fixed
