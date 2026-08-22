@@ -7,6 +7,7 @@ abschnitte:
     titel: Was ist es
     felder:
       - name: hersteller
+        label: Hersteller
         typ: auswahl
         pflicht: false
         regelrelevant: false
@@ -66,6 +67,7 @@ abschnitte:
             textbaustein:
 
       - name: modell
+        label: Modell
         typ: text
         pflicht: false
         regelrelevant: false
@@ -140,6 +142,7 @@ abschnitte:
           - wert: 93PM 200kVA
 
       - name: kapazitaet_va
+        label: Kapazität (VA)
         typ: zahl
         pflicht: false
         regelrelevant: false
@@ -157,12 +160,14 @@ abschnitte:
           max_punkte: 10
 
       - name: versorgte_geraete_anzahl
+        label: Anzahl versorgter Geräte
         typ: zahl
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
 
       - name: auslastung_prozent
+        label: Auslastung (%)
         typ: zahl
         pflicht: false
         regelrelevant: true
@@ -176,6 +181,7 @@ abschnitte:
     titel: In welchem Zustand ist es
     felder:
       - name: batterie_alter
+        label: Alter der Batterie
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -209,6 +215,7 @@ abschnitte:
             textbaustein:
 
       - name: garantie_geraet_bis
+        label: Gerätegarantie gültig bis
         typ: datum
         pflicht: false
         regelrelevant: true
@@ -219,6 +226,7 @@ abschnitte:
           max_punkte: 5
 
       - name: garantie_batterie_bis
+        label: Batteriegarantie gültig bis
         typ: datum
         pflicht: false
         regelrelevant: true
@@ -229,6 +237,7 @@ abschnitte:
           max_punkte: 5
 
       - name: wartungsvertrag_vorhanden
+        label: Wartungsvertrag vorhanden
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -255,6 +264,7 @@ abschnitte:
             textbaustein:
 
       - name: letzter_batterietest
+        label: Letzter Batterietest
         typ: datum
         pflicht: false
         regelrelevant: true
@@ -268,6 +278,7 @@ abschnitte:
     titel: Was passiert bei Ausfall
     felder:
       - name: abschaltsignal_an_server
+        label: Abschaltsignal an Server
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true

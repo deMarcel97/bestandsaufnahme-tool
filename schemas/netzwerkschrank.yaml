@@ -7,6 +7,7 @@ abschnitte:
     titel: Allgemeine Angaben
     felder:
       - name: art
+        label: Art
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -43,6 +44,7 @@ abschnitte:
             textbaustein:
 
       - name: abschliessbar
+        label: Abschließbar
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -68,6 +70,7 @@ abschnitte:
             textbaustein:
 
       - name: belueftung
+        label: Belüftung
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -108,6 +111,7 @@ abschnitte:
     titel: Verkabelung und Patchfelder
     felder:
       - name: patchpanel_vorhanden
+        label: Patchpanel vorhanden
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: false
@@ -125,6 +129,7 @@ abschnitte:
             textbaustein:
 
       - name: patchpanel_beschriftung
+        label: Patchpanel-Beschriftung
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -161,6 +166,7 @@ abschnitte:
             textbaustein:
 
       - name: verkabelungsdokumentation
+        label: Verkabelungsdokumentation
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -191,6 +197,7 @@ abschnitte:
             textbaustein:
 
       - name: ausfuehrung_durch
+        label: Ausführung durch
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -229,6 +236,7 @@ abschnitte:
             textbaustein:
 
       - name: kabeltyp
+        label: Kabeltyp
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -275,6 +283,7 @@ abschnitte:
             textbaustein:
 
       - name: verkabelung_alter
+        label: Alter der Verkabelung
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -305,6 +314,7 @@ abschnitte:
             textbaustein:
 
       - name: erweiterungsreserve
+        label: Erweiterungsreserve
         typ: auswahl
         pflicht: false
         regelrelevant: true
