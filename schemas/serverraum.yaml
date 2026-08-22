@@ -7,6 +7,7 @@ abschnitte:
     titel: Zutritt und Physische Sicherheit
     felder:
       - name: zugangskontrolle
+        label: Zugangskontrolle
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -52,6 +53,7 @@ abschnitte:
             textbaustein:
 
       - name: zutrittsprotokollierung
+        label: Zutrittsprotokollierung
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -77,6 +79,7 @@ abschnitte:
             textbaustein:
 
       - name: zugangsberechtigte_dokumentiert
+        label: Zugangsberechtigte dokumentiert
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -104,6 +107,7 @@ abschnitte:
             textbaustein:
 
       - name: kameraueberwachung
+        label: Kameraüberwachung
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: false
@@ -125,6 +129,7 @@ abschnitte:
     titel: Umwelt- und Brandschutz
     felder:
       - name: umweltsensorik
+        label: Umweltsensorik
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -158,6 +163,7 @@ abschnitte:
             textbaustein:
 
       - name: brandmeldeanlage
+        label: Brandmeldeanlage
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -185,6 +191,7 @@ abschnitte:
             textbaustein:
 
       - name: loeschanlage
+        label: Löschanlage
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -222,6 +229,7 @@ abschnitte:
     titel: Stromversorgung und Redundanz
     felder:
       - name: stromeinspeisung
+        label: Stromeinspeisung
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -249,6 +257,7 @@ abschnitte:
             textbaustein:
 
       - name: notstromaggregat
+        label: Notstromaggregat vorhanden
         typ: ja_nein_nicht_relevant
         pflicht: false
         regelrelevant: true
@@ -277,6 +286,7 @@ abschnitte:
             textbaustein:
 
       - name: notstromaggregat_letzter_test
+        label: Letzter Test des Notstromaggregats
         typ: datum
         pflicht: false
         regelrelevant: true

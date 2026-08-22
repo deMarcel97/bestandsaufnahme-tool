@@ -7,6 +7,7 @@ abschnitte:
     titel: Allgemeine Angaben
     felder:
       - name: hersteller
+        label: Hersteller
         typ: auswahl
         pflicht: false
         regelrelevant: false
@@ -71,6 +72,7 @@ abschnitte:
             textbaustein:
 
       - name: modell
+        label: Modell
         typ: text
         pflicht: false
         regelrelevant: false
@@ -155,6 +157,7 @@ abschnitte:
           - wert: U6-Enterprise
 
       - name: wlan_standard
+        label: WLAN-Standard
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -202,6 +205,7 @@ abschnitte:
             textbaustein:
 
       - name: management
+        label: Management
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -238,6 +242,7 @@ abschnitte:
     titel: WLAN-Sicherheit und Gastnetz
     felder:
       - name: gast_wlan_vorhanden
+        label: Gast-WLAN vorhanden
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: false
@@ -255,6 +260,7 @@ abschnitte:
             textbaustein:
 
       - name: gast_wlan_isoliert
+        label: Gast-WLAN isoliert
         typ: ja_nein_nicht_relevant
         pflicht: false
         regelrelevant: true
@@ -289,6 +295,7 @@ abschnitte:
             textbaustein:
 
       - name: verschluesselung_wpa3
+        label: Verschlüsselung WPA3
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -318,6 +325,7 @@ abschnitte:
     titel: Wartung und Garantie
     felder:
       - name: firmware_aktuell
+        label: Firmware aktuell
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -343,6 +351,7 @@ abschnitte:
             textbaustein:
 
       - name: garantie_bis
+        label: Garantie gültig bis
         typ: datum
         pflicht: false
         regelrelevant: true
@@ -353,6 +362,7 @@ abschnitte:
           max_punkte: 5
 
       - name: wartungsvertrag_vorhanden
+        label: Wartungsvertrag vorhanden
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true

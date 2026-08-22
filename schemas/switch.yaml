@@ -7,6 +7,7 @@ abschnitte:
     titel: Allgemeine Angaben
     felder:
       - name: hersteller
+        label: Hersteller
         typ: auswahl
         pflicht: false
         regelrelevant: false
@@ -75,6 +76,7 @@ abschnitte:
             textbaustein:
 
       - name: modell
+        label: Modell
         typ: text
         pflicht: false
         regelrelevant: false
@@ -201,12 +203,14 @@ abschnitte:
           - wert: USW-Enterprise-48
 
       - name: port_anzahl
+        label: Anzahl Ports
         typ: zahl
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
 
       - name: geschwindigkeit
+        label: Geschwindigkeit
         typ: auswahl
         pflicht: false
         regelrelevant: false
@@ -237,6 +241,7 @@ abschnitte:
             textbaustein:
 
       - name: poe_vorhanden
+        label: PoE vorhanden
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: false
@@ -255,6 +260,7 @@ abschnitte:
             textbaustein:
 
       - name: management_typ
+        label: Management-Typ
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -290,6 +296,7 @@ abschnitte:
     titel: Sicherheit und Segmentierung
     felder:
       - name: netztrennung
+        label: Netztrennung
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -317,6 +324,7 @@ abschnitte:
             textbaustein:
 
       - name: zugangsschutz_management
+        label: Zugangsschutz für Management
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -350,6 +358,7 @@ abschnitte:
             textbaustein:
 
       - name: port_security_aktiv
+        label: Port Security aktiv
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -376,6 +385,7 @@ abschnitte:
             textbaustein:
 
       - name: loop_protection_aktiv
+        label: Loop Protection aktiv
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -405,6 +415,7 @@ abschnitte:
     titel: Wartung und Konfigurationssicherung
     felder:
       - name: firmware_aktuell
+        label: Firmware aktuell
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -430,6 +441,7 @@ abschnitte:
             textbaustein:
 
       - name: garantie_bis
+        label: Garantie gültig bis
         typ: datum
         pflicht: false
         regelrelevant: true
@@ -440,6 +452,7 @@ abschnitte:
           max_punkte: 5
 
       - name: wartungsvertrag_vorhanden
+        label: Wartungsvertrag vorhanden
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -466,6 +479,7 @@ abschnitte:
             textbaustein:
 
       - name: konfigurationssicherung_aktuell
+        label: Konfigurationssicherung aktuell
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true

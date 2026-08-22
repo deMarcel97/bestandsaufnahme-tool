@@ -7,6 +7,7 @@ abschnitte:
     titel: Was ist es
     felder:
       - name: kategorie
+        label: Kategorie
         typ: auswahl
         pflicht: true
         regelrelevant: false
@@ -162,6 +163,7 @@ abschnitte:
         vertraulichkeit: kundentauglich
 
       - name: hosting_modell
+        label: Hosting-Modell
         typ: auswahl
         pflicht: false
         regelrelevant: false
@@ -242,6 +244,7 @@ abschnitte:
             textbaustein:
 
       - name: dokumentation_vorhanden
+        label: Dokumentation vorhanden
         typ: auswahl
         pflicht: false
         regelrelevant: true

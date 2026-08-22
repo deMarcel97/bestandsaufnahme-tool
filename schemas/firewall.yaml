@@ -7,6 +7,7 @@ abschnitte:
     titel: Was ist es
     felder:
       - name: hersteller
+        label: Hersteller
         typ: auswahl
         pflicht: true
         regelrelevant: false
@@ -80,6 +81,7 @@ abschnitte:
           - wert: unbekannt
             textbaustein:
       - name: modell
+        label: Modell
         typ: text
         pflicht: false
         regelrelevant: false
@@ -374,11 +376,13 @@ abschnitte:
           - wert: F900
           - wert: F1000
       - name: firmware_version
+        label: Firmware-Version
         typ: text
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
       - name: aufbau
+        label: Aufbau
         typ: auswahl
         pflicht: false
         regelrelevant: false
@@ -400,11 +404,13 @@ abschnitte:
           - wert: unbekannt
             textbaustein:
       - name: anzahl_geraete
+        label: Anzahl Geräte
         typ: zahl
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
       - name: ip_adressen
+        label: IP-Adressen
         typ: text
         pflicht: false
         regelrelevant: false
@@ -413,6 +419,7 @@ abschnitte:
     titel: In welchem Zustand ist es
     felder:
       - name: hardware_alter
+        label: Alter der Hardware
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -447,6 +454,7 @@ abschnitte:
             punkte:
             textbaustein:
       - name: wartungsvertrag_vorhanden
+        label: Wartungsvertrag vorhanden
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -473,11 +481,13 @@ abschnitte:
             punkte:
             textbaustein:
       - name: wartungsvertrag_bis
+        label: Wartungsvertrag gültig bis
         typ: datum
         pflicht: false
         regelrelevant: true
         vertraulichkeit: kundentauglich
       - name: security_abo_vorhanden
+        label: Security-Abonnement vorhanden
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -505,11 +515,13 @@ abschnitte:
             punkte:
             textbaustein:
       - name: security_abo_bis
+        label: Security-Abonnement gültig bis
         typ: datum
         pflicht: false
         regelrelevant: true
         vertraulichkeit: kundentauglich
       - name: firmware_eol
+        label: Firmware End-of-Life erreicht
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -539,11 +551,13 @@ abschnitte:
             punkte:
             textbaustein:
       - name: letztes_firmware_update
+        label: Letztes Firmware-Update
         typ: datum
         pflicht: false
         regelrelevant: true
         vertraulichkeit: kundentauglich
       - name: dokumentation_vorhanden
+        label: Dokumentation der Konfiguration vorhanden
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -576,6 +590,7 @@ abschnitte:
             punkte:
             textbaustein:
       - name: konfigurationssicherung_aktuell
+        label: Konfigurationssicherung aktuell
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -629,6 +644,7 @@ abschnitte:
             punkte:
             textbaustein:
       - name: zugangsschutz_standort
+        label: Zugangsschutz am Standort
         typ: auswahl
         pflicht: false
         regelrelevant: true
@@ -704,6 +720,7 @@ abschnitte:
     titel: Was passiert bei Ausfall
     felder:
       - name: ersatzgeraet_vorhanden
+        label: Ersatzgerät vorhanden
         typ: ja_nein
         pflicht: false
         regelrelevant: true
@@ -727,11 +744,13 @@ abschnitte:
               auswirkung: Bei einem Hardware-Defekt ist das gesamte Netzwerk bis
                 zur Lieferung eines Austauschgeräts unterbrochen.
       - name: sla_ersatz
+        label: SLA für Ersatzgerät
         typ: text
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
       - name: internetleitung_haengt_dran
+        label: Internetleitung hängt direkt an der Firewall
         typ: ja_nein
         pflicht: false
         regelrelevant: false
@@ -740,16 +759,19 @@ abschnitte:
     titel: Funktionen
     felder:
       - name: ssl_vpn_homeoffice
+        label: SSL-VPN für Homeoffice
         typ: ja_nein
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
       - name: site_to_site_vpn_anzahl
+        label: Anzahl Site-to-Site-VPN-Verbindungen
         typ: zahl
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
       - name: web_protection_aktiv
+        label: Web Protection aktiv
         typ: ja_nein
         pflicht: false
         regelrelevant: true
@@ -772,6 +794,7 @@ abschnitte:
               auswirkung: Benutzer sind beim Surfen im Internet nicht vor 
                 bösartigen Webseiten und schädlichen Downloads geschützt.
       - name: ips_aktiv
+        label: Intrusion Prevention System (IPS) aktiv
         typ: ja_nein
         pflicht: false
         regelrelevant: true
@@ -795,16 +818,19 @@ abschnitte:
               auswirkung: Bösartige Netzwerkzugriffe und bekannte Angriffsmuster
                 werden nicht automatisch erkannt und blockiert.
       - name: anzahl_sicherheitszonen
+        label: Anzahl Sicherheitszonen
         typ: zahl
         pflicht: false
         regelrelevant: false
         vertraulichkeit: kundentauglich
       - name: exchange_onprem_dahinter
+        label: Exchange On-Premises dahinter
         typ: ja_nein
         pflicht: false
         regelrelevant: true
         vertraulichkeit: kundentauglich
       - name: mfa_fuer_vpn
+        label: MFA für VPN-Zugang
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true
@@ -831,6 +857,7 @@ abschnitte:
             punkte:
             textbaustein:
       - name: vlan_konzept_umgesetzt
+        label: VLAN-Konzept umgesetzt
         typ: ja_nein_unbekannt
         pflicht: false
         regelrelevant: true

@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.43] - 2026-08-22
+
+### Fixed
+- **85 Schema-Felder ohne `label` beschriftet (#434)**: `firewall.yaml` (27), `switch.yaml` (14), `usv.yaml` (11), `access_point.yaml` (10), `netzwerkschrank.yaml` (10), `serverraum.yaml` (10), `software.yaml` (3). `app/templates/technik/form.html:99` fing das bisher über einen Fallback ab (Feldname → Titel-Case), der Felder nie unsichtbar machte, aber unklare Beschriftungen wie „Mfa fuer vpn“ statt „MFA für VPN-Zugang“ erzeugte. War die vermutliche Ursache hinter #422 (als Fehlalarm geschlossen — der Reviewer fand das Feld wegen der unklaren Beschriftung nicht) und betrifft denselben Mechanismus wie #431.
+
 ## [2.7.42] - 2026-08-22
 
 ### Added
