@@ -4,6 +4,11 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.41] - 2026-08-22
+
+### Added
+- **Feature-Dokumentation unter `docs/` (#416)**: 26 Dateien, eine pro Feature, mit Index in `docs/README.md` und Kartenverweisen. `CLAUDE.md` verweist jetzt darauf ("neues Feature = neue Datei, Feature bearbeitet = Doku aktualisieren"). Bei der Übernahme durchgängig ASCII-Umlaut-Ersatzschreibung (`ue`/`ae`/`oe`) auf echte Umlaute korrigiert — dabei zwei Bugs vermieden, die eine blinde Ersetzung verursacht hätte: ein kaputter Markdown-Link (`vertraege.md`) sowie mehrere im Code bewusst ASCII gehaltene Identifier/Pfade (`prioritaet`, `foerderprogramm`, `kuendigungsfrist`, `.../uebersicht.html`, `.../vertraege.html`, YAML-Operatorwerte `groesser`/`enthaelt`, Route `.../loeschen`, Platzhalter `<praefix>`).
+
 ## [2.7.40] - 2026-08-21
 
 ### Removed
