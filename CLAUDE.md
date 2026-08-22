@@ -8,6 +8,10 @@ Antigravity/agy, Mistral Vibe, …).
 FastAPI-Webtool zur strukturierten IT-Bestandsaufnahme beim Kunden. Daten
 liegen als YAML-Dateien, nicht in einer Datenbank. Details: [README.md](README.md).
 
+Feature-Dokumentation liegt unter `docs/` -- pro Feature eine `.md`-Datei,
+Index in `docs/README.md`. Neues Feature = neue Datei, Feature bearbeitet =
+Doku aktualisieren.
+
 Ein Grundsatz zieht sich durch alle Entscheidungen: **Es gibt genau ein
 Erfassungswerkzeug für alle Kundengrößen** — vom 5-PC-Betrieb bis zum
 1000-PC-Konzern. Neue Felder und Fragen müssen für beide Enden sinnvoll sein;

@@ -1,6 +1,6 @@
 # TODO / Planungs-Handoff – Bestandsaufnahme-Tool
 
-**Stand:** 2026-08-15, erstellt von Claude Code (Sonnet 5) als Übergabe an eine andere KI-Session (Opus 4.6) zur Weiterplanung. Dies ist eine **Planungsgrundlage**, keine fertige Spezifikation — die größeren Punkte unten sind bewusst noch nicht ausformuliert und sollten mit Marcel durchgesprochen werden, bevor sie umgesetzt werden (siehe Leitplanken unten).
+**Stand:** 2026-08-22 (v2.7.41). Diese Datei behandelt größere strategische Fragen. Der laufende Sitzungsfortschritt steht in `../001_bestandsaufnahme_tool-notizen/TODO.md` und `ARBEITSPROTOKOLL.md`. Feature-Dokumentation liegt unter `docs/` (pro Feature eine `.md`).
 
 ## Projektkontext
 
@@ -12,8 +12,9 @@ IT-Systemhaus-Tool zur einmaligen Vor-Ort-Bestandsaufnahme von Kunden-IT-Infrast
 - GitHub: `https://github.com/deMarcel97/bestandsaufnahme-tool`, Branch `main`
 - Stack: FastAPI + Jinja2 + Pydantic v2 + PyYAML, Storage als YAML-Dateien unter `data/` (kein DB-Server)
 - Läuft zusätzlich als Dienst auf einem internen Server — Zugang und Arbeitsweise siehe `CLAUDE.md` und `deploy/`
-- Aktuelle Version: 2.7.7 (siehe `CHANGELOG.md` für volle Historie)
-- Tests: `PYTHONPATH=. venv/bin/pytest` (Stand jetzt: 141 Tests, alle grün)
+- Aktuelle Version: 2.7.41 (siehe `CHANGELOG.md` für volle Historie)
+- Tests: `PYTHONPATH=. venv/bin/pytest` (Stand jetzt: 294+ Tests, alle grün)
+- Feature-Dokumentation: `docs/` (pro Feature eine `.md`, Index in `docs/README.md`)
 
 ### Architektur-Kurzreferenz (wichtig, bevor man Neues plant)
 
@@ -26,47 +27,48 @@ Alles ist **schema-getrieben**, kein Code pro Objekttyp:
 
 ## Aktueller Stand (zuletzt fertiggestellt)
 
-- **v2.6.0 (2026-08-15)**: Alle 10 offenen Backlog-Karten (#281, #283, #284, #286, #287, #295, #296, #297, #298, #299) wurden implementiert, getestet (88/88 Tests grün) und in `main` konsolidiert:
-  1. ✅ **#281 – QA-Testdaten bereinigen**: Bereinigung der „QA Inspector Team"-Reste aus den Testaufträgen.
-  2. ✅ **#283 – Auftragsstatus & Vertraulichkeit editierbar**: Vertraulichkeit und Status lassen sich nun direkt aus Auftragsübersicht und Detailansicht ändern und persistieren.
-  3. ✅ **#284 – Automatische Empfehlung bei Stammdaten-Änderung**: Client- und modellseitige Empfehlungen im Kontext (Rufbereitschaft bei 24/7, IT-Dienstleister bei fehlender IT).
-  4. ✅ **#286 – Trennung Stammdaten & Kontext**: Visuelle Aufteilung im Bearbeitungsformular in getrennte Fieldsets für Stammdaten, Auftragssteuerung und Kontext.
-  5. ✅ **#287 – Offene Punkte strukturieren**: Hierarchische Gruppierung nach Standort und Baustein/Hardware-Typ.
-  6. ✅ **#295 – Status-Anpassungen / Ampelfarben**: Ampelfarben in der Standortübersicht vereinheitlicht (Vollständig=grün, Teilweise=gelb/orange, Unbekannt=grau).
-  7. ✅ **#296 – Server-Detailfragen**: Schema um `standort_rack` (Rack/Höheneinheit) und `baujahr` erweitert.
-  8. ✅ **#297 – Server & Virtualisierung: Pflichtfeld & Sichtbarkeit**: `wird_virtualisiert` als Pflichtfeld ganz oben; Hypervisor-spezifische Fragen nur sichtbar bei „ja".
-  9. ✅ **#298 – Feld Festplatten-Slots**: `festplatten_slots` als `liste`-Typ mit Anbindungstypen (SATA/SAS/NVMe/M.2) in `server_virtualisierung` und `backup_storage`.
-  10. ✅ **#299 – Feld Kommentar**: Kommentarfeld in allen 13 Schemas einheitlich ans Ende des letzten Abschnitts verschoben.
-- **PR #6 (gemerged)**: Business-Software-Themenblock (CRM/DMS/ERP).
-- **PR #7 (gemerged)**: „Noch nicht erfasst"-Leiste auf allen Auftragsseiten.
-- Superthread-Board „Bestandsaufnahme-Tool" (Space „Software", board_id 15) enthält die laufende Kartenhistorie aller Änderungen.
+- **v2.7.41 (2026-08-22)**: Feature-Dokumentation unter `docs/` eingeführt (#416).
+- **v2.7.40 (2026-08-21)**: HANDOFF_antigravity.md/HANDOFF_claude_code.md aus dem Repo entfernt (#415), Duplikat des Notizen-Ordners.
+- **v2.7.39 (2026-08-21)**: Dark Mode global kaputt seit #379-Fix behoben (#413).
+- **v2.7.38 (2026-08-21)**: M365-Lizenzmatrix Fundament (#408) -- lizenz-bewusste Regeln, Tier-Blindheit-Fix.
+- **v2.7.37 (2026-08-21)**: Topologie-Bereinigungen (#402), Vorläufig-Hinweis (#403), Dialog-UX (#403).
+- **v2.7.36 (2026-08-19)**: Phantom-Backup-ISP (#362), ungespeicherte Änderungen (#357).
+- **v2.7.35 (2026-08-19)**: Security Headers (#373), Offline-Mermaid (#372), Fehlerseiten/Print (#375), Barrierefreiheit (#374), Priorisierung (#369), Form-Submit (#364), Baustein-Bezeichnung (#376), Key-Facts (#366).
+- **v2.7.34 (2026-08-19)**: Software-Review Befunde & Wizard UX (#363, #364-#371).
+- **v2.7.33 (2026-08-19)**: Erfassungs-Wizard Direkteinstieg & Wiederaufnahme (#361).
+- **v2.7.32 (2026-08-18)**: Wizard Vollausbau 13 Schritte + automatische Baustein-Erstellung (#325).
+- **v2.7.30 (2026-08-17)**: Hersteller- und Modelllisten pro Hersteller (#355).
+- **v2.7.28 (2026-08-16)**: Erfassungs-Wizard initial (#325).
+- **v2.7.27 (2026-08-16)**: Massnahmenkatalog Dringlichkeit & Förderprogramm (#322).
+- **v2.7.24 (2026-08-16)**: Netzwerktopologie Generator (#324).
+- **v2.7.22 (2026-08-16)**: Storage/Backup-Trennung + Organisation & Prozesse (#323).
+- **v2.7.21 (2026-08-16)**: Beteiligte & Support-Matrix (#321).
+- **v2.7.20 (2026-08-16)**: Cloud-Bausteine ohne Standort (#315).
+- **v2.7.19 (2026-08-16)**: Offene Punkte hierarchisch (#314).
+- **v2.7.14 (2026-08-16)**: Beteiligte/Verträge/Unterlagen/Projektrahmen (#316).
+- **v2.7.0 (2026-08-15)**: Server-Deployment (#301).
+- **v2.6.0 (2026-08-15)**: 10 Backlog-Karten (#281-#299).
 
-## Abgeschlossene Backlog-Karten (v2.6.0)
-
-Alle 10 Karten aus der ursprünglichen Backlog-Liste wurden erfolgreich umgesetzt und verifiziert.
+Siehe `CHANGELOG.md` für die vollständige Historie und `docs/` für Feature-Dokumentation.
 
 ## Größere offene strategische Fragen (noch nicht im Detail geplant — hier ansetzen)
 
 Diese Punkte sind bewusst nur als Merkposten notiert, nicht als fertige Spezifikation:
 
-1. **Themenblöcke / Organisation & Prozesse als eigener Baustein.** Laut Referenzmaterial macht organisatorischer/prozessualer Content ~2/3 des eigentlichen Assessment-Inhalts aus (Governance, Prozesse, Verantwortlichkeiten) — im Tool aktuell fast nur Technik-Bausteine vorhanden. Business-Software (CRM/DMS/ERP) war ein erster Schritt in diese Richtung. Verinice (BSI-IT-Grundschutz-Tool) behandelt Organisation als gleichwertiges Objekt neben Technik (ORP-/CON-Bausteine) — als Referenz-Architektur relevant.
-2. **Generelles Objektmodell.** Server, Storage etc. sollten als saubere Basis-Objekte definiert sein, *bevor* weitere Themenblöcke draufgesetzt werden — aktuell historisch gewachsen (server_virtualisierung/server_cluster/vm als Geschwister-Schemas). Klärungsbedarf, wie das sauber vereinheitlicht wird, ohne bestehende Daten/Reports zu brechen.
-3. **Backup & Recovery** als nächster großer Themenblock nach Firewall (im Sinne der Themenblock-Architektur wie Business-Software). DIN-SPEC-27076 trennt „Reaktion" von „Wiederherstellung" — als Bauplan relevant.
-4. **Weitere Business-Software-Kategorien** über CRM/DMS/ERP hinaus (z. B. HR-Software, E-Commerce/Shop-Systeme) — aktuell nicht abgedeckt, das `software`-Schema mit Kategorie-Selector ist aber genau für diese Erweiterung gebaut.
-5. **Referenzpreis-Katalog für Maßnahmen.** `kosten_richtwert`/`aufwand_richtwert` sind pro Regel in `rules/*.yaml` gepflegt (seit v2.1.0), aber `kosten_quelle` bleibt bis zur manuellen Bestätigung `"offen"`. Prüfen, ob das für den Verkaufsprozess ausreicht oder ob ein editierbarer globaler Preiskatalog nötig ist. Laut Konkurrenzanalyse (#290, siehe unten) ist ein fertiger, gestaffelter Maßnahmenkatalog mit Kostenschätzung eine echte Marktlücke — kein Konkurrenzprodukt bietet das.
-6. **Cross-Objekt VLAN-Status.** Wenn Switch/Firewall den VLAN-Status auf Netzwerkebene erfassen, könnte das Access-Point-Feld `gast_wlan_isoliert` redundant werden. Eigene Design-Diskussion nötig, wie objektübergreifende Konsistenz sauber modelliert wird, ohne Doppelerfassung zu erzeugen.
-7. **Erkenntnisse aus der Konkurrenzanalyse (Karte #290, Recherche vom 15.08.2026, von Marcel noch nicht gegengeprüft)** — konkrete Ideen für die Roadmap.
-
-   > **TODO (Karte #312):** Diese Liste ist ein Rechercheergebnis, kein Auftrag — solange sie als ein Block dasteht, wird nichts davon umgesetzt. Sie muss mit Marcel durchgegangen und **zerlegt** werden: pro Idee entweder „bauen wir" (eigene Karte mit klarem Umfang), „später" (Backlog, mit Begründung) oder „bauen wir nicht" (begründet verworfen, damit die Frage nicht in einem halben Jahr erneut auftaucht). Zuerst zu bewerten sind die Maßnahmenkatalog-Punkte: der Kernbefund von #290 ist, dass **kein** recherchiertes Konkurrenzprodukt einen gestaffelten Maßnahmenkatalog mit Kostenschätzung bietet — dort liegt der Unterschied zum Markt, nicht bei Netzplänen oder zusätzlichen Kennzahlen. Beim Durchgehen sind zwei Punkte aus #290 zu streichen, die inzwischen erledigt sind: die Trennung Stammdaten/Kontext (#286 → umgesetzt in #303) und der Hinweis, Multiuser weiche vom Offline-Laptop-Prinzip ab (durch das Server-Deployment #301 beantwortet).
-
-   Die Ideen im Einzelnen:
-   - Kosten × Dringlichkeit als zweiachsiges Priorisierungsmodell im Maßnahmenkatalog (analog DIN SPEC 27076).
-   - Optionales Metadatenfeld „Förderprogramm" pro Maßnahme (z. B. Mittelstand Digital) — geringer Aufwand, verkaufsstark.
-   - Aus erfassten Verbindungsdaten (Gerät X an Switch-Port Y) automatisches Netzwerktopologie-Diagramm statt Freihand-Zeichnen.
-   - Getrennte Kennzahlen (Risk-Score vs. Issues-Score, Vorbild Network Detective) prüfen gegenüber dem bestehenden Scoring-Modell.
-   - Kurzer Executive-Abschnitt vorneweg im Bericht statt separatem Dokument.
-   - Optionaler Diff-/Update-Modus für Folgebesuche beim selben Kunden.
-   - Positionierung: „Kein Scanner, keine Zugangsdaten, ein Termin reicht" explizit als USP gegenüber Docusnap/Network Detective/i-doit kommunizieren.
+1. **~~Themenblöcke / Organisation & Prozesse als eigener Baustein.~~** ERLEDIGT (#323, v2.7.22): Baustein `organisation_prozesse` mit `standortbezug: false` implementiert. Siehe `docs/cloud-bausteine.md`.
+2. **~~Generelles Objektmodell.~~** TEILWEISE ERLEDIGT: Storage/Backup-Trennung (#323), Server-Cluster/VM-Verknüpfung (#298). Historisch gewachsene Schemas bleiben bestehen, aber sauber getrennt. Siehe `docs/schema-system.md`.
+3. **~~Backup & Recovery als nächster grosser Themenblock.~~** ERLEDIGT (#323, v2.7.22): `backup.yaml` & `rules/backup.yaml` mit BSI-konformer Bewertung. Siehe `docs/technikobjekt-erfassung.md`.
+4. **Weitere Business-Software-Kategorien** über CRM/DMS/ERP hinaus (z. B. HR-Software, E-Commerce/Shop-Systeme) -- aktuell nicht abgedeckt, das `software`-Schema mit Kategorie-Selector ist dafür gebaut.
+5. **Referenzpreis-Katalog für Massnahmen.** `kosten_richtwert`/`aufwand_richtwert` sind pro Regel gepflegt. `kosten_quelle` bleibt bis zur manuellen Bestätigung `"offen"`. Prüfen, ob ein editierbarer globaler Preiskatalog nötig ist.
+6. **Cross-Objekt VLAN-Status.** Wenn Switch/Firewall den VLAN-Status erfassen, könnte Access-Point `gast_wlan_isoliert` redundant werden. Design-Diskussion nötig.
+7. **~~Erkenntnisse aus der Konkurrenzanalyse (Karte #290).~~** GROSSTEILS ERLEDIGT:
+   - ~~Kosten x Dringlichkeit zweiachsig~~ -> ERLEDIGT (#322, v2.7.27). Siehe `docs/massnahmenkatalog.md`.
+   - ~~Förderprogramm-Feld~~ -> ERLEDIGT (#322, v2.7.27).
+   - ~~Netzwerktopologie-Diagramm~~ -> ERLEDIGT (#324, v2.7.24). Siehe `docs/netzwerktopologie.md`.
+   - ~~Executive-Abschnitt im Bericht~~ -> ERLEDIGT (`export_managementsummary`).
+   - Getrennte Kennzahlen (Risk-Score vs. Issues-Score) -- offen.
+   - Optionaler Diff-/Update-Modus für Folgebesuche -- offen.
+   - Positionierung "Kein Scanner, ein Termin reicht" als USP -- offen (Vermarktung, nicht Technik).
 
 ## Leitplanken (aus bisherigen Diskussionen mit Marcel — bitte einhalten)
 
