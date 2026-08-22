@@ -7,6 +7,7 @@ from app.models.technik import TechnikObjekt, OffenerPunktItem
 from app.models.standort import Standort
 from app.models.finding import Finding
 from app.services.schema_loader import schema_loader
+from app.services.m365_lizenzmatrix import m365_lizenzmatrix
 
 class RuleValidationError(Exception):
     pass
@@ -70,7 +71,13 @@ class ConditionEvaluator:
     def _evaluate_op(val: Any, operator: str, expected: Any) -> bool:
         if isinstance(val, (list, tuple)):
             val_strs = [str(x).lower() for x in val]
-            if operator == "in_liste" or operator == "enthaelt":
+            # Lizenzabdeckung steht nicht in der Regel, sondern in der
+            # M365-Lizenzmatrix: `wert` ist eine feature_id, keine Planliste.
+            if operator == "lizenz_deckt":
+                return m365_lizenzmatrix.deckt_feature(val_strs, str(expected))
+            elif operator == "lizenz_deckt_nicht":
+                return not m365_lizenzmatrix.deckt_feature(val_strs, str(expected))
+            elif operator == "in_liste" or operator == "enthaelt":
                 if isinstance(expected, (list, tuple)):
                     return any(str(e).lower() in val_strs for e in expected)
                 return str(expected).lower() in val_strs
@@ -149,7 +156,17 @@ class RuleEngine:
     def validate_rule(self, rule: Dict[str, Any], filename: str):
         gilt_fuer = rule.get("gilt_fuer")
         rule_id = rule.get("id")
-        
+
+        # Die Lizenz-Operatoren zeigen auf die Matrix statt auf das Schema.
+        # Ein Tippfehler in der feature_id bliebe sonst unsichtbar: die Regel
+        # wuerde nie zutreffen und damit still ein Finding verschlucken.
+        for feature_id in self._extract_lizenz_features(rule.get("bedingung", {})):
+            if feature_id not in m365_lizenzmatrix.feature_ids():
+                raise RuleValidationError(
+                    f"Regel '{rule_id}' in {filename} verweist auf unbekannte "
+                    f"feature_id '{feature_id}' in der M365-Lizenzmatrix"
+                )
+
         # If rule applies to a tech object, verify field exists in schema
         if gilt_fuer and gilt_fuer != "standort":
             schema = schema_loader.get_schema(gilt_fuer)
@@ -178,6 +195,19 @@ class RuleEngine:
         elif "feld" in cond:
             fields.append(cond["feld"])
         return fields
+
+    def _extract_lizenz_features(self, cond: Dict[str, Any]) -> List[str]:
+        """feature_ids, die eine Regel ueber die Lizenz-Operatoren anspricht."""
+        features = []
+        if "alle" in cond:
+            for sub in cond["alle"]:
+                features.extend(self._extract_lizenz_features(sub))
+        elif "eines" in cond:
+            for sub in cond["eines"]:
+                features.extend(self._extract_lizenz_features(sub))
+        elif cond.get("operator") in ("lizenz_deckt", "lizenz_deckt_nicht"):
+            features.append(str(cond.get("wert")))
+        return features
 
     def evaluate_all(
         self,
