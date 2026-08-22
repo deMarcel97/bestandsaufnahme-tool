@@ -127,7 +127,8 @@ def test_objekt_speichern_landet_auf_der_erfassung(auftrag_id):
         "standort_id": "sto-verwaltungsgebaeude",
     }, follow_redirects=False)
     assert res.status_code == 303
-    assert res.headers["location"] == f"/auftrag/{auftrag_id}/erfassung"
+    # Query-Param "gespeichert" triggert den Toast (#427) — Pfad zaehlt hier, nicht die Query.
+    assert res.headers["location"].split("?")[0] == f"/auftrag/{auftrag_id}/erfassung"
 
 
 def test_standort_speichern_landet_auf_der_erfassung(auftrag_id):

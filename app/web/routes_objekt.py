@@ -1,3 +1,4 @@
+from urllib.parse import quote
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse
 from app.services.storage import storage, KonfliktFehler
@@ -198,7 +199,8 @@ async def new_objekt_submit(request: Request, auftrag_id: str, typ: str = "firew
         daten=daten
     )
     storage.save_objekt(obj)
-    return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
+    meldung = quote(f"{schema.get('bezeichnung_anzeige', typ)} „{bezeichnung}“ wurde gespeichert.")
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung?gespeichert={meldung}", status_code=303)
 
 @router.get("/auftrag/{auftrag_id}/objekt/{typ}/{objekt_id}")
 def edit_objekt_form(request: Request, auftrag_id: str, typ: str, objekt_id: str):
@@ -282,7 +284,9 @@ async def edit_objekt_submit(request: Request, auftrag_id: str, typ: str, objekt
     except KonfliktFehler:
         return _konflikt_formular(request, auftrag_id, typ, objekt_id, obj)
 
-    return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung", status_code=303)
+    bezeichnung_anzeige = schema.get("bezeichnung_anzeige", typ) if schema else typ
+    meldung = quote(f"{bezeichnung_anzeige} „{obj.bezeichnung}“ wurde gespeichert.")
+    return RedirectResponse(url=f"/auftrag/{auftrag_id}/erfassung?gespeichert={meldung}", status_code=303)
 
 def _konflikt_formular(request: Request, auftrag_id: str, typ: str, objekt_id: str, obj: TechnikObjekt):
     """Liefert das Bearbeitungsformular mit den gerade eingegebenen Werten und

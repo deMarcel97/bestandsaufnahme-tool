@@ -93,6 +93,10 @@
     </div>
     <form action="/auftrag/neu" method="POST" id="form-neuer-auftrag" novalidate>
       <div class="dialog-body">
+        <div class="alert alert-warning" id="neu-auftrag-fehler" style="display:none;">
+          <strong>Fehlt</strong>
+          <span>Bitte füllen Sie alle mit * markierten Felder aus.</span>
+        </div>
         <div class="form-row">
           <div class="form-group">
             <label for="modal-input-projekt-nummer">Projektnummer</label>
@@ -171,4 +175,38 @@
 </div>
 
 <script src="/static/js/dialog.js"></script>
+<script>
+  // Eigenes Fehler-Feedback statt der stillen Browser-Tooltipp-Validierung
+  // (Karte #433) — das Formular traegt bewusst novalidate (#364), damit
+  // Browser-Automation nicht an unsichtbaren Tooltips scheitert.
+  (function () {
+    var form = document.getElementById("form-neuer-auftrag");
+    var fehlerBanner = document.getElementById("neu-auftrag-fehler");
+    if (!form || !fehlerBanner) return;
+
+    form.addEventListener("submit", function (e) {
+      var pflichtfelder = form.querySelectorAll("[required]");
+      var ersteFehlerhafte = null;
+      pflichtfelder.forEach(function (feld) {
+        var leer = feld.value.trim() === "";
+        feld.classList.toggle("input-error", leer);
+        if (leer && !ersteFehlerhafte) ersteFehlerhafte = feld;
+      });
+
+      if (ersteFehlerhafte) {
+        e.preventDefault();
+        fehlerBanner.style.display = "flex";
+        ersteFehlerhafte.focus();
+      } else {
+        fehlerBanner.style.display = "none";
+      }
+    });
+
+    form.querySelectorAll("[required]").forEach(function (feld) {
+      feld.addEventListener("input", function () {
+        feld.classList.remove("input-error");
+      });
+    });
+  })();
+</script>
 {% endblock %}
