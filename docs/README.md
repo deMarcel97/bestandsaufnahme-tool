@@ -46,7 +46,7 @@ Feature bearbeitet = Doku aktualisieren.
 
 | Datei | Feature | Karten |
 |---|---|---|
-| [m365-lizenzmatrix.md](m365-lizenzmatrix.md) | Lizenzfeld, lizenz-bewusste Regeln, Tier-Blindheit-Fix | #408 |
+| [m365-lizenzmatrix.md](m365-lizenzmatrix.md) | Lizenzfeld, lizenz-bewusste Regeln, Matrix-Lookup, Evidenzstatus | #405, #407, #408 |
 | [zahlparser.md](zahlparser.md) | Deutsche Tausenderpunkte, internationale Formate | #319 |
 
 ## Infrastruktur & Sicherheit

@@ -4,6 +4,20 @@ Alle nennenswerten Änderungen am IT-Bestandsaufnahme-Tool werden hier dokumenti
 
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/), Versionierung nach [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH): MAJOR = Breaking Change, MINOR = neue Funktionalität (abwärtskompatibel), PATCH = Bugfix.
 
+## [2.7.42] - 2026-08-22
+
+### Added
+- **M365-Lizenzmatrix als Datenquelle im Regelwerk (#407)**:
+  - Matrix aus der Recherche (#405) als `rules/m365_lizenzmatrix.json` übernommen — 353 Zeilen, 41 Features über 15 Lizenzpläne. Generiert aus `tools/build_m365_matrix.py`, nicht von Hand gepflegt.
+  - Neue Rule-Engine-Operatoren `lizenz_deckt` / `lizenz_deckt_nicht`: `wert` ist eine `feature_id` statt einer Planliste. Die drei Regeln aus #408 tragen ihre Planlisten damit nicht mehr selbst — bei 41 Features wären das über achtzig handgepflegte Listen, die nach jedem Microsoft-Repackaging einzeln nachzuziehen wären.
+  - Lookup-Service `app/services/m365_lizenzmatrix.py` mit `get_feature_status(lizenzplan, feature_id)` und `deckt_feature(lizenzen, feature_id)`. Mehrere SKUs pro Tenant werden unterstützt: eine deckende SKU genügt.
+  - `Add-on` gilt bewusst **nicht** als lizenziert — zubuchbar heisst nicht vorhanden, sonst entstünde ein Fehlkonfigurations-Befund für etwas, das der Kunde nie gekauft hat.
+  - Evidenzstatus (`bestaetigt`/`wahrscheinlich`/`umstritten`/`unbestaetigt`) und `quelle` je Zeile, plus `meta.evidenz_offen`. Ausgangszustand ehrlich: 41 von 41 Features ohne Primärquelle, `sharepoint_quota` und `audio_conferencing` als `umstritten` markiert (dort widersprachen sich die beiden Recherchen aus #405).
+  - `--scaffold <feature_id>` erzeugt ein YAML-Regelgerüst, `--offen` listet Features ohne Regel (aktuell 38 von 41 — die Arbeitsvorräte der Karten #409 bis #412). Das Gerüst schreibt bewusst nicht nach `rules/`: Fundtexte bleiben handgepflegt.
+
+### Fixed
+- **Unbekannte `feature_id` in einer Regel fällt jetzt beim Laden auf (#407)**: `RuleEngine.validate_rule()` prüft die Lizenz-Operatoren gegen die Matrix. Ein Tippfehler liess die Regel zuvor still nie zutreffen — das Finding wäre unbemerkt verschwunden.
+
 ## [2.7.41] - 2026-08-22
 
 ### Added

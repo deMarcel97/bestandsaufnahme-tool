@@ -52,6 +52,14 @@ regeln:
 | `datum_vor_heute` | Datum liegt in der Vergangenheit |
 | `ist_leer` | Feld ist leer/nicht gesetzt |
 | `enthaelt` | Feld enthält Wert (für Listen) |
+| `lizenz_deckt` | M365-Lizenzmatrix deckt die feature_id ab (#407) |
+| `lizenz_deckt_nicht` | Umkehrung von `lizenz_deckt` (#407) |
+
+Bei den beiden Lizenz-Operatoren ist `wert` keine Planliste, sondern eine
+`feature_id` aus `rules/m365_lizenzmatrix.json` — siehe
+[m365-lizenzmatrix.md](m365-lizenzmatrix.md). Eine unbekannte `feature_id`
+lässt `RuleEngine.validate_rule()` beim Laden fehlschlagen, damit ein
+Tippfehler nicht als stillschweigend nie zutreffende Regel endet.
 
 ### Schweregrade
 

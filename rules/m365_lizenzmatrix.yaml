@@ -6,8 +6,8 @@ regeln:
     bedingung:
       alle:
         - feld: m365_lizenzen
-          operator: nicht_in_liste
-          wert: [bp, me3, me5, entp1, entp2]
+          operator: lizenz_deckt_nicht
+          wert: conditional_access
     schweregrad: hoch
     befund: Aktuelle M365-Lizenzierung bietet keinen bedingten Zugriff (Conditional Access)
     risiko: Kunde benötigt bedingten Zugriff (z. B. MFA nur bei Risiko-Login, Geo-Blocking, Geräte-Compliance als Voraussetzung), der aktuelle Lizenzplan enthält aber nur Entra ID Free.
@@ -23,8 +23,8 @@ regeln:
     bedingung:
       alle:
         - feld: m365_lizenzen
-          operator: in_liste
-          wert: [bp, me3, me5, entp1, entp2]
+          operator: lizenz_deckt
+          wert: conditional_access
         - feld: conditional_access_regelwerke
           operator: gleich
           wert: "nein"
@@ -44,8 +44,8 @@ regeln:
     bedingung:
       alle:
         - feld: m365_lizenzen
-          operator: nicht_in_liste
-          wert: [bp, oe3, me3, oe5, me5]
+          operator: lizenz_deckt_nicht
+          wert: defender_o365_p1
     schweregrad: hoch
     befund: Aktuelle M365-Lizenzierung bietet keinen erweiterten E-Mail-Schutz (Defender for Office 365)
     risiko: Schutz vor Phishing-Links und schädlichen Anhängen ist gefordert, der aktuelle Plan bietet aber nur den Exchange-Online-Protection-Basisschutz.
@@ -61,8 +61,8 @@ regeln:
     bedingung:
       alle:
         - feld: m365_lizenzen
-          operator: in_liste
-          wert: [bp, oe3, me3, oe5, me5]
+          operator: lizenz_deckt
+          wert: defender_o365_p1
         - feld: defender_for_office365_aktiv
           operator: gleich
           wert: "nein"
@@ -82,8 +82,8 @@ regeln:
     bedingung:
       alle:
         - feld: m365_lizenzen
-          operator: nicht_in_liste
-          wert: [bp, me1, oe3, me3, oe5, me5]
+          operator: lizenz_deckt_nicht
+          wert: audit_standard
     schweregrad: mittel
     befund: Aktuelle M365-Lizenzierung bietet keinen Zugriff auf Audit-Logging (Purview Compliance Center)
     risiko: Nachvollziehbarkeit von Admin-/Nutzeraktivitäten ist gefordert (z. B. für Incident-Response), aber Business Basic/Standard haben keinen Zugriff auf das Purview Compliance Center und damit faktisch keine durchsuchbare Audit-Log-Oberfläche.
@@ -99,8 +99,8 @@ regeln:
     bedingung:
       alle:
         - feld: m365_lizenzen
-          operator: in_liste
-          wert: [bp, me1, oe3, me3, oe5, me5]
+          operator: lizenz_deckt
+          wert: audit_standard
         - feld: audit_logging_aktiv
           operator: gleich
           wert: "nein"
